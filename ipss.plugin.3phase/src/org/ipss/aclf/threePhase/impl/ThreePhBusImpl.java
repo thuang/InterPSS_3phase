@@ -2,11 +2,11 @@ package org.ipss.aclf.threePhase.impl;
 
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.ThreePhAclfBus;
+import org.ipss.aclf.threePhase.ThreePhBus;
 
-import com.interpss.core.aclf.impl.AclfBusImpl;
+import com.interpss.core.acsc.impl.AcscBusImpl;
 
-public class ThreePhAclfBusImpl extends AclfBusImpl implements ThreePhAclfBus{
+public class ThreePhBusImpl extends AcscBusImpl implements ThreePhBus{
 	
 	private Complex3x1 Vabc = null;
 

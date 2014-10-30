@@ -6,7 +6,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.PhaseCode;
 
-public interface ThreePhAclfLoad extends AclfLoad {
+public interface ThreePhLoad extends AclfLoad {
 	
 	public Complex3x3 getEquivYabc();
 	
