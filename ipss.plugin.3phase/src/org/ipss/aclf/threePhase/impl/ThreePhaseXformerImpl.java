@@ -115,9 +115,9 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
     			{y1.multiply(-1/Math.sqrt(3)),     y1.divide(Math.sqrt(3)),        new Complex(0.0, 0.0)},
     			{new Complex(0,0),                y1.multiply(-1/Math.sqrt(3)),    y1.divide(Math.sqrt(3)) },
     			{ y1.divide(Math.sqrt(3)),            new Complex(0,0),            y1.multiply(-1/Math.sqrt(3))}});
-    	else
-    		return null;
-    	
-   	}
+
+		return null;
+	}
+
 
 }
