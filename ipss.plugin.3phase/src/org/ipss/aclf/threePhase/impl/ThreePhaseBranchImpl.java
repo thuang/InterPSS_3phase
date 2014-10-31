@@ -1,8 +1,10 @@
 package org.ipss.aclf.threePhase.impl;
 
 import org.apache.commons.math3.complex.Complex;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
+import org.ipss.aclf.threePhase.ThreePhaseXformer;
 
 import com.interpss.core.acsc.impl.AcscBranchImpl;
 
@@ -99,14 +101,72 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 
 	@Override
 	public Complex3x3 getYffabc() {
-		
-		return this.getBranchYabc().add(this.getFromShuntYabc());
+		Complex3x3 yff = null;
+		if(!isXfr())
+			yff= this.getBranchYabc().add(this.getFromShuntYabc());
+		else{
+			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			yff = ph3Xformer.getYffabc();
+		}
+	        
+	    return yff;
 	}
 
 	@Override
 	public Complex3x3 getYttabc() {
-		
-		return this.getBranchYabc().add(this.getToShuntYabc());
+		Complex3x3 ytt = null;
+		if(!isXfr())
+		    ytt = this.getBranchYabc().add(this.getToShuntYabc());
+		else{
+			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			ytt = ph3Xformer.getYttabc();
+		}
+	    
+		return ytt;
+	}
+
+	@Override
+	public Complex3x3 getYftabc() {
+		Complex3x3 yft = null;
+		if(!isXfr())
+		    yft = this.getBranchYabc().mulitply(-1);
+		else{
+			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			yft = ph3Xformer.getYftabc();
+		}
+	    
+		return yft;
+	}
+
+	@Override
+	public Complex3x3 getYtfabc() {
+		Complex3x3 ytf = null;
+		if(!isXfr())
+		    ytf = this.getBranchYabc().mulitply(-1);
+		else{
+			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			ytf = ph3Xformer.getYtfabc();
+		}
+	    
+		return ytf;
+	}
+
+	@Override
+	public Complex3x1 CurrentAbcIntoNetFromSide() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Complex3x1 CurrentAbcIntoNetToSide() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ThreePhaseXformer to3PXformer() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

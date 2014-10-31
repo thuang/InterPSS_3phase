@@ -1,6 +1,7 @@
 package org.ipss.aclf.threePhase;
 
 import org.apache.commons.math3.complex.Complex;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 
 import com.interpss.core.acsc.AcscBranch;
@@ -27,6 +28,14 @@ public interface ThreePhaseBranch extends AcscBranch{
 	
 	public Complex3x3 getYttabc();
 	
+	public Complex3x3 getYftabc();
 	
+	public Complex3x3 getYtfabc();
+	
+	public Complex3x1 CurrentAbcIntoNetFromSide();
+	
+	public Complex3x1 CurrentAbcIntoNetToSide();
+	
+	public ThreePhaseXformer to3PXformer();
 
 }

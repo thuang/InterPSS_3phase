@@ -5,6 +5,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseXformer;
 
+import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.impl.AcscXformerImpl;
 
 public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhaseXformer{
@@ -15,7 +16,12 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	private Complex y1 =null;
 	
 	public ThreePhaseXformerImpl(ThreePhaseBranch threePhBranch){
-		
+		this.ph3Branch =threePhBranch;
+		this.y1 = this.ph3Branch.getY();
+		if(this.ph3Branch.getY0()!=null) 
+			y0 = this.ph3Branch.getY0();
+		else
+			y0 = y1;
 	}
 	
 	
@@ -42,23 +48,154 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 		
 		return this.ph3Branch.getBranchYabc();
 	}
-
+	
+	
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// using look up table to build the Yff, Ytt, yft, ytf for standard connected transformers
+	// referred to Selva S. Moorthy, David Hoadley, "A new phase-coordinate transformer modeling for Ybus Anaysks", IEEE Trans. on Power systems, vol.17, No.4, 2002
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	public Complex3x3 getYffabc() {
-		// TODO
-		// using look up table to build the Yff and Y
+	    Complex3x3 yffabc = null;
+		//Yg
+		if(this.getFromConnect() == XfrConnectCode.WYE_SOLID_GROUNDED){
+			yffabc = getY1().mulitply(1/this.getFromTurnRatio()/this.getFromTurnRatio());
+	
+		}
 		
-		///
+		//Y
+		else if(this.getFromConnect() == XfrConnectCode.WYE_UNGROUNDED){
+			yffabc = getY2().mulitply(1/this.getFromTurnRatio()/this.getFromTurnRatio());
+			
+		}
 		
-		///
+		//D
+        else if(this.getFromConnect() == XfrConnectCode.DELTA){
+        	yffabc = getY2().mulitply(1/this.getFromTurnRatio()/this.getFromTurnRatio());
+    		
+		} else
+			try {
+				throw new Exception("Unsupported connection type at the from side!");
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
 		
-		return null;
+
+		return yffabc;
 	}
 
 	@Override
 	public Complex3x3 getYttabc() {
-		// TODO Auto-generated method stub
-		return null;
+		 Complex3x3 yttabc = null;
+			//Yg
+			if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED){
+				yttabc = getY1().mulitply(1/this.getToTurnRatio()/this.getToTurnRatio());
+		
+			}
+			
+			//Y
+			else if(this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED){
+				yttabc = getY2().mulitply(1/this.getToTurnRatio()/this.getToTurnRatio());
+				
+			}
+			
+			//D
+	        else if(this.getToConnect() == XfrConnectCode.DELTA){
+	        	yttabc = getY2().mulitply(1/this.getToTurnRatio()/this.getToTurnRatio());
+	    		
+			} else
+				try {
+					throw new Exception("Unsupported connection type at the from side!");
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+			
+			return yttabc;
+	}
+	
+	
+	@Override
+	public Complex3x3 getYftabc() {
+		
+		 Complex3x3 yftabc = null;
+			//Yg-
+		 if(this.getFromConnect() == XfrConnectCode.WYE_SOLID_GROUNDED){
+			  //YgYg
+			    if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED)
+				   yftabc = getY1().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			  //YgY
+			    else if (this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+			    	yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			    
+			    else if (this.getToConnect() == XfrConnectCode.DELTA)
+			    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			    
+			    else if (this.getToConnect() == XfrConnectCode.DELTA11)
+			    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			}
+			
+			//Y-
+			else if(this.getFromConnect() == XfrConnectCode.WYE_UNGROUNDED ){
+				//Yg or Y
+				if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED ||
+						this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+					    // note: y2* = y2
+				        yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				// D1
+				 else if (this.getToConnect() == XfrConnectCode.DELTA)
+				    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			   // D11   
+				 else if (this.getToConnect() == XfrConnectCode.DELTA11)
+				    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				
+			}
+			
+			//D
+	        else if(this.getFromConnect() == XfrConnectCode.DELTA){
+	        	
+	        	//D-Yg or Y
+				if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED ||
+						this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+	        	     yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				
+				else if(this.getToConnect() == XfrConnectCode.DELTA)
+					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	    		
+			} 
+		 
+			//D11
+	        else if(this.getFromConnect() == XfrConnectCode.DELTA11){
+	        	
+	        	//D-Yg or Y
+				if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED ||
+						this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+	        	     yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				
+				else if(this.getToConnect() == XfrConnectCode.DELTA || this.getToConnect() == XfrConnectCode.DELTA11)
+					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	    		
+			} 
+	        
+	        
+	        else
+				try {
+					throw new Exception("Unsupported connection type at the from side!");
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+			
+			return yftabc;
+	}
+
+
+	@Override
+	public Complex3x3 getYtfabc() {
+		
+		return getYftabc().transpose();
 	}
 	
 	/**
@@ -118,6 +255,9 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 
 		return null;
 	}
+
+
+
 
 
 }

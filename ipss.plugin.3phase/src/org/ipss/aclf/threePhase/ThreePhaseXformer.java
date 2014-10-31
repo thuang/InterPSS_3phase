@@ -22,7 +22,10 @@ public interface ThreePhaseXformer extends AcscXformer{
 		public Complex3x3 getYffabc();
 		
 		public Complex3x3 getYttabc();
-	
+	    
+        public Complex3x3 getYftabc();
+		
+		public Complex3x3 getYtfabc();
 
 	
 	
