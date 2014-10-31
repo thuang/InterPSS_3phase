@@ -8,7 +8,7 @@ import com.interpss.core.acsc.BusGroundCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 
-public interface ThreePhXformer extends AcscXformer{
+public interface ThreePhaseXformer extends AcscXformer{
 	
 	
 	    public void setZbac(Complex3x3 Zabc);

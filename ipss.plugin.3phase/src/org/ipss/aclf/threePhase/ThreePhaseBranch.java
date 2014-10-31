@@ -5,8 +5,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 
 import com.interpss.core.acsc.AcscBranch;
 
-public interface ThreePhBranch extends AcscBranch{
-	
+public interface ThreePhaseBranch extends AcscBranch{
 	
     public void setZbac(Complex3x3 Zabc);
     
@@ -23,7 +22,7 @@ public interface ThreePhBranch extends AcscBranch{
 	
 	public void setToShuntYabc( Complex3x3 tYabc) ;
 	
-	
+
 	public Complex3x3 getYffabc();
 	
 	public Complex3x3 getYttabc();
