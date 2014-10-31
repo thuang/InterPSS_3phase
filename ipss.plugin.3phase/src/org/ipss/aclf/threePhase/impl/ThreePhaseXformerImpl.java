@@ -6,6 +6,7 @@ import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseXformer;
 
 import com.interpss.core.acsc.XfrConnectCode;
+import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.adpter.impl.AcscXformerImpl;
 
 public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhaseXformer{
@@ -13,7 +14,7 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	private ThreePhaseBranch ph3Branch= null;
 	
 	private Complex y0 =null;
-	private Complex y1 =null;
+	private Complex y1 =null; // transformer primitive leakage admittance of a phase 
 	
 	public ThreePhaseXformerImpl(ThreePhaseBranch threePhBranch){
 		this.ph3Branch =threePhBranch;
@@ -25,6 +26,11 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	}
 	
 	
+	public ThreePhaseXformerImpl() {
+		
+	}
+
+
 	@Override
 	public void setZabc(Complex3x3 Zabc) {
 		this.ph3Branch.setZabc(Zabc);
@@ -59,19 +65,19 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	public Complex3x3 getYffabc() {
 	    Complex3x3 yffabc = null;
 		//Yg
-		if(this.getFromConnect() == XfrConnectCode.WYE_SOLID_GROUNDED){
+		if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
 			yffabc = getY1().mulitply(1/this.getFromTurnRatio()/this.getFromTurnRatio());
 	
 		}
 		
 		//Y
-		else if(this.getFromConnect() == XfrConnectCode.WYE_UNGROUNDED){
+		else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_UNGROUNDED){
 			yffabc = getY2().mulitply(1/this.getFromTurnRatio()/this.getFromTurnRatio());
 			
 		}
 		
 		//D
-        else if(this.getFromConnect() == XfrConnectCode.DELTA){
+        else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA){
         	yffabc = getY2().mulitply(1/this.getFromTurnRatio()/this.getFromTurnRatio());
     		
 		} else
@@ -90,19 +96,19 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	public Complex3x3 getYttabc() {
 		 Complex3x3 yttabc = null;
 			//Yg
-			if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED){
+			if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
 				yttabc = getY1().mulitply(1/this.getToTurnRatio()/this.getToTurnRatio());
 		
 			}
 			
 			//Y
-			else if(this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED){
+			else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED){
 				yttabc = getY2().mulitply(1/this.getToTurnRatio()/this.getToTurnRatio());
 				
 			}
 			
 			//D
-	        else if(this.getToConnect() == XfrConnectCode.DELTA){
+	        else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA){
 	        	yttabc = getY2().mulitply(1/this.getToTurnRatio()/this.getToTurnRatio());
 	    		
 			} else
@@ -122,59 +128,59 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 		
 		 Complex3x3 yftabc = null;
 			//Yg-
-		 if(this.getFromConnect() == XfrConnectCode.WYE_SOLID_GROUNDED){
+		 if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
 			  //YgYg
-			    if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED)
+			    if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED)
 				   yftabc = getY1().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			  //YgY
-			    else if (this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 			    	yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			    
-			    else if (this.getToConnect() == XfrConnectCode.DELTA)
+			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
 			    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			    
-			    else if (this.getToConnect() == XfrConnectCode.DELTA11)
+			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 			    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			}
 			
 			//Y-
-			else if(this.getFromConnect() == XfrConnectCode.WYE_UNGROUNDED ){
+			else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_UNGROUNDED ){
 				//Yg or Y
-				if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED ||
-						this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
+						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 					    // note: y2* = y2
 				        yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				// D1
-				 else if (this.getToConnect() == XfrConnectCode.DELTA)
+				 else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
 				    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			   // D11   
-				 else if (this.getToConnect() == XfrConnectCode.DELTA11)
+				 else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 				    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 			}
 			
 			//D
-	        else if(this.getFromConnect() == XfrConnectCode.DELTA){
+	        else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA){
 	        	
 	        	//D-Yg or Y
-				if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED ||
-						this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
+						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 	        	     yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
-				else if(this.getToConnect() == XfrConnectCode.DELTA)
+				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
 					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 	    		
 			} 
 		 
 			//D11
-	        else if(this.getFromConnect() == XfrConnectCode.DELTA11){
+	        else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA11){
 	        	
 	        	//D-Yg or Y
-				if(this.getToConnect() == XfrConnectCode.WYE_SOLID_GROUNDED ||
-						this.getToConnect() == XfrConnectCode.WYE_UNGROUNDED)
+				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
+						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 	        	     yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
-				else if(this.getToConnect() == XfrConnectCode.DELTA || this.getToConnect() == XfrConnectCode.DELTA11)
+				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA || this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 	    		
 			} 
@@ -254,6 +260,13 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
     			{ y1.divide(Math.sqrt(3)),            new Complex(0,0),            y1.multiply(-1/Math.sqrt(3))}});
 
 		return null;
+	}
+
+
+	@Override
+	public void set3PBranch(ThreePhaseBranch ph3Branch) {
+		this.ph3Branch = ph3Branch;
+		
 	}
 
 

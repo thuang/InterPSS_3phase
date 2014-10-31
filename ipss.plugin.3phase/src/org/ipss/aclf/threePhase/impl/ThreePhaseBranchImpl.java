@@ -1,5 +1,8 @@
 package org.ipss.aclf.threePhase.impl;
 
+
+
+import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
@@ -165,8 +168,8 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 
 	@Override
 	public ThreePhaseXformer to3PXformer() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return threePhaseXfrAptr.apply(this);
 	}
 
 }
