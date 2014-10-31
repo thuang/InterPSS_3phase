@@ -7,9 +7,9 @@ import com.interpss.core.acsc.AcscBranch;
 
 public interface ThreePhaseBranch extends AcscBranch{
 	
-    public void setZbac(Complex3x3 Zabc);
+    public void setZabc(Complex3x3 Zabc);
     
-    public void setZbac(Complex Z1, Complex Z2, Complex Z0);
+    public void setZabc(Complex Z1, Complex Z2, Complex Z0);
 	
 	public Complex3x3 getZabc() ;
 	

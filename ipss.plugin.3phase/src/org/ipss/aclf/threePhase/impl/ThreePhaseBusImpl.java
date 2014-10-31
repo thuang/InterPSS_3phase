@@ -74,9 +74,8 @@ public class ThreePhaseBusImpl extends AcscBusImpl implements ThreePhaseBus{
 			 }
 		 }
 		
-		
-		
-		return null;
+
+		return yiiAbc;
 	}
 
 }
