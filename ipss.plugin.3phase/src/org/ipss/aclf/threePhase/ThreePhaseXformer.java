@@ -11,13 +11,13 @@ import com.interpss.core.acsc.adpter.AcscXformer;
 public interface ThreePhaseXformer extends AcscXformer{
 	
 	
-	    public void setZbac(Complex3x3 Zabc);
+	    public void setZabc(Complex3x3 Zabc);
 	    
-	    public void setZbac(Complex Z1, Complex Z2, Complex Z0);
+	    public void setZabc(Complex Z1, Complex Z2, Complex Z0);
 		
 		public Complex3x3 getZabc() ;
 		
-		public Complex3x3 getBranchYabc() ;
+		public Complex3x3 getYabc() ;
 		
 		public Complex3x3 getYffabc();
 		
