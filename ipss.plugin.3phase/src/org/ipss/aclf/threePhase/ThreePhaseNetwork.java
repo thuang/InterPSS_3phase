@@ -11,7 +11,7 @@ public interface ThreePhaseNetwork extends AcscNetwork {
 	public boolean initThreePhaseFromLfResult();
 	
 	
-	public ISparseEqnMatrix3x3 formYabc();
+	public ISparseEqnMatrix3x3 formYabc() throws Exception;
 	
 	
 	public boolean run3PhaseLoadflow();

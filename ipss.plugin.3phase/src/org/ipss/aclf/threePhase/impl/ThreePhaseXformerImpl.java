@@ -11,6 +11,11 @@ import com.interpss.core.acsc.adpter.impl.AcscXformerImpl;
 
 public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhaseXformer{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ThreePhaseBranch ph3Branch= null;
 	
 	private Complex y0 =null;
@@ -29,7 +34,12 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	public ThreePhaseXformerImpl() {
 		
 	}
-
+    
+	@Override
+	public void set3PBranch(ThreePhaseBranch ph3Branch) {
+		this.ph3Branch = ph3Branch;
+		
+	}
 
 	@Override
 	public void setZabc(Complex3x3 Zabc) {
@@ -263,11 +273,7 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	}
 
 
-	@Override
-	public void set3PBranch(ThreePhaseBranch ph3Branch) {
-		this.ph3Branch = ph3Branch;
-		
-	}
+
 
 
 
