@@ -20,13 +20,13 @@ public class ThreePhaseBusImpl extends AcscBusImpl implements ThreePhaseBus{
 	Complex3x3 yiiAbc = new Complex3x3();
 
 	@Override
-	public Complex3x1 getPhaseVotlages() {
+	public Complex3x1 get3PhaseVotlages() {
 		
 		return  Vabc;
 	}
 
 	@Override
-	public void setPhaseVoltages(Complex3x1 vabc) {
+	public void set3PhaseVoltages(Complex3x1 vabc) {
 		this.Vabc = vabc;
 		
 	}

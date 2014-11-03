@@ -8,9 +8,9 @@ import com.interpss.core.acsc.AcscBus;
 
 public interface ThreePhaseBus extends AcscBus {
 	
-	public Complex3x1 getPhaseVotlages();
+	public Complex3x1 get3PhaseVotlages();
 	
-    public void setPhaseVoltages(Complex3x1 vabc);
+    public void set3PhaseVoltages(Complex3x1 vabc);
     
     
     public Complex3x3 getYiiAbc();

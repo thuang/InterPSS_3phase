@@ -49,6 +49,7 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 		 *      by assuming the connection meeting the  U.S. Delta connection standard, with high voltage side leading 30 degree, always 
 	     *      Finally, set the visited attribute to be true.
 	     *   (4) iterate over all step-down transformers and the connected subtransmissions 
+	     *   (5) for the rest of the buses, set the phase votlages directly based on the positive sequence voltage
 	     *
 	     */
 		
@@ -65,39 +66,33 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 		
 		for(AcscBranch bra: this.getBranchList()){
 			if(bra.isActive() && bra.isXfr()){
-				if(((bra.getXfrFromConnectCode()== XfrConnectCode.DELTA ||
-						bra.getXfrFromConnectCode()== XfrConnectCode.DELTA11) && 
-						(bra.getXfrToConnectCode()== XfrConnectCode.WYE_SOLID_GROUNDED || 
-						bra.getXfrToConnectCode()== XfrConnectCode.WYE_UNGROUNDED||
-						bra.getXfrToConnectCode()== XfrConnectCode.WYE_ZGROUNDED))
+				if((isDeltaConnected(bra.getXfrFromConnectCode()) && 
+						!isDeltaConnected(bra.getXfrToConnectCode()))
 						
 						||
-						((bra.getXfrFromConnectCode()== XfrConnectCode.WYE_SOLID_GROUNDED || 
-						    bra.getXfrFromConnectCode()== XfrConnectCode.WYE_UNGROUNDED||
-						    bra.getXfrFromConnectCode()== XfrConnectCode.WYE_ZGROUNDED) &&
-						    bra.getXfrToConnectCode()== XfrConnectCode.DELTA || 
-						    bra.getXfrToConnectCode()== XfrConnectCode.DELTA11 )){
+						(!isDeltaConnected(bra.getXfrFromConnectCode()) &&
+						    isDeltaConnected(bra.getXfrToConnectCode()))){
 					
 					 bra.setVisited(true);
 					 
-					 
+					 phaseShiftDeg = -30;
 					 ThreePhaseBus  StartingBus =null;
 					 
 					 //high voltage side leads 30 deg, always starts from the low voltage side
 					 if(bra.getFromAclfBus().getBaseVoltage()>bra.getToAclfBus().getBaseVoltage()){
 						 
-					     phaseShiftDeg = -30;
 						 StartingBus = (ThreePhaseBus) bra.getToAclfBus();
 					 }		
 					 else {
-						 phaseShiftDeg = 30;
+					
 						 StartingBus = (ThreePhaseBus) bra.getFromAclfBus();
 					 }
+					 
 					    Complex vpos = StartingBus.getVoltage();
 						Complex va = vpos.multiply(phaseShiftCplxFactor(phaseShiftDeg));
 						Complex vb = va.multiply(phaseShiftCplxFactor(120));
 						Complex vc = vb.multiply(phaseShiftCplxFactor(120));
-						StartingBus.setPhaseVoltages(new Complex3x1(va,vb,vc));
+						StartingBus.set3PhaseVoltages(new Complex3x1(va,vb,vc));
 					 
 					 Queue<ThreePhaseBus> q = new  LinkedList<ThreePhaseBus>();
 				     q.add(StartingBus);
@@ -109,8 +104,17 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 		
 		
 		
-		// initialize the three-phase generation power output and load
+		// initialize the phase voltages of those which are not set before, three-phase generation power output and load
 		for(AcscBus b: this.getBusList()){
+			
+			if(b.isActive() && !b.isVisited()){
+				   Complex vpos = b.getVoltage();
+					Complex va = vpos;
+					Complex vb = va.multiply(phaseShiftCplxFactor(120));
+					Complex vc = vb.multiply(phaseShiftCplxFactor(120));
+					((ThreePhaseBus) b).set3PhaseVoltages(new Complex3x1(va,vb,vc));
+			}
+				
 			//initialize the 3p power output of generation;
 			if(b.isGen()){
 				for(AclfGen gen: b.getContributeGenList()){
@@ -141,6 +145,11 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 		return true;
 	}
 	
+	private boolean isDeltaConnected(XfrConnectCode code){
+		return code ==XfrConnectCode.DELTA ||
+				code== XfrConnectCode.DELTA11;
+	}
+	
 	private void BFSSubTransmission (double phaseShiftDeg, Queue<ThreePhaseBus> onceVisitedBuses){
 		
 		//Retrieves and removes the head of this queue, or returns null if this queue is empty.
@@ -167,10 +176,10 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 									// update the phase voltage
 									Complex vpos = ((AclfBus)findBus).getVoltage();
 									Complex va = vpos.multiply(phaseShiftCplxFactor(phaseShiftDeg));
-									Complex vb = va.multiply(phaseShiftCplxFactor(120));
-									Complex vc = vb.multiply(phaseShiftCplxFactor(120));
+									Complex vb = va.multiply(phaseShiftCplxFactor(120.0d));
+									Complex vc = vb.multiply(phaseShiftCplxFactor(120.0d));
 									
-									((ThreePhaseBus) findBus).setPhaseVoltages(new Complex3x1(va,vb,vc));
+									((ThreePhaseBus) findBus).set3PhaseVoltages(new Complex3x1(va,vb,vc));
 								}
 							} catch (InterpssException e) {
 								
@@ -186,7 +195,7 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 	}
 	
 	private Complex phaseShiftCplxFactor(double shiftDeg){
-		return new Complex(Math.cos(shiftDeg/180*Math.PI),Math.sin(shiftDeg/180*Math.PI));
+		return new Complex(Math.cos(shiftDeg/180.0d*Math.PI),Math.sin(shiftDeg/180.0d*Math.PI));
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package ipss.plugin.aclf.threePhase.test;
 
 import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
@@ -13,6 +14,7 @@ import org.ipss.aclf.threePhase.ThreePhaseBus;
 import org.ipss.aclf.threePhase.ThreePhaseNetwork;
 import org.ipss.aclf.threePhase.impl.ThreePhaseNetworkImpl;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
+import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
 import com.interpss.common.exp.InterpssException;
@@ -22,13 +24,15 @@ import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.aclf.adpter.AclfLoadBusAdapter;
 import com.interpss.core.aclf.adpter.AclfPVGenBus;
 import com.interpss.core.aclf.adpter.AclfSwingBus;
+import com.interpss.core.acsc.AcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.algo.LoadflowAlgorithm;
 
 public class IEEE9Bus_3phase_test {
 	
-	public static void main(String[] args) throws InterpssException {
+	//@Test
+	public void testLoadFlow() throws InterpssException {
 		//Initialize logger and Spring config
 		IpssCorePlugin.init();
 		
@@ -36,14 +40,85 @@ public class IEEE9Bus_3phase_test {
 	//create a load flow algorithm object
   	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
   	//run load flow using default setting
-  	algo.loadflow();
+  	
+  	
+  	assertTrue(algo.loadflow())	;
+	//output load flow summary result
+	System.out.println(AclfOutFunc.loadFlowSummary(net));
+	
+	/**
+Load Flow Summary
+
+                         Max Power Mismatches
+             Bus              dPmax       Bus              dQmax
+            -------------------------------------------------------
+            Bus7             0.000001  Bus4             0.000013 (pu)
+                            0.0973520                   1.324432 (kva)
+
+     BusID          Code           Volt(pu)   Angle(deg)     P(pu)     Q(pu)      Bus Name   
+  -------------------------------------------------------------------------------------------
+  Bus1         Swing                1.04000        0.00       0.7164    0.2704   BUS-1   100 
+  Bus2         PV                   1.02500        9.28       1.6300    0.0665   BUS-2   100 
+  Bus3         PV                   1.02500        4.66       0.8500   -0.1086   BUS-3   100 
+  Bus4         PQ                   1.02579       -2.22       0.0000    0.0000   BUS-4   100 
+  Bus5         PQ    + ConstP       0.99563       -3.99      -1.2500   -0.5000   BUS-5   100 
+  Bus6         PQ    + ConstP       1.01265       -3.69      -0.9000   -0.3000   BUS-6   100 
+  Bus7         PQ                   1.02577        3.72       0.0000    0.0000   BUS-7   100 
+  Bus8         PQ    + ConstP       1.01588        0.73      -1.0000   -0.3500   BUS-8   100 
+  Bus9         PQ                   1.03235        1.97       0.0000    0.0000   BUS-9   100  
+	 */
+	
+	//BusStyle output provides bus generation and load, as well as branch power flow info
+	//System.out.println(AclfOut_BusStyle.lfResultsBusStyle(net, BusIdStyle.BusId_No));
+	
+	}
+	
+	@Test
+	public void test3PNetworkInitialization() throws InterpssException {
+		//Initialize logger and Spring config
+		IpssCorePlugin.init();
+		
+		ThreePhaseNetwork net = createIEEE9Bus();
+	//create a load flow algorithm object
+  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
+  	//run load flow using default setting
+	assertTrue(algo.loadflow())	;
   	
   		
 	//output load flow summary result
 	System.out.println(AclfOutFunc.loadFlowSummary(net));
 	
-	//BusStyle output provides bus generation and load, as well as branch power flow info
-	System.out.println(AclfOut_BusStyle.lfResultsBusStyle(net, BusIdStyle.BusId_No));
+	/**
+		                           Load Flow Summary
+		
+		                         Max Power Mismatches
+		             Bus              dPmax       Bus              dQmax
+		            -------------------------------------------------------
+		            Bus7             0.000001  Bus4             0.000013 (pu)
+		                            0.0973520                   1.324432 (kva)
+		
+		     BusID          Code           Volt(pu)   Angle(deg)     P(pu)     Q(pu)      Bus Name   
+		  -------------------------------------------------------------------------------------------
+		  Bus1         Swing                1.04000        0.00       0.7164    0.2704   BUS-1   100 
+		  Bus2         PV                   1.02500        9.28       1.6300    0.0665   BUS-2   100 
+		  Bus3         PV                   1.02500        4.66       0.8500   -0.1086   BUS-3   100 
+		  Bus4         PQ                   1.02579       -2.22       0.0000    0.0000   BUS-4   100 
+		  Bus5         PQ    + ConstP       0.99563       -3.99      -1.2500   -0.5000   BUS-5   100 
+		  Bus6         PQ    + ConstP       1.01265       -3.69      -0.9000   -0.3000   BUS-6   100 
+		  Bus7         PQ                   1.02577        3.72       0.0000    0.0000   BUS-7   100 
+		  Bus8         PQ    + ConstP       1.01588        0.73      -1.0000   -0.3500   BUS-8   100 
+		  Bus9         PQ                   1.03235        1.97       0.0000    0.0000   BUS-9   100 
+	*/
+	
+   net.initThreePhaseFromLfResult();
+   
+  for(AcscBus bus: net.getBusList()){
+	  if(bus instanceof ThreePhaseBus){
+		  ThreePhaseBus ph3Bus = (ThreePhaseBus) bus;
+		  
+		  System.out.println(bus.getId() +": "+ph3Bus.get3PhaseVotlages());
+	  }
+  }
 	
 	}
 	
@@ -124,7 +199,7 @@ public class IEEE9Bus_3phase_test {
 		  		
 		  	//Bus 6	
 		  		ThreePhaseBus bus6 = ThreePhaseObjectFactory.create3PBus("Bus6", net);
-		  		bus6.setAttributes("Bus 5", "");
+		  		bus6.setAttributes("Bus6", "");
 		  		bus6.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus6.setGenCode(AclfGenCode.NON_GEN);
@@ -167,48 +242,48 @@ public class IEEE9Bus_3phase_test {
 		  		ThreePhaseBranch bra78 = ThreePhaseObjectFactory.create3PBranch("Bus7", "Bus8", "0", net);
 				bra78.setBranchCode(AclfBranchCode.LINE);
 				bra78.setZ( new Complex( 0.00850,   0.07200));
-				bra78.setHShuntY(new Complex(0,0.149));
+				bra78.setHShuntY(new Complex(0,0.149/2));
 				bra78.setZ0( new Complex(0.02125,	  0.18));
-				bra78.setHB0(0.14900);
+				bra78.setHB0(0.14900/2);
 				
 				
 				ThreePhaseBranch bra89 = ThreePhaseObjectFactory.create3PBranch("Bus8", "Bus9", "0", net);
 				bra89.setBranchCode(AclfBranchCode.LINE);
 				bra89.setZ( new Complex(0.01190,   0.10080));
-				bra89.setHShuntY(new Complex(0,0.20900));
+				bra89.setHShuntY(new Complex(0,0.20900/2));
 				bra89.setZ0( new Complex(0.02975,	  0.252));
-				bra89.setHB0(0.20900);
+				bra89.setHB0(0.20900/2);
 				
 				
 				ThreePhaseBranch bra57 = ThreePhaseObjectFactory.create3PBranch("Bus5", "Bus7", "0", net);
 				bra57.setBranchCode(AclfBranchCode.LINE);
 				bra57.setZ( new Complex(0.03200,   0.16100));
-				bra57.setHShuntY(new Complex(0,0.30600));
+				bra57.setHShuntY(new Complex(0,0.30600/2));
 				bra57.setZ0( new Complex(0.08,   	  0.4025));
-				bra57.setHB0(0.30600);
+				bra57.setHB0(0.30600/2);
 				
 				
 				ThreePhaseBranch bra69 = ThreePhaseObjectFactory.create3PBranch("Bus6", "Bus9", "0", net);
 				bra69.setBranchCode(AclfBranchCode.LINE);
 				bra69.setZ( new Complex(0.03900,   0.17000));
-				bra69.setHShuntY(new Complex(0, 0.35800));
+				bra69.setHShuntY(new Complex(0, 0.35800/2));
 				bra69.setZ0( new Complex(0.0975,	  0.425));
-				bra69.setHB0(0.35800);
+				bra69.setHB0(0.35800/2);
 				
 				ThreePhaseBranch bra45 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus5", "0", net);
 				bra45.setBranchCode(AclfBranchCode.LINE);
 				bra45.setZ( new Complex(0.01000,   0.08500));
-				bra45.setHShuntY(new Complex(0, 0.17600));
+				bra45.setHShuntY(new Complex(0, 0.17600/2));
 				bra45.setZ0( new Complex(0.025,	  0.2125));
-				bra45.setHB0(0.17600);
+				bra45.setHB0(0.17600/2);
 				
 				
 				ThreePhaseBranch bra46 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus6", "0", net);
 				bra46.setBranchCode(AclfBranchCode.LINE);
 				bra46.setZ( new Complex(0.01700,   0.09200));
-				bra46.setHShuntY(new Complex(0, 0.15800));
+				bra46.setHShuntY(new Complex(0, 0.15800/2));
 				bra46.setZ0( new Complex(0.0425,	  0.23));
-				bra46.setHB0(0.15800);
+				bra46.setHB0(0.15800/2);
               
 				
 				//////////////////transformers///////////////////////////////////////////
