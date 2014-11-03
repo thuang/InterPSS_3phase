@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="/ipss.lib.3rdPty/lib/cache/hazelcast-3.1.jar"/>
 	<classpathentry kind="lib" path="/ipss.lib.3rdPty/lib/spring/spring-2.5.6.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ipss.numeric"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ipss.plugin.base"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ipss.plugin.core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

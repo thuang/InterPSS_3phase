@@ -11,10 +11,16 @@ import com.interpss.core.acsc.PhaseCode;
 public class ThreePhaseLoadImpl extends AclfLoadImpl implements ThreePhaseLoad {
 
 	Complex3x1 ph3Load = new Complex3x1();
+	Complex3x3 equivYabc = new Complex3x3();
 	
 	@Override
 	public Complex3x3 getEquivYabc() {
-		return null;
+		double v = this.getParentBus().getVoltageMag();
+		equivYabc.aa = ph3Load.a_0.conjugate().divide(v*v);
+		equivYabc.bb = ph3Load.b_1.conjugate().divide(v*v);
+		equivYabc.cc = ph3Load.c_2.conjugate().divide(v*v);
+		
+		return equivYabc;
 	}
 
 	@Override

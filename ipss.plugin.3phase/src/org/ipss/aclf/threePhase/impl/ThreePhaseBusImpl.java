@@ -67,9 +67,9 @@ public class ThreePhaseBusImpl extends AcscBusImpl implements ThreePhaseBus{
 		// the generators
 		 for(AclfGen gen:this.getContributeGenList()) {
 			 if(gen.isActive()){
-				 if(gen instanceof ThreePhaseLoad){
-					 ThreePhaseGen ph3Load = (ThreePhaseGen) gen;
-					 yiiAbc = yiiAbc.add(ph3Load.getYabc(false));
+				 if(gen instanceof ThreePhaseGen){
+					 ThreePhaseGen ph3Gen = (ThreePhaseGen) gen;
+					 yiiAbc = yiiAbc.add(ph3Gen.getYabc(false));
 				 }
 			 }
 		 }

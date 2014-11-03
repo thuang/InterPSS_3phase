@@ -8,16 +8,21 @@ import java.util.Set;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.NumericObjectFactory;
 import org.interpss.numeric.datatype.Complex3x1;
+import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplex;
 import org.interpss.numeric.sparse.ISparseEqnMatrix3x3;
 import org.interpss.numeric.sparse.impl.SparseEqnMatrix3x3Impl;
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseBus;
+import org.ipss.aclf.threePhase.ThreePhaseGen;
+import org.ipss.aclf.threePhase.ThreePhaseLoad;
 import org.ipss.aclf.threePhase.ThreePhaseNetwork;
 
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranch;
 import com.interpss.core.aclf.AclfBus;
+import com.interpss.core.aclf.AclfGen;
+import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.AcscBranch;
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
@@ -104,11 +109,36 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 		
 		
 		
-		// initialize the generation power output
+		// initialize the three-phase generation power output and load
+		for(AcscBus b: this.getBusList()){
+			//initialize the 3p power output of generation;
+			if(b.isGen()){
+				for(AclfGen gen: b.getContributeGenList()){
+					if(gen instanceof ThreePhaseGen){
+						ThreePhaseGen ph3Gen = (ThreePhaseGen) gen;
+						Complex phaseGen = gen.getGen().divide(3);
+						ph3Gen.setPowerAbc(new Complex3x1(phaseGen,phaseGen,phaseGen), UnitType.PU);
+					}
+				}
+			}
+			
+			// initialize the load 3-phase power
+			if(b.isLoad()){
+				for(AclfLoad load: b.getContributeLoadList()){
+					if(load instanceof ThreePhaseLoad){
+						ThreePhaseLoad ph3Load = (ThreePhaseLoad) load; 
+						Complex phaseLoad = load.getLoad(b.getVoltageMag()).divide(3);
+						
+						ph3Load.set3PhaseLoad(new Complex3x1(phaseLoad,phaseLoad,phaseLoad));
+					}
+				}
+			}
+			
+		}
 		
 		
-		// initialize the load 1-phase power
-		return false;
+		
+		return true;
 	}
 	
 	private void BFSSubTransmission (double phaseShiftDeg, Queue<ThreePhaseBus> onceVisitedBuses){
