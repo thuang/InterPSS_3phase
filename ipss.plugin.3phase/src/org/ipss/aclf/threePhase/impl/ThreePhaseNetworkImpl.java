@@ -120,7 +120,7 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 				for(AclfGen gen: b.getContributeGenList()){
 					if(gen instanceof ThreePhaseGen){
 						ThreePhaseGen ph3Gen = (ThreePhaseGen) gen;
-						Complex phaseGen = gen.getGen().divide(3);
+						Complex phaseGen = gen.getGen();// phase gen and 3-phase gen are of the same value in PU
 						ph3Gen.setPowerAbc(new Complex3x1(phaseGen,phaseGen,phaseGen), UnitType.PU);
 					}
 				}
@@ -131,7 +131,7 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 				for(AclfLoad load: b.getContributeLoadList()){
 					if(load instanceof ThreePhaseLoad){
 						ThreePhaseLoad ph3Load = (ThreePhaseLoad) load; 
-						Complex phaseLoad = load.getLoad(b.getVoltageMag()).divide(3);
+						Complex phaseLoad = load.getLoad(b.getVoltageMag()); // phase load and 3-phase load are of the same value in PU
 						
 						ph3Load.set3PhaseLoad(new Complex3x1(phaseLoad,phaseLoad,phaseLoad));
 					}

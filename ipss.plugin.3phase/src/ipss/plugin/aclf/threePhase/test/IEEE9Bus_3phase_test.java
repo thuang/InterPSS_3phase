@@ -11,6 +11,7 @@ import org.interpss.display.impl.AclfOut_BusStyle;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseBus;
+import org.ipss.aclf.threePhase.ThreePhaseGen;
 import org.ipss.aclf.threePhase.ThreePhaseNetwork;
 import org.ipss.aclf.threePhase.impl.ThreePhaseNetworkImpl;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
@@ -37,6 +38,10 @@ public class IEEE9Bus_3phase_test {
 		IpssCorePlugin.init();
 		
 		ThreePhaseNetwork net = createIEEE9Bus();
+	
+	// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
+	net.initContributeGenLoad();
+		
 	//create a load flow algorithm object
   	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
   	//run load flow using default setting
@@ -79,47 +84,62 @@ Load Flow Summary
 		IpssCorePlugin.init();
 		
 		ThreePhaseNetwork net = createIEEE9Bus();
-	//create a load flow algorithm object
-  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
-  	//run load flow using default setting
-	assertTrue(algo.loadflow())	;
-  	
-  		
-	//output load flow summary result
-	System.out.println(AclfOutFunc.loadFlowSummary(net));
-	
-	/**
-		                           Load Flow Summary
 		
-		                         Max Power Mismatches
-		             Bus              dPmax       Bus              dQmax
-		            -------------------------------------------------------
-		            Bus7             0.000001  Bus4             0.000013 (pu)
-		                            0.0973520                   1.324432 (kva)
 		
-		     BusID          Code           Volt(pu)   Angle(deg)     P(pu)     Q(pu)      Bus Name   
-		  -------------------------------------------------------------------------------------------
-		  Bus1         Swing                1.04000        0.00       0.7164    0.2704   BUS-1   100 
-		  Bus2         PV                   1.02500        9.28       1.6300    0.0665   BUS-2   100 
-		  Bus3         PV                   1.02500        4.66       0.8500   -0.1086   BUS-3   100 
-		  Bus4         PQ                   1.02579       -2.22       0.0000    0.0000   BUS-4   100 
-		  Bus5         PQ    + ConstP       0.99563       -3.99      -1.2500   -0.5000   BUS-5   100 
-		  Bus6         PQ    + ConstP       1.01265       -3.69      -0.9000   -0.3000   BUS-6   100 
-		  Bus7         PQ                   1.02577        3.72       0.0000    0.0000   BUS-7   100 
-		  Bus8         PQ    + ConstP       1.01588        0.73      -1.0000   -0.3500   BUS-8   100 
-		  Bus9         PQ                   1.03235        1.97       0.0000    0.0000   BUS-9   100 
-	*/
-	
-   net.initThreePhaseFromLfResult();
-   
-  for(AcscBus bus: net.getBusList()){
-	  if(bus instanceof ThreePhaseBus){
-		  ThreePhaseBus ph3Bus = (ThreePhaseBus) bus;
+		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
+		net.initContributeGenLoad();
+			
+		//create a load flow algorithm object
+	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
+	  	//run load flow using default setting
+		assertTrue(algo.loadflow())	;
+	  	
+	  		
+		//output load flow summary result
+		System.out.println(AclfOutFunc.loadFlowSummary(net));
+		
+		/**
+			                           Load Flow Summary
+			
+			                         Max Power Mismatches
+			             Bus              dPmax       Bus              dQmax
+			            -------------------------------------------------------
+			            Bus7             0.000001  Bus4             0.000013 (pu)
+			                            0.0973520                   1.324432 (kva)
+			
+			     BusID          Code           Volt(pu)   Angle(deg)     P(pu)     Q(pu)      Bus Name   
+			  -------------------------------------------------------------------------------------------
+			  Bus1         Swing                1.04000        0.00       0.7164    0.2704   BUS-1   100 
+			  Bus2         PV                   1.02500        9.28       1.6300    0.0665   BUS-2   100 
+			  Bus3         PV                   1.02500        4.66       0.8500   -0.1086   BUS-3   100 
+			  Bus4         PQ                   1.02579       -2.22       0.0000    0.0000   BUS-4   100 
+			  Bus5         PQ    + ConstP       0.99563       -3.99      -1.2500   -0.5000   BUS-5   100 
+			  Bus6         PQ    + ConstP       1.01265       -3.69      -0.9000   -0.3000   BUS-6   100 
+			  Bus7         PQ                   1.02577        3.72       0.0000    0.0000   BUS-7   100 
+			  Bus8         PQ    + ConstP       1.01588        0.73      -1.0000   -0.3500   BUS-8   100 
+			  Bus9         PQ                   1.03235        1.97       0.0000    0.0000   BUS-9   100 
+		*/
+		
+	   net.initThreePhaseFromLfResult();
+	   
+	  for(AcscBus bus: net.getBusList()){
+		  if(bus instanceof ThreePhaseBus){
+			  ThreePhaseBus ph3Bus = (ThreePhaseBus) bus;
+			  
+			  System.out.print(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
+			  
+			  if (ph3Bus.isGen()){
+				 ThreePhaseGen gen = (ThreePhaseGen) ph3Bus.getContributeGenList().get(0);
+				  System.out.print(", \nGenPowerAbc = "+gen.getPowerAbc(UnitType.mVA)+", \nZabc = "+gen.getZabc(true));
+			  }
+			  System.out.print("\n");
+		  }
 		  
-		  System.out.println(bus.getId() +": "+ph3Bus.get3PhaseVotlages());
+		  
 	  }
-  }
-	
+	  
+	 
+		
 	}
 	
 	private static ThreePhaseNetwork createIEEE9Bus() throws InterpssException{
@@ -142,10 +162,19 @@ Load Flow Summary
 		  		// set bus to be a swing bus
 		  		bus1.setGenCode(AclfGenCode.SWING);
 		  		// adapt the bus object to a swing bus object
-		  		AclfSwingBus swingBus = bus1.toSwingBus();
-		  		// set swing bus attributes
-		  		swingBus.setDesiredVoltMag(1.04, UnitType.PU);
-		  		swingBus.setDesiredVoltAng(0.0, UnitType.Deg);
+		  		
+		  		// create contribute generator
+		  		// MVABase, power, sourceZ1/2/0
+		  		ThreePhaseGen gen1 = ThreePhaseObjectFactory.create3PGenerator("Gen1");
+		  		gen1.setMvaBase(100.0);
+		  		gen1.setDesiredVoltMag(1.04);
+		  		gen1.setGen(new Complex(0.7164,0.2710));
+		  		gen1.setPosGenZ(new Complex(0,0.04));
+		  		gen1.setNegGenZ(new Complex(0,0.04));
+		  		gen1.setZeroGenZ(new Complex(0,0.04));
+		  		bus1.getContributeGenList().add(gen1);
+		  		
+		  		
 		  		
 		  	// Bus 2
 		  		ThreePhaseBus bus2 = ThreePhaseObjectFactory.create3PBus("Bus2", net);
@@ -156,10 +185,21 @@ Load Flow Summary
 		  		// set bus to be a swing bus
 		  		bus2.setGenCode(AclfGenCode.GEN_PV);
 		  		// adapt the bus object to a swing bus object
-		  		AclfPVGenBus pvBus2 = bus2.toPVBus();
+		  		//AclfPVGenBus pvBus2 = bus2.toPVBus();
 		  		// set swing bus attributes
-		  		pvBus2.setDesiredVoltMag(1.025, UnitType.PU);
-		  		pvBus2.setGenP(1.63);
+		  		//pvBus2.setDesiredVoltMag(1.025, UnitType.PU);
+		  		//pvBus2.setGenP(1.63);
+		  		
+		  	// create contribute generator
+		  		// MVABase, power, sourceZ1/2/0
+		  		ThreePhaseGen gen2 = ThreePhaseObjectFactory.create3PGenerator("Gen2");
+		  		gen2.setMvaBase(100.0);
+		  		gen2.setDesiredVoltMag(1.025);
+		  		gen2.setGen(new Complex(1.6300, 0.0659));
+		  		gen2.setPosGenZ(new Complex(0,0.089));
+		  		gen2.setNegGenZ(new Complex(0,0.089));
+		  		gen2.setZeroGenZ(new Complex(0,0.089));
+		  		bus2.getContributeGenList().add(gen2);
 		  		
 		  		
 		  	// Bus 3
@@ -171,10 +211,21 @@ Load Flow Summary
 		  		// set bus to be a swing bus
 		  		bus3.setGenCode(AclfGenCode.GEN_PV);
 		  		// adapt the bus object to a swing bus object
-		  		AclfPVGenBus pvbus3 = bus3.toPVBus();
+		  		//AclfPVGenBus pvbus3 = bus3.toPVBus();
 		  		
-		  		pvbus3.setDesiredVoltMag(1.025, UnitType.PU);
-		  		pvbus3.setGenP(0.85);
+		  		//pvbus3.setDesiredVoltMag(1.025, UnitType.PU);
+		  		//pvbus3.setGenP(0.85);
+		  		
+		  	// create contribute generator
+		  		// MVABase, power, sourceZ1/2/0
+		  		ThreePhaseGen gen3 = ThreePhaseObjectFactory.create3PGenerator("Gen3");
+		  		gen3.setMvaBase(100.0);
+		  		gen3.setDesiredVoltMag(1.025);
+		  		gen3.setGen(new Complex(0.8500, -0.1092));
+		  		gen3.setPosGenZ(new Complex(0,0.107));
+		  		gen3.setNegGenZ(new Complex(0,0.107));
+		  		gen3.setZeroGenZ(new Complex(0,0.107));
+		  		bus3.getContributeGenList().add(gen3);
 		  		
 		  		
 		  	//Bus 4
@@ -199,7 +250,7 @@ Load Flow Summary
 		  		
 		  	//Bus 6	
 		  		ThreePhaseBus bus6 = ThreePhaseObjectFactory.create3PBus("Bus6", net);
-		  		bus6.setAttributes("Bus6", "");
+		  		bus6.setAttributes("Bus 6", "");
 		  		bus6.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus6.setGenCode(AclfGenCode.NON_GEN);

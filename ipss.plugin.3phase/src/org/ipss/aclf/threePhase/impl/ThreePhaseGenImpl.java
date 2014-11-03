@@ -58,7 +58,7 @@ public class ThreePhaseGenImpl extends AcscGenImpl implements ThreePhaseGen {
 	public Complex3x3 getZabc(boolean machineMVABase) {
 		if(this.zAbc == null)
 			if(this.getPosGenZ()!=null && this.getZeroGenZ()!=null){
-				this.zAbc = new Complex3x3(this.getPosGenZ(),this.getNegGenZ(),this.getZeroGenZ());
+				setZabc(this.getPosGenZ(),this.getNegGenZ(),this.getZeroGenZ());
 			}
 		if(!machineMVABase) 
 			  return this.zAbc.mulitply(this.getZMultiFactor());
@@ -88,7 +88,7 @@ public class ThreePhaseGenImpl extends AcscGenImpl implements ThreePhaseGen {
 	public Complex3x1 getPowerAbc(UnitType unit) {
 		switch(unit){
 		 case PU: return this.puPowerAbc;
-		 case mVA: return this.puPowerAbc.multiply(this.getMvaBase()/3.0); 
+		 case mVA: return this.puPowerAbc.multiply(this.getMvaBase()/3.0);
 		 case kVA: return this.puPowerAbc.multiply(this.getMvaBase()*1000.0/3.0);
 		 default: try {
 				throw new Exception("The unit should be PU, mVA or kVA");
@@ -103,9 +103,9 @@ public class ThreePhaseGenImpl extends AcscGenImpl implements ThreePhaseGen {
 	public void setPowerAbc(Complex3x1 genPQAbc,UnitType unit) {
 		
 		switch(unit){
-		 case PU:   this.puPowerAbc =   genPQAbc;
-		 case mVA:  this.puPowerAbc =   genPQAbc.multiply(3.0/this.getMvaBase()); 
-		 case kVA:  this.puPowerAbc =   genPQAbc.multiply(3.0/1000.0/this.getMvaBase());
+		 case PU:   this.puPowerAbc =   genPQAbc; break;
+		 case mVA:  this.puPowerAbc =   genPQAbc.multiply(3.0/this.getMvaBase()); break;
+		 case kVA:  this.puPowerAbc =   genPQAbc.multiply(3.0/1000.0/this.getMvaBase());break;
 		 default: try {
 				throw new Exception("The unit should be PU, mVA or kVA");
 			} catch (Exception e) {

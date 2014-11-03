@@ -2,10 +2,12 @@ package org.ipss.aclf.threePhase.util;
 
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseBus;
+import org.ipss.aclf.threePhase.ThreePhaseGen;
 import org.ipss.aclf.threePhase.ThreePhaseNetwork;
 import org.ipss.aclf.threePhase.ThreePhaseXformer;
 import org.ipss.aclf.threePhase.impl.ThreePhaseBranchImpl;
 import org.ipss.aclf.threePhase.impl.ThreePhaseBusImpl;
+import org.ipss.aclf.threePhase.impl.ThreePhaseGenImpl;
 import org.ipss.aclf.threePhase.impl.ThreePhaseXformerImpl;
 
 import com.interpss.common.exp.InterpssException;
@@ -28,6 +30,12 @@ public class ThreePhaseObjectFactory {
 		ThreePhaseBranch branch = new ThreePhaseBranchImpl();
 		net.addBranch(branch, fromBusId, toBusId, cirId);
 		return branch;
+	}
+	
+	public static ThreePhaseGen  create3PGenerator(String genId){
+		ThreePhaseGen gen = new ThreePhaseGenImpl();
+		gen.setId(genId);
+		return gen;
 	}
 
 }
