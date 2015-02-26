@@ -4,6 +4,7 @@ import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.complex.ComplexUtils;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
 import org.interpss.display.AclfOutFunc.BusIdStyle;
@@ -12,6 +13,7 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseBus;
 import org.ipss.aclf.threePhase.ThreePhaseGen;
+import org.ipss.aclf.threePhase.ThreePhaseLoad;
 import org.ipss.aclf.threePhase.ThreePhaseNetwork;
 import org.ipss.aclf.threePhase.impl.ThreePhaseNetworkImpl;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
@@ -130,7 +132,43 @@ Load Flow Summary
 			  
 			  if (ph3Bus.isGen()){
 				 ThreePhaseGen gen = (ThreePhaseGen) ph3Bus.getContributeGenList().get(0);
-				  System.out.print(", \nGenPowerAbc = "+gen.getPowerAbc(UnitType.mVA)+", \nZabc = "+gen.getZabc(true));
+				  System.out.print("\nGenPowerAbc(MW) = "+gen.getPowerAbc(UnitType.mVA)+", \nZabc: "+gen.getZabc(true));
+			  
+				  
+				  /**
+				   * Bus1: Vabc =  0.90067 + j-0.5200  0.0000 + j1.0400  -0.90067 + j-0.5200, 
+							GenPowerAbc = 23.88023 + j9.03339  23.88023 + j9.03339  23.88023 + j9.03339, 
+							Zabc = aa = (0.0, 0.039999999999999994),ab = (0.0, 0.0),ac = (0.0, 0.0)
+							ba = (0.0, 0.0),bb = (-1.734723475976807E-18, 0.039999999999999994),bc = (1.734723475976807E-18, -3.469446951953614E-18)
+							ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.734723475976807E-18, 0.039999999999999994)
+											  
+				    */
+			      if(bus.getId().equals("Bus1")){
+			    	  assertTrue(Math.abs(gen.getPowerAbc(UnitType.mVA).a_0.getReal()-23.88023)<1.0E-4);
+			    	  assertTrue(gen.getPowerAbc(UnitType.mVA).a_0.abs() ==gen.getPowerAbc(UnitType.mVA).b_1.abs());
+			    	  assertTrue(gen.getZabc(false).aa.subtract(new Complex(0.0,0.04)).abs()<1.0E-5);
+			    	  assertTrue(gen.getZabc(false).ab.abs()<1.0E-5);
+			    	  assertTrue(gen.getZabc(false).ca.abs()<1.0E-5);
+			    	  
+			      }
+			      
+			  
+			  }
+			  
+			  if(bus.isLoad()){
+				  ThreePhaseLoad ph3Load = (ThreePhaseLoad) ph3Bus.getContributeLoadList().get(0);
+				  
+				    if(bus.getId().equals("Bus5")){
+				    	  
+				    	//System.out.println("Phase A load@Bus5 ="+ph3Load.get3PhaseLoad().a_0);
+				    	assertTrue(Math.abs(ph3Load.get3PhaseLoad().a_0.getReal()-1.25)<1.0E-4);
+				    	assertTrue(ph3Load.get3PhaseLoad().a_0.abs() ==ph3Load.get3PhaseLoad().b_1.abs());
+				    	 // assertTrue(ph3Load .getZabc(false).aa.subtract(new Complex(0.0,0.04)).abs()<1.0E-5);
+				    	 // assertTrue(ph3Load .getZabc(false).ab.abs()<1.0E-5);
+				    	 // assertTrue(ph3Load .getZabc(false).ca.abs()<1.0E-5);
+				    	  
+				      }
+				  
 			  }
 			  System.out.print("\n");
 		  }
@@ -138,7 +176,14 @@ Load Flow Summary
 		  
 	  }
 	  
-	 
+	 /**
+	  * 
+Bus1: Vabc =  0.90067 + j-0.5200  0.0000 + j1.0400  -0.90067 + j-0.5200, 
+GenPowerAbc = 23.88023 + j9.03339  23.88023 + j9.03339  23.88023 + j9.03339, 
+Zabc = aa = (0.0, 0.039999999999999994),ab = (0.0, 0.0),ac = (0.0, 0.0)
+ba = (0.0, 0.0),bb = (-1.734723475976807E-18, 0.039999999999999994),bc = (1.734723475976807E-18, -3.469446951953614E-18)
+ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.734723475976807E-18, 0.039999999999999994)
+	  */
 		
 	}
 	
@@ -244,9 +289,14 @@ Load Flow Summary
 		  		// set the bus to a constant power load bus
 		  		bus5.setLoadCode(AclfLoadCode.CONST_P);
 		  		// adapt the bus object to a Load bus object
-		  		AclfLoadBusAdapter loadBus5 = bus5.toLoadBus();
+		  		//AclfLoadBusAdapter loadBus5 = bus5.toLoadBus();
 		  		// set load to the bus
-		  		loadBus5.setLoad(new Complex(1.25, 0.5), UnitType.PU);
+		  		//loadBus5.setLoad(new Complex(1.25, 0.5), UnitType.PU);
+		  		
+		  		ThreePhaseLoad load = ThreePhaseObjectFactory.create3PLoad("load1");
+		  		load.setLoadCP(new Complex(1.25,0.5));
+		  		bus5.getContributeLoadList().add(load);
+		  		
 		  		
 		  	//Bus 6	
 		  		ThreePhaseBus bus6 = ThreePhaseObjectFactory.create3PBus("Bus6", net);
@@ -257,9 +307,12 @@ Load Flow Summary
 		  		// set the bus to a constant power load bus
 		  		bus6.setLoadCode(AclfLoadCode.CONST_P);
 		  		// adapt the bus object to a Load bus object
-		  		AclfLoadBusAdapter loadBus6 = bus6.toLoadBus();
+		  		//AclfLoadBusAdapter loadBus6 = bus6.toLoadBus();
 		  		// set load to the bus
-		  		loadBus6.setLoad(new Complex(0.9, 0.3), UnitType.PU);
+		  		//loadBus6.setLoad(new Complex(0.9, 0.3), UnitType.PU);
+		  		load = ThreePhaseObjectFactory.create3PLoad("load2");
+		  		load.setLoadCP(new Complex(0.9, 0.3));
+		  		bus6.getContributeLoadList().add(load);
 		  		
 		  		
 		  	//Bus 7
@@ -278,9 +331,13 @@ Load Flow Summary
 		  		// set the bus to a constant power load bus
 		  		bus8.setLoadCode(AclfLoadCode.CONST_P);
 		  		// adapt the bus object to a Load bus object
-		  		AclfLoadBusAdapter loadBus8 = bus8.toLoadBus();
+		  		//AclfLoadBusAdapter loadBus8 = bus8.toLoadBus();
 		  		// set load to the bus
-		  		loadBus8.setLoad(new Complex(1.00, 0.35), UnitType.PU);
+		  		//loadBus8.setLoad(new Complex(1.00, 0.35), UnitType.PU);
+		  		
+		  		load = ThreePhaseObjectFactory.create3PLoad("load3");
+		  		load.setLoadCP(new Complex(1.00, 0.35));
+		  		bus8.getContributeLoadList().add(load);
 		  		
 		  	//Bus 9
 		  		ThreePhaseBus bus9 = ThreePhaseObjectFactory.create3PBus("Bus9", net);

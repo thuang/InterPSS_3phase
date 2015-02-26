@@ -3,11 +3,13 @@ package org.ipss.aclf.threePhase.util;
 import org.ipss.aclf.threePhase.ThreePhaseBranch;
 import org.ipss.aclf.threePhase.ThreePhaseBus;
 import org.ipss.aclf.threePhase.ThreePhaseGen;
+import org.ipss.aclf.threePhase.ThreePhaseLoad;
 import org.ipss.aclf.threePhase.ThreePhaseNetwork;
 import org.ipss.aclf.threePhase.ThreePhaseXformer;
 import org.ipss.aclf.threePhase.impl.ThreePhaseBranchImpl;
 import org.ipss.aclf.threePhase.impl.ThreePhaseBusImpl;
 import org.ipss.aclf.threePhase.impl.ThreePhaseGenImpl;
+import org.ipss.aclf.threePhase.impl.ThreePhaseLoadImpl;
 import org.ipss.aclf.threePhase.impl.ThreePhaseXformerImpl;
 
 import com.interpss.common.exp.InterpssException;
@@ -36,6 +38,12 @@ public class ThreePhaseObjectFactory {
 		ThreePhaseGen gen = new ThreePhaseGenImpl();
 		gen.setId(genId);
 		return gen;
+	}
+	
+	public static ThreePhaseLoad create3PLoad(String loadId){
+		ThreePhaseLoad load = new ThreePhaseLoadImpl();
+		load.setId(loadId);
+		return load;
 	}
 
 }
