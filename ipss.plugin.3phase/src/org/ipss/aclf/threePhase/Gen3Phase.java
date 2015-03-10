@@ -7,7 +7,7 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 
 import com.interpss.core.acsc.AcscGen;
 
-public interface ThreePhaseGen extends AcscGen{
+public interface Gen3Phase extends AcscGen{
 	
 	/**
 	 * directly set the generator 3x3 impedance matrix on machine MVA base

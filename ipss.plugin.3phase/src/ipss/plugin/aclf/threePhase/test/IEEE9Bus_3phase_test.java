@@ -10,12 +10,12 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.display.AclfOutFunc.BusIdStyle;
 import org.interpss.display.impl.AclfOut_BusStyle;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.ipss.aclf.threePhase.ThreePhaseBranch;
-import org.ipss.aclf.threePhase.ThreePhaseBus;
-import org.ipss.aclf.threePhase.ThreePhaseGen;
-import org.ipss.aclf.threePhase.ThreePhaseLoad;
-import org.ipss.aclf.threePhase.ThreePhaseNetwork;
-import org.ipss.aclf.threePhase.impl.ThreePhaseNetworkImpl;
+import org.ipss.aclf.threePhase.Branch3Phase;
+import org.ipss.aclf.threePhase.Bus3Phase;
+import org.ipss.aclf.threePhase.Gen3Phase;
+import org.ipss.aclf.threePhase.Load3Phase;
+import org.ipss.aclf.threePhase.Network3Phase;
+import org.ipss.aclf.threePhase.impl.Network3PhaseImpl;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class IEEE9Bus_3phase_test {
 		//Initialize logger and Spring config
 		IpssCorePlugin.init();
 		
-		ThreePhaseNetwork net = createIEEE9Bus();
+		Network3Phase net = createIEEE9Bus();
 	
 	// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
 	net.initContributeGenLoad();
@@ -85,7 +85,7 @@ Load Flow Summary
 		//Initialize logger and Spring config
 		IpssCorePlugin.init();
 		
-		ThreePhaseNetwork net = createIEEE9Bus();
+		Network3Phase net = createIEEE9Bus();
 		
 		
 		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
@@ -125,23 +125,22 @@ Load Flow Summary
 	   net.initThreePhaseFromLfResult();
 	   
 	  for(AcscBus bus: net.getBusList()){
-		  if(bus instanceof ThreePhaseBus){
-			  ThreePhaseBus ph3Bus = (ThreePhaseBus) bus;
+		  if(bus instanceof Bus3Phase){
+			  Bus3Phase ph3Bus = (Bus3Phase) bus;
 			  
 			  System.out.print(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
 			  
 			  if (ph3Bus.isGen()){
-				 ThreePhaseGen gen = (ThreePhaseGen) ph3Bus.getContributeGenList().get(0);
+				 Gen3Phase gen = (Gen3Phase) ph3Bus.getContributeGenList().get(0);
 				  System.out.print("\nGenPowerAbc(MW) = "+gen.getPowerAbc(UnitType.mVA)+", \nZabc: "+gen.getZabc(true));
 			  
 				  
 				  /**
-				   * Bus1: Vabc =  0.90067 + j-0.5200  0.0000 + j1.0400  -0.90067 + j-0.5200, 
-							GenPowerAbc = 23.88023 + j9.03339  23.88023 + j9.03339  23.88023 + j9.03339, 
-							Zabc = aa = (0.0, 0.039999999999999994),ab = (0.0, 0.0),ac = (0.0, 0.0)
-							ba = (0.0, 0.0),bb = (-1.734723475976807E-18, 0.039999999999999994),bc = (1.734723475976807E-18, -3.469446951953614E-18)
-							ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.734723475976807E-18, 0.039999999999999994)
-											  
+					Bus1: Vabc =  0.90067 + j-0.5200  -0.90067 + j-0.5200  0.0000 + j1.0400
+					GenPowerAbc(MW) = 23.88023 + j9.03339  23.88023 + j9.03339  23.88023 + j9.03339, 
+					Zabc: aa = (0.0, 0.039999999999999994),ab = (0.0, 0.0),ac = (0.0, 0.0)
+					ba = (0.0, 0.0),bb = (-1.734723475976807E-18, 0.039999999999999994),bc = (1.734723475976807E-18, -3.469446951953614E-18)
+					ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.734723475976807E-18, 0.039999999999999994)		  
 				    */
 			      if(bus.getId().equals("Bus1")){
 			    	  assertTrue(Math.abs(gen.getPowerAbc(UnitType.mVA).a_0.getReal()-23.88023)<1.0E-4);
@@ -156,7 +155,7 @@ Load Flow Summary
 			  }
 			  
 			  if(bus.isLoad()){
-				  ThreePhaseLoad ph3Load = (ThreePhaseLoad) ph3Bus.getContributeLoadList().get(0);
+				  Load3Phase ph3Load = (Load3Phase) ph3Bus.getContributeLoadList().get(0);
 				  
 				    if(bus.getId().equals("Bus5")){
 				    	  
@@ -187,11 +186,11 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		
 	}
 	
-	private static ThreePhaseNetwork createIEEE9Bus() throws InterpssException{
+	private static Network3Phase createIEEE9Bus() throws InterpssException{
 		
 		
 		// Create an AclfNetwork object
-				ThreePhaseNetwork net = new ThreePhaseNetworkImpl();
+				Network3Phase net = new Network3PhaseImpl();
 
 				double baseKva = 100000.0;
 				
@@ -199,7 +198,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				net.setBaseKva(baseKva);
 			  
 			//Bus 1
-		  		ThreePhaseBus bus1 = ThreePhaseObjectFactory.create3PBus("Bus1", net);
+		  		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PBus("Bus1", net);
 		  		// set bus name and description attributes
 		  		bus1.setAttributes("Bus 1", "");
 		  		// set bus base voltage 
@@ -210,7 +209,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		// create contribute generator
 		  		// MVABase, power, sourceZ1/2/0
-		  		ThreePhaseGen gen1 = ThreePhaseObjectFactory.create3PGenerator("Gen1");
+		  		Gen3Phase gen1 = ThreePhaseObjectFactory.create3PGenerator("Gen1");
 		  		gen1.setMvaBase(100.0);
 		  		gen1.setDesiredVoltMag(1.04);
 		  		gen1.setGen(new Complex(0.7164,0.2710));
@@ -222,7 +221,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	// Bus 2
-		  		ThreePhaseBus bus2 = ThreePhaseObjectFactory.create3PBus("Bus2", net);
+		  		Bus3Phase bus2 = ThreePhaseObjectFactory.create3PBus("Bus2", net);
 		  		// set bus name and description attributes
 		  		bus2.setAttributes("Bus 2", "");
 		  		// set bus base voltage 
@@ -237,7 +236,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  	// create contribute generator
 		  		// MVABase, power, sourceZ1/2/0
-		  		ThreePhaseGen gen2 = ThreePhaseObjectFactory.create3PGenerator("Gen2");
+		  		Gen3Phase gen2 = ThreePhaseObjectFactory.create3PGenerator("Gen2");
 		  		gen2.setMvaBase(100.0);
 		  		gen2.setDesiredVoltMag(1.025);
 		  		gen2.setGen(new Complex(1.6300, 0.0659));
@@ -248,7 +247,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	// Bus 3
-		  		ThreePhaseBus bus3 = ThreePhaseObjectFactory.create3PBus("Bus3", net);
+		  		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PBus("Bus3", net);
 		  		// set bus name and description attributes
 		  		bus3.setAttributes("Bus 3", "");
 		  		// set bus base voltage 
@@ -263,7 +262,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  	// create contribute generator
 		  		// MVABase, power, sourceZ1/2/0
-		  		ThreePhaseGen gen3 = ThreePhaseObjectFactory.create3PGenerator("Gen3");
+		  		Gen3Phase gen3 = ThreePhaseObjectFactory.create3PGenerator("Gen3");
 		  		gen3.setMvaBase(100.0);
 		  		gen3.setDesiredVoltMag(1.025);
 		  		gen3.setGen(new Complex(0.8500, -0.1092));
@@ -274,14 +273,14 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	//Bus 4
-		  		ThreePhaseBus bus4 =ThreePhaseObjectFactory.create3PBus("Bus4", net);
+		  		Bus3Phase bus4 =ThreePhaseObjectFactory.create3PBus("Bus4", net);
 		  		bus4.setAttributes("Bus 4", "");
 		  		bus4.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus4.setGenCode(AclfGenCode.NON_GEN);
 		  		
 		  	//Bus 5	
-		  		ThreePhaseBus bus5 = ThreePhaseObjectFactory.create3PBus("Bus5", net);
+		  		Bus3Phase bus5 = ThreePhaseObjectFactory.create3PBus("Bus5", net);
 		  		bus5.setAttributes("Bus 5", "");
 		  		bus5.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
@@ -293,13 +292,13 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		// set load to the bus
 		  		//loadBus5.setLoad(new Complex(1.25, 0.5), UnitType.PU);
 		  		
-		  		ThreePhaseLoad load = ThreePhaseObjectFactory.create3PLoad("load1");
+		  		Load3Phase load = ThreePhaseObjectFactory.create3PLoad("load1");
 		  		load.setLoadCP(new Complex(1.25,0.5));
 		  		bus5.getContributeLoadList().add(load);
 		  		
 		  		
 		  	//Bus 6	
-		  		ThreePhaseBus bus6 = ThreePhaseObjectFactory.create3PBus("Bus6", net);
+		  		Bus3Phase bus6 = ThreePhaseObjectFactory.create3PBus("Bus6", net);
 		  		bus6.setAttributes("Bus 6", "");
 		  		bus6.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
@@ -316,14 +315,14 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	//Bus 7
-		  		ThreePhaseBus bus7 = ThreePhaseObjectFactory.create3PBus("Bus7", net);
+		  		Bus3Phase bus7 = ThreePhaseObjectFactory.create3PBus("Bus7", net);
 		  		bus7.setAttributes("Bus 7", "");
 		  		bus7.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus7.setGenCode(AclfGenCode.NON_GEN);
 		  		
 		  	//Bus 8	
-		  		ThreePhaseBus bus8 = ThreePhaseObjectFactory.create3PBus("Bus8", net);
+		  		Bus3Phase bus8 = ThreePhaseObjectFactory.create3PBus("Bus8", net);
 		  		bus8.setAttributes("Bus 8", "");
 		  		bus8.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
@@ -340,14 +339,14 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		bus8.getContributeLoadList().add(load);
 		  		
 		  	//Bus 9
-		  		ThreePhaseBus bus9 = ThreePhaseObjectFactory.create3PBus("Bus9", net);
+		  		Bus3Phase bus9 = ThreePhaseObjectFactory.create3PBus("Bus9", net);
 		  		bus9.setAttributes("Bus 9", "");
 		  		bus9.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus9.setGenCode(AclfGenCode.NON_GEN);
 		  		
 		  //////////////////////////////Lines /////////////////////////////////
-		  		ThreePhaseBranch bra78 = ThreePhaseObjectFactory.create3PBranch("Bus7", "Bus8", "0", net);
+		  		Branch3Phase bra78 = ThreePhaseObjectFactory.create3PBranch("Bus7", "Bus8", "0", net);
 				bra78.setBranchCode(AclfBranchCode.LINE);
 				bra78.setZ( new Complex( 0.00850,   0.07200));
 				bra78.setHShuntY(new Complex(0,0.149/2));
@@ -355,7 +354,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				bra78.setHB0(0.14900/2);
 				
 				
-				ThreePhaseBranch bra89 = ThreePhaseObjectFactory.create3PBranch("Bus8", "Bus9", "0", net);
+				Branch3Phase bra89 = ThreePhaseObjectFactory.create3PBranch("Bus8", "Bus9", "0", net);
 				bra89.setBranchCode(AclfBranchCode.LINE);
 				bra89.setZ( new Complex(0.01190,   0.10080));
 				bra89.setHShuntY(new Complex(0,0.20900/2));
@@ -363,7 +362,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				bra89.setHB0(0.20900/2);
 				
 				
-				ThreePhaseBranch bra57 = ThreePhaseObjectFactory.create3PBranch("Bus5", "Bus7", "0", net);
+				Branch3Phase bra57 = ThreePhaseObjectFactory.create3PBranch("Bus5", "Bus7", "0", net);
 				bra57.setBranchCode(AclfBranchCode.LINE);
 				bra57.setZ( new Complex(0.03200,   0.16100));
 				bra57.setHShuntY(new Complex(0,0.30600/2));
@@ -371,14 +370,14 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				bra57.setHB0(0.30600/2);
 				
 				
-				ThreePhaseBranch bra69 = ThreePhaseObjectFactory.create3PBranch("Bus6", "Bus9", "0", net);
+				Branch3Phase bra69 = ThreePhaseObjectFactory.create3PBranch("Bus6", "Bus9", "0", net);
 				bra69.setBranchCode(AclfBranchCode.LINE);
 				bra69.setZ( new Complex(0.03900,   0.17000));
 				bra69.setHShuntY(new Complex(0, 0.35800/2));
 				bra69.setZ0( new Complex(0.0975,	  0.425));
 				bra69.setHB0(0.35800/2);
 				
-				ThreePhaseBranch bra45 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus5", "0", net);
+				Branch3Phase bra45 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus5", "0", net);
 				bra45.setBranchCode(AclfBranchCode.LINE);
 				bra45.setZ( new Complex(0.01000,   0.08500));
 				bra45.setHShuntY(new Complex(0, 0.17600/2));
@@ -386,7 +385,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				bra45.setHB0(0.17600/2);
 				
 				
-				ThreePhaseBranch bra46 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus6", "0", net);
+				Branch3Phase bra46 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus6", "0", net);
 				bra46.setBranchCode(AclfBranchCode.LINE);
 				bra46.setZ( new Complex(0.01700,   0.09200));
 				bra46.setHShuntY(new Complex(0, 0.15800/2));
@@ -395,7 +394,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
               
 				
 				//////////////////transformers///////////////////////////////////////////
-				ThreePhaseBranch xfr14 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus4", "0", net);
+				Branch3Phase xfr14 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus4", "0", net);
 				xfr14.setBranchCode(AclfBranchCode.XFORMER);
 				xfr14.setZ( new Complex( 0.0, 0.0567 ));
 				xfr14.setZ0( new Complex(0.0, 0.0567 ));
@@ -404,7 +403,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				xfr.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
 				
 				
-				ThreePhaseBranch xfr27 = ThreePhaseObjectFactory.create3PBranch("Bus2", "Bus7", "0", net);
+				Branch3Phase xfr27 = ThreePhaseObjectFactory.create3PBranch("Bus2", "Bus7", "0", net);
 				xfr27.setBranchCode(AclfBranchCode.XFORMER);
 				xfr27.setZ( new Complex( 0.0, 0.0625 ));
 				xfr27.setZ0( new Complex(0.0, 0.0625 ));
@@ -413,7 +412,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				xfr.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
 				
 				
-				ThreePhaseBranch xfr39 = ThreePhaseObjectFactory.create3PBranch("Bus3", "Bus9", "0", net);
+				Branch3Phase xfr39 = ThreePhaseObjectFactory.create3PBranch("Bus3", "Bus9", "0", net);
 				xfr39.setBranchCode(AclfBranchCode.XFORMER);
 				xfr39.setZ( new Complex( 0.0, 0.0586 ));
 				xfr39.setZ0( new Complex(0.0, 0.0586 ));

@@ -8,9 +8,9 @@ import com.interpss.core.acsc.BusGroundCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 
-public interface ThreePhaseXformer extends AcscXformer{
+public interface Transformer3Phase extends AcscXformer{
 	
-	    public void set3PBranch(ThreePhaseBranch ph3Branch);
+	    public void set3PBranch(Branch3Phase ph3Branch);
 	    
 	    public void setZabc(Complex3x3 Zabc);
 	    

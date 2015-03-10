@@ -6,7 +6,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 
 import com.interpss.core.acsc.AcscBranch;
 
-public interface ThreePhaseBranch extends AcscBranch{
+public interface Branch3Phase extends AcscBranch{
 	
     public void setZabc(Complex3x3 Zabc);
     
@@ -36,6 +36,6 @@ public interface ThreePhaseBranch extends AcscBranch{
 	
 	public Complex3x1 CurrentAbcIntoNetToSide();
 	
-	public ThreePhaseXformer to3PXformer();
+	public Transformer3Phase to3PXformer();
 
 }

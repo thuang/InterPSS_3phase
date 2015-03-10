@@ -18,7 +18,7 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.LimitType;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.ipss.aclf.threePhase.ThreePhaseGen;
+import org.ipss.aclf.threePhase.Gen3Phase;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -30,7 +30,7 @@ import com.interpss.core.acsc.impl.AcscGenImpl;
 import com.interpss.core.net.DataCheckConfiguration;
 import com.interpss.core.net.NameTag;
 
-public class ThreePhaseGenImpl extends AcscGenImpl implements ThreePhaseGen {
+public class Gen3PhaseImpl extends AcscGenImpl implements Gen3Phase {
 	
 	private Complex3x3   zAbc = null;
 	private Complex3x3   yAbc = null;

@@ -7,7 +7,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.PhaseCode;
 
-public interface ThreePhaseLoad extends AclfLoad {
+public interface Load3Phase extends AclfLoad {
 	
 	/**
 	 * get three phase load equivalent 3x3 admittance matrix in pu

@@ -3,12 +3,12 @@ package org.ipss.aclf.threePhase.impl;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.ThreePhaseLoad;
+import org.ipss.aclf.threePhase.Load3Phase;
 
 import com.interpss.core.aclf.impl.AclfLoadImpl;
 import com.interpss.core.acsc.PhaseCode;
 
-public class ThreePhaseLoadImpl extends AclfLoadImpl implements ThreePhaseLoad {
+public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 
 	Complex3x1 ph3Load = new Complex3x1();
 	Complex3x3 equivYabc = new Complex3x3();
