@@ -1,25 +1,20 @@
 package org.ipss.aclf.threePhase.impl;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 
 import org.apache.commons.math3.complex.Complex;
-import org.interpss.numeric.NumericObjectFactory;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.interpss.numeric.sparse.ISparseEqnComplex;
-import org.interpss.numeric.sparse.ISparseEqnMatrix3x3;
-import org.interpss.numeric.sparse.impl.SparseEqnMatrix3x3Impl;
-import org.ipss.aclf.threePhase.ThreePhaseBranch;
-import org.ipss.aclf.threePhase.ThreePhaseBus;
-import org.ipss.aclf.threePhase.ThreePhaseGen;
-import org.ipss.aclf.threePhase.ThreePhaseLoad;
-import org.ipss.aclf.threePhase.ThreePhaseNetwork;
+import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
+import org.interpss.numeric.sparse.impl.SparseEqnComplexMatrix3x3Impl;
+import org.ipss.aclf.threePhase.Branch3Phase;
+import org.ipss.aclf.threePhase.Bus3Phase;
+import org.ipss.aclf.threePhase.Gen3Phase;
+import org.ipss.aclf.threePhase.Load3Phase;
+import org.ipss.aclf.threePhase.Network3Phase;
 
 import com.interpss.common.exp.InterpssException;
-import com.interpss.core.aclf.AclfBranch;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
@@ -30,8 +25,8 @@ import com.interpss.core.acsc.impl.AcscNetworkImpl;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 
-public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
-		ThreePhaseNetwork {
+public class Network3PhaseImpl extends AcscNetworkImpl implements
+		Network3Phase {
 
 	@Override
 	public boolean initThreePhaseFromLfResult() {
@@ -76,25 +71,25 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 					 bra.setVisited(true);
 					 
 					 phaseShiftDeg = -30;
-					 ThreePhaseBus  StartingBus =null;
+					 Bus3Phase  StartingBus =null;
 					 
 					 //high voltage side leads 30 deg, always starts from the low voltage side
 					 if(bra.getFromAclfBus().getBaseVoltage()>bra.getToAclfBus().getBaseVoltage()){
 						 
-						 StartingBus = (ThreePhaseBus) bra.getToAclfBus();
+						 StartingBus = (Bus3Phase) bra.getToAclfBus();
 					 }		
 					 else {
 					
-						 StartingBus = (ThreePhaseBus) bra.getFromAclfBus();
+						 StartingBus = (Bus3Phase) bra.getFromAclfBus();
 					 }
 					 
 					    Complex vpos = StartingBus.getVoltage();
 						Complex va = vpos.multiply(phaseShiftCplxFactor(phaseShiftDeg));
-						Complex vb = va.multiply(phaseShiftCplxFactor(120));
-						Complex vc = vb.multiply(phaseShiftCplxFactor(120));
+						Complex vb = va.multiply(phaseShiftCplxFactor(240));
+						Complex vc = va.multiply(phaseShiftCplxFactor(120));
 						StartingBus.set3PhaseVoltages(new Complex3x1(va,vb,vc));
 					 
-					 Queue<ThreePhaseBus> q = new  LinkedList<ThreePhaseBus>();
+					 Queue<Bus3Phase> q = new  LinkedList<Bus3Phase>();
 				     q.add(StartingBus);
 				     
 				     BFSSubTransmission(phaseShiftDeg,q);
@@ -112,14 +107,14 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 					Complex va = vpos;
 					Complex vb = va.multiply(phaseShiftCplxFactor(120));
 					Complex vc = vb.multiply(phaseShiftCplxFactor(120));
-					((ThreePhaseBus) b).set3PhaseVoltages(new Complex3x1(va,vb,vc));
+					((Bus3Phase) b).set3PhaseVoltages(new Complex3x1(va,vb,vc));
 			}
 				
 			//initialize the 3p power output of generation;
 			if(b.isGen()){
 				for(AclfGen gen: b.getContributeGenList()){
-					if(gen instanceof ThreePhaseGen){
-						ThreePhaseGen ph3Gen = (ThreePhaseGen) gen;
+					if(gen instanceof Gen3Phase){
+						Gen3Phase ph3Gen = (Gen3Phase) gen;
 						Complex phaseGen = gen.getGen();// phase gen and 3-phase gen are of the same value in PU
 						ph3Gen.setPowerAbc(new Complex3x1(phaseGen,phaseGen,phaseGen), UnitType.PU);
 					}
@@ -129,8 +124,8 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 			// initialize the load 3-phase power
 			if(b.isLoad()){
 				for(AclfLoad load: b.getContributeLoadList()){
-					if(load instanceof ThreePhaseLoad){
-						ThreePhaseLoad ph3Load = (ThreePhaseLoad) load; 
+					if(load instanceof Load3Phase){
+						Load3Phase ph3Load = (Load3Phase) load; 
 						Complex phaseLoad = load.getLoad(b.getVoltageMag()); // phase load and 3-phase load are of the same value in PU
 						
 						ph3Load.set3PhaseLoad(new Complex3x1(phaseLoad,phaseLoad,phaseLoad));
@@ -150,11 +145,11 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 				code== XfrConnectCode.DELTA11;
 	}
 	
-	private void BFSSubTransmission (double phaseShiftDeg, Queue<ThreePhaseBus> onceVisitedBuses){
+	private void BFSSubTransmission (double phaseShiftDeg, Queue<Bus3Phase> onceVisitedBuses){
 		
 		//Retrieves and removes the head of this queue, or returns null if this queue is empty.
 	    while(!onceVisitedBuses.isEmpty()){
-			ThreePhaseBus  startingBus = onceVisitedBuses.poll();
+			Bus3Phase  startingBus = onceVisitedBuses.poll();
 			startingBus.setVisited(true);
 			startingBus.setIntFlag(2);
 			
@@ -171,7 +166,7 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 								
 								if(findBus.getIntFlag()==0){
 									findBus.setIntFlag(1);
-									onceVisitedBuses.add((ThreePhaseBus) findBus);
+									onceVisitedBuses.add((Bus3Phase) findBus);
 									
 									// update the phase voltage
 									Complex vpos = ((AclfBus)findBus).getVoltage();
@@ -179,7 +174,7 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 									Complex vb = va.multiply(phaseShiftCplxFactor(120.0d));
 									Complex vc = vb.multiply(phaseShiftCplxFactor(120.0d));
 									
-									((ThreePhaseBus) findBus).set3PhaseVoltages(new Complex3x1(va,vb,vc));
+									((Bus3Phase) findBus).set3PhaseVoltages(new Complex3x1(va,vb,vc));
 								}
 							} catch (InterpssException e) {
 								
@@ -199,13 +194,13 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 	}
 
 	@Override
-	public ISparseEqnMatrix3x3 formYabc() throws Exception {
-		final ISparseEqnMatrix3x3 yMatrixAbc = new SparseEqnMatrix3x3Impl(getNoBus());
+	public ISparseEqnComplexMatrix3x3 formYabc() throws Exception {
+		final ISparseEqnComplexMatrix3x3 yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
 		for(AcscBus b:this.getBusList()){
-			if(b instanceof ThreePhaseBus){
+			if(b instanceof Bus3Phase){
 				int i = b.getSortNumber();
-				ThreePhaseBus ph3Bus = (ThreePhaseBus) b;
+				Bus3Phase ph3Bus = (Bus3Phase) b;
 				yMatrixAbc.setA(ph3Bus.getYiiAbc() ,i, i);
 			}
 			else
@@ -214,8 +209,8 @@ public class ThreePhaseNetworkImpl extends AcscNetworkImpl implements
 		
 		for (AcscBranch bra : this.getBranchList()) {
 			if (bra.isActive()) {
-				if(bra instanceof ThreePhaseBranch){
-					ThreePhaseBranch ph3Branch = (ThreePhaseBranch) bra;
+				if(bra instanceof Branch3Phase){
+					Branch3Phase ph3Branch = (Branch3Phase) bra;
 					int i = bra.getFromBus().getSortNumber(),
 						j = bra.getToBus().getSortNumber();
 					yMatrixAbc.addToA( ph3Branch.getYftabc(), i, j );

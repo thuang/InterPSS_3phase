@@ -6,12 +6,12 @@ import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfr
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.ThreePhaseBranch;
-import org.ipss.aclf.threePhase.ThreePhaseXformer;
+import org.ipss.aclf.threePhase.Branch3Phase;
+import org.ipss.aclf.threePhase.Transformer3Phase;
 
 import com.interpss.core.acsc.impl.AcscBranchImpl;
 
-public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBranch{
+public class Branch3PhaseImpl extends AcscBranchImpl implements Branch3Phase{
    
 	private Complex3x3 Zabc =null;
 	private Complex3x3 Yabc =null;
@@ -108,7 +108,7 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 		if(!isXfr())
 			yff= this.getBranchYabc().add(this.getFromShuntYabc());
 		else{
-			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			Transformer3Phase ph3Xformer = this.to3PXformer();
 			yff = ph3Xformer.getYffabc();
 		}
 	        
@@ -121,7 +121,7 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 		if(!isXfr())
 		    ytt = this.getBranchYabc().add(this.getToShuntYabc());
 		else{
-			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			Transformer3Phase ph3Xformer = this.to3PXformer();
 			ytt = ph3Xformer.getYttabc();
 		}
 	    
@@ -134,7 +134,7 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 		if(!isXfr())
 		    yft = this.getBranchYabc().mulitply(-1);
 		else{
-			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			Transformer3Phase ph3Xformer = this.to3PXformer();
 			yft = ph3Xformer.getYftabc();
 		}
 	    
@@ -147,7 +147,7 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 		if(!isXfr())
 		    ytf = this.getBranchYabc().mulitply(-1);
 		else{
-			ThreePhaseXformer ph3Xformer = this.to3PXformer();
+			Transformer3Phase ph3Xformer = this.to3PXformer();
 			ytf = ph3Xformer.getYtfabc();
 		}
 	    
@@ -167,7 +167,7 @@ public class ThreePhaseBranchImpl extends AcscBranchImpl implements ThreePhaseBr
 	}
 
 	@Override
-	public ThreePhaseXformer to3PXformer() {
+	public Transformer3Phase to3PXformer() {
 		
 		return threePhaseXfrAptr.apply(this);
 	}

@@ -5,7 +5,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 
 import com.interpss.core.acsc.adpter.AcscLine;
 
-public interface ThreePhaseLine extends AcscLine {
+public interface Line3Phase extends AcscLine {
 	
 	
     public void setZbac(Complex3x3 Zabc);

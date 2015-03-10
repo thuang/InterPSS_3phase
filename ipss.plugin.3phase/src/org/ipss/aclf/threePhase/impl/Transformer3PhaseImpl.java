@@ -2,26 +2,26 @@ package org.ipss.aclf.threePhase.impl;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.ThreePhaseBranch;
-import org.ipss.aclf.threePhase.ThreePhaseXformer;
+import org.ipss.aclf.threePhase.Branch3Phase;
+import org.ipss.aclf.threePhase.Transformer3Phase;
 
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.adpter.impl.AcscXformerImpl;
 
-public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhaseXformer{
+public class Transformer3PhaseImpl extends AcscXformerImpl implements Transformer3Phase{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private ThreePhaseBranch ph3Branch= null;
+	private Branch3Phase ph3Branch= null;
 	
 	private Complex y0 =null;
 	private Complex y1 =null; // transformer primitive leakage admittance of a phase 
 	
-	public ThreePhaseXformerImpl(ThreePhaseBranch threePhBranch){
+	public Transformer3PhaseImpl(Branch3Phase threePhBranch){
 		this.ph3Branch =threePhBranch;
 		this.y1 = this.ph3Branch.getY();
 		if(this.ph3Branch.getY0()!=null) 
@@ -31,12 +31,12 @@ public class ThreePhaseXformerImpl extends AcscXformerImpl implements ThreePhase
 	}
 	
 	
-	public ThreePhaseXformerImpl() {
+	public Transformer3PhaseImpl() {
 		
 	}
     
 	@Override
-	public void set3PBranch(ThreePhaseBranch ph3Branch) {
+	public void set3PBranch(Branch3Phase ph3Branch) {
 		this.ph3Branch = ph3Branch;
 		
 	}
