@@ -107,9 +107,12 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	@Override
 	public Complex3x3 getYffabc() {
 		Complex3x3 yff = null;
-		if(!isXfr())
-			yff= this.getBranchYabc().add(this.getFromShuntYabc());
-		else{
+		if(!isXfr()){
+			yff= this.getBranchYabc();
+		
+			if(this.getFromShuntYabc()!=null)
+		         yff = yff.add(this.getFromShuntYabc());
+		}else{
 			Transformer3Phase ph3Xformer = this.to3PXformer();
 			yff = ph3Xformer.getYffabc();
 		}
@@ -120,8 +123,11 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	@Override
 	public Complex3x3 getYttabc() {
 		Complex3x3 ytt = null;
-		if(!isXfr())
-		    ytt = this.getBranchYabc().add(this.getToShuntYabc());
+		if(!isXfr()){
+			ytt = this.getBranchYabc();
+			if(this.getToShuntYabc()!=null)
+		         ytt = ytt.add(this.getToShuntYabc());
+		}
 		else{
 			Transformer3Phase ph3Xformer = this.to3PXformer();
 			ytt = ph3Xformer.getYttabc();

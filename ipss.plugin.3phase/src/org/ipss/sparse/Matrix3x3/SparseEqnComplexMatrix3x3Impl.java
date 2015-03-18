@@ -53,7 +53,7 @@ public class SparseEqnComplexMatrix3x3Impl extends AbstractSparseEquation implem
 			cplxMatrix.addToA( x.ba, 3*i+1, 3*j );
 		}
 		if ( x.bb.abs() != 0.0 ) {
-			cplxMatrix.addToA( x.ba, 3*i+1, 3*j+1 );
+			cplxMatrix.addToA( x.bb, 3*i+1, 3*j+1 );
 		}
 		if ( x.bc.abs() != 0.0 ) {
 			cplxMatrix.addToA( x.bc, 3*i+1, 3*j+2 );
@@ -194,6 +194,7 @@ public class SparseEqnComplexMatrix3x3Impl extends AbstractSparseEquation implem
 		return cplxMatrix.getZeroAii_row();
 	}
 	
+	@Override
 	public ISparseEqnComplex getSparseEqnComplex(){
 		return this.cplxMatrix;
 	}

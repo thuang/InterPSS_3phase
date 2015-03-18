@@ -10,13 +10,13 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.exp.IpssNumericException;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.interpss.numeric.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 import org.ipss.aclf.threePhase.Branch3Phase;
 import org.ipss.aclf.threePhase.Bus3Phase;
 import org.ipss.aclf.threePhase.Gen3Phase;
 import org.ipss.aclf.threePhase.Load3Phase;
 import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
 import org.ipss.dynamic.threePhase.Machine3Phase;
+import org.ipss.sparse.Matrix3x3.SparseEqnComplexMatrix3x3Impl;
 
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;

@@ -1,21 +1,18 @@
 package org.ipss.aclf.threePhase.impl;
 
-import static com.interpss.common.util.IpssLogger.ipssLogger;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.interpss.numeric.exp.IpssNumericException;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.interpss.numeric.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 import org.ipss.aclf.threePhase.Branch3Phase;
 import org.ipss.aclf.threePhase.Bus3Phase;
 import org.ipss.aclf.threePhase.Gen3Phase;
 import org.ipss.aclf.threePhase.Load3Phase;
 import org.ipss.aclf.threePhase.Network3Phase;
+import org.ipss.sparse.Matrix3x3.SparseEqnComplexMatrix3x3Impl;
 
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;
@@ -27,7 +24,6 @@ import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.impl.AcscNetworkImpl;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
-import com.interpss.dstab.DStabBus;
 
 public class Network3PhaseImpl extends AcscNetworkImpl implements
 		Network3Phase {

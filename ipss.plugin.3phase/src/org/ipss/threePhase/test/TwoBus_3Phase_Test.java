@@ -1,15 +1,18 @@
 package org.ipss.threePhase.test;
 
-import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
+import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
 import org.interpss.numeric.datatype.Unit.UnitType;
+import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
+import org.interpss.numeric.util.MatrixUtil;
 import org.ipss.aclf.threePhase.Branch3Phase;
 import org.ipss.aclf.threePhase.Bus3Phase;
 import org.ipss.aclf.threePhase.Gen3Phase;
+import org.ipss.aclf.threePhase.Transformer3Phase;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
 import org.ipss.dynamic.threePhase.impl.DStabNetwork3phaseImpl;
@@ -27,7 +30,7 @@ import com.interpss.core.algo.LoadflowAlgorithm;
 public class TwoBus_3Phase_Test {
 	
 	
-	@Test
+	//@Test
 	public void testLF() throws InterpssException{
 		
 		IpssCorePlugin.init();
@@ -77,6 +80,31 @@ public class TwoBus_3Phase_Test {
 			  
 	}
 	
+	@Test
+	public void testYMatrixabc() throws Exception{
+		
+		IpssCorePlugin.init();
+		
+		DStabNetwork3Phase net = create2BusSys();
+		
+	
+		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
+		net.initContributeGenLoad();
+			
+		//create a load flow algorithm object
+	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
+	  	//run load flow using default setting
+	  	
+	  	
+	  
+	  	assertTrue(algo.loadflow())	;
+	  	
+	  	ISparseEqnComplexMatrix3x3  Yabc = net.formYMatrixABC();
+	  	
+	  	System.out.println(Yabc.getSparseEqnComplex());
+	  	MatrixUtil.matrixToMatlabMFile("output/twoBusYabc.m", Yabc.getSparseEqnComplex());
+		
+	}
 	
 	private DStabNetwork3Phase create2BusSys() throws InterpssException{
 		
@@ -107,6 +135,7 @@ public class TwoBus_3Phase_Test {
   		gen1.setNegGenZ(new Complex(0.1,0.05));
   		gen1.setZeroGenZ(new Complex(0,0.05));
   		bus1.getContributeGenList().add(gen1);
+  		bus1.setSortNumber(0);
   		
   		
   		
@@ -118,7 +147,7 @@ public class TwoBus_3Phase_Test {
   		bus2.setBaseVoltage(230000.0);
   		// set bus to be a swing bus
   		bus2.setGenCode(AclfGenCode.NON_GEN);
-
+  		bus2.setSortNumber(1);
 
   	  	// Bus 3
   		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PBus("Bus3", net);
@@ -128,6 +157,8 @@ public class TwoBus_3Phase_Test {
   		bus3.setBaseVoltage(230000.0);
   		// set bus to be a swing bus
   		bus3.setGenCode(AclfGenCode.SWING);
+  		
+  		bus3.setSortNumber(2);
   		
   	// create contribute generator
   		// MVABase, power, sourceZ1/2/0
@@ -154,10 +185,12 @@ public class TwoBus_3Phase_Test {
 		xfr12.setBranchCode(AclfBranchCode.XFORMER);
 		xfr12.setZ( new Complex( 0.0, 0.05 ));
 		xfr12.setZ0( new Complex(0.0, 0.05 ));
-		AcscXformer xfr = acscXfrAptr.apply(xfr12);
+		Transformer3Phase xfr = threePhaseXfrAptr.apply(xfr12);
 		xfr.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
 		xfr.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
   		
+		
+		//net.setBusNumberArranged(true);
   		return net;
 		
 	}

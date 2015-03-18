@@ -10,7 +10,7 @@ public class ThreePhaseUtilFunction {
 	
 	public static Function<Branch3Phase, Transformer3Phase> threePhaseXfrAptr = bra -> {
 		Transformer3Phase adpter = ThreePhaseObjectFactory.create3PXformer();
-		//adpter.setBranch(bra);
+		adpter.set3PBranch(bra);
 		return adpter;
 	};
 	
