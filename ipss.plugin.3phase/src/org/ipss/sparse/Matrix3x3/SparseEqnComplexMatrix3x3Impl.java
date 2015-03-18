@@ -3,6 +3,7 @@ package org.ipss.sparse.Matrix3x3;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.exp.IpssNumericException;
+import org.interpss.numeric.sparse.ISparseEqnComplex;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
 
 import com.interpss.common.exp.InterpssRuntimeException;
@@ -191,6 +192,10 @@ public class SparseEqnComplexMatrix3x3Impl extends AbstractSparseEquation implem
 	public int getZeroAii_row() {
 
 		return cplxMatrix.getZeroAii_row();
+	}
+	
+	public ISparseEqnComplex getSparseEqnComplex(){
+		return this.cplxMatrix;
 	}
 
 }
