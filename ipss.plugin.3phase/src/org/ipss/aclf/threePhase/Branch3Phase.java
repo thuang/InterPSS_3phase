@@ -5,8 +5,9 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 
 import com.interpss.core.acsc.AcscBranch;
+import com.interpss.dstab.DStabBranch;
 
-public interface Branch3Phase extends AcscBranch{
+public interface Branch3Phase extends DStabBranch{
 	
     public void setZabc(Complex3x3 Zabc);
     

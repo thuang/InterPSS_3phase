@@ -12,8 +12,9 @@ import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.AcscBranch;
 import com.interpss.core.acsc.impl.AcscBusImpl;
 import com.interpss.core.net.Branch;
+import com.interpss.dstab.impl.DStabBusImpl;
 
-public class Bus3PhaseImpl extends AcscBusImpl implements Bus3Phase{
+public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private Complex3x1 Vabc = null;
 	private Complex3x3 shuntYabc = null;
@@ -22,13 +23,23 @@ public class Bus3PhaseImpl extends AcscBusImpl implements Bus3Phase{
 	@Override
 	public Complex3x1 get3PhaseVotlages() {
 		
-		return  Vabc;
+		return  this.Vabc;
 	}
 
 	@Override
 	public void set3PhaseVoltages(Complex3x1 vabc) {
 		this.Vabc = vabc;
 		
+	}
+	
+	@Override
+	public Complex3x1 get3SeqVotlages() {
+		return Complex3x1.abc_to_z12(this.Vabc);
+	}
+
+	@Override
+	public void set3SeqVoltages(Complex3x1 v120) {
+		this.Vabc =Complex3x1.z12_to_abc(v120);  // all voltages are saved in three-phase, in order to make sure data consistency
 	}
 
 	@Override
@@ -77,5 +88,7 @@ public class Bus3PhaseImpl extends AcscBusImpl implements Bus3Phase{
 
 		return yiiAbc;
 	}
+
+
 
 }

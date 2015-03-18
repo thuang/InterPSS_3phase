@@ -3,6 +3,7 @@ package org.ipss.aclf.threePhase.impl;
 
 
 import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
+
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
@@ -10,8 +11,9 @@ import org.ipss.aclf.threePhase.Branch3Phase;
 import org.ipss.aclf.threePhase.Transformer3Phase;
 
 import com.interpss.core.acsc.impl.AcscBranchImpl;
+import com.interpss.dstab.impl.DStabBranchImpl;
 
-public class Branch3PhaseImpl extends AcscBranchImpl implements Branch3Phase{
+public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
    
 	private Complex3x3 Zabc =null;
 	private Complex3x3 Yabc =null;

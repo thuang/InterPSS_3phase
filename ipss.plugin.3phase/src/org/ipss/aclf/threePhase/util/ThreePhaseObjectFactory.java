@@ -11,6 +11,7 @@ import org.ipss.aclf.threePhase.impl.Bus3PhaseImpl;
 import org.ipss.aclf.threePhase.impl.Gen3PhaseImpl;
 import org.ipss.aclf.threePhase.impl.Load3PhaseImpl;
 import org.ipss.aclf.threePhase.impl.Transformer3PhaseImpl;
+import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
 
 import com.interpss.common.exp.InterpssException;
 
@@ -21,14 +22,14 @@ public class ThreePhaseObjectFactory {
 	   return ph3Xfr;
 	}
 	
-	public static Bus3Phase create3PBus(String busId, Network3Phase net) throws InterpssException{
+	public static Bus3Phase create3PBus(String busId, DStabNetwork3Phase net) throws InterpssException{
 		Bus3Phase bus = new Bus3PhaseImpl();
 		bus.setId(busId);
 		net.addBus(bus);
 		return bus;
 	}
 	
-	public static Branch3Phase create3PBranch(String fromBusId, String toBusId, String cirId,Network3Phase net) throws InterpssException{
+	public static Branch3Phase create3PBranch(String fromBusId, String toBusId, String cirId,DStabNetwork3Phase net) throws InterpssException{
 		Branch3Phase branch = new Branch3PhaseImpl();
 		net.addBranch(branch, fromBusId, toBusId, cirId);
 		return branch;

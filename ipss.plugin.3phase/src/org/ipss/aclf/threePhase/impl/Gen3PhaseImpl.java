@@ -29,8 +29,9 @@ import com.interpss.core.acsc.BusScGrounding;
 import com.interpss.core.acsc.impl.AcscGenImpl;
 import com.interpss.core.net.DataCheckConfiguration;
 import com.interpss.core.net.NameTag;
+import com.interpss.dstab.impl.DStabGenImpl;
 
-public class Gen3PhaseImpl extends AcscGenImpl implements Gen3Phase {
+public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	
 	private Complex3x3   zAbc = null;
 	private Complex3x3   yAbc = null;

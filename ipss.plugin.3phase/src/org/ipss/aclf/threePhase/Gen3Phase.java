@@ -6,8 +6,9 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 
 import com.interpss.core.acsc.AcscGen;
+import com.interpss.dstab.DStabGen;
 
-public interface Gen3Phase extends AcscGen{
+public interface Gen3Phase extends DStabGen{
 	
 	/**
 	 * directly set the generator 3x3 impedance matrix on machine MVA base

@@ -17,6 +17,8 @@ import org.ipss.aclf.threePhase.Load3Phase;
 import org.ipss.aclf.threePhase.Network3Phase;
 import org.ipss.aclf.threePhase.impl.Network3PhaseImpl;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
+import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
+import org.ipss.dynamic.threePhase.impl.DStabNetwork3phaseImpl;
 import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
@@ -39,7 +41,7 @@ public class IEEE9Bus_3phase_test {
 		//Initialize logger and Spring config
 		IpssCorePlugin.init();
 		
-		Network3Phase net = createIEEE9Bus();
+		DStabNetwork3Phase net = createIEEE9Bus();
 	
 	// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
 	net.initContributeGenLoad();
@@ -85,7 +87,7 @@ Load Flow Summary
 		//Initialize logger and Spring config
 		IpssCorePlugin.init();
 		
-		Network3Phase net = createIEEE9Bus();
+		DStabNetwork3Phase net = createIEEE9Bus();
 		
 		
 		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
@@ -186,11 +188,11 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		
 	}
 	
-	private static Network3Phase createIEEE9Bus() throws InterpssException{
+	private static DStabNetwork3Phase createIEEE9Bus() throws InterpssException{
 		
 		
 		// Create an AclfNetwork object
-				Network3Phase net = new Network3PhaseImpl();
+				DStabNetwork3Phase net = new DStabNetwork3phaseImpl();
 
 				double baseKva = 100000.0;
 				
