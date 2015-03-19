@@ -178,7 +178,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	     yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	        	     yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
 					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
@@ -191,7 +191,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	     yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	        	     yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA || this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
@@ -268,9 +268,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
     private  Complex3x3  getY3(){
     	if(y1 != null)
     	return new Complex3x3(new Complex[][]{
-    			{y1.multiply(-1/Math.sqrt(3)),     y1.divide(Math.sqrt(3)),        new Complex(0.0, 0.0)},
-    			{new Complex(0,0),                y1.multiply(-1/Math.sqrt(3)),    y1.divide(Math.sqrt(3)) },
-    			{ y1.divide(Math.sqrt(3)),            new Complex(0,0),            y1.multiply(-1/Math.sqrt(3))}});
+    			{y1.multiply(-1*Math.sqrt(3)/3),     y1.multiply(Math.sqrt(3)/3),        new Complex(0.0, 0.0)},
+    			{new Complex(0,0),                y1.multiply(-1*Math.sqrt(3)/3),    y1.multiply(Math.sqrt(3)/3) },
+    			{  y1.multiply(Math.sqrt(3)/3),            new Complex(0,0),            y1.multiply(-1*Math.sqrt(3)/3)}});
 
 		return null;
 	}

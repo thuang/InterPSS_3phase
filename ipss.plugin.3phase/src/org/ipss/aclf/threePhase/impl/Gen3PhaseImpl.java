@@ -18,6 +18,7 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.LimitType;
 import org.interpss.numeric.datatype.Unit.UnitType;
+import org.ipss.aclf.threePhase.Bus3Phase;
 import org.ipss.aclf.threePhase.Gen3Phase;
 
 import com.hazelcast.nio.ObjectDataInput;
@@ -30,12 +31,18 @@ import com.interpss.core.acsc.impl.AcscGenImpl;
 import com.interpss.core.net.DataCheckConfiguration;
 import com.interpss.core.net.NameTag;
 import com.interpss.dstab.impl.DStabGenImpl;
+import com.interpss.dstab.mach.DynamicMachine;
 
 public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	
 	private Complex3x3   zAbc = null;
 	private Complex3x3   yAbc = null;
 	private Complex3x1   puPowerAbc = null;
+	
+	private Bus3Phase parentBus3P = null;
+
+	private Complex3x1 igen3Ph = null;
+
 
 	/**
 	 * 
@@ -86,7 +93,7 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	
 
 	@Override
-	public Complex3x1 getPowerAbc(UnitType unit) {
+	public Complex3x1 getPower3Phase(UnitType unit) {
 		switch(unit){
 		 case PU: return this.puPowerAbc;
 		 case mVA: return this.puPowerAbc.multiply(this.getMvaBase()/3.0);
@@ -101,12 +108,12 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	}
 	
 	@Override
-	public void setPowerAbc(Complex3x1 genPQAbc,UnitType unit) {
+	public void setPower3Phase(Complex3x1 genPQ,UnitType unit) {
 		
 		switch(unit){
-		 case PU:   this.puPowerAbc =   genPQAbc; break;
-		 case mVA:  this.puPowerAbc =   genPQAbc.multiply(3.0/this.getMvaBase()); break;
-		 case kVA:  this.puPowerAbc =   genPQAbc.multiply(3.0/1000.0/this.getMvaBase());break;
+		 case PU:   this.puPowerAbc =   genPQ; break;
+		 case mVA:  this.puPowerAbc =   genPQ.multiply(3.0/this.getMvaBase()); break;
+		 case kVA:  this.puPowerAbc =   genPQ.multiply(3.0/1000.0/this.getMvaBase());break;
 		 default: try {
 				throw new Exception("The unit should be PU, mVA or kVA");
 			} catch (Exception e) {
@@ -116,7 +123,60 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 		
 		
 	}
+	
 
+	public Bus3Phase getParentBus(){
+		if(super.getParentBus() instanceof Bus3Phase)
+		     return (Bus3Phase) super.getParentBus();
+		else
+			try {
+				throw new Exception("The parent bus is not a Bus3Phase");
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			return null;
+	}
+	
+
+	@Override
+	public Complex3x1 getIgen3Phase() {
+		 // Complex3x1(a0,b1,c2)
+		return this.igen3Ph = Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),getMach().getIgen(), new Complex(0,0)));
+	}
+
+	
+	
+	/**
+	 * Pe_neg = Ig_neg^2*R2n
+	 * @return
+	 */
+	private double calcNegativeSeqPe(){
+		double Pe_neg = 0;
+		
+		Complex z2 = this.getMach().getParentGen().getNegGenZ();
+		
+		Complex v2 = parentBus3P.get3SeqVotlages().c_2;
+		if(z2!=null && z2.abs()>0){
+			if(z2.getReal()>this.getMach().getRa()){
+		     double Rr = (z2.getReal()-this.getMach().getRa())*2;
+		     Complex i2 = v2.divide(z2);
+		     Pe_neg = i2.abs()*i2.abs()*Rr/2;
+			}
+			else
+				throw new Error("Machine Negative sequence data Error: Real part of NegGenZ must be larger than Ra, as R2 = Ra+ Rr/2");
+		}
+		return Pe_neg;
+	}
+
+	@Override
+	public boolean updateStates() {
+		
+		this.getMach().setPe_NegSeq(calcNegativeSeqPe());
+		
+		//TODO udpate GenPowerAbc
+		return true;
+	}
 
 
 	

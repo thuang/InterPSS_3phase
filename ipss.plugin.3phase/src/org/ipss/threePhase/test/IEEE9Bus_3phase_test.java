@@ -134,7 +134,7 @@ Load Flow Summary
 			  
 			  if (ph3Bus.isGen()){
 				 Gen3Phase gen = (Gen3Phase) ph3Bus.getContributeGenList().get(0);
-				  System.out.print("\nGenPowerAbc(MW) = "+gen.getPowerAbc(UnitType.mVA)+", \nZabc: "+gen.getZabc(true));
+				  System.out.print("\nGenPowerAbc(MW) = "+gen.getPower3Phase(UnitType.mVA)+", \nZabc: "+gen.getZabc(true));
 			  
 				  
 				  /**
@@ -145,8 +145,8 @@ Load Flow Summary
 					ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.734723475976807E-18, 0.039999999999999994)		  
 				    */
 			      if(bus.getId().equals("Bus1")){
-			    	  assertTrue(Math.abs(gen.getPowerAbc(UnitType.mVA).a_0.getReal()-23.88023)<1.0E-4);
-			    	  assertTrue(gen.getPowerAbc(UnitType.mVA).a_0.abs() ==gen.getPowerAbc(UnitType.mVA).b_1.abs());
+			    	  assertTrue(Math.abs(gen.getPower3Phase(UnitType.mVA).a_0.getReal()-23.88023)<1.0E-4);
+			    	  assertTrue(gen.getPower3Phase(UnitType.mVA).a_0.abs() ==gen.getPower3Phase(UnitType.mVA).b_1.abs());
 			    	  assertTrue(gen.getZabc(false).aa.subtract(new Complex(0.0,0.04)).abs()<1.0E-5);
 			    	  assertTrue(gen.getZabc(false).ab.abs()<1.0E-5);
 			    	  assertTrue(gen.getZabc(false).ca.abs()<1.0E-5);

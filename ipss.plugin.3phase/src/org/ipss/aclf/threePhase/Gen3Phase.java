@@ -7,6 +7,7 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 
 import com.interpss.core.acsc.AcscGen;
 import com.interpss.dstab.DStabGen;
+import com.interpss.dstab.mach.DynamicMachine;
 
 public interface Gen3Phase extends DStabGen{
 	
@@ -39,8 +40,24 @@ public interface Gen3Phase extends DStabGen{
 	 */
 	public Complex3x3 getYabc(boolean machineMVABase);
 	
-	public Complex3x1 getPowerAbc(UnitType unit);
+	/**
+	 * Power = VABC*conj(IgenABC-YgenABC*VABC)
+	 * @param unit
+	 * @return
+	 */
+	public Complex3x1 getPower3Phase(UnitType unit);
 	
-	public  void setPowerAbc(Complex3x1 genPQAbc,UnitType unit);
+	public  void setPower3Phase(Complex3x1 genPQ,UnitType unit);
+	
+	public Complex3x1 getIgen3Phase();
+	
+	
+	public Bus3Phase getParentBus();
+	
+	/**
+	 *  Update the genPower and the negative sequence Pe
+	 * @return
+	 */
+	public boolean updateStates();
 
 }

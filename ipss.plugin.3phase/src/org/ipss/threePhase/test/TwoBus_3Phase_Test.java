@@ -15,7 +15,9 @@ import org.ipss.aclf.threePhase.Gen3Phase;
 import org.ipss.aclf.threePhase.Transformer3Phase;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
+import org.ipss.dynamic.threePhase.Machine3Phase;
 import org.ipss.dynamic.threePhase.impl.DStabNetwork3phaseImpl;
+import org.ipss.dynamic.threePhase.impl.Machine3PhaseImpl;
 import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
@@ -136,6 +138,31 @@ public class TwoBus_3Phase_Test {
   		gen1.setZeroGenZ(new Complex(0,0.05));
   		bus1.getContributeGenList().add(gen1);
   		bus1.setSortNumber(0);
+  		
+  		Machine3Phase mach = new Machine3PhaseImpl();
+  		
+  		mach.setRating(100, UnitType.mVA, net.getBaseKva());
+		mach.setRatedVoltage(1000.0);
+		mach.calMultiFactors();
+		mach.setH(5.0);
+		mach.setD(0.01);
+		mach.setX0(0.1);
+		mach.setX2(0.2);
+		mach.setRa(0.003);
+		mach.setXl(0.14);
+		mach.setXd(1.1);
+		mach.setXq(1.08);
+		mach.setXd1(0.23);
+		mach.setTd01(5.6);
+		mach.setXq1(0.23);
+		mach.setTq01(1.5);
+		mach.setXd11(0.12);
+		mach.setTq011(0.05);
+		mach.setXq11(0.15);
+		mach.setTd011(0.03);
+		mach.setSliner(2.0);  // no saturation
+		mach.setSe100(0.0);   // no saturation
+		mach.setSe120(0.0);		
   		
   		
   		

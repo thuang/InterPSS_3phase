@@ -116,7 +116,7 @@ public class Network3PhaseImpl extends AcscNetworkImpl implements
 					if(gen instanceof Gen3Phase){
 						Gen3Phase ph3Gen = (Gen3Phase) gen;
 						Complex phaseGen = gen.getGen();// phase gen and 3-phase gen are of the same value in PU
-						ph3Gen.setPowerAbc(new Complex3x1(phaseGen,phaseGen,phaseGen), UnitType.PU);
+						ph3Gen.setPower3Phase(new Complex3x1(phaseGen,phaseGen,phaseGen), UnitType.PU);
 					}
 				}
 			}
