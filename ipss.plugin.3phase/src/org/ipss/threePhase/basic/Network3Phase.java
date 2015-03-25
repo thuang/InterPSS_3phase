@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase;
+package org.ipss.threePhase.basic;
 
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
 

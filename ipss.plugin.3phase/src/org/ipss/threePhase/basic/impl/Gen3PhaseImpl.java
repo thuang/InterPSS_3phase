@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase.impl;
+package org.ipss.threePhase.basic.impl;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -18,8 +18,8 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.LimitType;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.ipss.aclf.threePhase.Bus3Phase;
-import org.ipss.aclf.threePhase.Gen3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;

@@ -1,17 +1,17 @@
 package org.ipss.aclf.threePhase.util;
 
-import org.ipss.aclf.threePhase.Branch3Phase;
-import org.ipss.aclf.threePhase.Bus3Phase;
-import org.ipss.aclf.threePhase.Gen3Phase;
-import org.ipss.aclf.threePhase.Load3Phase;
-import org.ipss.aclf.threePhase.Network3Phase;
-import org.ipss.aclf.threePhase.Transformer3Phase;
-import org.ipss.aclf.threePhase.impl.Branch3PhaseImpl;
-import org.ipss.aclf.threePhase.impl.Bus3PhaseImpl;
-import org.ipss.aclf.threePhase.impl.Gen3PhaseImpl;
-import org.ipss.aclf.threePhase.impl.Load3PhaseImpl;
-import org.ipss.aclf.threePhase.impl.Transformer3PhaseImpl;
-import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.basic.Network3Phase;
+import org.ipss.threePhase.basic.Transformer3Phase;
+import org.ipss.threePhase.basic.impl.Branch3PhaseImpl;
+import org.ipss.threePhase.basic.impl.Bus3PhaseImpl;
+import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
+import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
+import org.ipss.threePhase.basic.impl.Transformer3PhaseImpl;
+import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 
 import com.interpss.common.exp.InterpssException;
 

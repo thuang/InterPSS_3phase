@@ -1,9 +1,9 @@
-package org.ipss.aclf.threePhase.impl;
+package org.ipss.threePhase.basic.impl;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.Load3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
 
 import com.interpss.core.aclf.impl.AclfLoadImpl;
 import com.interpss.core.acsc.PhaseCode;

@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase.impl;
+package org.ipss.threePhase.basic.impl;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -7,12 +7,12 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.ipss.aclf.threePhase.Branch3Phase;
-import org.ipss.aclf.threePhase.Bus3Phase;
-import org.ipss.aclf.threePhase.Gen3Phase;
-import org.ipss.aclf.threePhase.Load3Phase;
-import org.ipss.aclf.threePhase.Network3Phase;
 import org.ipss.sparse.Matrix3x3.SparseEqnComplexMatrix3x3Impl;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.basic.Network3Phase;
 
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;

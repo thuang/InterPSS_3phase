@@ -1,4 +1,4 @@
-package org.ipss.dynamic.threePhase.impl;
+package org.ipss.threePhase.dynamic.impl;
 
 import static com.interpss.common.util.IpssLogger.ipssLogger;
 
@@ -11,12 +11,12 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.exp.IpssNumericException;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.ipss.aclf.threePhase.Branch3Phase;
-import org.ipss.aclf.threePhase.Bus3Phase;
-import org.ipss.aclf.threePhase.Gen3Phase;
-import org.ipss.aclf.threePhase.Load3Phase;
-import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
 import org.ipss.sparse.Matrix3x3.SparseEqnComplexMatrix3x3Impl;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;

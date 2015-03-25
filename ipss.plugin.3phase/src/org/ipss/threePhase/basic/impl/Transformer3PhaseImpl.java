@@ -1,9 +1,9 @@
-package org.ipss.aclf.threePhase.impl;
+package org.ipss.threePhase.basic.impl;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.Branch3Phase;
-import org.ipss.aclf.threePhase.Transformer3Phase;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Transformer3Phase;
 
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;

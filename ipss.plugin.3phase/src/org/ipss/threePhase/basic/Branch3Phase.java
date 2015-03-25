@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase;
+package org.ipss.threePhase.basic;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;

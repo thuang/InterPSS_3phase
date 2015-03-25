@@ -2,8 +2,8 @@ package org.ipss.aclf.threePhase.util;
 
 import java.util.function.Function;
 
-import org.ipss.aclf.threePhase.Branch3Phase;
-import org.ipss.aclf.threePhase.Transformer3Phase;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Transformer3Phase;
 
 public class ThreePhaseUtilFunction {
 	

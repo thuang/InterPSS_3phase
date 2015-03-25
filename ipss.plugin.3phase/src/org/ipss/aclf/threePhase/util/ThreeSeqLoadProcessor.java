@@ -2,7 +2,7 @@ package org.ipss.aclf.threePhase.util;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x3;
-import org.ipss.aclf.threePhase.Bus3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
 
 public class ThreeSeqLoadProcessor {
 	

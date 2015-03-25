@@ -1,6 +1,6 @@
-package org.ipss.dynamic.threePhase;
+package org.ipss.threePhase.dynamic;
 
-import org.ipss.aclf.threePhase.Network3Phase;
+import org.ipss.threePhase.basic.Network3Phase;
 
 import com.interpss.dstab.DStabilityNetwork;
 
