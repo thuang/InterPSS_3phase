@@ -3,6 +3,8 @@ package org.ipss.threePhase.test;
 import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 import static org.junit.Assert.assertTrue;
 
+import java.util.logging.Level;
+
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
@@ -23,12 +25,16 @@ import org.junit.Test;
 import com.interpss.CoreObjectFactory;
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
+import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.algo.DynamicSimuAlgorithm;
+import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 import com.interpss.dstab.mach.RoundRotorMachine;
@@ -41,7 +47,7 @@ public class TwoBus_3Phase_Test {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testInitBasedOnLF() throws InterpssException{
 		
 		IpssCorePlugin.init();
@@ -90,7 +96,7 @@ public class TwoBus_3Phase_Test {
 			  
 	}
 	
-	@Test
+	//@Test
 	public void testYMatrixabc() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -157,16 +163,19 @@ public class TwoBus_3Phase_Test {
 	     */
 	}
 	
-	@Test
+	//@Test
 	public void testSolvNetwork() throws Exception{
 		
 		IpssCorePlugin.init();
-		
+		IpssLogger.getLogger().setLevel(Level.INFO);
 		DStabNetwork3Phase net = create2BusSys();
 		
 	
 		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
 		net.initContributeGenLoad();
+		
+		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
+				net, IpssCorePlugin.getMsgHub());
 			
 		//create a load flow algorithm object
 	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
@@ -177,9 +186,9 @@ public class TwoBus_3Phase_Test {
 	  	assertTrue(algo.loadflow())	;
 	  	
 	  	
-	  	
-	  	net.init3PDstabNetwork();
-	  	net.solve3PNetworkEquation();
+	  	assertTrue(dstabAlgo.initialization());
+	  	//assertTrue(net.initDStabNet());
+	  	assertTrue(net.solveNetEqn(false));
 	  	
 	  	 for(DStabBus bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
@@ -195,13 +204,16 @@ public class TwoBus_3Phase_Test {
 					  
 					  //phase a: 5.77 - 30 = -24.23
 					  assertTrue(ph3Bus.get3PhaseVotlages().a_0.subtract(new Complex(1.03765,0.06989)).abs()<5.0E-5);
-					  
+					  assertTrue(Math.abs(ph3Bus.get3SeqVotlages().b_1.abs()-1.040)<1.0E-4);
+					  assertTrue(ph3Bus.get3SeqVotlages().b_1.subtract(new Complex(1.0376487360089972, 0.0698927284775248)).abs()<5.0E-5);
 				  }
 				  
                  if(bus.getId().equals("Bus3")){
 					  
 					  //phase a: 5.77 - 30 = -24.23
 					  assertTrue(ph3Bus.get3PhaseVotlages().b_1.subtract(new Complex(-0.5125, -0.88768)).abs()<5.0E-5);
+					  assertTrue(Math.abs(ph3Bus.get3SeqVotlages().b_1.abs()-1.025)<1.0E-4);
+					  assertTrue(ph3Bus.get3SeqVotlages().b_1.subtract(new Complex(1.025, 0.0)).abs()<5.0E-5);
 					  
 				  }
 			  }
@@ -215,7 +227,50 @@ public class TwoBus_3Phase_Test {
 		
 	}
 	
-
+	@Test
+	public void testDstab() throws Exception{
+		
+		IpssCorePlugin.init();
+		IpssLogger.getLogger().setLevel(Level.INFO);
+		DStabNetwork3Phase net = create2BusSys();
+		
+	
+		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
+		net.initContributeGenLoad();
+		
+		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
+				net, IpssCorePlugin.getMsgHub());
+			
+		//create a load flow algorithm object
+	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
+	  	//run load flow using default setting
+	  	
+	  	
+	  
+	  	assertTrue(algo.loadflow())	;
+	  	
+	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
+		dstabAlgo.setSimuStepSec(0.005d);
+		dstabAlgo.setTotalSimuTimeSec(0.005);
+		net.setNetEqnIterationNoEvent(1);
+		net.setNetEqnIterationWithEvent(1);
+		//dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+		//net.addDynamicEvent(create3PhaseFaultEvent("Bus5",net,1.0d,0.05),"3phaseFault@Bus5");
+        
+		
+		StateMonitor sm = new StateMonitor();
+		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus3-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
+		// set the output handler
+				dstabAlgo.setSimuOutputHandler(sm);
+				dstabAlgo.setOutPutPerSteps(1);
+	  	if(dstabAlgo.initialization()){
+	  	
+	  		dstabAlgo.performSimulation();
+	  	}
+	  	
+	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	}
 	
 private DStabNetwork3Phase create2BusSys() throws InterpssException{
 		

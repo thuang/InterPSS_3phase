@@ -5,9 +5,7 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 
-import com.interpss.core.acsc.AcscGen;
 import com.interpss.dstab.DStabGen;
-import com.interpss.dstab.mach.DynamicMachine;
 
 public interface Gen3Phase extends DStabGen{
 	

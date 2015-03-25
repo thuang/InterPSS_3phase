@@ -11,8 +11,11 @@ import org.ipss.threePhase.basic.impl.Bus3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Transformer3PhaseImpl;
+import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
+import org.ipss.threePhase.dynamic.impl.DStabGen3PhaseImpl;
 
+import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
 
 public class ThreePhaseObjectFactory {
@@ -25,7 +28,10 @@ public class ThreePhaseObjectFactory {
 	public static Bus3Phase create3PBus(String busId, DStabNetwork3Phase net) throws InterpssException{
 		Bus3Phase bus = new Bus3PhaseImpl();
 		bus.setId(busId);
+		bus.setBusFreqMeasureBlock(DStabObjectFactory.createBusFreqMeasurement());
+		
 		net.addBus(bus);
+		
 		return bus;
 	}
 	
@@ -37,6 +43,12 @@ public class ThreePhaseObjectFactory {
 	
 	public static Gen3Phase  create3PGenerator(String genId){
 		Gen3Phase gen = new Gen3PhaseImpl();
+		gen.setId(genId);
+		return gen;
+	}
+	
+	public static DStabGen3Phase  create3PDynGenerator(String genId){
+		DStabGen3Phase gen = new DStabGen3PhaseImpl();
 		gen.setId(genId);
 		return gen;
 	}

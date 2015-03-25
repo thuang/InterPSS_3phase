@@ -18,7 +18,9 @@ import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 
+import com.interpss.common.datatype.Constants;
 import com.interpss.common.exp.InterpssException;
+import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
@@ -229,7 +231,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			
 		}
 		
-		 yMatrixAbc.luMatrix(1.0E-4);
+		
+		setYMatrixDirty(true);
 	
 		return yMatrixAbc;
 	}
@@ -246,14 +249,20 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 	
 	@Override
-	public boolean solve3PNetworkEquation() {
+	public boolean solveNetEqn(boolean netChange) {
   		try {
+  			
+  			if(isYMatrixDirty()){
+	  			getYMatrixABC().luMatrix(Constants.Matrix_LU_Tolerance);
+				setYMatrixDirty(false);
+  			}
+  			
 		  	// Calculate and set generator injection current
 			for( Bus b : getBusList()) {
 				DStabBus bus = (DStabBus)b;
-				//TODO to consider bus status
 
 				if(bus.isActive()){
+					
 					Complex3x1 iInject = new Complex3x1();
 
 					if(bus.getContributeGenList().size()>0){
@@ -274,13 +283,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				  if(iInject == null){
 					  throw new Error (bus.getId()+" current injection is null");
 				  }
-				  /* Igen2
-				   * -0.1915 - 4.9478i
-					  -4.1892 + 2.6397i
-					   4.3808 + 2.3080i
-				   */
-//				  if(bus.getId().equals("Bus3"))
-//					  iInject= new Complex3x1( new Complex(-0.1915, - 4.9478),new Complex(-4.1892,2.6397),new Complex(4.3808, 2.3080));
+
 				  getYMatrixABC().setBi(iInject, bus.getSortNumber());
 				}
 			}
@@ -290,8 +293,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			
 			//addCustomBusCurrentInj();
 			
-			 ISparseEqnComplexMatrix3x3  Yabc = getYMatrixABC();
-			 System.out.println(Yabc.getSparseEqnComplex());
+			// ISparseEqnComplexMatrix3x3  Yabc = getYMatrixABC();
+			// System.out.println(Yabc.getSparseEqnComplex());
 		   
 			getYMatrixABC().solveEqn();
 
@@ -301,7 +304,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				if(bus.isActive()){
 					Complex3x1 vabc = getYMatrixABC().getX(bus.getSortNumber());
 					
-					System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
+					//System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
 					
 					if(!vabc.a_0.isNaN()){
                     
@@ -309,7 +312,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							Bus3Phase bus3P = (Bus3Phase) bus;
 							 bus3P.set3PhaseVoltages(vabc);
 							 // update the positive sequence voltage
-							 bus.setVoltage(bus3P.get3SeqVotlages().b_1);
+							 Complex v = bus3P.get3SeqVotlages().b_1;
+							 System.out.println("posV @ bus :"+v.toString()+","+bus.getId());
+							 bus.setVoltage(v);
                          }
 					
 					    bus.updateDynamicAttributes(false);
@@ -332,8 +337,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	}
 
 	@Override
-	public boolean init3PDstabNetwork() {
-		
+	public boolean initDStabNet() {
+		boolean initFlag = true;
+		IpssLogger.getLogger().info("Start three-phase DStabNetwork initialization...");
 		for ( DStabBus busi : getBusList() ) {
 
 			if( busi instanceof Bus3Phase){
@@ -347,14 +353,15 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					// init bus dynamic signal calculation, 
 					// for example, bus Frequency measurement
-					//bus.initStates();
+					bus.initStates();
 					
 					
 					//initialize the bus generator
 					for(AclfGen gen: bus.getContributeGenList()){
 						if(gen.isActive() && gen instanceof Gen3Phase){
 							Gen3Phase gen3P = (Gen3Phase) gen;
-							gen3P.initDStabMach();
+							if(!gen3P.initDStabMach())
+								initFlag = false;
 						}
 					}
 					
@@ -375,9 +382,10 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			initFlag = false;
 		}
 		
-		return false;
+		return initFlag;
 	}
 
 }

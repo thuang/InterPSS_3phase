@@ -11,9 +11,9 @@ public interface DStabNetwork3Phase extends Network3Phase, DStabilityNetwork{
 	
 	public boolean initThreePhaseFromLfResult();
 	
-	public boolean init3PDstabNetwork();
+	//public boolean init3PDstabNetwork();
 	
 	
-	public boolean solve3PNetworkEquation();
+	//public boolean solve3PNetworkEquation();
 
 }
