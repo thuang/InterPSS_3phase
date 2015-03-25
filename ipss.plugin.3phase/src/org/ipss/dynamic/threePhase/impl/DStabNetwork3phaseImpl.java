@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
+import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.exp.IpssNumericException;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
@@ -15,7 +16,6 @@ import org.ipss.aclf.threePhase.Bus3Phase;
 import org.ipss.aclf.threePhase.Gen3Phase;
 import org.ipss.aclf.threePhase.Load3Phase;
 import org.ipss.dynamic.threePhase.DStabNetwork3Phase;
-import org.ipss.dynamic.threePhase.Machine3Phase;
 import org.ipss.sparse.Matrix3x3.SparseEqnComplexMatrix3x3Impl;
 
 import com.interpss.common.exp.InterpssException;
@@ -92,7 +92,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					 
 					    Complex vpos = StartingBus.getVoltage();
 						Complex va = vpos.multiply(phaseShiftCplxFactor(phaseShiftDeg));
-						Complex vb = va.multiply(phaseShiftCplxFactor(240));
+						Complex vb = va.multiply(phaseShiftCplxFactor(-120));
 						Complex vc = va.multiply(phaseShiftCplxFactor(120));
 						StartingBus.set3PhaseVoltages(new Complex3x1(va,vb,vc));
 					 
@@ -112,8 +112,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			if(b.isActive() && !b.isVisited()){
 				   Complex vpos = b.getVoltage();
 					Complex va = vpos;
-					Complex vb = va.multiply(phaseShiftCplxFactor(120));
-					Complex vc = vb.multiply(phaseShiftCplxFactor(120));
+					Complex vb = va.multiply(phaseShiftCplxFactor(-120));
+					Complex vc = va.multiply(phaseShiftCplxFactor(120));
 					((Bus3Phase) b).set3PhaseVoltages(new Complex3x1(va,vb,vc));
 			}
 				
@@ -178,8 +178,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 									// update the phase voltage
 									Complex vpos = ((AclfBus)findBus).getVoltage();
 									Complex va = vpos.multiply(phaseShiftCplxFactor(phaseShiftDeg));
-									Complex vb = va.multiply(phaseShiftCplxFactor(120.0d));
-									Complex vc = vb.multiply(phaseShiftCplxFactor(120.0d));
+									Complex vb = va.multiply(phaseShiftCplxFactor(-120.0d));
+									Complex vc = va.multiply(phaseShiftCplxFactor(120.0d));
 									
 									((Bus3Phase) findBus).set3PhaseVoltages(new Complex3x1(va,vb,vc));
 								}
@@ -228,10 +228,13 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			}
 			
 		}
+		
+		 yMatrixAbc.luMatrix(1.0E-4);
 	
 		return yMatrixAbc;
 	}
 	
+	@Override
 	public ISparseEqnComplexMatrix3x3 getYMatrixABC(){
 		return this.yMatrixAbc;
 	}
@@ -243,7 +246,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 	
 	@Override
-	public boolean solveNetworkEquation() {
+	public boolean solve3PNetworkEquation() {
   		try {
 		  	// Calculate and set generator injection current
 			for( Bus b : getBusList()) {
@@ -256,14 +259,13 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					if(bus.getContributeGenList().size()>0){
 						 for(AclfGen gen: bus.getContributeGenList()){
 						      if(gen.isActive() && ((DStabGen)gen).getMach()!=null){
-						    	  if(((DStabGen)gen).getMach() instanceof Machine3Phase){
-						    		  
-						    		  Machine3Phase mach3P = (Machine3Phase) ((DStabGen)gen).getMach();
-						    		  
-						    		  iInject = iInject.add(mach3P.getIgen3Phase());
+						    	  if(gen instanceof Gen3Phase){
+						    		  Gen3Phase gen3P = (Gen3Phase) gen;
+						    		  iInject = iInject.add(gen3P.getIgen3Phase());
 						    		  
 						    	  }
 						    	  
+						    	  System.out.println("Bus, Igen:"+bus.getId()+","+iInject);
 						    	 
 						       }
 						  }
@@ -272,16 +274,25 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				  if(iInject == null){
 					  throw new Error (bus.getId()+" current injection is null");
 				  }
-				
+				  /* Igen2
+				   * -0.1915 - 4.9478i
+					  -4.1892 + 2.6397i
+					   4.3808 + 2.3080i
+				   */
+//				  if(bus.getId().equals("Bus3"))
+//					  iInject= new Complex3x1( new Complex(-0.1915, - 4.9478),new Complex(-4.1892,2.6397),new Complex(4.3808, 2.3080));
 				  getYMatrixABC().setBi(iInject, bus.getSortNumber());
 				}
 			}
 			
 			//add customized bus current injection, which is used in hybrid simulation or 
 			//for adding user new defined models, which is represented as current injections in dynamic simulation
-			addCustomBusCurrentInj();
 			
-		
+			//addCustomBusCurrentInj();
+			
+			 ISparseEqnComplexMatrix3x3  Yabc = getYMatrixABC();
+			 System.out.println(Yabc.getSparseEqnComplex());
+		   
 			getYMatrixABC().solveEqn();
 
 			// update bus voltage and machine Pe
@@ -289,6 +300,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				DStabBus bus = (DStabBus)b;
 				if(bus.isActive()){
 					Complex3x1 vabc = getYMatrixABC().getX(bus.getSortNumber());
+					
+					System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
+					
 					if(!vabc.a_0.isNaN()){
                     
 						if(bus instanceof Bus3Phase){
@@ -318,8 +332,51 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	}
 
 	@Override
-	public boolean initialize4Dstab() {
-		// TODO Auto-generated method stub
+	public boolean init3PDstabNetwork() {
+		
+		for ( DStabBus busi : getBusList() ) {
+
+			if( busi instanceof Bus3Phase){
+			    Bus3Phase bus =(Bus3Phase) busi;
+
+			   //only the active buses will be initialized
+				if(busi.isActive()){
+					// set bus initial vaule 
+					bus.setInitLoad(new Complex(0.0,0.0));
+					bus.setInitVoltMag(bus.getVoltageMag());
+					
+					// init bus dynamic signal calculation, 
+					// for example, bus Frequency measurement
+					//bus.initStates();
+					
+					
+					//initialize the bus generator
+					for(AclfGen gen: bus.getContributeGenList()){
+						if(gen.isActive() && gen instanceof Gen3Phase){
+							Gen3Phase gen3P = (Gen3Phase) gen;
+							gen3P.initDStabMach();
+						}
+					}
+					
+					
+					//initialize the bus load
+					//change load from power to admittance, in three-sequence, then to three-phase 	
+						
+				}
+				
+				
+				
+			}
+		}
+		
+		//form the Ymatrix
+		try {
+			formYMatrixABC();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 

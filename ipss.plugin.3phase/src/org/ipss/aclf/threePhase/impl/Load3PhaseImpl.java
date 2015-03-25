@@ -56,4 +56,10 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 		 ph3Load = threePhaseLoad;
 	}
 
+	@Override
+	public void initEquivYabc(Complex y1, Complex y2, Complex y0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -76,7 +76,7 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	public Complex3x3 getToShuntYabc() {
 		
 		// if toShuntY is not provided, get it from the sequence network
-		if(this.fromShuntYabc ==null){
+		if(this.toShuntYabc ==null){
 			
 			//Ys = (2*Y1+Y0)/3
 			Complex Ys = (this.getHShuntY().multiply(2).add(new Complex(0,this.getHB0()))).divide(3);
@@ -110,6 +110,7 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 		if(!isXfr()){
 			yff= this.getBranchYabc();
 		
+			
 			if(this.getFromShuntYabc()!=null)
 		         yff = yff.add(this.getFromShuntYabc());
 		}else{

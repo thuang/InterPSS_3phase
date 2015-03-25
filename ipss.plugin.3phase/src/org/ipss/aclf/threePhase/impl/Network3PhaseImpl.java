@@ -27,118 +27,9 @@ import com.interpss.core.net.Bus;
 
 public class Network3PhaseImpl extends AcscNetworkImpl implements
 		Network3Phase {
+	
+	protected ISparseEqnComplexMatrix3x3 yMatrixAbc =null;
 
-	@Override
-	public boolean initThreePhaseFromLfResult() {
-
-		/*  
-		 * initialize the bus phase voltages. 
-		 *   Special attentions need to be paid to the buses within the subtransmission and the distribution system, if any, 
-		 *   connected to the LV side of Delta/Yg connected step-down transformer 
-		 *   
-		 *   steps:
-		 *   
-		 *   (1) initialization by setting the visited status false
-		 *   (2) search the step-down delta/Y connected transformers
-		 *   (3) starting from the low voltage side of the transformers, set the phase voltage with 30 deg lagging w.r.t the positive sequenc voltage, 
-		 *      by assuming the connection meeting the  U.S. Delta connection standard, with high voltage side leading 30 degree, always 
-	     *      Finally, set the visited attribute to be true.
-	     *   (4) iterate over all step-down transformers and the connected subtransmissions 
-	     *   (5) for the rest of the buses, set the phase votlages directly based on the positive sequence voltage
-	     *
-	     */
-		
-		//step (1)
-		for(AcscBranch bra: this.getBranchList()){
-			bra.setVisited(false);
-		}
-		for(Bus b: this.getBusList()){
-			b.setVisited(false);
-			b.setIntFlag(0);
-		}
-		
-		double phaseShiftDeg = 0;
-		
-		for(AcscBranch bra: this.getBranchList()){
-			if(bra.isActive() && bra.isXfr()){
-				if((isDeltaConnected(bra.getXfrFromConnectCode()) && 
-						!isDeltaConnected(bra.getXfrToConnectCode()))
-						
-						||
-						(!isDeltaConnected(bra.getXfrFromConnectCode()) &&
-						    isDeltaConnected(bra.getXfrToConnectCode()))){
-					
-					 bra.setVisited(true);
-					 
-					 phaseShiftDeg = -30;
-					 Bus3Phase  StartingBus =null;
-					 
-					 //high voltage side leads 30 deg, always starts from the low voltage side
-					 if(bra.getFromAclfBus().getBaseVoltage()>bra.getToAclfBus().getBaseVoltage()){
-						 
-						 StartingBus = (Bus3Phase) bra.getToAclfBus();
-					 }		
-					 else {
-					
-						 StartingBus = (Bus3Phase) bra.getFromAclfBus();
-					 }
-					 
-					    Complex vpos = StartingBus.getVoltage();
-						Complex va = vpos.multiply(phaseShiftCplxFactor(phaseShiftDeg));
-						Complex vb = va.multiply(phaseShiftCplxFactor(240));
-						Complex vc = va.multiply(phaseShiftCplxFactor(120));
-						StartingBus.set3PhaseVoltages(new Complex3x1(va,vb,vc));
-					 
-					 Queue<Bus3Phase> q = new  LinkedList<Bus3Phase>();
-				     q.add(StartingBus);
-				     
-				     BFSSubTransmission(phaseShiftDeg,q);
-				}
-			}
-		}
-		
-		
-		
-		// initialize the phase voltages of those which are not set before, three-phase generation power output and load
-		for(AcscBus b: this.getBusList()){
-			
-			if(b.isActive() && !b.isVisited()){
-				   Complex vpos = b.getVoltage();
-					Complex va = vpos;
-					Complex vb = va.multiply(phaseShiftCplxFactor(120));
-					Complex vc = vb.multiply(phaseShiftCplxFactor(120));
-					((Bus3Phase) b).set3PhaseVoltages(new Complex3x1(va,vb,vc));
-			}
-				
-			//initialize the 3p power output of generation;
-			if(b.isGen()){
-				for(AclfGen gen: b.getContributeGenList()){
-					if(gen instanceof Gen3Phase){
-						Gen3Phase ph3Gen = (Gen3Phase) gen;
-						Complex phaseGen = gen.getGen();// phase gen and 3-phase gen are of the same value in PU
-						ph3Gen.setPower3Phase(new Complex3x1(phaseGen,phaseGen,phaseGen), UnitType.PU);
-					}
-				}
-			}
-			
-			// initialize the load 3-phase power
-			if(b.isLoad()){
-				for(AclfLoad load: b.getContributeLoadList()){
-					if(load instanceof Load3Phase){
-						Load3Phase ph3Load = (Load3Phase) load; 
-						Complex phaseLoad = load.getLoad(b.getVoltageMag()); // phase load and 3-phase load are of the same value in PU
-						
-						ph3Load.set3PhaseLoad(new Complex3x1(phaseLoad,phaseLoad,phaseLoad));
-					}
-				}
-			}
-			
-		}
-		
-		
-		
-		return true;
-	}
 	
 	private boolean isDeltaConnected(XfrConnectCode code){
 		return code ==XfrConnectCode.DELTA ||
@@ -195,7 +86,7 @@ public class Network3PhaseImpl extends AcscNetworkImpl implements
 
 	@Override
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
-		final ISparseEqnComplexMatrix3x3 yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
+		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
 		for(AcscBus b:this.getBusList()){
 			if(b instanceof Bus3Phase){
@@ -228,6 +119,12 @@ public class Network3PhaseImpl extends AcscNetworkImpl implements
 	@Override
 	public boolean run3PhaseLoadflow() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ISparseEqnComplexMatrix3x3 getYMatrixABC() {
+		
+		return this.yMatrixAbc;
 	}
 
 	

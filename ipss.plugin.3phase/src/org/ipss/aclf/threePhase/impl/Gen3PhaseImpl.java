@@ -24,6 +24,7 @@ import org.ipss.aclf.threePhase.Gen3Phase;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.interpss.common.exp.InterpssException;
+import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.acsc.AcscGen;
 import com.interpss.core.acsc.BusScGrounding;
@@ -176,6 +177,25 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 		
 		//TODO udpate GenPowerAbc
 		return true;
+	}
+
+	@Override
+	public boolean initDStabMach() {
+		
+		boolean flag =true;
+		
+		this.mach.calMultiFactors();
+		
+		if(this.getMach() ==null){
+			//TODO
+			//convert the generation to equiv load;
+			IpssLogger.getLogger().severe("Gen3Phase has no machine model, genId, busId: "+this.getId()+","+this.getParentBus().getId());
+		}
+		else
+		    flag = this.getMach().initStates(this.getMach().getDStabBus());
+		
+		
+		return flag;
 	}
 
 

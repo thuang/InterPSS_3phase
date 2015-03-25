@@ -49,6 +49,10 @@ public interface Gen3Phase extends DStabGen{
 	
 	public  void setPower3Phase(Complex3x1 genPQ,UnitType unit);
 	
+	/**
+	 * Calculate the three phase current injection at the terminal on system basis
+	 * @return
+	 */
 	public Complex3x1 getIgen3Phase();
 	
 	
@@ -59,5 +63,7 @@ public interface Gen3Phase extends DStabGen{
 	 * @return
 	 */
 	public boolean updateStates();
+	
+	public boolean initDStabMach();
 
 }

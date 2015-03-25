@@ -6,6 +6,7 @@ import org.ipss.aclf.threePhase.Branch3Phase;
 import org.ipss.aclf.threePhase.Bus3Phase;
 import org.ipss.aclf.threePhase.Gen3Phase;
 import org.ipss.aclf.threePhase.Load3Phase;
+import org.ipss.aclf.threePhase.util.ThreeSeqLoadProcessor;
 
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
@@ -64,16 +65,24 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 			 yiiAbc= yiiAbc.add(shuntYabc);
 		 }
 		
-		
-		// the loads
+		//Switch shunt
+		 
+		 
+		/*
+		// three-phase generic loads, they can be used to define three-phase or single-phase loads
 		 for(AclfLoad load:this.getContributeLoadList()) {
 			 if(load.isActive()){
 				 if(load instanceof Load3Phase){
 					 Load3Phase ph3Load = (Load3Phase) load;
 					 yiiAbc = yiiAbc.add(ph3Load.getEquivYabc());
 				 }
+				
 			 }
 		 }
+		 */
+		 
+		 //the conventional three-sequence load definition, they need to be pre-processed using ThreeSeqLoadProcessor
+		 yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
 		
 		// the generators
 		 for(AclfGen gen:this.getContributeGenList()) {

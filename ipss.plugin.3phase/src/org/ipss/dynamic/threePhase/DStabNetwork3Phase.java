@@ -6,10 +6,14 @@ import com.interpss.dstab.DStabilityNetwork;
 
 public interface DStabNetwork3Phase extends Network3Phase, DStabilityNetwork{
 	
+
 	
-	public boolean solveNetworkEquation();
+	
+	public boolean initThreePhaseFromLfResult();
+	
+	public boolean init3PDstabNetwork();
 	
 	
-	public boolean initialize4Dstab();
+	public boolean solve3PNetworkEquation();
 
 }

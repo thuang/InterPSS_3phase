@@ -8,11 +8,12 @@ import com.interpss.core.acsc.BaseAcscNetwork;
 
 public interface Network3Phase {
 	
-	
-	public boolean initThreePhaseFromLfResult();
+
 	
 	
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception;
+	
+	public ISparseEqnComplexMatrix3x3 getYMatrixABC();
 	
 	
 	public boolean run3PhaseLoadflow();

@@ -10,6 +10,13 @@ import com.interpss.core.acsc.PhaseCode;
 public interface Load3Phase extends AclfLoad {
 	
 	/**
+	 * calcuate the Yabc from Y120
+	 * @param y1  equivalent positive sequence admittance of the load which is not represented by dynamic load
+	 * @param y2  equivalent negative sequence admittance of the load which is not represented by dynamic load
+	 * @param y0  equivalent zero sequence admittance of the load which is not represented by dynamic load. This is zero by default
+	 */
+	public void initEquivYabc(Complex y1, Complex y2, Complex y0);
+	/**
 	 * get three phase load equivalent 3x3 admittance matrix in pu
 	 * @return
 	 */
