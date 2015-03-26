@@ -45,7 +45,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 
 	@Override
 	public Complex3x3 getYiiAbc() {
-		 
+		//always start from zero
+		yiiAbc = new Complex3x3();
 		// contributions from the connected branches
 		 for(Branch bra:this.getBranchList()) {
 			 if(bra.isActive()){

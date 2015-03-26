@@ -36,6 +36,7 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 				double t = dEventMsg.getTime();
 				if (hasAnyEvent(t)) {
 					
+					//System.out.println("dynamic event at: "+t);
 					/*
 					 * We always start from a full Y-matrix without any fault. At
 					 * any point, if there is an event, we apply all current
@@ -94,6 +95,17 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 		}
 		return true;
 	}
+	
+	@Override
+	protected boolean hasAnyEvent(double t) {
+		boolean has = false;
+		for (DynamicEvent dEvent : net.getDynamicEventList()) {
+			if (dEvent.hasEventAt(t)) {
+				has = true;
+			}
+		}
+		return has;
+	}
 
 	@Override public void onMsgEvent(IpssMessage eventMsg) {
 		throw new InterpssRuntimeException("Method not applicable");
@@ -129,6 +141,7 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 							yfaultABC.aa = ylarge;
 							net.getYMatrixABC().addToA(yfaultABC, i, i);
 						}
+						//TODO need to check how to model LL
 						else if(fault.getFaultCode()==SimpleFaultCode.GROUND_LL){
 							Complex3x3 yii = net.getYMatrixABC().getA(i, i);
 							yii.ab = new Complex(0,0);
@@ -158,8 +171,9 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 					 * Apply the branch fault to the Y-matrix
 					 */
 					else if (e.getType() == DynamicEventType.BRANCH_FAULT) {
+						 throw new UnsupportedOperationException();
 					}
-					  throw new UnsupportedOperationException();
+					 
 					}
 	}
 

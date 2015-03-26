@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
+import org.interpss.numeric.NumericConstant;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
@@ -18,6 +19,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
+import org.ipss.threePhase.dynamic.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
@@ -31,12 +33,17 @@ import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.acsc.XfrConnectCode;
+import com.interpss.core.acsc.fault.AcscBusFault;
+import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabBranch;
 import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.DStabilityNetwork;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.devent.DynamicEvent;
+import com.interpss.dstab.devent.DynamicEventType;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 import com.interpss.dstab.mach.RoundRotorMachine;
@@ -215,19 +222,22 @@ public class ThreeBus_3Phase_Test {
 	  	
 	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(0.005);
+		dstabAlgo.setTotalSimuTimeSec(0.5);
 		net.setNetEqnIterationNoEvent(1);
 		net.setNetEqnIterationWithEvent(1);
-		//dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
-		//net.addDynamicEvent(create3PhaseFaultEvent("Bus5",net,1.0d,0.05),"3phaseFault@Bus5");
+	    dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+		net.addDynamicEvent(create3PhaseFaultEvent("Bus2",net,0.2,0.05),"3phaseFault@Bus2");
         
 		
 		StateMonitor sm = new StateMonitor();
 		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus3-mach1"});
 		sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
 		// set the output handler
-				dstabAlgo.setSimuOutputHandler(sm);
-				dstabAlgo.setOutPutPerSteps(1);
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(1);
+		
+		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+				
 	  	if(dstabAlgo.initialization()){
 	  	
 	  		dstabAlgo.performSimulation();
@@ -443,6 +453,25 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 		//net.setBusNumberArranged(true);
   		return net;
 		
+	}
+
+	private DynamicEvent create3PhaseFaultEvent(String faultBusId, DStabilityNetwork net,double startTime, double durationTime){
+	    // define an event, set the event id and event type.
+			DynamicEvent event1 = DStabObjectFactory.createDEvent("BusFault3P@"+faultBusId, "Bus Fault 3P@"+faultBusId, 
+					DynamicEventType.BUS_FAULT, net);
+			event1.setStartTimeSec(startTime);
+			event1.setDurationSec(durationTime);
+			
+	   // define a bus fault
+			DStabBus faultBus = net.getDStabBus(faultBusId);
+			AcscBusFault fault = CoreObjectFactory.createAcscBusFault("Bus Fault 3P@"+faultBusId, net);
+			fault.setBus(faultBus);
+			fault.setFaultCode(SimpleFaultCode.GROUND_3P);
+			fault.setZLGFault(NumericConstant.SmallScZ);
+	
+	   // add this fault to the event, must be consist with event type definition before.
+			event1.setBusFault(fault); 
+			return event1;
 	}
 
 }

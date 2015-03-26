@@ -277,7 +277,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						    		  
 						    	  }
 						    	  
-						    	  System.out.println("Bus, Igen:"+bus.getId()+","+iInject);
+						    	 // System.out.println("Bus, Igen:"+bus.getId()+","+iInject);
 						    	 
 						       }
 						  }
@@ -314,10 +314,12 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						if(bus instanceof Bus3Phase){
 							Bus3Phase bus3P = (Bus3Phase) bus;
 							 bus3P.set3PhaseVoltages(vabc);
+							 
 							 // update the positive sequence voltage
 							 Complex v = bus3P.get3SeqVotlages().b_1;
-							 System.out.println("posV @ bus :"+v.toString()+","+bus.getId());
 							 bus.setVoltage(v);
+							// System.out.println("posV @ bus :"+v.toString()+","+bus.getId());
+							
                          }
 					
 					    bus.updateDynamicAttributes(false);
