@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase.util;
+package org.ipss.threePhase.util;
 
 import java.util.function.Function;
 

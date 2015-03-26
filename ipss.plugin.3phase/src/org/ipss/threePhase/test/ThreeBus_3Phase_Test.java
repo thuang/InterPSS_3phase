@@ -1,6 +1,6 @@
 package org.ipss.threePhase.test;
 
-import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 import static org.junit.Assert.assertTrue;
 
 import java.util.logging.Level;
@@ -13,14 +13,14 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
 import org.interpss.numeric.util.MatrixOutputUtil;
 import org.interpss.numeric.util.NumericUtil;
-import org.ipss.aclf.threePhase.util.ThreePhaseAclfOutFunc;
-import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
+import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
+import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
@@ -43,7 +43,7 @@ import com.interpss.dstab.mach.RoundRotorMachine;
 
 public class ThreeBus_3Phase_Test {
 	
-	@Test
+	//@Test
 	public void testYMatrixabc() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -236,7 +236,7 @@ public class ThreeBus_3Phase_Test {
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
-	@Test
+	//@Test
 	public void testSolvNetwork() throws Exception{
 		
 		IpssCorePlugin.init();

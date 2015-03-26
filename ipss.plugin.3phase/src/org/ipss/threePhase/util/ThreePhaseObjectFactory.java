@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase.util;
+package org.ipss.threePhase.util;
 
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;

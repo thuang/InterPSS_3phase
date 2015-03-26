@@ -209,7 +209,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
 		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
-		for(AcscBus b:this.getBusList()){
+		for(DStabBus b:this.getBusList()){
 			if(b instanceof Bus3Phase){
 				int i = b.getSortNumber();
 				Bus3Phase ph3Bus = (Bus3Phase) b;

@@ -2,7 +2,7 @@ package org.ipss.threePhase.basic.impl;
 
 
 
-import static org.ipss.aclf.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;

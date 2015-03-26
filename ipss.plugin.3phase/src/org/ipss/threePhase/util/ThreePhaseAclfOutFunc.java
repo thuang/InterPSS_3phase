@@ -1,4 +1,4 @@
-package org.ipss.aclf.threePhase.util;
+package org.ipss.threePhase.util;
 
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.ComplexFunc;

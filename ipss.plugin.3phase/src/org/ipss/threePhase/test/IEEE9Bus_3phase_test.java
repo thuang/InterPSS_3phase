@@ -10,7 +10,6 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.display.AclfOutFunc.BusIdStyle;
 import org.interpss.display.impl.AclfOut_BusStyle;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
@@ -19,6 +18,7 @@ import org.ipss.threePhase.basic.Network3Phase;
 import org.ipss.threePhase.basic.impl.Network3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
+import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
