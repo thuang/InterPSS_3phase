@@ -148,10 +148,10 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 			  //YgY
 			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 			    	yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
-			    
+			   //YgD1 
 			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
 			    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
-			    
+			   //YgD11  
 			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 			    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			}
@@ -220,6 +220,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	/**
 	 * Refer to the paper: M.S.Chen, W.E.Dillon, "Power system modeling," Proc. of IEEE,Vol.62, No.7, 1974
 	 * 
+	 * AND paper Selva Moorthy et al "a new phase coordinate transformer model for Ybus analysis", IEEE PWRS Vol.17, No.4, Nov.2002
 	 * 
 	 * Y1 corresponding to self and mutual admittance on the Yn side
 	 * It is symmetric with :
@@ -249,8 +250,8 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
     private  Complex3x3  getY2(){
     	
     	if(y1 != null){
-	    	Complex Y1ii = (y1.multiply(2)).divide(3);
-			Complex Y1ij = (y1.multiply(-1)).divide(3);
+	    	Complex Y1ii = (y1.multiply(2.0d)).divide(3);
+			Complex Y1ij = (y1.multiply(-1.0d)).divide(3);
 			return new Complex3x3(Y1ii,Y1ij);
 	    }
     	return null;
@@ -260,17 +261,17 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	/**
 	 * Y3 corresponding to mutual admittance of the Y and delta connections
 	 * It is  with the structure: 
-	 *              [-y1 y1  0]
-	 *    1/sqrt(3)*[0 -y1, y1]
-	 *              [y1, 0,-y1]
+	 *              [y1 -y1  0]
+	 *    1/sqrt(3)*[0 y1, -y1]
+	 *              [-y1, 0,y1]
 	 * @return
 	 */
     private  Complex3x3  getY3(){
     	if(y1 != null)
     	return new Complex3x3(new Complex[][]{
-    			{y1.multiply(-1*Math.sqrt(3)/3),     y1.multiply(Math.sqrt(3)/3),        new Complex(0.0, 0.0)},
-    			{new Complex(0,0),                y1.multiply(-1*Math.sqrt(3)/3),    y1.multiply(Math.sqrt(3)/3) },
-    			{  y1.multiply(Math.sqrt(3)/3),            new Complex(0,0),            y1.multiply(-1*Math.sqrt(3)/3)}});
+    			{y1.multiply(Math.sqrt(3)/3),     y1.multiply(-1*Math.sqrt(3)/3),        new Complex(0.0, 0.0)},
+    			{new Complex(0,0),                y1.multiply(Math.sqrt(3)/3),    y1.multiply(-1*Math.sqrt(3)/3) },
+    			{  y1.multiply(-1*Math.sqrt(3)/3),            new Complex(0,0),            y1.multiply(Math.sqrt(3)/3)}});
 
 		return null;
 	}

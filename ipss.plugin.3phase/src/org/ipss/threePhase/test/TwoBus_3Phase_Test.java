@@ -11,7 +11,7 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.interpss.numeric.util.MatrixUtil;
+import org.interpss.numeric.util.MatrixOutputUtil;
 import org.interpss.numeric.util.NumericUtil;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.ipss.threePhase.basic.Branch3Phase;
