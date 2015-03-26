@@ -36,6 +36,7 @@ import com.interpss.dstab.impl.DStabilityNetworkImpl;
 public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DStabNetwork3Phase {
     
 	protected ISparseEqnComplexMatrix3x3 yMatrixAbc = null;
+	protected boolean is3PhaseNetworkInitialized = false;
 	
 	@Override
 	public boolean initThreePhaseFromLfResult() {
@@ -147,7 +148,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		
 		
-		return true;
+		return is3PhaseNetworkInitialized= true;
 	}
 	
 	private boolean isDeltaConnected(XfrConnectCode code){
@@ -342,6 +343,12 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	public boolean initDStabNet() {
 		boolean initFlag = true;
 		IpssLogger.getLogger().info("Start three-phase DStabNetwork initialization...");
+		
+		
+	  	//TODO this is a must step, otherwise the system cannot be initialized properly
+		if(!is3PhaseNetworkInitialized)
+	  	     initThreePhaseFromLfResult();
+		
 		for ( DStabBus busi : getBusList() ) {
 
 			if( busi instanceof Bus3Phase){

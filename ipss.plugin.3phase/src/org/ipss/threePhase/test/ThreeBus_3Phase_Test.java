@@ -12,6 +12,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
 import org.interpss.numeric.util.MatrixOutputUtil;
+import org.interpss.numeric.util.NumericUtil;
 import org.ipss.aclf.threePhase.util.ThreePhaseAclfOutFunc;
 import org.ipss.aclf.threePhase.util.ThreePhaseObjectFactory;
 import org.ipss.threePhase.basic.Branch3Phase;
@@ -33,6 +34,9 @@ import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabBranch;
 import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.algo.DynamicSimuAlgorithm;
+import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 import com.interpss.dstab.mach.RoundRotorMachine;
@@ -71,34 +75,77 @@ public class ThreeBus_3Phase_Test {
 	  	Gen3Phase gen1 = (Gen3Phase) bus1.getContributeGen("Gen1");
 	  	Complex3x3 yg1abc= gen1.getYabc(false);
 	  	
+	  	/*
+	  	 * Gen1 yabc = 
+			aa = (0.049988758448491294, -3.332583699594674),ab = (-0.024994379224245654, 1.6662918492973369),ac = (-0.024994379224245647, 1.6662918492973375)
+			ba = (-0.024994379224245643, 1.6662918492973369),bb = (0.0499887584784707, -3.3325837005937737),bc = (-0.024994379254225044, 1.666291850296437)
+			ca = (-0.02499437922424565, 1.6662918492973369),cb = (-0.024994379254225044, 1.666291850296437),cc = (0.049988758478470695, -3.332583700593774)
+		 */
 	  	System.out.println("Gen1 yabc = \n"+yg1abc);
+	  	
+	  	 assertTrue(NumericUtil.equals(yg1abc.aa, new Complex(0.049988758448491294, -3.332583699594674),1.0E-5));
+	  	 assertTrue(NumericUtil.equals(yg1abc.ab, new Complex(-0.024994379224245654, 1.6662918492973369),1.0E-5));
 	  	
 	  	Branch3Phase xfr = (Branch3Phase) net.getBranch("Bus2->Bus1(0)");
 	  	System.out.println("xfr yabc = \n"+xfr.getBranchYabc());
-	  	System.out.println("xfr yffabc = \n"+xfr.getYffabc());
+	  	
 	  	
 	  	/*
-	  	 *  yft012 = diag([0;-20i*exp(30/180*pi*i) ; -20i*exp(-30/180*pi*i)])
-
-			yft012 =
-			
-			   0.0000 + 0.0000i   0.0000 + 0.0000i   0.0000 + 0.0000i
-			   0.0000 + 0.0000i  10.0000 -17.3205i   0.0000 + 0.0000i
-			   0.0000 + 0.0000i   0.0000 + 0.0000i -10.0000 -17.3205i
-			
-			>> yftabc=T*yft012*inv(T)
-			
-			yftabc =
-			
-			   0.0000 -11.5470i  -0.0000 +11.5470i   0.0000 + 0.0000i
-			   0.0000 + 0.0000i   0.0000 -11.5470i  -0.0000 +11.5470i
-			  -0.0000 +11.5470i  -0.0000 + 0.0000i   0.0000 -11.5470i
+	  	 * xfr yffabc = 
+			aa = (0.0, -20.0),ab = (0.0, 0.0),ac = (0.0, 0.0)
+			ba = (0.0, 0.0),bb = (0.0, -20.0),bc = (0.0, 0.0)
+			ca = (0.0, 0.0),cb = (0.0, 0.0),cc = (0.0, -20.0)
 	  	 */
-	  	System.out.println("xfr yftabc = \n"+xfr.getYftabc());
-	  	System.out.println("xfr yttabc = \n"+xfr.getYttabc());
-	  	System.out.println("xfr ytfabc = \n"+xfr.getYtfabc());
+	  	
+	  	Complex3x3 yffabc  =	xfr.getYffabc();
+	  	System.out.println("xfr yffabc = \n"+yffabc);
+	  	
+	  	assertTrue(NumericUtil.equals(yffabc.aa, new Complex(0, -20.0),1.0E-5));
+	  	 assertTrue(NumericUtil.equals(yffabc.ab, new Complex(0, 0),1.0E-5));
+	  	
+	  	/*
+			xfr yftabc = 
+			aa = (-0.0, 11.547005383792515),ab = (0.0, -11.547005383792515),ac = (-0.0, -0.0)
+			ba = (-0.0, -0.0),bb = (-0.0, 11.547005383792515),bc = (0.0, -11.547005383792515)
+			ca = (0.0, -11.547005383792515),cb = (-0.0, -0.0),cc = (-0.0, 11.547005383792515)
+	  	 */
+	  	 
+	  	Complex3x3 yftabc  =	xfr.getYftabc();
+	  	System.out.println("xfr yftabc = \n"+yftabc );
+	  	assertTrue(NumericUtil.equals(yftabc.aa, new Complex(-0.0, 11.547005383792515),1.0E-5));
+	  	assertTrue(NumericUtil.equals(yftabc.ab, new Complex(-0.0, -11.547005383792515),1.0E-5));
+	  	assertTrue(NumericUtil.equals(yftabc.ba, new Complex(-0.0, 0),1.0E-5));
+	  	assertTrue(NumericUtil.equals(yftabc.ca, new Complex(0.0, -11.547005383792515),1.0E-5));
+	  	
+	  	/*
+	  	 * xfr yttabc = 
+				aa = (0.0, -13.333333333333334),ab = (-0.0, 6.666666666666667),ac = (-0.0, 6.666666666666667)
+				ba = (-0.0, 6.666666666666667),bb = (0.0, -13.333333333333334),bc = (-0.0, 6.666666666666667)
+				ca = (-0.0, 6.666666666666667),cb = (-0.0, 6.666666666666667),cc = (0.0, -13.333333333333334)
+	  	 */
+	  	Complex3x3 yttabc  =	xfr.getYttabc();
+	  	System.out.println("xfr yttabc = \n"+yttabc);
+	  	
+	  	assertTrue(NumericUtil.equals(yttabc.aa, new Complex(0.0, -13.333333333333334),1.0E-5));
+	  	assertTrue(NumericUtil.equals(yttabc.ab, new Complex(-0.0, 6.666666666666667),1.0E-5));
+	  	assertTrue(NumericUtil.equals(yttabc.ba, new Complex(-0.0, 6.666666666666667),1.0E-5));
 	  	
 	  	
+	  	/**
+	  	 * xfr ytfabc = 
+	  	 * aa = (-0.0, 11.547005383792515),ab = (-0.0, -0.0),ac = (0.0, -11.547005383792515)
+			ba = (0.0, -11.547005383792515),bb = (-0.0, 11.547005383792515),bc = (-0.0, -0.0)
+			ca = (-0.0, -0.0),cb = (0.0, -11.547005383792515),cc = (-0.0, 11.547005383792515)
+	  	 */
+	  	Complex3x3 ytfabc  =	xfr.getYtfabc();
+	  	System.out.println("xfr ytfabc = \n"+ytfabc);
+         
+	  	/*
+	  	 *  ytfabc = yftabc.transpose()
+	  	 */
+	  	assertTrue(NumericUtil.equals(ytfabc.aa, yftabc.aa,1.0E-5));
+	  	assertTrue(NumericUtil.equals(ytfabc.ab, yftabc.ba,1.0E-5));
+	  	assertTrue(NumericUtil.equals(ytfabc.ba, yftabc.ab,1.0E-5));
 	  	
 	  	DStabBus bus3 = net.getBus("Bus3");
 	  	Bus3Phase bus33p = (Bus3Phase) bus3;
@@ -127,7 +174,66 @@ public class ThreeBus_3Phase_Test {
 	  	
 	  	
 	  	Branch3Phase line23 = (Branch3Phase) net.getBranch("Bus2->Bus3(0)");
-	  	System.out.println("line23 yttabc = \n"+line23.getYttabc());
+	  	
+	  	/*
+	  	 * line23 yttabc = 
+			aa = (1.8391102453069232E-32, -7.677777777777778),ab = (-3.697785493223493E-32, 2.2222222222222228),ac = (-3.697785493223493E-32, 2.2222222222222237)
+			ba = (-2.201062793585413E-32, 2.2222222222222228),bb = (-6.93889390390723E-16, -7.67777777777778),bc = (6.938893903907232E-16, 2.2222222222222223)
+			ca = (-2.3967128196818943E-32, 2.222222222222223),cb = (6.938893903907231E-16, 2.2222222222222223),cc = (-6.938893903907231E-16, -7.677777777777781)
+
+	  	 */
+	  	Complex3x3 yttabc_line23 = line23.getYttabc();
+	  	System.out.println("line23 yttabc = \n"+yttabc_line23);
+	  	
+	  	assertTrue(NumericUtil.equals(yttabc_line23.ba, new Complex(0.0, 2.2222222222222228),1.0E-5));
+	  	assertTrue(NumericUtil.equals(yttabc_line23.bb, new Complex(0.0, -7.6777777777777),1.0E-5));
+	}
+	
+	
+	@Test
+	public void testDstab() throws Exception{
+		
+		IpssCorePlugin.init();
+		IpssLogger.getLogger().setLevel(Level.INFO);
+		DStabNetwork3Phase net = create3BusSys();
+		
+	
+		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
+		net.initContributeGenLoad();
+		
+		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
+				net, IpssCorePlugin.getMsgHub());
+			
+		//create a load flow algorithm object
+	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
+	  	//run load flow using default setting
+	  	
+	  	
+	  
+	  	assertTrue(algo.loadflow())	;
+	
+	  	
+	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
+		dstabAlgo.setSimuStepSec(0.005d);
+		dstabAlgo.setTotalSimuTimeSec(0.005);
+		net.setNetEqnIterationNoEvent(1);
+		net.setNetEqnIterationWithEvent(1);
+		//dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+		//net.addDynamicEvent(create3PhaseFaultEvent("Bus5",net,1.0d,0.05),"3phaseFault@Bus5");
+        
+		
+		StateMonitor sm = new StateMonitor();
+		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus3-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
+		// set the output handler
+				dstabAlgo.setSimuOutputHandler(sm);
+				dstabAlgo.setOutPutPerSteps(1);
+	  	if(dstabAlgo.initialization()){
+	  	
+	  		dstabAlgo.performSimulation();
+	  	}
+	  	
+	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
 	@Test
@@ -171,8 +277,8 @@ public class ThreeBus_3Phase_Test {
 	  	net.initDStabNet();
 	  	
 	  	ISparseEqnComplexMatrix3x3  Yabc = net.getYMatrixABC();
-	  	System.out.println(Yabc.getSparseEqnComplex());
-	    MatrixOutputUtil.matrixToMatlabMFile("output/ThreeBusYabc.m", Yabc.getSparseEqnComplex());
+	   //	System.out.println(Yabc.getSparseEqnComplex());
+	   // MatrixOutputUtil.matrixToMatlabMFile("output/ThreeBusYabc.m", Yabc.getSparseEqnComplex());
 	  /**
 	   * Xfr :Wye-g Wye-g connection
 	   * 
@@ -187,6 +293,19 @@ public class ThreeBus_3Phase_Test {
 	   */
 	  
 	    net.solveNetEqn(false);
+	    
+	    for(DStabBus bus: net.getBusList()){
+			  if(bus instanceof Bus3Phase){
+				  Bus3Phase bus3p = (Bus3Phase) bus;
+				  
+				  if(bus.getId().equals("Bus1")){
+					  assertTrue(NumericUtil.equals(bus3p.get3PhaseVotlages().a_0, new Complex(0.94835,-0.42688),1.0E-4));
+				  }
+				  else if(bus.getId().equals("Bus3")){
+					  assertTrue(NumericUtil.equals(bus3p.get3PhaseVotlages().a_0, new Complex(1.0250,0),1.0E-4));
+				  }
+			  }
+		  }
 	  
 	    
 	}
