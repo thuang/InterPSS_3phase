@@ -10,7 +10,6 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 
-import com.interpss.core.acsc.impl.AcscBranchImpl;
 import com.interpss.dstab.impl.DStabBranchImpl;
 
 public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{

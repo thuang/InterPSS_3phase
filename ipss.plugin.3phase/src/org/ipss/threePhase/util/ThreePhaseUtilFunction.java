@@ -4,11 +4,9 @@ import java.util.function.Function;
 
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
+import org.ipss.threePhase.dynamic.DStabGen3Phase;
 
 import com.interpss.dstab.DStabGen;
-
-import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.dynamic.DStabGen3Phase;
 
 public class ThreePhaseUtilFunction {
 	

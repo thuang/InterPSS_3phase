@@ -6,13 +6,17 @@ import static org.junit.Assert.assertTrue;
 import java.util.logging.Level;
 
 import org.apache.commons.math3.complex.Complex;
+import org.ieee.odm.adapter.IODMAdapter.NetType;
+import org.ieee.odm.adapter.psse.PSSEAdapter;
+import org.ieee.odm.adapter.psse.PSSEAdapter.PsseVersion;
+import org.ieee.odm.model.dstab.DStabModelParser;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
+import org.interpss.mapper.odm.ODMDStabParserMapper;
 import org.interpss.numeric.NumericConstant;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.interpss.numeric.util.MatrixOutputUtil;
 import org.interpss.numeric.util.NumericUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
@@ -27,16 +31,15 @@ import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
 import com.interpss.DStabObjectFactory;
+import com.interpss.SimuObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranchCode;
-import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.fault.AcscBusFault;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
-import com.interpss.dstab.DStabBranch;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabilityNetwork;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -47,6 +50,8 @@ import com.interpss.dstab.devent.DynamicEventType;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 import com.interpss.dstab.mach.RoundRotorMachine;
+import com.interpss.simu.SimuContext;
+import com.interpss.simu.SimuCtxType;
 
 public class ThreeBus_3Phase_Test {
 	
@@ -197,8 +202,8 @@ public class ThreeBus_3Phase_Test {
 	}
 	
 	
-	@Test
-	public void testDstab() throws Exception{
+	//@Test
+	public void testDstab3Phase() throws Exception{
 		
 		IpssCorePlugin.init();
 		IpssLogger.getLogger().setLevel(Level.INFO);
@@ -239,7 +244,73 @@ public class ThreeBus_3Phase_Test {
 		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
 				
 	  	if(dstabAlgo.initialization()){
+	  		System.out.println(net.getMachineInitCondition());
 	  	
+	  		dstabAlgo.performSimulation();
+	  	}
+	  	
+	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	}
+	
+	@Test
+	public void testDstabPosSeq() throws Exception{
+		
+		IpssCorePlugin.init();
+		IpssCorePlugin.setLoggerLevel(Level.INFO);
+		PSSEAdapter adapter = new PSSEAdapter(PsseVersion.PSSE_30);
+		assertTrue(adapter.parseInputFile(NetType.DStabNet, new String[]{
+				"testData/threeBusSys.raw",
+				//"testData/adpter/psse/v30/IEEE9Bus/ieee9.seq",
+				"testData/threeBusSys.dyr"
+		}));
+		DStabModelParser parser =(DStabModelParser) adapter.getModel();
+		
+		//System.out.println(parser.toXmlDoc());
+
+		
+		
+		SimuContext simuCtx = SimuObjectFactory.createSimuNetwork(SimuCtxType.DSTABILITY_NET);
+		if (!new ODMDStabParserMapper(IpssCorePlugin.getMsgHub())
+					.map2Model(parser, simuCtx)) {
+			System.out.println("Error: ODM model to InterPSS SimuCtx mapping error, please contact support@interpss.com");
+			return;
+		}
+		
+		
+	    DStabilityNetwork net =simuCtx.getDStabilityNet();
+		
+	
+		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
+		//net.initContributeGenLoad();
+		
+		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
+				net, IpssCorePlugin.getMsgHub());
+			
+
+		LoadflowAlgorithm aclfAlgo = dstabAlgo.getAclfAlgorithm();
+		assertTrue(aclfAlgo.loadflow());
+		System.out.println(AclfOutFunc.loadFlowSummary(net));
+		
+		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
+		dstabAlgo.setSimuStepSec(0.005d);
+		dstabAlgo.setTotalSimuTimeSec(0.5);
+		net.setNetEqnIterationNoEvent(1);
+		net.setNetEqnIterationWithEvent(1);
+	    dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+		net.addDynamicEvent(create3PhaseFaultEvent("Bus2",net,0.2,0.05),"3phaseFault@Bus2");
+        
+		
+		StateMonitor sm = new StateMonitor();
+		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
+		// set the output handler
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(1);
+		
+		//dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+				
+	  	if(dstabAlgo.initialization()){
+	  		System.out.println(net.getMachineInitCondition());
 	  		dstabAlgo.performSimulation();
 	  	}
 	  	
@@ -270,7 +341,6 @@ public class ThreeBus_3Phase_Test {
 	  	
 	  	net.initThreePhaseFromLfResult();
 	  
-
 		   
 		  for(DStabBus bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
@@ -362,7 +432,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 		mach.setRatedVoltage(16500.0);
 		mach.calMultiFactors();
 		mach.setH(5.0);
-		mach.setD(0.01);
+		mach.setD(0.00);
 		mach.setRa(0.003);
 		mach.setXl(0.14);
 		mach.setXd(1.1);

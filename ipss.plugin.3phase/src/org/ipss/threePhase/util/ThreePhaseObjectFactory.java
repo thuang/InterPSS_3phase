@@ -4,7 +4,6 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.basic.Network3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.basic.impl.Branch3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Bus3PhaseImpl;

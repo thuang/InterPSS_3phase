@@ -1,6 +1,5 @@
 package org.ipss.threePhase.test;
 
-import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 import static org.junit.Assert.assertTrue;
 
 import java.util.logging.Level;
@@ -11,12 +10,10 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.sparse.ISparseEqnComplexMatrix3x3;
-import org.interpss.numeric.util.MatrixOutputUtil;
 import org.interpss.numeric.util.NumericUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
@@ -28,8 +25,6 @@ import com.interpss.common.exp.InterpssException;
 import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
-import com.interpss.core.acsc.AcscBus;
-import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
