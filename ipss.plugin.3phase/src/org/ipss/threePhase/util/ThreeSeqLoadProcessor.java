@@ -20,7 +20,7 @@ public class ThreeSeqLoadProcessor {
 			loadEquivY0 = bus.getScLoadShuntY0();
 		}
 		
-		return new Complex3x3(loadEquivY1,loadEquivY2,loadEquivY0);
+		return Complex3x3.z12_to_abc( new Complex3x3(loadEquivY1,loadEquivY2,loadEquivY0));
 	}
 
 }

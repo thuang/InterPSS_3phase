@@ -38,6 +38,8 @@ import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGenCode;
+import com.interpss.core.aclf.AclfLoad;
+import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.fault.AcscBusFault;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
@@ -255,7 +257,7 @@ public class ThreeBus_3Phase_Test {
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
-	@Test
+	//@Test
 	public void testDstabPosSeq() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -320,7 +322,7 @@ public class ThreeBus_3Phase_Test {
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
-	//@Test
+	@Test
 	public void testSolvNetwork() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -339,27 +341,24 @@ public class ThreeBus_3Phase_Test {
 	  	
 	  
 	  	assertTrue(algo.loadflow())	;
-	  	 System.out.println(AclfOutFunc.loadFlowSummary(net));
+	  	System.out.println(AclfOutFunc.loadFlowSummary(net));
 	  	
 	  	
-	  	net.initThreePhaseFromLfResult();
+	  //	net.initThreePhaseFromLfResult();
 	  
 		   
-		  for(DStabBus bus: net.getBusList()){
-			  if(bus instanceof Bus3Phase){
-				  Bus3Phase ph3Bus = (Bus3Phase) bus;
-				  
-				  System.out.println(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
-			  }
-		  }
-	  	//TODO three-phase load flow result
+//		  for(DStabBus bus: net.getBusList()){
+//			  if(bus instanceof Bus3Phase){
+//				  Bus3Phase ph3Bus = (Bus3Phase) bus;
+//				  
+//				  System.out.println(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
+//			  }
+
 		
-	  	System.out.println(ThreePhaseAclfOutFunc.busLfSummary(net));
-	  
 	  	
-	  	net.initDStabNet();
+		net.initDStabNet();
 	  	
-	  	ISparseEqnComplexMatrix3x3  Yabc = net.getYMatrixABC();
+	  //	ISparseEqnComplexMatrix3x3  Yabc = net.getYMatrixABC();
 	   //	System.out.println(Yabc.getSparseEqnComplex());
 	   // MatrixOutputUtil.matrixToMatlabMFile("output/ThreeBusYabc.m", Yabc.getSparseEqnComplex());
 	  /**
@@ -377,12 +376,15 @@ public class ThreeBus_3Phase_Test {
 	  
 	    net.solveNetEqn(false);
 	    
+		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(net));
+	    
 	    for(DStabBus bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
 				  Bus3Phase bus3p = (Bus3Phase) bus;
 				  
 				  if(bus.getId().equals("Bus1")){
-					  assertTrue(NumericUtil.equals(bus3p.get3PhaseVotlages().a_0, new Complex(0.94835,-0.42688),1.0E-4));
+					  System.out.println("Bus1 Vabc =:"+bus3p.get3PhaseVotlages());
+					  assertTrue(NumericUtil.equals(bus3p.get3PhaseVotlages().a_0, new Complex(0.90406,-0.51407 ),1.0E-4));
 				  }
 				  else if(bus.getId().equals("Bus3")){
 					  assertTrue(NumericUtil.equals(bus3p.get3PhaseVotlages().a_0, new Complex(1.0250,0),1.0E-4));
@@ -462,7 +464,15 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
   		bus2.setBaseVoltage(230000.0);
   		// set bus to be a swing bus
   		bus2.setGenCode(AclfGenCode.NON_GEN);
+  		bus2.setLoadCode(AclfLoadCode.CONST_P);
+  		
+  		//TODO Three-sequence load
+  		//AclfLoad load = CoreObjectFactory.createAclfLoad("1");
+  		bus2.setLoadPQ(new Complex(1.0,0.20));
+  		
+  		
   		bus2.setSortNumber(1);
+  		
 
   		
   		

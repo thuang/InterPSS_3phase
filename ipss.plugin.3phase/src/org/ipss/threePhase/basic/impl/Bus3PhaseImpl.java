@@ -83,7 +83,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		 */
 		 
 		 //the conventional three-sequence load definition, they need to be pre-processed using ThreeSeqLoadProcessor
-		// yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
+		 if(this.isLoad())
+		yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
 		
 		// the generators
 		 for(AclfGen gen:this.getContributeGenList()) {
