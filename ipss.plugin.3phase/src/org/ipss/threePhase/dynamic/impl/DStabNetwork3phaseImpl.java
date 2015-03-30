@@ -17,6 +17,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
+import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
 import com.interpss.common.datatype.Constants;
 import com.interpss.common.exp.InterpssException;
@@ -361,6 +362,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					// set bus initial vaule 
 					bus.setInitLoad(new Complex(0.0,0.0));
 					bus.setInitVoltMag(bus.getVoltageMag());
+					
+					//init three sequence load
+					ThreeSeqLoadProcessor.initEquivLoadY120(bus);
 					
 					// init bus dynamic signal calculation, 
 					// for example, bus Frequency measurement

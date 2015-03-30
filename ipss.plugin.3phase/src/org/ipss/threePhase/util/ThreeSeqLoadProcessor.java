@@ -4,23 +4,25 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Bus3Phase;
 
+import com.interpss.core.acsc.SequenceCode;
+import com.interpss.dstab.DStabBus;
+
 public class ThreeSeqLoadProcessor {
 	
-	public static Complex3x3 getEquivLoadYabc(Bus3Phase bus){
-		Complex loadPQ =bus.getLoadPQ();
-		double v2 = bus.getVoltageMag()*bus.getVoltageMag();
-		Complex loadEquivY1 = loadPQ.conjugate().divide(v2);
-		
-		Complex loadEquivY2 = bus.getScLoadShuntY2();
-		if(loadEquivY2  == null)
-			loadEquivY2 =loadEquivY1;
-		
-		Complex loadEquivY0 = new Complex(0,0);
-		if(bus.getScLoadShuntY0() != null){
-			loadEquivY0 = bus.getScLoadShuntY0();
-		}
-		
+	public static Complex3x3 getEquivLoadYabc(DStabBus bus){
+
+		Complex loadEquivY1 =  new Complex(1.0,0).divide(bus.getEquivZ1());
+		Complex loadEquivY2 =  new Complex(1.0,0).divide(bus.getEquivZ2());
+		Complex loadEquivY0 =  new Complex(1.0,0).divide(bus.getEquivZ0());
+
 		return Complex3x3.z12_to_abc( new Complex3x3(loadEquivY1,loadEquivY2,loadEquivY0));
+	}
+	
+	public static void initEquivLoadY120(DStabBus bus){
+	    bus.initSeqEquivLoad(SequenceCode.POSITIVE);
+	    bus.initSeqEquivLoad(SequenceCode.NEGATIVE);
+	    bus.initSeqEquivLoad(SequenceCode.ZERO);
+
 	}
 
 }
