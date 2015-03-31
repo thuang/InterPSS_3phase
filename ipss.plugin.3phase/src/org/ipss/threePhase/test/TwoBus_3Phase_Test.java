@@ -32,6 +32,7 @@ import com.interpss.core.acsc.AcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
@@ -96,7 +97,7 @@ public class TwoBus_3Phase_Test {
 			  
 	}
 	
-	//@Test
+	@Test
 	public void testYMatrixabc() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -150,6 +151,7 @@ public class TwoBus_3Phase_Test {
 
 	
 	  	Complex3x3 y11 = Yabc.getA(0, 0);
+	  	//System.out.println("y11 = \n"+y11);
 	  	assertTrue(NumericUtil.equals(y11.aa, new Complex(0.04999,-11.01036),1.0E-4));
 	  	assertTrue(NumericUtil.equals(y11.ab, new Complex(-0.02499,3.88851),1.0E-4));
 	  	
@@ -163,7 +165,7 @@ public class TwoBus_3Phase_Test {
 	     */
 	}
 	
-	//@Test
+    @Test
 	public void testSolvNetwork() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -194,7 +196,7 @@ public class TwoBus_3Phase_Test {
 			  if(bus instanceof Bus3Phase){
 				  Bus3Phase ph3Bus = (Bus3Phase) bus;
 				  
-				 // System.out.println(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
+				 System.out.println(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
                  /*
                   *Bus1: Vabc =  1.03765 + j0.06989    -0.4583 + j-0.93358  -0.57935 + j0.86368
 
@@ -227,7 +229,7 @@ public class TwoBus_3Phase_Test {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testDstab() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -294,7 +296,7 @@ private DStabNetwork3Phase create2BusSys() throws InterpssException{
   		// create contribute generator
   		// MVABase, power, sourceZ1/2/0
   		
-  		Gen3Phase gen1 = ThreePhaseObjectFactory.create3PGenerator("Gen1");
+  		DStabGen gen1 = DStabObjectFactory.createDStabGen("Gen1");
   		gen1.setMvaBase(100.0);
   		gen1.setDesiredVoltMag(1.04);
   		gen1.setGen(new Complex(0.7164,0.2710));
@@ -342,7 +344,7 @@ private DStabNetwork3Phase create2BusSys() throws InterpssException{
   		
   		bus3.setSortNumber(1);
   		
-  		Gen3Phase gen2 = ThreePhaseObjectFactory.create3PGenerator("Gen2");
+  		DStabGen gen2 = DStabObjectFactory.createDStabGen("Gen2");
   		gen2.setMvaBase(100.0);
   		gen2.setDesiredVoltMag(1.025);
   		//gen2.setGen(new Complex(0.7164,0.2710));

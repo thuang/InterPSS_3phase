@@ -1,6 +1,7 @@
 package org.ipss.threePhase.dynamic.impl;
 
 import static com.interpss.common.util.IpssLogger.ipssLogger;
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -16,6 +17,7 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
@@ -271,14 +273,14 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 					if(bus.getContributeGenList().size()>0){
 						 for(AclfGen gen: bus.getContributeGenList()){
-						      if(gen.isActive() && ((DStabGen)gen).getMach()!=null){
-						    	  if(gen instanceof Gen3Phase){
-						    		  Gen3Phase gen3P = (Gen3Phase) gen;
+						      if(gen.isActive() && gen instanceof DStabGen){
+						    	  DStabGen dynGen = (DStabGen)gen;
+						    	  if( dynGen.getMach()!=null){
+						    		  DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
 						    		  iInject = iInject.add(gen3P.getIgen3Phase());
-						    		  
 						    	  }
 						    	  
-						    	 // System.out.println("Bus, Igen:"+bus.getId()+","+iInject);
+						    	// System.out.println("Bus, Igen:"+bus.getId()+","+iInject);
 						    	 
 						       }
 						  }
@@ -373,10 +375,13 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					//initialize the bus generator
 					for(AclfGen gen: bus.getContributeGenList()){
-						if(gen.isActive() && gen instanceof Gen3Phase){
-							Gen3Phase gen3P = (Gen3Phase) gen;
-							if(!gen3P.initDStabMach())
-								initFlag = false;
+						if(gen.isActive() && gen instanceof DStabGen){
+							DStabGen dynGen = (DStabGen) gen;
+							if(dynGen.getMach()!=null){
+								dynGen.getMach().calMultiFactors();
+							    if(!dynGen.getMach().initStates(bus))
+								   initFlag = false;
+							}
 						}
 					}
 					

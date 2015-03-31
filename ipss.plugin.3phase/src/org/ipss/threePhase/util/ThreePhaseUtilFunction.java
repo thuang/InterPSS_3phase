@@ -20,7 +20,7 @@ public class ThreePhaseUtilFunction {
 	};
 	
 	public static Function<DStabGen, DStabGen3Phase> threePhaseGenAptr = gen -> {
-		DStabGen3Phase adpter = ThreePhaseObjectFactory.create3PDynGenerator("");
+		DStabGen3Phase adpter = ThreePhaseObjectFactory.create3PDynGenerator(gen.getId());
 		adpter.setGen(gen);
 		return adpter;
 	};

@@ -60,7 +60,7 @@ import com.interpss.simu.SimuCtxType;
 
 public class ThreeBus_3Phase_Test {
 	
-	//@Test
+	@Test
 	public void testYMatrixabc() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -322,7 +322,7 @@ public class ThreeBus_3Phase_Test {
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
-	//@Test
+	@Test
 	public void testSolvNetwork() throws Exception{
 		
 		IpssCorePlugin.init();

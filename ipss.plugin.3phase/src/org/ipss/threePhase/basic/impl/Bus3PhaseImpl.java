@@ -4,16 +4,16 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 
 import com.interpss.core.aclf.AclfGen;
-import com.interpss.core.aclf.AclfLoad;
-import com.interpss.core.acsc.AcscBranch;
-import com.interpss.core.acsc.impl.AcscBusImpl;
 import com.interpss.core.net.Branch;
+import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.impl.DStabBusImpl;
+
+
 
 public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
@@ -89,10 +89,18 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		// the generators
 		 for(AclfGen gen:this.getContributeGenList()) {
 			 if(gen.isActive()){
+				/*
 				 if(gen instanceof Gen3Phase){
 					 Gen3Phase ph3Gen = (Gen3Phase) gen;
 					 yiiAbc = yiiAbc.add(ph3Gen.getYabc(false));
 				 }
+				 */
+				 if(gen instanceof DStabGen){
+					 DStabGen dynGen = (DStabGen) gen;
+					 DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
+					 yiiAbc = yiiAbc.add(gen3P.getYabc(false));
+				 }
+				 
 			 }
 		 }
 		

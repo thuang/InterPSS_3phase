@@ -140,64 +140,6 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	}
 	
 
-	@Override
-	public Complex3x1 getIgen3Phase() {
-		 // Complex3x1(a0,b1,c2)
-		return this.igen3Ph = Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),getMach().getIgen(), new Complex(0,0)));
-	}
-
-	
-	
-	/**
-	 * Pe_neg = Ig_neg^2*R2n
-	 * @return
-	 */
-	private double calcNegativeSeqPe(){
-		double Pe_neg = 0;
-		
-		Complex z2 = this.getMach().getParentGen().getNegGenZ();
-		
-		Complex v2 = parentBus3P.get3SeqVotlages().c_2;
-		if(z2!=null && z2.abs()>0){
-			if(z2.getReal()>this.getMach().getRa()){
-		     double Rr = (z2.getReal()-this.getMach().getRa())*2;
-		     Complex i2 = v2.divide(z2);
-		     Pe_neg = i2.abs()*i2.abs()*Rr/2;
-			}
-			else
-				throw new Error("Machine Negative sequence data Error: Real part of NegGenZ must be larger than Ra, as R2 = Ra+ Rr/2");
-		}
-		return Pe_neg;
-	}
-
-	@Override
-	public boolean updateStates() {
-		
-		this.getMach().setPe_NegSeq(calcNegativeSeqPe());
-		
-		//TODO udpate GenPowerAbc
-		return true;
-	}
-
-	@Override
-	public boolean initDStabMach() {
-		
-		boolean flag =true;
-		
-		this.mach.calMultiFactors();
-		
-		if(this.getMach() ==null){
-			//TODO
-			//convert the generation to equiv load;
-			IpssLogger.getLogger().severe("Gen3Phase has no machine model, genId, busId: "+this.getId()+","+this.getParentBus().getId());
-		}
-		else
-		    flag = this.getMach().initStates(this.getMach().getDStabBus());
-		
-		
-		return flag;
-	}
-
 
 	
 }
