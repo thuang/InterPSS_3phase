@@ -120,6 +120,15 @@ public class DStabGen3PhaseImpl extends NameTagImpl implements DStabGen3Phase {
 		 // Complex3x1(a0,b1,c2)
 		return Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),this.dynGen.getMach().getIgen(), new Complex(0,0)));
 	}
+	
+	public Complex3x1 getIinj2Network3Phase(){
+		Complex3x1 iInj =getIgen3Phase();
+		Complex3x1 Vabc = ((Bus3Phase)this.dynGen.getParentBus()).get3PhaseVotlages();
+		
+		
+		iInj = iInj.subtract(getYabc(false).mulitply(Vabc));
+		return iInj;
+	}
 
 	
 	

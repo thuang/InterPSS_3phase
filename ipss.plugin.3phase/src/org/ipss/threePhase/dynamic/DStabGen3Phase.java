@@ -55,6 +55,8 @@ public interface DStabGen3Phase extends GenRef<DStabGen>{
 	 */
 	public Complex3x1 getIgen3Phase();
 	
+	public Complex3x1 getIinj2Network3Phase();
+	
 	
 
 }

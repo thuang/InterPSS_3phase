@@ -1,5 +1,6 @@
 package org.ipss.threePhase.test;
 
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 import static org.junit.Assert.assertTrue;
 
 import java.util.logging.Level;
@@ -11,8 +12,11 @@ import org.ieee.odm.model.dstab.DStabModelParser;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
 import org.interpss.mapper.odm.ODMDStabParserMapper;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.util.PerformanceTimer;
 import org.interpss.util.FileUtil;
+import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
@@ -22,8 +26,12 @@ import com.interpss.DStabObjectFactory;
 import com.interpss.SimuObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.common.util.IpssLogger;
+import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
+import com.interpss.core.net.Bus;
+import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.DStabilityNetwork;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
@@ -79,7 +87,7 @@ public class TestODM3PhaseDstabMapper {
 		dsNet.setNetEqnIterationNoEvent(1);
 		dsNet.setNetEqnIterationWithEvent(1);
 		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,1.0d,0.05),"3phaseFault@Bus5");
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_3P,1.0d,0.05),"3phaseFault@Bus5");
         
 		
 		StateMonitor sm = new StateMonitor();
@@ -101,16 +109,48 @@ public class TestODM3PhaseDstabMapper {
 			
 			System.out.println("Running DStab simulation ...");
 			timer.start();
-			dstabAlgo.performSimulation();
+			//dstabAlgo.performSimulation();
 			
-			timer.logStd("total simu time: ");
+			while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
+				
+				dstabAlgo.solveDEqnStep(true);
+			
+				for( Bus b : dsNet.getBusList()) {
+					Bus3Phase bus = (Bus3Phase)b;
+
+					if(bus.isActive()){
+						
+						Complex3x1 iInject = new Complex3x1();
+
+						if(bus.getContributeGenList().size()>0){
+							 for(AclfGen gen: bus.getContributeGenList()){
+							      if(gen.isActive() && gen instanceof DStabGen){
+							    	  DStabGen dynGen = (DStabGen)gen;
+							    	  if( dynGen.getMach()!=null){
+							    		  DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
+							    		  iInject = iInject.add(gen3P.getIinj2Network3Phase());
+							    		  
+							    	      
+							    	  if(bus.getId().equals("Bus1"))
+							    	      System.out.println("t, bus, Ia, Ib, Ic,"+dstabAlgo.getSimuTime()+","+bus.getId()+","+iInject.a_0.abs()+","+iInject.b_1.abs()+","+iInject.c_2.abs());
+							    	  }
+							       }
+							  }
+					    }
 			}
 			
+			
+			}
+		}
+			
+			timer.logStd("total simu time: ");
+			
+		}
 
 		
-		System.out.println(sm.toCSVString(sm.getMachAngleTable()));
+		//System.out.println(sm.toCSVString(sm.getMachAngleTable()));
 		
-	     System.out.println(sm.toCSVString(sm.getMachPeTable()));
+	    // System.out.println(sm.toCSVString(sm.getMachPeTable()));
 		
 //		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));
@@ -120,7 +160,7 @@ public class TestODM3PhaseDstabMapper {
 	}
 	
 	
-	@Test
+	//@Test
 	public void test_IEEE9Bus_posSeq_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
