@@ -87,17 +87,20 @@ public class TestODM3PhaseDstabMapper {
 		dsNet.setNetEqnIterationNoEvent(1);
 		dsNet.setNetEqnIterationWithEvent(1);
 		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_3P,1.0d,0.05),"3phaseFault@Bus5");
+		
+		//applied the event
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,1.0d,0.05),"3phaseFault@Bus5");
         
 		
 		StateMonitor sm = new StateMonitor();
 		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1","Bus3-mach1"});
 		sm.addBusStdMonitor(new String[]{"Bus5","Bus4","Bus1"});
-		// set the output handler
-				dstabAlgo.setSimuOutputHandler(sm);
-				dstabAlgo.setOutPutPerSteps(1);
 		
-		IpssLogger.getLogger().setLevel(Level.INFO);
+		// set the output handler
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(5);
+		
+		IpssLogger.getLogger().setLevel(Level.WARNING);
 		
 		PerformanceTimer timer = new PerformanceTimer(IpssLogger.getLogger());
 		
@@ -131,8 +134,9 @@ public class TestODM3PhaseDstabMapper {
 							    		  iInject = iInject.add(gen3P.getIinj2Network3Phase());
 							    		  
 							    	      
-							    	  if(bus.getId().equals("Bus1"))
-							    	      System.out.println("t, bus, Ia, Ib, Ic,"+dstabAlgo.getSimuTime()+","+bus.getId()+","+iInject.a_0.abs()+","+iInject.b_1.abs()+","+iInject.c_2.abs());
+							    	 // if(bus.getId().equals("Bus2"))
+							    	     // System.out.println("t, bus, Ia, Ib, Ic,"+dstabAlgo.getSimuTime()+","+bus.getId()+","+iInject.a_0.abs()+","+iInject.b_1.abs()+","+iInject.c_2.abs());
+							    		//  System.out.println("t, bus, Ia, Ib, Ic,"+dstabAlgo.getSimuTime()+","+bus.getId()+","+iInject.a_0+","+iInject.b_1+","+iInject.c_2);
 							    	  }
 							       }
 							  }
@@ -150,7 +154,7 @@ public class TestODM3PhaseDstabMapper {
 		
 		//System.out.println(sm.toCSVString(sm.getMachAngleTable()));
 		
-	    // System.out.println(sm.toCSVString(sm.getMachPeTable()));
+	    System.out.println(sm.toCSVString(sm.getMachPeTable()));
 		
 //		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));

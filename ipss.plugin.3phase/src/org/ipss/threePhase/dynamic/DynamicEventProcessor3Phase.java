@@ -89,7 +89,8 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 
 					// if have event condition (applying or clearing)
 					// solve network and update bus voltage
-					net.solveNetEqn(true);
+					//TODO no need any more as network solution is solved at the beginning in the nextStep, or just right after this 
+					net.solveNetEqn();  
 				}
 			}
 		}

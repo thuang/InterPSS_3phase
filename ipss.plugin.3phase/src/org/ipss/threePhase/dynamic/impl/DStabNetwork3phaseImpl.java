@@ -255,7 +255,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 	
 	@Override
-	public boolean solveNetEqn(boolean netChange) {
+	public boolean solveNetEqn() {
   		try {
   			
   			if(isYMatrixDirty()){

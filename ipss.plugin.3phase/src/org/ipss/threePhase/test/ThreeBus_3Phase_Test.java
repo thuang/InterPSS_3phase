@@ -374,7 +374,7 @@ public class ThreeBus_3Phase_Test {
          Bus, Igen:Bus3,-0.1915 + j-4.87234  -4.12382 + j2.60201  4.31532 + j2.27032
 	   */
 	  
-	    net.solveNetEqn(false);
+	    net.solveNetEqn();
 	    
 		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(net));
 	    

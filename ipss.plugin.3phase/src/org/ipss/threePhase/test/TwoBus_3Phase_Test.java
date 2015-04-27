@@ -190,7 +190,7 @@ public class TwoBus_3Phase_Test {
 	  	
 	  	assertTrue(dstabAlgo.initialization());
 	  	//assertTrue(net.initDStabNet());
-	  	assertTrue(net.solveNetEqn(false));
+	  	assertTrue(net.solveNetEqn());
 	  	
 	  	 for(DStabBus bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
