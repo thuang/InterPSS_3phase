@@ -13,10 +13,6 @@ public interface Bus3Phase extends DStabBus {
 	
     public void set3PhaseVoltages(Complex3x1 vabc);
     
-	public Complex3x1 get3SeqVotlages();
-	
-    public void set3SeqVoltages(Complex3x1 v120);
-    
     
     public Complex3x3 getYiiAbc();
     

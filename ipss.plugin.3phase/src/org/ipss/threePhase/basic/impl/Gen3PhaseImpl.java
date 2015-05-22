@@ -70,7 +70,7 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 				setZabc(this.getPosGenZ(),this.getNegGenZ(),this.getZeroGenZ());
 			}
 		if(!machineMVABase) 
-			  return this.zAbc.mulitply(this.getZMultiFactor());
+			  return this.zAbc.multiply(this.getZMultiFactor());
 		return this.zAbc;
 	}
 	
@@ -86,7 +86,7 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	    	   if(machineMVABase)
 				  return yAbc;
 	    	   else
-	    		  return this.yAbc.mulitply(1/this.getZMultiFactor());
+	    		  return this.yAbc.multiply(1/this.getZMultiFactor());
 	           
 		return null;
 	}

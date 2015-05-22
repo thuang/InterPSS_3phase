@@ -79,19 +79,19 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	    Complex3x3 yffabc = null;
 		//Yg
 		if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
-			yffabc = getY1().mulitply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
+			yffabc = getY1().multiply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
 	
 		}
 		
 		//Y
 		else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_UNGROUNDED){
-			yffabc = getY2().mulitply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
+			yffabc = getY2().multiply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
 			
 		}
 		
 		//D
         else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA){
-        	yffabc = getY2().mulitply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
+        	yffabc = getY2().multiply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
     		
 		} else
 			try {
@@ -110,19 +110,19 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		 Complex3x3 yttabc = null;
 			//Yg
 			if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
-				yttabc = getY1().mulitply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
+				yttabc = getY1().multiply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
 		
 			}
 			
 			//Y
 			else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED){
-				yttabc = getY2().mulitply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
+				yttabc = getY2().multiply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
 				
 			}
 			
 			//D
 	        else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA){
-	        	yttabc = getY2().mulitply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
+	        	yttabc = getY2().multiply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
 	    		
 			} else
 				try {
@@ -144,16 +144,16 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		 if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
 			  //YgYg
 			    if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED)
-				   yftabc = getY1().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				   yftabc = getY1().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			  //YgY
 			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-			    	yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			    	yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			   //YgD1 
 			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
-			    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			    	yftabc = getY3().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			   //YgD11  
 			    else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
-			    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+			    	yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			}
 			
 			//Y-
@@ -162,13 +162,13 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 					    // note: y2* = y2
-				        yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				        yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				// D1
 				 else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
-				    	yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				    	yftabc = getY3().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 			   // D11   
 				 else if (this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
-				    	yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				    	yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 			}
 			
@@ -178,10 +178,10 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	     yftabc = getY3().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	        	     yftabc = getY3().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
-					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+					 yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 	    		
 			} 
 		 
@@ -191,10 +191,10 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	     yftabc = getY3().transpose().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	        	     yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA || this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
-					 yftabc = getY2().mulitply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+					 yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 	    		
 			} 
 	        

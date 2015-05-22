@@ -59,6 +59,8 @@ public class TestODM3PhaseDstabMapper {
 		
 		
 		SimuContext simuCtx = SimuObjectFactory.createSimuNetwork(SimuCtxType.DSTABILITY_NET);
+		
+		// The only change to the normal data import is the use of ODM3PhaseDStabParserMapper
 		if (!new ODM3PhaseDStabParserMapper(IpssCorePlugin.getMsgHub())
 					.map2Model(parser, simuCtx)) {
 			System.out.println("Error: ODM model to InterPSS SimuCtx mapping error, please contact support@interpss.com");

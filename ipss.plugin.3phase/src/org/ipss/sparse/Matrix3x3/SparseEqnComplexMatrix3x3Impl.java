@@ -1,5 +1,6 @@
 package org.ipss.sparse.Matrix3x3;
 
+import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.exp.IpssNumericException;
@@ -34,6 +35,7 @@ public class SparseEqnComplexMatrix3x3Impl extends AbstractSparseEquation implem
    */
 	@Override
 	public void setDimension( final int n ) 	{
+		this.dimension = n;
 		cplxMatrix.setDimension(3*n);
 	}
 
@@ -165,9 +167,11 @@ public class SparseEqnComplexMatrix3x3Impl extends AbstractSparseEquation implem
 
 	@Override
 	public void setB2Unity(int i) {
-		cplxMatrix.setB2Unity(3*i);
-		cplxMatrix.setB2Unity(3*i+1);
-		cplxMatrix.setB2Unity(3*i+2);
+		
+		cplxMatrix.setB2Zero();
+		cplxMatrix.setBi(new Complex(1,0),3*i);
+		cplxMatrix.setBi(new Complex(1,0),3*i+1);
+		cplxMatrix.setBi(new Complex(1,0),3*i+2);
 		
 	}
 

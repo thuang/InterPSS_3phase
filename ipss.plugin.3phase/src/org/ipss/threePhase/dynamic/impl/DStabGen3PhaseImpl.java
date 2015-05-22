@@ -76,7 +76,7 @@ public class DStabGen3PhaseImpl extends NameTagImpl implements DStabGen3Phase {
 			this.zAbc = new Complex3x3(this.dynGen.getPosGenZ(),this.dynGen.getNegGenZ(),this.dynGen.getZeroGenZ()).ToAbc();
 		}
 		if(!machineMVABase) 
-			  return this.zAbc.mulitply(this.dynGen.getZMultiFactor());
+			  return this.zAbc.multiply(this.dynGen.getZMultiFactor());
 		return this.zAbc;
 	}
 	
@@ -93,7 +93,7 @@ public class DStabGen3PhaseImpl extends NameTagImpl implements DStabGen3Phase {
 		//Power = VABC*conj(IgenABC-YgenABC*VABC)
 		// pu on system mva base
 		Complex3x1 Vabc = ((Bus3Phase)this.dynGen.getParentBus()).get3PhaseVotlages();
-		Complex3x1 IinjABC =  getIgen3Phase().subtract(getYabc(false).mulitply(Vabc)); 
+		Complex3x1 IinjABC =  getIgen3Phase().subtract(getYabc(false).multiply(Vabc)); 
 		this.puPowerAbc.a_0 = Vabc.a_0.multiply(IinjABC.a_0.conjugate());
 		this.puPowerAbc.b_1 = Vabc.b_1.multiply(IinjABC.b_1.conjugate());
 		this.puPowerAbc.c_2 = Vabc.c_2.multiply(IinjABC.c_2.conjugate());
@@ -126,7 +126,7 @@ public class DStabGen3PhaseImpl extends NameTagImpl implements DStabGen3Phase {
 		Complex3x1 Vabc = ((Bus3Phase)this.dynGen.getParentBus()).get3PhaseVotlages();
 		
 		
-		iInj = iInj.subtract(getYabc(false).mulitply(Vabc));
+		iInj = iInj.subtract(getYabc(false).multiply(Vabc));
 		return iInj;
 	}
 
