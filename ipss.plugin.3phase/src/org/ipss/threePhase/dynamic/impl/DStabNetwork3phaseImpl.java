@@ -3,6 +3,7 @@ package org.ipss.threePhase.dynamic.impl;
 import static com.interpss.common.util.IpssLogger.ipssLogger;
 import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -40,6 +41,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
     
 	protected ISparseEqnComplexMatrix3x3 yMatrixAbc = null;
 	protected boolean is3PhaseNetworkInitialized = false;
+	protected Hashtable<String, Complex3x1> threePhaseCurInjTable = null;
+	private boolean isLoadModelConverted = false;
 	
 	@Override
 	public boolean initThreePhaseFromLfResult() {
@@ -210,6 +213,11 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 	@Override
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
+		
+		// check if load model is converted
+		if(!this.is3PhaseNetworkInitialized)
+			    convertLoadModel();
+		
 		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
 		for(DStabBus b:this.getBusList()){
@@ -243,6 +251,18 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		return yMatrixAbc;
 	}
 	
+	private void convertLoadModel() {
+		for ( DStabBus busi : getBusList() ) {
+			   //only the active buses will be initialized
+				if(busi.isActive()){
+					//init three sequence load
+					ThreeSeqLoadProcessor.initEquivLoadY120(busi);
+				}
+		}
+		this.isLoadModelConverted = true;
+		
+	}
+
 	@Override
 	public ISparseEqnComplexMatrix3x3 getYMatrixABC(){
 		return this.yMatrixAbc;
@@ -279,8 +299,6 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						    		  DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
 						    		  iInject = iInject.add(gen3P.getIgen3Phase());
 						    	  }
-						    	  
-						    	// System.out.println("Bus, Igen:"+bus.getId()+","+iInject);
 						    	 
 						       }
 						  }
@@ -288,6 +306,11 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				  
 				  if(iInject == null){
 					  throw new Error (bus.getId()+" current injection is null");
+				  }
+				  
+				  // add external/customized bus current injection
+				  if(this.get3phaseCustomCurrInjTable()!=null){
+					  iInject = iInject.add(this.get3phaseCustomCurrInjTable().get(bus.getId()));
 				  }
 
 				  getYMatrixABC().setBi(iInject, bus.getSortNumber());
@@ -365,9 +388,6 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					bus.setInitLoad(new Complex(0.0,0.0));
 					bus.setInitVoltMag(bus.getVoltageMag());
 					
-					//init three sequence load
-					ThreeSeqLoadProcessor.initEquivLoadY120(bus);
-					
 					// init bus dynamic signal calculation, 
 					// for example, bus Frequency measurement
 					bus.initStates();
@@ -409,9 +429,22 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	}
 
 	@Override
-	public boolean parentSolveNetEqn() {
+	public boolean solvePosSeqNetEqn() {
 		
 		return  super.solveNetEqn();
+	}
+
+	@Override
+	public Hashtable<String, Complex3x1> get3phaseCustomCurrInjTable() {
+		
+		return this.threePhaseCurInjTable;
+	}
+
+	@Override
+	public void set3phaseCustomCurrInjTable(
+			Hashtable<String, Complex3x1> new3PhaseCurInjTable) {
+		this.threePhaseCurInjTable = new3PhaseCurInjTable;
+		
 	}
 
 }
