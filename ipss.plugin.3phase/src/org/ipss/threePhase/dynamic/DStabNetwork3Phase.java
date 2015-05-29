@@ -28,6 +28,8 @@ public interface DStabNetwork3Phase extends Network3Phase, DStabilityNetwork{
 	 */
 	public boolean solvePosSeqNetEqn();
 	
+	public boolean initPosSeqDStabNet();
+	
 	public Hashtable<String, Complex3x1> get3phaseCustomCurrInjTable();
 	
 	public void set3phaseCustomCurrInjTable(Hashtable<String, Complex3x1> new3PhaseCurInjTable);

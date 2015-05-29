@@ -215,7 +215,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
 		
 		// check if load model is converted
-		if(!this.is3PhaseNetworkInitialized)
+		if(!this.isLoadModelConverted )
 			    convertLoadModel();
 		
 		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
@@ -433,6 +433,12 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		return  super.solveNetEqn();
 	}
+	
+	@Override
+	public boolean initPosSeqDStabNet() {
+		
+		return super.initDStabNet();
+	}
 
 	@Override
 	public Hashtable<String, Complex3x1> get3phaseCustomCurrInjTable() {
@@ -446,5 +452,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		this.threePhaseCurInjTable = new3PhaseCurInjTable;
 		
 	}
+
+
 
 }

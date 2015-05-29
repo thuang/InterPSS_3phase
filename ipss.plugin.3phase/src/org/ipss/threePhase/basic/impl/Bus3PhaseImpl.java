@@ -30,6 +30,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	@Override
 	public void set3PhaseVoltages(Complex3x1 vabc) {
 		this.Vabc = vabc;
+		super.set3SeqVoltage(Complex3x1.abc_to_z12(Vabc));
 		
 	}
 	
