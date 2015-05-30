@@ -4,8 +4,8 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
-import org.ipss.aclf.threePhase.ref.GenRef;
 
+import com.interpss.core.aclf.ref.GenRef;
 import com.interpss.dstab.DStabGen;
 
 public interface DStabGen3Phase extends GenRef<DStabGen>{
