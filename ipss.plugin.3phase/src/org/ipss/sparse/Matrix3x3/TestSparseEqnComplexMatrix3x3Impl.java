@@ -8,6 +8,8 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.exp.IpssNumericException;
 import org.junit.Test;
 
+import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
+
 public class TestSparseEqnComplexMatrix3x3Impl {
 	
 	

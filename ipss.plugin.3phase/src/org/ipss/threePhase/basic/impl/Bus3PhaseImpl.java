@@ -1,12 +1,13 @@
 package org.ipss.threePhase.basic.impl;
 
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
+
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
-import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.net.Branch;

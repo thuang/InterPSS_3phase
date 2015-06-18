@@ -6,7 +6,6 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 
 import com.interpss.core.acsc.XfrConnectCode;
-import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.adpter.impl.AcscXformerImpl;
 
 public class Transformer3PhaseImpl extends AcscXformerImpl implements Transformer3Phase{
