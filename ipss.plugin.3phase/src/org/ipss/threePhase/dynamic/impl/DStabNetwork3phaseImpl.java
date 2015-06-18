@@ -320,11 +320,6 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				}
 			}
 			
-			//add customized bus current injection, which is used in hybrid simulation or 
-			//for adding user new defined models, which is represented as current injections in dynamic simulation
-			
-			//addCustomBusCurrentInj();
-			
 			// ISparseEqnComplexMatrix3x3  Yabc = getYMatrixABC();
 			// System.out.println(Yabc.getSparseEqnComplex());
 		   
@@ -350,8 +345,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							// System.out.println("posV @ bus :"+v.toString()+","+bus.getId());
 							
                          }
-					
-					    bus.updateDynamicAttributes(false);
+
 					}
 					else
 						 throw new Error (bus.getId()+" solution voltage is NaN");
@@ -363,10 +357,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
   			ipssLogger.severe(e.toString());
   			return false;
   		}
-  		catch (InterpssException e) {
-  			ipssLogger.severe(e.toString());
-  			return false;
-  		}
+  	
 		return true;
 	}
 
