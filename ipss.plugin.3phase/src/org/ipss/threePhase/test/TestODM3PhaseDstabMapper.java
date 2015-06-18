@@ -20,6 +20,7 @@ import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
+import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.junit.Test;
 
 import com.interpss.DStabObjectFactory;
@@ -85,10 +86,10 @@ public class TestODM3PhaseDstabMapper {
 		
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(3);
+		dstabAlgo.setTotalSimuTimeSec(2);
 		dsNet.setNetEqnIterationNoEvent(1);
 		dsNet.setNetEqnIterationWithEvent(1);
-		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
+		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		//applied the event
 		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,1.0d,0.05),"3phaseFault@Bus5");
@@ -101,6 +102,7 @@ public class TestODM3PhaseDstabMapper {
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
 		dstabAlgo.setOutPutPerSteps(5);
+		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		IpssLogger.getLogger().setLevel(Level.WARNING);
 		
@@ -110,9 +112,11 @@ public class TestODM3PhaseDstabMapper {
 		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
 		
 		if (dstabAlgo.initialization()) {
+			System.out.println(ThreePhaseAclfOutFunc.busLfSummary(dsNet));
+			
 			System.out.println(dsNet.getMachineInitCondition());
 			
-			System.out.println("Running DStab simulation ...");
+			System.out.println("Running 3Phase DStab simulation ...");
 			timer.start();
 			//dstabAlgo.performSimulation();
 			
@@ -153,10 +157,10 @@ public class TestODM3PhaseDstabMapper {
 			
 		}
 
+		System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+		System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 		
-		//System.out.println(sm.toCSVString(sm.getMachAngleTable()));
-		
-	    System.out.println(sm.toCSVString(sm.getMachPeTable()));
+	   // System.out.println(sm.toCSVString(sm.getMachPeTable()));
 		
 //		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));
@@ -208,16 +212,16 @@ public class TestODM3PhaseDstabMapper {
 		
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(3);
+		dstabAlgo.setTotalSimuTimeSec(1);
 		dsNet.setNetEqnIterationNoEvent(1);
 		dsNet.setNetEqnIterationWithEvent(1);
 		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,1.0d,0.05),"3phaseFault@Bus5");
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,0.5d,0.05),"3phaseFault@Bus5");
         
 		
 		StateMonitor sm = new StateMonitor();
 		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1","Bus3-mach1"});
-		sm.addBusStdMonitor(new String[]{"Bus5","Bus4","Bus1"});
+		sm.addBusStdMonitor(new String[]{"Bus5","Bus4","Bus7"});
 		// set the output handler
 				dstabAlgo.setSimuOutputHandler(sm);
 				dstabAlgo.setOutPutPerSteps(1);
@@ -235,13 +239,13 @@ public class TestODM3PhaseDstabMapper {
 			dstabAlgo.performSimulation();
 			
 			timer.logStd("total simu time: ");
-			}
+		}
 			
 
 		
-		System.out.println(sm.toCSVString(sm.getMachAngleTable()));
+		//System.out.println(sm.toCSVString(sm.getMachAngleTable()));
 		
-	     System.out.println(sm.toCSVString(sm.getMachPeTable()));
+	     System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 		
 //		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));

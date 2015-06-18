@@ -86,6 +86,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					 bra.setVisited(true);
 					 
+					 //TODO 06/17/2015, for testing, change from -30 to +30
 					 phaseShiftDeg = -30;
 					 Bus3Phase  StartingBus =null;
 					 
@@ -221,13 +222,15 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
 		for(DStabBus b:this.getBusList()){
-			if(b instanceof Bus3Phase){
-				int i = b.getSortNumber();
-				Bus3Phase ph3Bus = (Bus3Phase) b;
-				yMatrixAbc.setA(ph3Bus.getYiiAbc() ,i, i);
+			if(b.isActive()){
+				if(b instanceof Bus3Phase){
+					int i = b.getSortNumber();
+					Bus3Phase ph3Bus = (Bus3Phase) b;
+					yMatrixAbc.setA(ph3Bus.getYiiAbc() ,i, i);
+				}
+				else
+					throw new Exception("The processing bus # "+b.getId()+"  is not a threePhaseBus");
 			}
-			else
-				throw new Exception("The processing bus # "+b.getId()+"  is not a threePhaseBus");
 		}
 		
 		for (AcscBranch bra : this.getBranchList()) {
@@ -310,7 +313,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				  
 				  // add external/customized bus current injection
 				  if(this.get3phaseCustomCurrInjTable()!=null){
-					  iInject = iInject.add(this.get3phaseCustomCurrInjTable().get(bus.getId()));
+					  if(this.get3phaseCustomCurrInjTable().get(bus.getId())!=null)
+					    iInject = iInject.add(this.get3phaseCustomCurrInjTable().get(bus.getId()));
 				  }
 
 				  getYMatrixABC().setBi(iInject, bus.getSortNumber());

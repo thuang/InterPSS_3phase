@@ -88,26 +88,30 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		 */
 		 
 		 //the conventional three-sequence load definition, they need to be pre-processed using ThreeSeqLoadProcessor
-		 if(this.isLoad())
+		 
+		 //TODO 06/16/2016 EquivLoadYabc does not limit to load buses, otherwise buses with sequence shuntY cannot be correctly modeled
+		
+//		    if(ThreeSeqLoadProcessor.getEquivLoadYabc(this).abs()>1.0E-4)
+//		          System.out.println(this.getId()+" eqvYabc abs() = "+ThreeSeqLoadProcessor.getEquivLoadYabc(this).abs());
+//		    
 		     yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
+		 
+		
+		     
+		   //NOTE: The contribution from the generators has been considered in the  <EquivLoadYabc> above    
 		
 		// the generators
-		 for(AclfGen gen:this.getContributeGenList()) {
-			 if(gen.isActive()){
-				/*
-				 if(gen instanceof Gen3Phase){
-					 Gen3Phase ph3Gen = (Gen3Phase) gen;
-					 yiiAbc = yiiAbc.add(ph3Gen.getYabc(false));
-				 }
-				 */
-				 if(gen instanceof DStabGen){
-					 DStabGen dynGen = (DStabGen) gen;
-					 DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
-					 yiiAbc = yiiAbc.add(gen3P.getYabc(false));
-				 }
-				 
-			 }
-		 }
+//		 for(AclfGen gen:this.getContributeGenList()) {
+//			 if(gen.isActive()){
+//				 if(gen instanceof DStabGen){
+//					 DStabGen dynGen = (DStabGen) gen;
+//					 DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
+//					 yiiAbc = yiiAbc.add(gen3P.getYabc(false));
+//				 }
+//				 
+//			 }
+//		 }
+        
 		
 
 		return yiiAbc;

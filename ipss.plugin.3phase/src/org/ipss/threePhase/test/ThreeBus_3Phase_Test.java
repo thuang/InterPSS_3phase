@@ -82,7 +82,7 @@ public class ThreeBus_3Phase_Test {
 	  	
 	 	net.initDStabNet();
 	  	
-	  	ISparseEqnComplexMatrix3x3  Yabc = net.formYMatrixABC();
+	  	ISparseEqnComplexMatrix3x3  Yabc = net.getYMatrixABC();
 	  	
 	    //System.out.println(Yabc.getSparseEqnComplex());
 	    // MatrixOutputUtil.matrixToMatlabMFile("output/ThreeBusYabc.m", Yabc.getSparseEqnComplex());
@@ -235,7 +235,7 @@ public class ThreeBus_3Phase_Test {
 		dstabAlgo.setTotalSimuTimeSec(0.5);
 		net.setNetEqnIterationNoEvent(1);
 		net.setNetEqnIterationWithEvent(1);
-	    dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
 		net.addDynamicEvent(create3PhaseFaultEvent("Bus2",net,0.2,0.05),"3phaseFault@Bus2");
         
 		
@@ -249,11 +249,12 @@ public class ThreeBus_3Phase_Test {
 		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
 				
 	  	if(dstabAlgo.initialization()){
+	  		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(net));
 	  		System.out.println(net.getMachineInitCondition());
 	  	
 	  		dstabAlgo.performSimulation();
 	  	}
-	  	
+	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	

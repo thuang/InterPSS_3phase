@@ -229,7 +229,7 @@ public class TwoBus_3Phase_Test {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testDstab() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -270,7 +270,7 @@ public class TwoBus_3Phase_Test {
 	  	
 	  		dstabAlgo.performSimulation();
 	  	}
-	  	
+	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
