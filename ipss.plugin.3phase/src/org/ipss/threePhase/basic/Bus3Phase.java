@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
+import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.acsc.AcscBus;
@@ -19,10 +20,10 @@ public interface Bus3Phase extends DStabBus {
     
     public Complex3x3 getYiiAbc();
     
-    public List<DynLoadModel> getPhaseADynLoadList();
+    public List<DynLoadModel1Phase> getPhaseADynLoadList();
     
-    public List<DynLoadModel> getPhaseBDynLoadList();
+    public List<DynLoadModel1Phase> getPhaseBDynLoadList();
     
-    public List<DynLoadModel> getPhaseCDynLoadList();
+    public List<DynLoadModel1Phase> getPhaseCDynLoadList();
 
 }

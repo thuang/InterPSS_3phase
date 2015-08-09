@@ -8,7 +8,7 @@ import org.ipss.threePhase.basic.Transformer3Phase;
 import com.interpss.dstab.DStabGen;
 
 import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.dynamic.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
 
 public class ThreePhaseUtilFunction {
 	

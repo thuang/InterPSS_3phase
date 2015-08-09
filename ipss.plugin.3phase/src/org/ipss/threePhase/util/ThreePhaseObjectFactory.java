@@ -12,9 +12,9 @@ import org.ipss.threePhase.basic.impl.Bus3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Transformer3PhaseImpl;
-import org.ipss.threePhase.dynamic.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
+import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.model.impl.DStabGen3PhaseImpl;
 
 import com.interpss.DStabObjectFactory;

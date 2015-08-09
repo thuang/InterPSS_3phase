@@ -5,7 +5,7 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.dynamic.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.model.DynamicModel3Phase;
 
 import com.interpss.core.net.impl.NameTagImpl;

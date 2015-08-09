@@ -9,7 +9,8 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.dynamic.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
 import com.interpss.core.aclf.AclfGen;
@@ -26,11 +27,11 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	private Complex3x3 shuntYabc = null;
 	Complex3x3 yiiAbc = new Complex3x3();
 	
-	private List<DynLoadModel> phaseADynLoadList;
+	private List<DynLoadModel1Phase> phaseADynLoadList;
 	
-	private List<DynLoadModel> phaseBDynLoadList;
+	private List<DynLoadModel1Phase> phaseBDynLoadList;
 	
-	private List<DynLoadModel> phaseCDynLoadList;
+	private List<DynLoadModel1Phase> phaseCDynLoadList;
 
 	@Override
 	public Complex3x1 get3PhaseVotlages() {
@@ -129,25 +130,25 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	}
 
 	@Override
-	public List<DynLoadModel> getPhaseADynLoadList() {
+	public List<DynLoadModel1Phase> getPhaseADynLoadList() {
 		
 		if(this.phaseADynLoadList == null)
-			this.phaseADynLoadList = new ArrayList<DynLoadModel>();
+			this.phaseADynLoadList = new ArrayList<DynLoadModel1Phase>();
 		return this.phaseADynLoadList;
 	}
 
 	@Override
-	public List<DynLoadModel> getPhaseBDynLoadList() {
+	public List<DynLoadModel1Phase> getPhaseBDynLoadList() {
 		if(this.phaseBDynLoadList == null)
-			this.phaseBDynLoadList = new ArrayList<DynLoadModel>();
+			this.phaseBDynLoadList = new ArrayList<DynLoadModel1Phase>();
 		
 		return this.phaseBDynLoadList;
 	}
 
 	@Override
-	public List<DynLoadModel> getPhaseCDynLoadList() {
+	public List<DynLoadModel1Phase> getPhaseCDynLoadList() {
 		if(this.phaseCDynLoadList == null)
-			this.phaseCDynLoadList = new ArrayList<DynLoadModel>();
+			this.phaseCDynLoadList = new ArrayList<DynLoadModel1Phase>();
 		return this.phaseCDynLoadList;
 	}
 

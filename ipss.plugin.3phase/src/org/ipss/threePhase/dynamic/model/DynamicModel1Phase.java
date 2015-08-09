@@ -20,31 +20,6 @@ public abstract class DynamicModel1Phase extends NameTagImpl implements
 	protected  Phase     connectPhase = null;
 	protected  Bus3Phase parentBus = null;
 	
-	
-
-	@Override
-	public Bus3Phase getBus() {
-		
-		return this.parentBus;
-	}
-
-	@Override
-	public void setBus(Bus3Phase value) {
-		this.parentBus = value;
-
-	}
-
-	@Override
-	public void setBaseVoltage(double v) {
-		parentBus.setBaseVoltage(v);
-
-	}
-
-	@Override
-	public Complex getEquivY(boolean modelMVABase) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Phase getPhase() {
