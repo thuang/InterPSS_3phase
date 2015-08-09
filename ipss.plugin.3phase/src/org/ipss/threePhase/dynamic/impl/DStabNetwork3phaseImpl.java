@@ -34,6 +34,7 @@ import com.interpss.core.net.Bus;
 import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabGen;
+import com.interpss.dstab.dynLoad.DynLoadModel;
 import com.interpss.dstab.impl.DStabilityNetworkImpl;
 
 public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DStabNetwork3Phase {
@@ -214,6 +215,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	@Override
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
 		
+		
+		
 		// check if load model is converted
 		if(!this.isLoadModelConverted )
 			    convertLoadModel();
@@ -382,12 +385,12 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					bus.setInitLoad(new Complex(0.0,0.0));
 					bus.setInitVoltMag(bus.getVoltageMag());
 					
-					// init bus dynamic signal calculation, 
+					//1) init bus dynamic signal calculation, 
 					// for example, bus Frequency measurement
 					bus.initStates();
 					
 					
-					//initialize the bus generator
+					//2) initialize the bus generator
 					for(AclfGen gen: bus.getContributeGenList()){
 						if(gen.isActive() && gen instanceof DStabGen){
 							DStabGen dynGen = (DStabGen) gen;
@@ -400,9 +403,90 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					}
 					
 					
-					//initialize the bus load
-					//change load from power to admittance, in three-sequence, then to three-phase 	
+					//3) process the dynamic loads, for each load, subtract the portion of dynamic loads, including 
+					// 3-phase dynamic loads and 1-phase dynamic loads from the total loads
+					for(DStabBus b:this.getBusList()){
 						
+						// first process the 3phase dynamic loads
+						double totalDynLoadPercent = 0;
+						Complex totalDynLoadPQ = new Complex(0,0);
+						if(bus.isLoad() && bus.getDynLoadModelList().size()>0){
+							for(DynLoadModel load:bus.getDynLoadModelList()){
+								if(load.isActive()){
+									totalDynLoadPercent += load.getLoadPercent(); 
+							
+								}
+							}
+							
+							// check the value of totalDynLoadPercent, it must be <=100.0; otherwise rescale it down to 100.
+							if(totalDynLoadPercent>100.0){
+								ipssLogger.severe("The total dynamic loads accout for more than 100% of the bus load. Rescaled down to 100%");
+								for(DynLoadModel load:bus.getDynLoadModelList()){
+									if(load.isActive()){
+								       load.setLoadPercent(load.getLoadPercent()*100.0/totalDynLoadPercent);
+									}
+								}
+								totalDynLoadPercent = 100.0;
+							}
+							
+							// the init load is only available after initialization
+							for(DynLoadModel load:bus.getDynLoadModelList()){
+								if(load.isActive()){
+							       load.initStates();
+							       totalDynLoadPQ = totalDynLoadPQ.add(load.getInitLoadPQ());
+								}
+							}
+
+							
+						}
+						
+		
+						
+						// second, process the 1-phase dynamic loads
+						double phaseADynLoadPercent = 0;
+						double phaseBDynLoadPercent = 0;
+						double phaseCDynLoadPercent = 0;
+						
+						Complex totalPhaseADynLoadPQ = new Complex(0,0);
+						Complex totalPhaseBDynLoadPQ = new Complex(0,0);
+						Complex totalPhaseCDynLoadPQ = new Complex(0,0);
+						
+                        for(DynLoadModel dynLoadPA : ((Bus3Phase)b).getPhaseADynLoadList()){
+                        	if(dynLoadPA.isActive())
+                        		phaseADynLoadPercent += dynLoadPA.getLoadPercent(); 
+                        	
+						}
+                        
+                        for(DynLoadModel dynLoadPB : ((Bus3Phase)b).getPhaseBDynLoadList()){
+                        	if(dynLoadPB.isActive())
+                        		phaseBDynLoadPercent += dynLoadPB.getLoadPercent(); 
+                        	
+						}
+                        
+                        
+                        for(DynLoadModel dynLoadPC : ((Bus3Phase)b).getPhaseCDynLoadList()){
+                        	if(dynLoadPC.isActive())
+                        		phaseCDynLoadPercent += dynLoadPC.getLoadPercent(); 
+                        	
+						}
+                        
+                        
+                        
+                        for(DynLoadModel dynLoadPA : ((Bus3Phase)b).getPhaseADynLoadList()){
+                        	if(dynLoadPA.isActive()){
+                        		dynLoadPA.initStates();
+                        		//TODO need to consider where to apply single phase 1/3
+                        		totalPhaseADynLoadPQ = totalPhaseADynLoadPQ.add(dynLoadPA.getInitLoadPQ()); 
+                        	}
+						}
+                        
+						
+						Complex orginalLoadPQ  = bus.getNetLoadResults();
+						
+						bus.setNetLoadResults(orginalLoadPQ.subtract(totalDynLoadPQ));
+							
+					}
+					
 				}
 				
 				

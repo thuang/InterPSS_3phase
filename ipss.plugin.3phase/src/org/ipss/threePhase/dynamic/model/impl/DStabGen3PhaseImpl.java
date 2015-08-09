@@ -1,4 +1,4 @@
-package org.ipss.threePhase.dynamic.impl;
+package org.ipss.threePhase.dynamic.model.impl;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
@@ -6,11 +6,12 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DynamicModel3Phase;
 
 import com.interpss.core.net.impl.NameTagImpl;
 import com.interpss.dstab.DStabGen;
 
-public class DStabGen3PhaseImpl extends NameTagImpl implements DStabGen3Phase {
+public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3Phase {
 	/**
 	 * 
 	 */
@@ -110,6 +111,24 @@ public class DStabGen3PhaseImpl extends NameTagImpl implements DStabGen3Phase {
 		
 		iInj = iInj.subtract(getYabc(false).multiply(Vabc));
 		return iInj;
+	}
+
+	@Override
+	public Bus3Phase getBus() {
+		
+		return (Bus3Phase)this.dynGen.getParentBus();
+	}
+
+	@Override
+	public void setBus(Bus3Phase value) {
+		throw new UnsupportedOperationException();
+		
+	}
+
+	@Override
+	public void setBaseVoltage(double v) {
+		throw new UnsupportedOperationException();
+		
 	}
 
 	

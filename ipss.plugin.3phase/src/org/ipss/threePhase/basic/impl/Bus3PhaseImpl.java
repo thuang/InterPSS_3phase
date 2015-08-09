@@ -2,6 +2,9 @@ package org.ipss.threePhase.basic.impl;
 
 import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
@@ -12,6 +15,7 @@ import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.net.Branch;
 import com.interpss.dstab.DStabGen;
+import com.interpss.dstab.dynLoad.DynLoadModel;
 import com.interpss.dstab.impl.DStabBusImpl;
 
 
@@ -21,6 +25,12 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	private Complex3x1 Vabc = null;
 	private Complex3x3 shuntYabc = null;
 	Complex3x3 yiiAbc = new Complex3x3();
+	
+	private List<DynLoadModel> phaseADynLoadList;
+	
+	private List<DynLoadModel> phaseBDynLoadList;
+	
+	private List<DynLoadModel> phaseCDynLoadList;
 
 	@Override
 	public Complex3x1 get3PhaseVotlages() {
@@ -116,6 +126,29 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		
 
 		return yiiAbc;
+	}
+
+	@Override
+	public List<DynLoadModel> getPhaseADynLoadList() {
+		
+		if(this.phaseADynLoadList == null)
+			this.phaseADynLoadList = new ArrayList<DynLoadModel>();
+		return this.phaseADynLoadList;
+	}
+
+	@Override
+	public List<DynLoadModel> getPhaseBDynLoadList() {
+		if(this.phaseBDynLoadList == null)
+			this.phaseBDynLoadList = new ArrayList<DynLoadModel>();
+		
+		return this.phaseBDynLoadList;
+	}
+
+	@Override
+	public List<DynLoadModel> getPhaseCDynLoadList() {
+		if(this.phaseCDynLoadList == null)
+			this.phaseCDynLoadList = new ArrayList<DynLoadModel>();
+		return this.phaseCDynLoadList;
 	}
 
 
