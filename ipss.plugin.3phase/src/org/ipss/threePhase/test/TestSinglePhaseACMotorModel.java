@@ -66,25 +66,25 @@ public class TestSinglePhaseACMotorModel {
 		Bus3Phase bus1 = (Bus3Phase) net.getBus("Bus1");
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
-  		ac1.setLoadPercent(50);
+  		ac1.setLoadPercent(100);
   		ac1.setPhase(Phase.A);
-  		ac1.setMVABase(50);
+  		ac1.setMVABase(40);
   		bus1.getPhaseADynLoadList().add(ac1);
   		
   		
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
-  		ac2.setLoadPercent(50);
+  		ac2.setLoadPercent(100);
   		ac2.setPhase(Phase.B);
-  		ac2.setMVABase(50);
+  		ac2.setMVABase(40);
   		bus1.getPhaseBDynLoadList().add(ac2);
   		
 
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
-  		ac3.setLoadPercent(50);
+  		ac3.setLoadPercent(100);
   		ac3.setPhase(Phase.C);
-  		ac3.setMVABase(50);
+  		ac3.setMVABase(40);
   		bus1.getPhaseCDynLoadList().add(ac3);
   		
   		// run dstab to test 1-phase ac model
@@ -96,7 +96,7 @@ public class TestSinglePhaseACMotorModel {
   			dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub())); 
   		  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
   			dstabAlgo.setSimuStepSec(0.005d);
-  			dstabAlgo.setTotalSimuTimeSec(0.02);
+  			dstabAlgo.setTotalSimuTimeSec(0.2);
   			
   			StateMonitor sm = new StateMonitor();
   			sm.addGeneratorStdMonitor(new String[]{"Bus3-mach1"});
@@ -106,7 +106,7 @@ public class TestSinglePhaseACMotorModel {
   			dstabAlgo.setSimuOutputHandler(sm);
   			dstabAlgo.setOutPutPerSteps(1);
   			
-  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_LG,new Complex(0,0.01),null, 0.005,0.06), "SLG@Bus1");
+  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_LG,new Complex(0,0.1),null, 0.005,0.06), "SLG@Bus1");
   			dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
   			
   		  	if(dstabAlgo.initialization()){
@@ -122,7 +122,7 @@ public class TestSinglePhaseACMotorModel {
   		  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
-	@Test
+	//@Test
 	public void test1PAC() throws InterpssException{
 		
        IpssCorePlugin.init();
@@ -261,8 +261,8 @@ private DStabNetwork3Phase create2BusSys() throws InterpssException{
   		
   		bus1.setLoadPQ(new Complex(1.0,0.2));
   		
-  		bus1.setScLoadShuntY2( new Complex (1.0,0.2));
-  		bus1.setScLoadShuntY0( new Complex (1.0,0.2));
+  		//bus1.setScLoadShuntY2( new Complex (1.0,0.2));
+  		//bus1.setScLoadShuntY0( new Complex (1.0,0.2));
   		
 
   	  	// Bus 3

@@ -95,7 +95,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		private double acRestartTimer = 0.0;
 
 
-		
+		private Complex loadPQFactor = null;
 		
 		
 		public SinglePhaseACMotor(){
@@ -236,6 +236,11 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				load is reconnected.  The fraction of the load that has not been tripped by the contactor is output as ¡°fcon¡±.
 			 */
 			
+			
+			//TODO the compensation current is only update once in order to solve the convergence issue.
+			calculateCompensateCurInj();
+			//loadPQFactor = calcLoadCharacterFactor();
+			
 			return flag;
 		}
 		
@@ -251,7 +256,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				qfactor  = Q0 +Kq1*Math.pow((v-Vbrk),Nq1);
 		    }
 			//TODO remove the constraint v> Vstall &
-			else if( v<Vbrk & stage == 0){
+			else if( v<Vbrk & v> Vstall & stage == 0){
 				pfactor = P0 +Kp2*Math.pow((Vbrk-v),Np2);
 				qfactor = Q0 +Kq2*Math.pow((Vbrk-v),Nq2);
 			}
@@ -286,14 +291,21 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	
 		@Override
 		public Complex getCompCurInj() {
-			this.currInj = new Complex(0.0d,0.0d);
+			if(this.currInj == null) calculateCompensateCurInj();
+			
+			//if(loadPQFactor==null)loadPQFactor = calcLoadCharacterFactor();
+			
+			//calculateCompensateCurInj();
+			return this.currInj;
+		}
+		
+		private void calculateCompensateCurInj(){
+           this.currInj = new Complex(0.0d,0.0d);
 			
 			// when loadPQFactor = 0, it means the AC is stalled, thus no compensation current
-			if(stage ==1) 
-				return  this.currInj;
-			else{
-				
-				Complex loadPQFactor = calcLoadCharacterFactor();
+			if(stage !=1) {
+
+				loadPQFactor = calcLoadCharacterFactor();
 				// p+jq is pu based on system
 				Complex pq = new Complex(p*loadPQFactor.getReal(),q*loadPQFactor.getImaginary());
 				
@@ -306,7 +318,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				// I = -conj( (p+j*q - conj(v^2*this.equivY))/v)
 				
 				// consider the situation where the load bus voltage is very low
-				if(vmag<1.0E-4)
+				if(vmag<0.4)
 					 this.currInj = new Complex(0.0);
 				else
 				   this.currInj= compPower.divide(v).conjugate().multiply(-1.0d);
@@ -314,7 +326,6 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			//IpssLogger.getLogger().fine
 			//if(this.connectPhase == Phase.A)
 			System.out.println("AC motor -"+this.getId()+"@"+this.getBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
-			return this.currInj;
 		}
 	
 		
