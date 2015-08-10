@@ -76,7 +76,7 @@ public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3P
 		//Power = VABC*conj(IgenABC-YgenABC*VABC)
 		// pu on system mva base
 		Complex3x1 Vabc = ((Bus3Phase)this.dynGen.getParentBus()).get3PhaseVotlages();
-		Complex3x1 IinjABC =  getIgen3Phase().subtract(getYabc(false).multiply(Vabc)); 
+		Complex3x1 IinjABC =  getISource3Phase().subtract(getYabc(false).multiply(Vabc)); 
 		this.puPowerAbc.a_0 = Vabc.a_0.multiply(IinjABC.a_0.conjugate());
 		this.puPowerAbc.b_1 = Vabc.b_1.multiply(IinjABC.b_1.conjugate());
 		this.puPowerAbc.c_2 = Vabc.c_2.multiply(IinjABC.c_2.conjugate());
@@ -99,13 +99,13 @@ public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3P
 	
 
 	@Override
-	public Complex3x1 getIgen3Phase() {
+	public Complex3x1 getISource3Phase() {
 		 // Complex3x1(a0,b1,c2)
 		return Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),this.dynGen.getMach().getIgen(), new Complex(0,0)));
 	}
 	
 	public Complex3x1 getIinj2Network3Phase(){
-		Complex3x1 iInj =getIgen3Phase();
+		Complex3x1 iInj =getISource3Phase();
 		Complex3x1 Vabc = ((Bus3Phase)this.dynGen.getParentBus()).get3PhaseVotlages();
 		
 		
@@ -130,7 +130,20 @@ public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3P
 		throw new UnsupportedOperationException();
 		
 	}
+	@Override
+	public Object getOutputObject() {
+	     return this.getISource3Phase();
+	}
 
-	
-	
+	@Override
+	public String getScripts() {
+		
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setScripts(String value) {
+		throw new UnsupportedOperationException();
+		
+	}
 }

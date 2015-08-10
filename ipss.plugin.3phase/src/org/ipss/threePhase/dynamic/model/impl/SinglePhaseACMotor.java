@@ -105,10 +105,15 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			this.id = Id;
 		}
 		
-		
+		/**
+		 * create an instance of SinglePhaseACMotor
+		 * @param bus
+		 * @param Id
+		 */
 		public SinglePhaseACMotor(Bus3Phase bus,String Id){
 			this.setBus(bus);
 			this.id = Id;
+			
 		}
 		
 
@@ -116,6 +121,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public boolean initStates() {
 	       boolean flag = true;
 			
+	       this.equivY = this.getEquivY();
 			
 			//TODO the initLoad is the toal load at the bus ,include constant Z and I load
 			//In the future, this may need to be update to consider the constant P load only
@@ -294,7 +300,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				//TODO replace the pos-seq voltage with phase voltage
 				Complex v = this.getBusPhaseVoltage();
 				double vmag = v.abs();
-				Complex compPower = pq.subtract(getCompShuntY().multiply(vmag*vmag).conjugate());
+				Complex compPower = pq.subtract(this.equivY.multiply(vmag*vmag).conjugate());
 				
 				// I = -conj( (p+j*q - conj(v^2*this.equivY))/v)
 				this.currInj= compPower.divide(v).conjugate().multiply(-1.0d);
@@ -304,7 +310,12 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			return this.currInj;
 		}
 	
-	
+		
+		@Override
+		public Object getOutputObject() {
+		     return this.getCompCurInj();
+		}
+		
 		
 		@Override
 		public Complex getEquivY() {

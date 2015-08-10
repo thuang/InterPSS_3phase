@@ -8,8 +8,9 @@ import org.ipss.threePhase.basic.Bus3Phase;
 
 import com.interpss.core.net.ref.BusRef;
 import com.interpss.dstab.algo.IDynamicSimulation;
+import com.interpss.dstab.device.DynamicDevice;
 
-public interface IDynamicModel3Phase extends BusRef<Bus3Phase>,IDynamicSimulation{
+public interface IDynamicModel3Phase extends BusRef<Bus3Phase>,DynamicDevice{
 		
 		
 		/**
@@ -51,11 +52,16 @@ public interface IDynamicModel3Phase extends BusRef<Bus3Phase>,IDynamicSimulatio
 
 		
 		/**
-		 * Calculate the three phase current injection at the terminal on system basis
+		 * The dynamic model is represented as A three-phase Norton equivalent. 
+		 * return the three phase  Norton equivalent current source at the terminal on system basis
 		 * @return
 		 */
-		public Complex3x1 getIgen3Phase();
+		public Complex3x1 getISource3Phase();
 		
+		/**
+		 *  
+		 * @return the three phase  current injected from this model into the network on system basis
+		 */
 		public Complex3x1 getIinj2Network3Phase();
 
 }

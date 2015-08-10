@@ -295,7 +295,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				DStabBus bus = (DStabBus)b;
 
 				if(bus.isActive()){
-					
+					Bus3Phase bus3p = (Bus3Phase) bus;
 					Complex3x1 iInject = new Complex3x1();
 
 					if(bus.getContributeGenList().size()>0){
@@ -304,12 +304,61 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						    	  DStabGen dynGen = (DStabGen)gen;
 						    	  if( dynGen.getMach()!=null){
 						    		  DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
-						    		  iInject = iInject.add(gen3P.getIgen3Phase());
+						    		  iInject = iInject.add(gen3P.getISource3Phase());
 						    	  }
 						    	 
 						       }
 						  }
 				    }
+					//TODO 3-phase dynamic load list
+					//if(bus3p.getp)
+					if(bus3p.isLoad()){
+						
+						//// Phase A
+						if(bus3p.getPhaseADynLoadList().size()>0){
+							Complex iPhAInj = new Complex(0,0);
+							
+							for(DynLoadModel1Phase load1p:bus3p.getPhaseADynLoadList()){
+								if(load1p.isActive()){
+							        iPhAInj = iPhAInj.add(load1p.getCompCurInj());
+								}
+							}
+							
+							if(iPhAInj.abs()>0.0)
+								iInject.a_0 = iInject.a_0.add(iPhAInj);
+						}
+						
+						// Phase B
+						if(bus3p.getPhaseBDynLoadList().size()>0){
+							Complex iPhBInj = new Complex(0,0);
+							
+							for(DynLoadModel1Phase load1p:bus3p.getPhaseBDynLoadList()){
+								if(load1p.isActive()){
+							        iPhBInj = iPhBInj.add(load1p.getCompCurInj());
+								}
+							}
+							
+							if(iPhBInj.abs()>0.0)
+								iInject.b_1 = iInject.b_1.add(iPhBInj);
+						}
+						
+						// Phase C
+						if(bus3p.getPhaseCDynLoadList().size()>0){
+							Complex iPhCInj = new Complex(0,0);
+							
+							for(DynLoadModel1Phase load1p:bus3p.getPhaseCDynLoadList()){
+								if(load1p.isActive()){
+							        iPhCInj = iPhCInj.add(load1p.getCompCurInj());
+								}
+							}
+							
+							if(iPhCInj.abs()>0.0)
+								iInject.c_2 = iInject.c_2.add(iPhCInj);
+						}
+						
+						
+						
+					}
 				  
 				  if(iInject == null){
 					  throw new Error (bus.getId()+" current injection is null");
@@ -376,15 +425,15 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		if(!is3PhaseNetworkInitialized)
 	  	     initThreePhaseFromLfResult();
 		
-		for ( DStabBus busi : getBusList() ) {
+		for ( DStabBus b : getBusList() ) {
 
-			if( busi instanceof Bus3Phase){
-			    Bus3Phase bus =(Bus3Phase) busi;
+			if( b instanceof Bus3Phase){
+			    Bus3Phase bus =(Bus3Phase) b;
 
 			   //only the active buses will be initialized
-				if(busi.isActive()){
+				if(b.isActive()){
 					// set bus initial vaule 
-					bus.setInitLoad(new Complex(0.0,0.0));
+					bus.setInitLoad(bus.getLoadPQ());
 					bus.setInitVoltMag(bus.getVoltageMag());
 					
 					//1) init bus dynamic signal calculation, 
@@ -407,12 +456,15 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					//3) process the dynamic loads, for each load, subtract the portion of dynamic loads, including 
 					// 3-phase dynamic loads and 1-phase dynamic loads from the total loads
-					for(DStabBus b:this.getBusList()){
+
 						
+					if(b.isLoad()){
+							
 						// first process the 3phase dynamic loads
 						double totalDynLoadPercent = 0;
 						Complex total3PhaseDynLoadPQ = new Complex(0,0);
-						if(bus.isLoad() && bus.getDynLoadModelList().size()>0){
+						
+						if( b.getDynLoadModelList().size()>0){
 							for(DynLoadModel load:bus.getDynLoadModelList()){
 								if(load.isActive()){
 									totalDynLoadPercent += load.getLoadPercent(); 
@@ -483,7 +535,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
                         	}
 						}
                         
-                        for(DynLoadModel1Phase dynLoadPB : ((Bus3Phase)b).getPhaseADynLoadList()){
+                        for(DynLoadModel1Phase dynLoadPB : ((Bus3Phase)b).getPhaseBDynLoadList()){
                         	if(dynLoadPB.isActive()){
                         		dynLoadPB.initStates();
                         		
@@ -492,7 +544,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						}
                         
                         
-                        for(DynLoadModel1Phase dynLoadPC : ((Bus3Phase)b).getPhaseADynLoadList()){
+                        for(DynLoadModel1Phase dynLoadPC : ((Bus3Phase)b).getPhaseCDynLoadList()){
                         	if(dynLoadPC.isActive()){
                         		dynLoadPC.initStates();
                         	
@@ -515,7 +567,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						
 						bus.setNetLoadResults(orginalLoadPQ.subtract(total3PhaseDynLoadPQ).subtract(totalPhaseADynLoadPQ));
 							
-					}
+				   }//end if-isLoad
+				   
 					
 				}
 				

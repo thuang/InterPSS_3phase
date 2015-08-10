@@ -254,8 +254,7 @@ public class TwoBus_3Phase_Test {
 	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(0.005);
-		net.setNetEqnIterationNoEvent(1);
-		net.setNetEqnIterationWithEvent(1);
+
 		//dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
 		//net.addDynamicEvent(create3PhaseFaultEvent("Bus5",net,1.0d,0.05),"3phaseFault@Bus5");
         

@@ -164,6 +164,8 @@ protected  Bus3Phase parentBus = null;
 		throw new UnsupportedOperationException();
 	}
 
+	
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

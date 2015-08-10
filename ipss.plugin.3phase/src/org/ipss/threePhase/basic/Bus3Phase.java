@@ -20,6 +20,8 @@ public interface Bus3Phase extends DStabBus {
     
     public Complex3x3 getYiiAbc();
     
+    // TODO in the next phase, put all dynamic models in one array;
+    // or we still need to separate the generators and loads;
     public List<DynLoadModel1Phase> getPhaseADynLoadList();
     
     public List<DynLoadModel1Phase> getPhaseBDynLoadList();
