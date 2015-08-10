@@ -1,4 +1,4 @@
-package org.ipss.threePhase.dynamic;
+package org.ipss.threePhase.dynamic.algo;
 
 import static com.interpss.common.util.IpssLogger.ipssLogger;
 
@@ -6,6 +6,7 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.NumericConstant;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.exp.IpssNumericException;
+import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 
 import com.interpss.common.exp.InterpssRuntimeException;
 import com.interpss.common.msg.IpssMessage;
@@ -75,6 +76,8 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 							}
 						}
 					}
+					
+					 System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
 
 					// publish Y matrix change event
 					// someone may be interested in the change event, for
@@ -133,13 +136,19 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 						
 						Complex ylarge =  NumericConstant.LargeBusZ;
 						
+						
 						//Need to determine the yfaultABC based on the fault type
 			            //TODO assuming the SLG fault is applied on phase A
 					
 						//net.getYMatrix().addToA(y, i, i);
 						Complex3x3 yfaultABC = new Complex3x3();
 						if(fault.getFaultCode()==SimpleFaultCode.GROUND_LG){
-							yfaultABC.aa = ylarge;
+							Complex yfault = ylarge;
+							if(fault.getZLGFault()!=null){
+								if(fault.getZLGFault().abs()>1.0E-7)
+								     yfault = new Complex(1.0,0).divide(fault.getZLGFault());
+							}
+							yfaultABC.aa = yfault ;
 							net.getYMatrixABC().addToA(yfaultABC, i, i);
 						}
 						//TODO need to check how to model LL

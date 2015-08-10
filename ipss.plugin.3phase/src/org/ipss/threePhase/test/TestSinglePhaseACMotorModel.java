@@ -14,6 +14,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DStab3PhaseSolverImpl;
+import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
@@ -25,6 +26,7 @@ import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -36,7 +38,7 @@ import com.interpss.dstab.mach.RoundRotorMachine;
 
 public class TestSinglePhaseACMotorModel {
 	
-	//@Test
+	@Test
 	public void test_dstab_1PAC() throws InterpssException{
 		IpssCorePlugin.init();
 		
@@ -94,7 +96,7 @@ public class TestSinglePhaseACMotorModel {
   			dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub())); 
   		  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
   			dstabAlgo.setSimuStepSec(0.005d);
-  			dstabAlgo.setTotalSimuTimeSec(0.01);
+  			dstabAlgo.setTotalSimuTimeSec(0.02);
   			
   			StateMonitor sm = new StateMonitor();
   			sm.addGeneratorStdMonitor(new String[]{"Bus3-mach1"});
@@ -103,9 +105,16 @@ public class TestSinglePhaseACMotorModel {
   			// set the output handler
   			dstabAlgo.setSimuOutputHandler(sm);
   			dstabAlgo.setOutPutPerSteps(1);
+  			
+  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_LG,new Complex(0,0.01),null, 0.005,0.06), "SLG@Bus1");
+  			dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+  			
   		  	if(dstabAlgo.initialization()){
-  		  	
-  		  		dstabAlgo.performSimulation();
+  		  	    System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
+  		  	    while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
+  		  	    System.out.print("\n\n time = "+dstabAlgo.getSimuTime()+"\n");
+  		  		      dstabAlgo.solveDEqnStep(true);
+  		  	    }
   		  	}
   		  	
   		

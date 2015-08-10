@@ -3,6 +3,7 @@ package org.ipss.threePhase.dynamic.model.impl;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 
 import com.interpss.common.util.IpssLogger;
@@ -303,9 +304,15 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				Complex compPower = pq.subtract(this.equivY.multiply(vmag*vmag).conjugate());
 				
 				// I = -conj( (p+j*q - conj(v^2*this.equivY))/v)
-				this.currInj= compPower.divide(v).conjugate().multiply(-1.0d);
+				
+				// consider the situation where the load bus voltage is very low
+				if(vmag<1.0E-4)
+					 this.currInj = new Complex(0.0);
+				else
+				   this.currInj= compPower.divide(v).conjugate().multiply(-1.0d);
 			}
 			//IpssLogger.getLogger().fine
+			//if(this.connectPhase == Phase.A)
 			System.out.println("AC motor -"+this.getId()+"@"+this.getBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
 			return this.currInj;
 		}
