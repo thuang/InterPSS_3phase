@@ -18,6 +18,7 @@ import org.interpss.numeric.util.PerformanceTimer;
 import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
+import org.ipss.threePhase.dynamic.algo.DStab3PhaseSolverImpl;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
@@ -88,8 +89,8 @@ public class TestODM3PhaseDstabMapper {
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(2);
-		dsNet.setNetEqnIterationNoEvent(1);
-		dsNet.setNetEqnIterationWithEvent(1);
+		dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub()));
+
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		//applied the event
@@ -214,8 +215,7 @@ public class TestODM3PhaseDstabMapper {
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(1);
-		dsNet.setNetEqnIterationNoEvent(1);
-		dsNet.setNetEqnIterationWithEvent(1);
+
 		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,0.5d,0.05),"3phaseFault@Bus5");
         

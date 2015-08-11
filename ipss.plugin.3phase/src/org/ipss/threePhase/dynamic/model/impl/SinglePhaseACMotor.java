@@ -50,7 +50,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 
 		
 		// restart
-		private double Frst = 0.0;
+		private double Frst = 0.0; // 0.2 
 		private double Vrst = 0.9;
 		private double Trst = 0.4;
 		
@@ -72,10 +72,12 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		private double	Vc1on  = 0.6;
 		private double	Vc2on  = 0.5;
 		
-		//Thermal relay setting
-		private double	Tth =  999.0;
-		private double	Th1t = 999.0;
-		private double	Th2t = 999.0;
+		//Thermal relay setting 
+		// Based on  "WECC air conditioner motor model test report", Page.75
+		private double	Tth =  10.0;
+		private double	Th1t = 1.3;
+		private double	Th2t = 4.3;
+		
 
 		
 		//Affiliated control component
@@ -84,7 +86,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		//Contractor
 		
 		//Thermal relays
+		// the tripping characterisic is modeled as y = Ax +B for x within {Th1t, Th2t}
 		
+		private double thEqnA = -1.0/3;
+		private double thEqnB = 1.433;  // default value
+		
+		private double temperature = 0.0d;
+		private double tripFraction = 0.0;		
+				
 		// Timers for relays and internal controls
 		
 		private double UVRelayTimer1 = 0.0;
@@ -172,6 +181,18 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			p = pac/loadPQFactor.getReal();
 			q = qac/loadPQFactor.getImaginary();
 			
+			
+			//calculate the thermal protection equation coefficient
+			if(Th1t >0 && Th2t>Th1t){
+			   thEqnA  = -1/(Th2t-Th1t);
+			   thEqnB  = Th2t/(Th2t-Th1t);
+			}
+			else{
+				thEqnA = 0.0;
+				thEqnB = 0.0;
+			}
+				
+			
 			return flag;
 		}
 		
@@ -227,6 +248,29 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				¡°fthB¡±, respectively.	
 			 */
 				
+			if(stage ==1){
+				// current need to convert to motor mva based
+				
+				// Iac_pu = Isys_pu*Ssys/Sac
+				Complex Isys_pu = this.getBusPhaseVoltage().multiply(this.getEquivY());
+				double mvaRatio = this.getBus().getNetwork().getBaseMva()/3.0/this.getMVABase();
+				
+				double Iac_pu = Isys_pu.multiply(mvaRatio).abs();
+				
+				//dTemp =  (Ic*Ic*Rstall- Temp)/Tth
+				double dTemp =  (Iac_pu* Iac_pu*this.Rstall - this.temperature)/this.Tth;
+				
+				this.temperature += dTemp*dt;
+				
+				if(this.temperature>this.Th1t){
+					if(this.thEqnA<0.0){
+					    this.tripFraction = this.temperature*this.thEqnA+this.thEqnB;
+					    if( this.tripFraction <0) this.tripFraction = 0.0;
+					    this.mva = this.mva*this.tripFraction;
+					}
+				}
+			}
+				
 				
 			// contractor
 			/*
@@ -238,7 +282,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			
 			//TODO the compensation current is only update once in order to solve the convergence issue.
+			
 			calculateCompensateCurInj();
+			
 			//loadPQFactor = calcLoadCharacterFactor();
 			
 			return flag;

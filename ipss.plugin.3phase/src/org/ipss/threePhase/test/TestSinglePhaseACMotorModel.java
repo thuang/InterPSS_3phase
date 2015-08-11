@@ -66,7 +66,7 @@ public class TestSinglePhaseACMotorModel {
 		Bus3Phase bus1 = (Bus3Phase) net.getBus("Bus1");
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
-  		ac1.setLoadPercent(100);
+  		ac1.setLoadPercent(50);
   		ac1.setPhase(Phase.A);
   		ac1.setMVABase(40);
   		bus1.getPhaseADynLoadList().add(ac1);
@@ -74,7 +74,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
-  		ac2.setLoadPercent(100);
+  		ac2.setLoadPercent(50);
   		ac2.setPhase(Phase.B);
   		ac2.setMVABase(40);
   		bus1.getPhaseBDynLoadList().add(ac2);
@@ -82,7 +82,7 @@ public class TestSinglePhaseACMotorModel {
 
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
-  		ac3.setLoadPercent(100);
+  		ac3.setLoadPercent(50);
   		ac3.setPhase(Phase.C);
   		ac3.setMVABase(40);
   		bus1.getPhaseCDynLoadList().add(ac3);
