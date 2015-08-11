@@ -1,5 +1,6 @@
 package org.ipss.threePhase.test;
 
+import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
 import static org.junit.Assert.assertTrue;
 
 import java.util.logging.Level;
@@ -11,7 +12,9 @@ import org.ieee.odm.adapter.psse.PSSEAdapter.PsseVersion;
 import org.ieee.odm.model.dstab.DStabModelParser;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
+import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.util.PerformanceTimer;
+import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
@@ -20,12 +23,18 @@ import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
 import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
+import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
 import com.interpss.DStabObjectFactory;
 import com.interpss.SimuObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.common.util.IpssLogger;
+import com.interpss.core.aclf.AclfBranchCode;
+import com.interpss.core.aclf.AclfGenCode;
+import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.acsc.XfrConnectCode;
+import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -36,7 +45,7 @@ import com.interpss.simu.SimuCtxType;
 
 public class IEEE9_3Phase_1PAC_test {
 	
-	@Test
+	//@Test
 	public void test_IEEE9_1pac_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -142,6 +151,194 @@ public class IEEE9_3Phase_1PAC_test {
 			while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
 				
 				dstabAlgo.solveDEqnStep(true);}
+		}
+		
+		System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+		System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+		
+	}
+	
+	
+	@Test
+	public void test_IEEE9_addFeeder_1pac_Dstab() throws InterpssException{
+		IpssCorePlugin.init();
+		IpssCorePlugin.setLoggerLevel(Level.INFO);
+		PSSEAdapter adapter = new PSSEAdapter(PsseVersion.PSSE_30);
+		assertTrue(adapter.parseInputFile(NetType.DStabNet, new String[]{
+				"testData/IEEE9Bus/ieee9.raw",
+				"testData/IEEE9Bus/ieee9.seq",
+				//"testData/IEEE9Bus/ieee9_dyn_onlyGen_saturation.dyr"
+				"testData/IEEE9Bus/ieee9_dyn_onlyGen.dyr"
+		}));
+		DStabModelParser parser =(DStabModelParser) adapter.getModel();
+		
+		//System.out.println(parser.toXmlDoc());
+
+		
+		
+		SimuContext simuCtx = SimuObjectFactory.createSimuNetwork(SimuCtxType.DSTABILITY_NET);
+		
+		// The only change to the normal data import is the use of ODM3PhaseDStabParserMapper
+		if (!new ODM3PhaseDStabParserMapper(IpssCorePlugin.getMsgHub())
+					.map2Model(parser, simuCtx)) {
+			System.out.println("Error: ODM model to InterPSS SimuCtx mapping error, please contact support@interpss.com");
+			return;
+		}
+		
+		
+	    DStabNetwork3Phase dsNet =(DStabNetwork3Phase) simuCtx.getDStabilityNet();
+	    
+	    // remove the load from bus5
+	    Bus3Phase bus5 = (Bus3Phase) dsNet.getBus("Bus5");
+	    
+	    bus5.setLoadCode(AclfLoadCode.NON_LOAD);
+	    bus5.getContributeLoadList().remove(0);
+	    
+	    // add 69 kV and below distribution system
+	    
+		Bus3Phase bus10 = ThreePhaseObjectFactory.create3PBus("Bus10", dsNet);
+  		bus10.setAttributes("69kV sub", "");
+  		bus10.setBaseVoltage(69000.0);
+  		// set the bus to a non-generator bus
+  		bus10.setGenCode(AclfGenCode.NON_GEN);
+  		// set the bus to a constant power load bus
+  		bus10.setLoadCode(AclfLoadCode.NON_LOAD);
+  		
+  		
+		Bus3Phase bus11 = ThreePhaseObjectFactory.create3PBus("Bus11", dsNet);
+  		bus11.setAttributes("12.47 kV feeder", "");
+  		bus11.setBaseVoltage(12470.0);
+  		// set the bus to a non-generator bus
+  		bus11.setGenCode(AclfGenCode.NON_GEN);
+  		// set the bus to a constant power load bus
+  		bus11.setLoadCode(AclfLoadCode.CONST_P);
+  		
+  		bus11.setLoadPQ(new Complex(0.6,-0.05));
+  		
+		Bus3Phase bus12 = ThreePhaseObjectFactory.create3PBus("Bus12", dsNet);
+  		bus12.setAttributes("380V feeder", "");
+  		bus12.setBaseVoltage(380.0);
+  		// set the bus to a non-generator bus
+  		bus12.setGenCode(AclfGenCode.NON_GEN);
+  		// set the bus to a constant power load bus
+  		bus12.setLoadCode(AclfLoadCode.CONST_P);
+  		
+  		bus12.setLoadCode(AclfLoadCode.CONST_P);
+  		
+  		bus12.setLoadPQ(new Complex(0.6,0.1));
+  		
+  		
+		//////////////////transformers///////////////////////////////////////////
+  		
+		Branch3Phase xfr5_10 = ThreePhaseObjectFactory.create3PBranch("Bus5", "Bus10", "0", dsNet);
+		xfr5_10.setBranchCode(AclfBranchCode.XFORMER);
+		xfr5_10.setZ( new Complex( 0.0, 0.08 ));
+		xfr5_10.setZ0( new Complex(0.0, 0.08 ));
+		
+		
+		AcscXformer xfr0 = acscXfrAptr.apply(xfr5_10);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+  		
+  		
+		Branch3Phase xfr10_11 = ThreePhaseObjectFactory.create3PBranch("Bus10", "Bus11", "0", dsNet);
+		xfr10_11.setBranchCode(AclfBranchCode.XFORMER);
+		xfr10_11.setZ( new Complex( 0.0, 0.06 ));
+		xfr10_11.setZ0( new Complex(0.0, 0.06 ));
+		
+		AcscXformer xfr1 = acscXfrAptr.apply(xfr10_11);
+		xfr1.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+		xfr1.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+	    
+		
+		Branch3Phase xfr11_12 = ThreePhaseObjectFactory.create3PBranch("Bus11", "Bus12", "0", dsNet);
+		xfr11_12.setBranchCode(AclfBranchCode.XFORMER);
+		xfr11_12.setZ( new Complex( 0.0, 0.025 ));
+		xfr11_12.setZ0( new Complex(0.0, 0.025 ));
+		xfr11_12.setToTurnRatio(1.01);
+		AcscXformer xfr2 = acscXfrAptr.apply(xfr11_12);
+		xfr2.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		xfr2.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+	    
+	    /*
+	     *   create the 1-phase AC model 
+	     */
+		
+
+		
+	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus12,"1");
+  		ac1.setLoadPercent(100);
+  		ac1.setPhase(Phase.A);
+  		ac1.setMVABase(25);
+  		bus12.getPhaseADynLoadList().add(ac1);
+  		
+  		
+  		
+  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus12,"2");
+  		ac2.setLoadPercent(100);
+  		ac2.setPhase(Phase.B);
+  		ac2.setMVABase(25);
+  		bus12.getPhaseBDynLoadList().add(ac2);
+  		
+
+  		
+  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus12,"3");
+  		ac3.setLoadPercent(100);
+  		ac3.setPhase(Phase.C);
+  		ac3.setMVABase(25);
+  		bus12.getPhaseCDynLoadList().add(ac3);
+	    
+	    
+	    
+		DynamicSimuAlgorithm dstabAlgo = simuCtx.getDynSimuAlgorithm();
+		LoadflowAlgorithm aclfAlgo = dstabAlgo.getAclfAlgorithm();
+		assertTrue(aclfAlgo.loadflow());
+		System.out.println(AclfOutFunc.loadFlowSummary(dsNet));
+		
+		
+		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
+		dstabAlgo.setSimuStepSec(0.005d);
+		dstabAlgo.setTotalSimuTimeSec(0.2);
+		
+		dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub()));
+
+		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
+		
+		//applied the event
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,0.01d,0.05),"3phaseFault@Bus5");
+        
+		
+		StateMonitor sm = new StateMonitor();
+		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1","Bus3-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus10","Bus11","Bus12","Bus5","Bus1"});
+		
+		// set the output handler
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(1);
+		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
+		
+		IpssLogger.getLogger().setLevel(Level.WARNING);
+		
+		PerformanceTimer timer = new PerformanceTimer(IpssLogger.getLogger());
+		
+        // Must use this dynamic event process to modify the YMatrixABC
+		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+		
+		if (dstabAlgo.initialization()) {
+			System.out.println(ThreePhaseAclfOutFunc.busLfSummary(dsNet));
+			
+			System.out.println(dsNet.getMachineInitCondition());
+			
+			System.out.println("Running 3Phase DStab simulation ...");
+			timer.start();
+			//dstabAlgo.performSimulation();
+			
+			while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
+				System.out.println("\n\n simu Time = "+dstabAlgo.getSimuTime()+"\n");
+				dstabAlgo.solveDEqnStep(true);
+			}
 		}
 		
 		System.out.println(sm.toCSVString(sm.getBusAngleTable()));

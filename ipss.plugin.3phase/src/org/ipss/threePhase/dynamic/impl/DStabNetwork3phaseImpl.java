@@ -88,7 +88,10 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					 bra.setVisited(true);
 					 
-					 //TODO 06/17/2015, for testing, change from -30 to +30
+                     //NOTE When Delta connection is on the low voltage side, such as the case of Generation connection
+					 // all buses on the low side should be shifted -30 deg. On the hand, if the the Delta Connection is on the high
+					 // voltage side, the low voltage side should be shifted + 30 deg.
+					 // 
 					 phaseShiftDeg = -30;
 					 Bus3Phase  StartingBus =null;
 					 
@@ -96,10 +99,13 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					 if(bra.getFromAclfBus().getBaseVoltage()>bra.getToAclfBus().getBaseVoltage()){
 						 
 						 StartingBus = (Bus3Phase) bra.getToAclfBus();
+						 
+						 if(isDeltaConnected(bra.getXfrFromConnectCode()))   phaseShiftDeg = +30;
 					 }		
 					 else {
 					
 						 StartingBus = (Bus3Phase) bra.getFromAclfBus();
+						 if(isDeltaConnected(bra.getXfrToConnectCode()))   phaseShiftDeg = +30;
 					 }
 					 
 					    Complex vpos = StartingBus.getVoltage();
@@ -458,7 +464,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				DStabBus bus = (DStabBus)b;
 				if(bus.isActive()){
 					Complex3x1 vabc = getYMatrixABC().getX(bus.getSortNumber());
-					
+					if(bus.getId().equals("Bus12"))
 					System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
 					
 					if(!vabc.a_0.isNaN()){
