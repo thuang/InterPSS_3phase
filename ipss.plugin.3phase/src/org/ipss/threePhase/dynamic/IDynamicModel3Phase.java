@@ -8,9 +8,10 @@ import org.ipss.threePhase.basic.Bus3Phase;
 
 import com.interpss.core.net.ref.BusRef;
 import com.interpss.dstab.algo.IDynamicSimulation;
+import com.interpss.dstab.device.DynamicBusDevice;
 import com.interpss.dstab.device.DynamicDevice;
 
-public interface IDynamicModel3Phase extends BusRef<Bus3Phase>,DynamicDevice{
+public interface IDynamicModel3Phase extends DynamicBusDevice{
 		
 		
 		/**

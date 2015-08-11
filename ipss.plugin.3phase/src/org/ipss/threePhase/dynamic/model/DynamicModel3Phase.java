@@ -15,32 +15,14 @@ import com.interpss.core.net.Network;
 import com.interpss.core.net.impl.NameTagImpl;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.device.impl.DynamicBusDeviceImpl;
 import com.interpss.dstab.mach.Machine;
 
-public abstract class DynamicModel3Phase extends NameTagImpl implements
+public abstract class DynamicModel3Phase extends DynamicBusDeviceImpl implements
 		IDynamicModel3Phase {
 
-protected  Bus3Phase parentBus = null;
+   protected  Bus3Phase parentBus = null;
 	
-	
-
-	@Override
-	public Bus3Phase getBus() {
-		
-		return this.parentBus;
-	}
-
-	@Override
-	public void setBus(Bus3Phase value) {
-		this.parentBus = value;
-
-	}
-
-	@Override
-	public void setBaseVoltage(double v) {
-		parentBus.setBaseVoltage(v);
-
-	}
 
 	
 	/**

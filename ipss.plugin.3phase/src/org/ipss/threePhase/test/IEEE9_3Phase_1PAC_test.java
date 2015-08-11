@@ -18,7 +18,6 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
-import org.ipss.threePhase.dynamic.algo.DStab3PhaseSolverImpl;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
@@ -115,7 +114,6 @@ public class IEEE9_3Phase_1PAC_test {
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(0.2);
 		
-		dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub()));
 
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
@@ -302,12 +300,12 @@ public class IEEE9_3Phase_1PAC_test {
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(0.2);
 		
-		dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub()));
+	
 
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		//applied the event
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,0.01d,0.05),"3phaseFault@Bus5");
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_3P,new Complex(0.0),null,0.01d,0.05),"3phaseFault@Bus5");
         
 		
 		StateMonitor sm = new StateMonitor();

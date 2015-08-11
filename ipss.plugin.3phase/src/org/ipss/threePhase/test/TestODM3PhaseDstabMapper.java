@@ -15,10 +15,8 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.mapper.odm.ODMDStabParserMapper;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.util.PerformanceTimer;
-import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
-import org.ipss.threePhase.dynamic.algo.DStab3PhaseSolverImpl;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
@@ -33,7 +31,6 @@ import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.core.net.Bus;
-import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.DStabilityNetwork;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -89,7 +86,7 @@ public class TestODM3PhaseDstabMapper {
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(2);
-		dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub()));
+		
 
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		

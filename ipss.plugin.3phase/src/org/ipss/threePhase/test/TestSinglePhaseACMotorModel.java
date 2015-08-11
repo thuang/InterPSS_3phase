@@ -2,8 +2,6 @@ package org.ipss.threePhase.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.security.acl.Acl;
-
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
@@ -13,7 +11,6 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
-import org.ipss.threePhase.dynamic.algo.DStab3PhaseSolverImpl;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
@@ -34,7 +31,6 @@ import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
-import com.interpss.dstab.mach.RoundRotorMachine;
 
 public class TestSinglePhaseACMotorModel {
 	
@@ -93,7 +89,7 @@ public class TestSinglePhaseACMotorModel {
   			DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
   					net, IpssCorePlugin.getMsgHub());
   				
-  			dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub())); 
+  		
   		  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
   			dstabAlgo.setSimuStepSec(0.005d);
   			dstabAlgo.setTotalSimuTimeSec(0.2);
@@ -178,7 +174,7 @@ public class TestSinglePhaseACMotorModel {
   			DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
   					net, IpssCorePlugin.getMsgHub());
   				
-  			dstabAlgo.setSolver( new DStab3PhaseSolverImpl(dstabAlgo, IpssCorePlugin.getMsgHub())); 
+  		
   		  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
   			dstabAlgo.setSimuStepSec(0.005d);
   			dstabAlgo.setTotalSimuTimeSec(0.01);

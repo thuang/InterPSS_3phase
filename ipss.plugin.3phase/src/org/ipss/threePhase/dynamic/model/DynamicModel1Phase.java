@@ -12,9 +12,10 @@ import com.interpss.core.net.Network;
 import com.interpss.core.net.impl.NameTagImpl;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.device.impl.DynamicBusDeviceImpl;
 import com.interpss.dstab.mach.Machine;
 
-public abstract class DynamicModel1Phase extends NameTagImpl implements
+public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
 		IDynamicModel1Phase {
 	
 	protected  Phase     connectPhase = null;

@@ -113,23 +113,7 @@ public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3P
 		return iInj;
 	}
 
-	@Override
-	public Bus3Phase getBus() {
-		
-		return (Bus3Phase)this.dynGen.getParentBus();
-	}
 
-	@Override
-	public void setBus(Bus3Phase value) {
-		throw new UnsupportedOperationException();
-		
-	}
-
-	@Override
-	public void setBaseVoltage(double v) {
-		throw new UnsupportedOperationException();
-		
-	}
 	@Override
 	public Object getOutputObject() {
 	     return this.getISource3Phase();

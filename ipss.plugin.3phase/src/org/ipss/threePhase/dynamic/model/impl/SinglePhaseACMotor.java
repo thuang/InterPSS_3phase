@@ -7,7 +7,9 @@ import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 
 import com.interpss.common.util.IpssLogger;
+import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.device.DynamicBusDeviceType;
 
 public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	
@@ -121,7 +123,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		 * @param Id
 		 */
 		public SinglePhaseACMotor(Bus3Phase bus,String Id){
-			this.setBus(bus);
+			this.setDStabBus(bus);
 			this.id = Id;
 			
 		}
@@ -135,7 +137,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			//TODO the initLoad is the toal load at the bus ,include constant Z and I load
 			//In the future, this may need to be update to consider the constant P load only
-	        Complex busTotalLoad = this.getBus().getInitLoad();
+	        Complex busTotalLoad = this.getDStabBus().getInitLoad();
 	        
 	        
 	        // TODO assuming three-phase balanced
@@ -154,7 +156,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				else 
 					this.loadFactor = 1.0;
 				// phase mva base is the 1/3 of the system 3phaes mva base
-				this.setMVABase(this.pac*this.getBus().getNetwork().getBaseMva()/3.0d/this.loadFactor);
+				this.setMVABase(this.pac*this.getDStabBus().getNetwork().getBaseMva()/3.0d/this.loadFactor);
 			}
 			
 			
@@ -253,7 +255,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				
 				// Iac_pu = Isys_pu*Ssys/Sac
 				Complex Isys_pu = this.getBusPhaseVoltage().multiply(this.getEquivY());
-				double mvaRatio = this.getBus().getNetwork().getBaseMva()/3.0/this.getMVABase();
+				double mvaRatio = this.getDStabBus().getNetwork().getBaseMva()/3.0/this.getMVABase();
 				
 				double Iac_pu = Isys_pu.multiply(mvaRatio).abs();
 				
@@ -311,7 +313,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			// consider the frequency dependence
 			if(pfactor !=0.0 ||qfactor!=0){
-				double dFreq = getBus().getFreq()-1.0;
+				double dFreq = getDStabBus().getFreq()-1.0;
 				pfactor = pfactor*(1+CmpKpf*dFreq);
 				qfactor = qfactor*(1+CmpKqf*dFreq/Math.sqrt(1-powerFactor*powerFactor));
 			}
@@ -321,7 +323,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		
 		private Complex getBusPhaseVoltage(){
-			Complex3x1 vabc = ((Bus3Phase)this.getBus()).get3PhaseVotlages();
+			Complex3x1 vabc = ((Bus3Phase)this.getDStabBus()).get3PhaseVotlages();
 			
 			switch(this.connectPhase){
 			case A: 
@@ -371,7 +373,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			}
 			//IpssLogger.getLogger().fine
 			//if(this.connectPhase == Phase.A)
-			System.out.println("AC motor -"+this.getId()+"@"+this.getBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
+			System.out.println("AC motor -"+this.getId()+"@"+this.getDStabBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
 		}
 	
 		
@@ -385,7 +387,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public Complex getEquivY() {
 			Complex zstall = new Complex(this.Rstall,this.Xstall);
 			Complex y = new Complex(1.0,0).divide(zstall);
-			this.equivY = y.multiply(this.mva/this.getBus().getNetwork().getBaseMva()*3.0d);
+			this.equivY = y.multiply(this.mva/this.getDStabBus().getNetwork().getBaseMva()*3.0d);
 			
 			return this.equivY;
 		}
@@ -714,6 +716,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public void setUVRelayTimer2(double uVRelayTimer2) {
 			UVRelayTimer2 = uVRelayTimer2;
 		}
+
+
 
 	
 	

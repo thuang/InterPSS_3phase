@@ -647,6 +647,12 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						
 						bus.setNetLoadResults(orginalLoadPQ.subtract(total3PhaseDynLoadPQ).subtract(totalPhaseADynLoadPQ));
 							
+						// add the dynamic loads to dynamicBusDeviceList()
+						bus.getDynamicBusDeviceList().addAll(bus.getDynLoadModelList());
+						bus.getDynamicBusDeviceList().addAll(bus.getPhaseADynLoadList());
+						bus.getDynamicBusDeviceList().addAll(bus.getPhaseBDynLoadList());
+						bus.getDynamicBusDeviceList().addAll(bus.getPhaseCDynLoadList());
+						
 				   }//end if-isLoad
 				   
 					
@@ -666,77 +672,6 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			initFlag = false;
 		}
         // The following has been moved into formYMatrixABC()
-		
-//		//TODO append the equivalent 3phase admittances of dynamic loads to YMatrixABC
-//		for ( DStabBus bus : getBusList() ) {
-//			if(bus.isActive() && bus.isLoad()){
-//				Bus3Phase bus3p = (Bus3Phase) bus;
-//				//TODO process three-phase dynamic loads
-//				
-//				
-//				//TODO process 1-phase dynamic loads on each phase
-//				Complex phaseAdynLoadEquivY = new Complex(0,0);
-//				Complex phaseBdynLoadEquivY = new Complex(0,0);
-//				Complex phaseCdynLoadEquivY = new Complex(0,0);
-//				
-//				if(bus3p.getPhaseADynLoadList().size()>0){
-//					
-//					for(DynLoadModel1Phase load:bus3p.getPhaseADynLoadList()){
-//						if(load.isActive()){
-//							phaseAdynLoadEquivY = phaseAdynLoadEquivY.add(load.getEquivY());
-//							//TODO when a compensation shuntY is needed, as the remaining loadQ is negative, 
-//							// with the existing load conversion mechanism, such a compensation is modeled as 
-//							// equivShuntY. Thus, it is not necessary to add it to the Ymatrix again here.
-//							
-//							// The info of compShuntY is only needed when the AC motor is tripped/reconnected to the system.
-//					
-//						}
-//					}
-//					
-//					
-//				}
-//				
-//                 if(bus3p.getPhaseBDynLoadList().size()>0){
-//					
-//					for(DynLoadModel1Phase load:bus3p.getPhaseBDynLoadList()){
-//						if(load.isActive()){
-//							phaseBdynLoadEquivY = phaseBdynLoadEquivY.add(load.getEquivY());
-//							//TODO when a compensation shuntY is needed, as the remaining loadQ is negative, 
-//							// with the existing load conversion mechanism, such a compensation is modeled as 
-//							// equivShuntY. Thus, it is not necessary to add it to the Ymatrix again here.
-//							
-//							// The info of compShuntY is only needed when the AC motor is tripped/reconnected to the system.
-//					
-//						}
-//					}
-//					
-//				}
-//                 
-//                 if(bus3p.getPhaseCDynLoadList().size()>0){
-// 					
-//					for(DynLoadModel1Phase load:bus3p.getPhaseBDynLoadList()){
-//						if(load.isActive()){
-//							phaseCdynLoadEquivY = phaseCdynLoadEquivY.add(load.getEquivY());
-//							//TODO when a compensation shuntY is needed, as the remaining loadQ is negative, 
-//							// with the existing load conversion mechanism, such a compensation is modeled as 
-//							// equivShuntY. Thus, it is not necessary to add it to the Ymatrix again here.
-//							
-//							// The info of compShuntY is only needed when the AC motor is tripped/reconnected to the system.
-//					
-//						}
-//					}
-//					
-//					
-//				}
-//				
-//                if(phaseAdynLoadEquivY.abs()>0 || phaseBdynLoadEquivY.abs()>0 || phaseCdynLoadEquivY.abs()>0 ){
-//                	Complex3x3 y = new Complex3x3(phaseAdynLoadEquivY,phaseBdynLoadEquivY,phaseCdynLoadEquivY) ;
-//                	this.getYMatrixABC().addToA(y, bus.getSortNumber(), bus.getSortNumber());
-//                }
-//                	
-//			}
-//		}
-		
 		
 		
 		return initFlag;

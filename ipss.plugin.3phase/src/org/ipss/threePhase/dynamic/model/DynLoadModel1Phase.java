@@ -15,7 +15,6 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	
 	protected DStabBus bus;
 	
-	protected double baseV ;
 	
 	protected Complex equivY = null;
 	
@@ -57,23 +56,7 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 		this.loadFactor = loadFactor;
 	}
 	
-	@Override
-	public DStabBus getBus() {
-		
-		return this.bus;
-	}
-	
-	@Override
-    public  void setBus(DStabBus bus) {
-		
-		this.bus = bus;
-	}
 
-	@Override
-	public void setBaseVoltage(double v) {
-		baseV = v;
-		
-	}
 	@Override
 	public Complex getPosSeqEquivY() {
 		throw new UnsupportedOperationException();
