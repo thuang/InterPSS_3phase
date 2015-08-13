@@ -48,9 +48,12 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	@Override
 	public Complex3x1 get3SeqVoltage() {
-		  if(this.threeSeqVoltage==null  && this.Vabc!=null)
+		  if(this.threeSeqVoltage.abs() ==0.0){
+		    if(this.Vabc!=null)
 			  this.threeSeqVoltage = Complex3x1.abc_to_z12(this.Vabc);
-	      
+		    else
+		    	this.threeSeqVoltage.b_1 = this.getVoltage();
+		  }
 		   return this.threeSeqVoltage;
 	}
 

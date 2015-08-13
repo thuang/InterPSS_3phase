@@ -33,7 +33,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
     
 	private DStabilityNetwork net = null;
 	
-	private double negZeroSeqCurrTolerance = 1.0E-4;
+	private double negZeroSeqCurrTolerance = 1.0E-3;
 	
 	public DStab3SeqSolverImpl(DynamicSimuAlgorithm algo, IPSSMsgHub msg) {
 		super(algo, msg);
@@ -50,8 +50,10 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 		}
 		//build the negative and zero sequence Y matrix
 		this.net.formYMatrix(SequenceCode.NEGATIVE, true);
+		
 		this.net.formYMatrix(SequenceCode.ZERO, true);
 		
+	
 		return flag;
 		
 	}
@@ -86,6 +88,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 
 					}
 					voltageRecTable.put(bus.getId(), bus.getVoltage());
+					bus.get3SeqVoltage().b_1 = bus.getVoltage();
 				}
 			}
 			
@@ -140,6 +143,9 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 	    if(this.getMaxCurMag(zeroCurTable)>this.negZeroSeqCurrTolerance){
 	     Hashtable<String,Complex> zeroVoltTable = this.solveSeqNetwork(net,SequenceCode.ZERO, zeroCurTable);
 		   
+	     if(zeroVoltTable == null)
+	    	 System.out.println("zeroVoltTable == null ");
+	    	 
 		    for(Entry<String,Complex> e: zeroVoltTable.entrySet()){
 		    	net.getBus(e.getKey()).get3SeqVoltage().a_0 =e.getValue();
 		    }
@@ -193,12 +199,24 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 		    break;
 		case NEGATIVE:
 			   ISparseEqnComplex negSeqYMatrix = subnet.getNegSeqYMatrix();
-			
+			   if(!negSeqYMatrix.isFactorized()){
+				   try {
+						negSeqYMatrix.luMatrix(1.0E-8);
+					} catch (IpssNumericException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+			   }
+			 
+			   
 			   negSeqYMatrix.setB2Zero();
 			   
 			   for(Entry<String,Complex> e: seqCurInjTable.entrySet()){
 				 negSeqYMatrix.setBi(e.getValue(),subnet.getBus(e.getKey()).getSortNumber());
 			   }
+			   
+			   //System.out.println("\n\n negative Ymatrix =\n"+negSeqYMatrix.toString());
+			   
 			   try {
 				   // solve network to obtain Vext_injection
 				   negSeqYMatrix.solveEqn();
@@ -217,7 +235,15 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 			break;
 		case ZERO:
 			   ISparseEqnComplex zeroSeqYMatrix = subnet.getZeroSeqYMatrix();
-				
+			
+			   if(!zeroSeqYMatrix.isFactorized()){
+				   try {
+					     zeroSeqYMatrix.luMatrix(1.0E-8);
+						} catch (IpssNumericException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+					}
+			   }
 			   zeroSeqYMatrix.setB2Zero();
 			   
 			   for(Entry<String,Complex> e: seqCurInjTable.entrySet()){
