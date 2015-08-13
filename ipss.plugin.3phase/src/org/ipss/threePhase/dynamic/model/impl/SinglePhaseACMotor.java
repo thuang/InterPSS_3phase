@@ -373,7 +373,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			}
 			//IpssLogger.getLogger().fine
 			//if(this.connectPhase == Phase.A)
-			System.out.println("AC motor -"+this.getId()+"@"+this.getDStabBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
+			//System.out.println("AC motor -"+this.getId()+"@"+this.getDStabBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
 		}
 	
 		

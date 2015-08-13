@@ -30,6 +30,7 @@ import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.AcscBranch;
 import com.interpss.core.acsc.AcscBus;
+import com.interpss.core.acsc.SequenceCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
@@ -464,12 +465,12 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				DStabBus bus = (DStabBus)b;
 				if(bus.isActive()){
 					Complex3x1 vabc = getYMatrixABC().getX(bus.getSortNumber());
-					if(bus.getId().equals("Bus12"))
-					System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
+					//if(bus.getId().equals("Bus12"))
+					//System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
 					
 					if(!vabc.a_0.isNaN()){
                     
-						if(bus instanceof Bus3Phase){
+						//if(bus instanceof Bus3Phase){
 							Bus3Phase bus3P = (Bus3Phase) bus;
 							 bus3P.set3PhaseVoltages(vabc);
 							 
@@ -478,7 +479,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							 bus.setVoltage(v);
 							// System.out.println("posV @ bus :"+v.toString()+","+bus.getId());
 							
-                         }
+                      //   }
 
 					}
 					else
@@ -671,15 +672,17 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			e.printStackTrace();
 			initFlag = false;
 		}
-        // The following has been moved into formYMatrixABC()
-		
-		
+ 
+		if(initFlag) this.isInitialized = true;
 		return initFlag;
 	}
 
 	@Override
 	public boolean solvePosSeqNetEqn() {
-		
+//		if(this.getYMatrix()== null){
+//			this.yMatrix = this.formYMatrix(SequenceCode.POSITIVE, false);
+//			this.setYMatrixDirty(true);
+//		}
 		return  super.solveNetEqn();
 	}
 	

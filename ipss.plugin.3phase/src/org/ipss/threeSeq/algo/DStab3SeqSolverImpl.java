@@ -56,128 +56,55 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 		
 	}
 	
+	@Override 
+	public boolean networkSolutionStep() throws DStabSimuException{
+		boolean netSolConverged = true;
+		 //maxIterationTimes =1;
+		 for(int i=0;i<maxIterationTimes;i++){
+			 
+			 netSolConverged = true;
+			 
+			 
+			// solve net equation
+			 boolean netSolvFlag = false;
+			// solve net equation
+			
+			if ((dstabAlgo.getNetwork() instanceof DStabNetwork3Phase))
+				netSolvFlag = ((DStabNetwork3Phase)dstabAlgo.getNetwork()).solvePosSeqNetEqn();
+			else
+				netSolvFlag = dstabAlgo.getNetwork().solveNetEqn();
+				
+			if(!netSolvFlag)
+				throw new DStabSimuException("Exception in dstabNet.solveNetEqn()");
+			
+			for ( Bus busi : dstabAlgo.getNetwork().getBusList() ) {
+				DStabBus bus = (DStabBus)busi;
+				if(bus.isActive()){
+					if(i>=1){
+						if(!NumericUtil.equals(bus.getVoltage(),voltageRecTable.get(bus.getId()),this.converge_tol))
+							netSolConverged =false;
+
+					}
+					voltageRecTable.put(bus.getId(), bus.getVoltage());
+				}
+			}
+			
+			// check whether the network solution is converged?
+			if(i>=1 && netSolConverged) {
+				IpssLogger.getLogger().fine("SimuTime: "+dstabAlgo.getSimuTime()+"\n Network solution converges with "+(i+1)+" iterations");
+				break;
+			}
+			
+		 } // END OF for maxIterationTimes loop
+		 return netSolConverged;
+	}
+	
+	
 	@Override public void nextStep(double time, double dt, DynamicSimuMethod method)  throws DStabSimuException {
 		
-		//super.nextStep(time, dt, method);
+		super.nextStep(time, dt, method);
 
-			 boolean netSolConverged = true;
-			 //maxIterationTimes =1;
-			 for(int i=0;i<maxIterationTimes;i++){
-				boolean netSolvFlag = false;
-				// solve net equation
-				
-				if ((dstabAlgo.getNetwork() instanceof DStabilityNetwork))
-					netSolvFlag = dstabAlgo.getNetwork().solveNetEqn();
-				else
-					((DStabNetwork3Phase)dstabAlgo.getNetwork()).solvePosSeqNetEqn();
-					
-				if(!netSolvFlag)
-					throw new DStabSimuException("Exception in dstabNet.solveNetEqn()");
-				
-				for ( Bus busi : dstabAlgo.getNetwork().getBusList() ) {
-					DStabBus bus = (DStabBus)busi;
-					if(bus.isActive()){
-						if(i>=1){
-							if(!NumericUtil.equals(bus.getVoltage(),voltageRecTable.get(bus.getId()),this.converge_tol))
-								netSolConverged =false;
-						}
-						voltageRecTable.put(bus.getId(), bus.getVoltage());
-					}
-				}
-				
-				// check whether the network solution is converged?
-				if(i>=1 && netSolConverged) {
-					IpssLogger.getLogger().fine("SimuTime: "+dstabAlgo.getSimuTime()+"\n Network solution converges with "+(i+1)+" iterations");
-					break;
-				}
-				
-			 } // END OF for maxIterationTimes loop
-				
-				// Solve DEqn for all dynamic bus devices
-				for (Bus b : dstabAlgo.getNetwork().getBusList()) {
-					if(b.isActive()){
-						DStabBus bus = (DStabBus)b;
-						for (DynamicBusDevice device : bus.getDynamicBusDeviceList()) {
-							// solve DEqn for the step. This includes all controller's nextStep() call
-							if(device.isActive()){
-								if (!device.nextStep(dt, method)) {
-									throw new DStabSimuException("Error occured, Simulation will be stopped");
-								}
-							}
-						}
-						// Solve DEqn for generator 
-						if(bus.getContributeGenList().size()>0){
-							for(AclfGen gen:bus.getContributeGenList()){
-								if(gen.isActive()){
-									Machine mach = ((DStabGen)gen).getMach();
-									if(mach!=null && mach.isActive()){
-									   if (!mach.nextStep(dt, method)) {
-										  throw new DStabSimuException("Error occured when solving nextStep for mach #"+ mach.getId()+ "@ bus - "
-									                   +bus.getId()+", Simulation will be stopped!");
-									   }
-									}
-								}
-							}
-						}
-						
-						//TODO Solve DEqn for dynamic load, e.g. induction motor
-					}
-				}
-
-				// Solve DEqn for all dynamic branch devices
-				for (Branch b : dstabAlgo.getNetwork().getBranchList()) {
-					DStabBranch branch = (DStabBranch)b;
-					for (DynamicBranchDevice device : branch.getDynamicBranchDeviceList()) {
-						// solve DEqn for the step. This includes all controller's nextStep() call
-						if (!device.nextStep(dt, method)) {
-							throw new DStabSimuException("Error occured, Simulation will be stopped");
-						}
-					}
-				}
-				
-				// update dynamic device attributes, such as the Pe of a generator and calculate dynamic measurement signals - they are secondary signals 
-				for ( Bus busi : dstabAlgo.getNetwork().getBusList() ) {
-					DStabBus bus = (DStabBus)busi;
-					if(bus.isActive()){
-						
-						// update dynamic attributes of the dynamic devices connected to the bus
-						 try {
-							bus.updateDynamicAttributes(false);
-						} catch (InterpssException e) {
-						
-							e.printStackTrace();
-						}
-						
-						//calculate dynamic measurement signals
-						if (!bus.nextStep(dt, method)) {
-							throw new DStabSimuException("Error occured, Simulation will be stopped");
-						}
-					}
-				}
-				
-
-			 
-			//TODO update the states
-			 for (Bus b : dstabAlgo.getNetwork().getBusList()) {
-					if(b.isActive()){
-						DStabBus bus = (DStabBus)b;
-						// Solve DEqn for generator 
-						if(bus.getContributeGenList().size()>0){
-							for(AclfGen gen:bus.getContributeGenList()){
-								if(gen.isActive()){
-									Machine mach = ((DStabGen)gen).getMach();
-									if(mach!=null && mach.isActive()){
-									  mach.backUpStates();
-									}
-								}
-							}
-						}
-						
-						//TODO Solve DEqn for dynamic load, e.g. induction motor
-					}
-				}
-
-	//////////////////////////////////// The following is for the negative and zero sequences /////////////////
+	   //////////////////////////////////// The following is for the negative and zero sequences /////////////////
 		
 		//solve the negative- and zero-sequence networks
 		Hashtable<String, Complex3x1> threeSeqCurInjTable = this.net.getCustom3SeqBusCurrInjHashtable();

@@ -271,15 +271,16 @@ public class IEEE9_3Phase_1PAC_test {
   		ac1.setPhase(Phase.A);
   		ac1.setMVABase(25);
   		bus12.getPhaseADynLoadList().add(ac1);
-  		
-  		
+  		ac1.setVstall(0.7);
+  		ac1.setTstall(0.05);
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus12,"2");
   		ac2.setLoadPercent(100);
   		ac2.setPhase(Phase.B);
   		ac2.setMVABase(25);
   		bus12.getPhaseBDynLoadList().add(ac2);
-  		
+  		ac2.setVstall(0.7);
+  		ac2.setTstall(0.05);
 
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus12,"3");
@@ -287,7 +288,8 @@ public class IEEE9_3Phase_1PAC_test {
   		ac3.setPhase(Phase.C);
   		ac3.setMVABase(25);
   		bus12.getPhaseCDynLoadList().add(ac3);
-	    
+  		ac3.setVstall(0.7);
+  		ac3.setTstall(0.05);
 	    
 	    
 		DynamicSimuAlgorithm dstabAlgo = simuCtx.getDynSimuAlgorithm();
@@ -305,7 +307,7 @@ public class IEEE9_3Phase_1PAC_test {
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		//applied the event
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_3P,new Complex(0.0),null,0.01d,0.05),"3phaseFault@Bus5");
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,0.01d,0.07),"3phaseFault@Bus5");
         
 		
 		StateMonitor sm = new StateMonitor();
