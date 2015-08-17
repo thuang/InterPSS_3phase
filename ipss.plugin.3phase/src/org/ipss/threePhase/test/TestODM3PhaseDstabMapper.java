@@ -15,6 +15,7 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.mapper.odm.ODMDStabParserMapper;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.util.PerformanceTimer;
+import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
@@ -41,7 +42,7 @@ import com.interpss.simu.SimuCtxType;
 
 public class TestODM3PhaseDstabMapper {
 	
-	@Test
+	//@Test
 	public void test_IEEE9Bus_3phase_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -85,7 +86,7 @@ public class TestODM3PhaseDstabMapper {
 		
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(2);
+		dstabAlgo.setTotalSimuTimeSec(10);
 		
 
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
@@ -100,7 +101,7 @@ public class TestODM3PhaseDstabMapper {
 		
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
-		dstabAlgo.setOutPutPerSteps(5);
+		dstabAlgo.setOutPutPerSteps(1);
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		IpssLogger.getLogger().setLevel(Level.WARNING);
@@ -156,20 +157,22 @@ public class TestODM3PhaseDstabMapper {
 			
 		}
 
-		System.out.println(sm.toCSVString(sm.getBusAngleTable()));
-		System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+//		System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+//		System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 		
 	   // System.out.println(sm.toCSVString(sm.getMachPeTable()));
 		
-//		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
-//		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_3Phase_SLG@bus5_machAngle.csv",sm.toCSVString(sm.getMachAngleTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_3Phase_SLG@bus5_machSpd.csv",sm.toCSVString(sm.getMachSpeedTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_3Phase_SLG@bus5_busVolt.csv",sm.toCSVString(sm.getBusVoltTable()));
+		//		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machSpd_v5_03172015.csv",sm.toCSVString(sm.getMachSpeedTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_busVolt_v5_03172015.csv",sm.toCSVString(sm.getBusVoltTable()));
 //		
 	}
 	
 	
-	//@Test
+	@Test
 	public void test_IEEE9Bus_posSeq_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -211,10 +214,10 @@ public class TestODM3PhaseDstabMapper {
 		
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(1);
+		dstabAlgo.setTotalSimuTimeSec(10);
 
 		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,0.5d,0.05),"3phaseFault@Bus5");
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus5",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,1.0d,0.05),"3phaseFault@Bus5");
         
 		
 		StateMonitor sm = new StateMonitor();
@@ -244,6 +247,10 @@ public class TestODM3PhaseDstabMapper {
 		//System.out.println(sm.toCSVString(sm.getMachAngleTable()));
 		
 	     System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	     
+			FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_machAngle.csv",sm.toCSVString(sm.getMachAngleTable()));
+			FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_machSpd.csv",sm.toCSVString(sm.getMachSpeedTable()));
+			FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_busVolt.csv",sm.toCSVString(sm.getBusVoltTable()));
 		
 //		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));

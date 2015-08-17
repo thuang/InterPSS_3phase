@@ -34,7 +34,7 @@ import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.algo.LoadflowAlgorithm;
 
-public class IEEE9Bus_3phase_test {
+public class IEEE9Bus_3phase_LF_init_test {
 	
 	//@Test
 	public void testLoadFlow() throws InterpssException {

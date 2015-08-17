@@ -10,7 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	TwoBus_3Phase_Test.class,
 	ThreeBus_3Phase_Test.class,
 	TestODM3PhaseDstabMapper.class,
-	IEEE9Bus_3phase_test.class,
+	IEEE9Bus_3phase_LF_init_test.class,
 	TestSinglePhaseACMotorModel.class,
 	IEEE9_3Phase_1PAC_test.class
 

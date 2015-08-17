@@ -108,6 +108,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 
 		private Complex loadPQFactor = null;
 		
+		private boolean disableInternalStallControl = false;
+		
 		
 		public SinglePhaseACMotor(){
 			
@@ -212,8 +214,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			boolean flag = true;
 			
 			// stage update 
-			if(acStallTimer>=Tstall){
-				stage = 1;
+			if(!this.disableInternalStallControl){
+				if(acStallTimer>=Tstall){
+					stage = 1;
+				}
 			}
 			
 			// switch to restart stage
@@ -719,7 +723,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 
 
 
-	
+	    public void disableInternalStallControl(boolean disableStallControl){
+	    	this.disableInternalStallControl = disableStallControl;
+	    }
 	
 	
 

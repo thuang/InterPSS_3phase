@@ -12,8 +12,10 @@ import org.ieee.odm.adapter.psse.PSSEAdapter.PsseVersion;
 import org.ieee.odm.model.dstab.DStabModelParser;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.util.PerformanceTimer;
+import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Phase;
@@ -52,8 +54,8 @@ public class IEEE9_3Phase_1PAC_test {
 		assertTrue(adapter.parseInputFile(NetType.DStabNet, new String[]{
 				"testData/IEEE9Bus/ieee9.raw",
 				"testData/IEEE9Bus/ieee9.seq",
-				//"testData/IEEE9Bus/ieee9_dyn_onlyGen_saturation.dyr"
-				"testData/IEEE9Bus/ieee9_dyn_onlyGen.dyr"
+				//"testData/IEEE9Bus/ieee9_dyn_onlyGen.dyr"
+				"testData/IEEE9Bus/ieee9_dyn.dyr"
 		}));
 		DStabModelParser parser =(DStabModelParser) adapter.getModel();
 		
@@ -165,8 +167,9 @@ public class IEEE9_3Phase_1PAC_test {
 		assertTrue(adapter.parseInputFile(NetType.DStabNet, new String[]{
 				"testData/IEEE9Bus/ieee9.raw",
 				"testData/IEEE9Bus/ieee9.seq",
-				//"testData/IEEE9Bus/ieee9_dyn_onlyGen_saturation.dyr"
-				"testData/IEEE9Bus/ieee9_dyn_onlyGen.dyr"
+				//"testData/IEEE9Bus/ieee9_dyn_onlyGen.dyr"
+				"testData/IEEE9Bus/ieee9_dyn.dyr"
+				//"testData/IEEE9Bus/ieee9_dyn_fullModel.dyr"
 		}));
 		DStabModelParser parser =(DStabModelParser) adapter.getModel();
 		
@@ -211,11 +214,11 @@ public class IEEE9_3Phase_1PAC_test {
   		// set the bus to a constant power load bus
   		bus11.setLoadCode(AclfLoadCode.CONST_P);
   		
-  		bus11.setLoadPQ(new Complex(0.6,-0.05));
+  		bus11.setLoadPQ(new Complex(0.625,-0.05));
   		
 		Bus3Phase bus12 = ThreePhaseObjectFactory.create3PBus("Bus12", dsNet);
-  		bus12.setAttributes("380V feeder", "");
-  		bus12.setBaseVoltage(380.0);
+  		bus12.setAttributes("208 V feeder", "");
+  		bus12.setBaseVoltage(208.0);
   		// set the bus to a non-generator bus
   		bus12.setGenCode(AclfGenCode.NON_GEN);
   		// set the bus to a constant power load bus
@@ -271,7 +274,7 @@ public class IEEE9_3Phase_1PAC_test {
   		ac1.setPhase(Phase.A);
   		ac1.setMVABase(25);
   		bus12.getPhaseADynLoadList().add(ac1);
-  		ac1.setVstall(0.7);
+  		ac1.setVstall(0.65);
   		ac1.setTstall(0.05);
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus12,"2");
@@ -279,7 +282,7 @@ public class IEEE9_3Phase_1PAC_test {
   		ac2.setPhase(Phase.B);
   		ac2.setMVABase(25);
   		bus12.getPhaseBDynLoadList().add(ac2);
-  		ac2.setVstall(0.7);
+  		ac2.setVstall(0.65);
   		ac2.setTstall(0.05);
 
   		
@@ -288,7 +291,7 @@ public class IEEE9_3Phase_1PAC_test {
   		ac3.setPhase(Phase.C);
   		ac3.setMVABase(25);
   		bus12.getPhaseCDynLoadList().add(ac3);
-  		ac3.setVstall(0.7);
+  		ac3.setVstall(0.65);
   		ac3.setTstall(0.05);
 	    
 	    
@@ -300,14 +303,14 @@ public class IEEE9_3Phase_1PAC_test {
 		
 		dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(0.2);
+		dstabAlgo.setTotalSimuTimeSec(10);
 		
 	
 
 		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		//applied the event
-		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,0.01d,0.07),"3phaseFault@Bus5");
+		dsNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus10",dsNet,SimpleFaultCode.GROUND_LG,new Complex(0.0),null,1d,0.07),"bus fault");
         
 		
 		StateMonitor sm = new StateMonitor();
@@ -317,7 +320,7 @@ public class IEEE9_3Phase_1PAC_test {
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
 		dstabAlgo.setOutPutPerSteps(1);
-		//dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
+		dstabAlgo.setRefMachine(dsNet.getMachine("Bus1-mach1"));
 		
 		IpssLogger.getLogger().setLevel(Level.WARNING);
 		
@@ -325,6 +328,8 @@ public class IEEE9_3Phase_1PAC_test {
 		
         // Must use this dynamic event process to modify the YMatrixABC
 		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+		
+		StringBuffer sb = new StringBuffer();
 		
 		if (dstabAlgo.initialization()) {
 			System.out.println(ThreePhaseAclfOutFunc.busLfSummary(dsNet));
@@ -335,15 +340,27 @@ public class IEEE9_3Phase_1PAC_test {
 			timer.start();
 			//dstabAlgo.performSimulation();
 			
+			
 			while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
-				System.out.println("\n\n simu Time = "+dstabAlgo.getSimuTime()+"\n");
+				//System.out.println("\n\n simu Time = "+dstabAlgo.getSimuTime()+"\n");
+				// access the terminal voltage, stage and power of the AC unit
+				Complex3x1 vabc = bus12.get3PhaseVotlages();
+				sb.append("t,AC Stage, voltage, power,"+dstabAlgo.getSimuTime()+","+ac1.getStage()+","+ac2.getStage()+","+ac3.getStage()+","
+				+vabc.a_0.abs()+","+vabc.b_1.abs()+","+vabc.c_2.abs()+","
+				+ac1.getLoadPQ().toString()+","+ac2.getLoadPQ().toString()+","+ac3.getLoadPQ().toString()+"\n");
+				
 				dstabAlgo.solveDEqnStep(true);
 			}
 		}
 		
-		System.out.println(sm.toCSVString(sm.getBusAngleTable()));
-		System.out.println(sm.toCSVString(sm.getBusVoltTable()));
-		
+		//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+		//System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_GenSpd.csv", sm.toCSVString(sm.getMachSpeedTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_GenAngle.csv", sm.toCSVString(sm.getMachAngleTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_busVolt.csv", sm.toCSVString(sm.getBusVoltTable()));
+		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_ac_Results.txt",sb.toString());
 	}
+	
+	
 
 }
