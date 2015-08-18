@@ -114,7 +114,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						Complex vb = va.multiply(phaseShiftCplxFactor(-120));
 						Complex vc = va.multiply(phaseShiftCplxFactor(120));
 						StartingBus.set3PhaseVoltages(new Complex3x1(va,vb,vc));
-						StartingBus.setVoltage(StartingBus.get3SeqVoltage().b_1);
+						StartingBus.setVoltage(StartingBus.getThreeSeqVoltage().b_1);
 					 
 					 Queue<Bus3Phase> q = new  LinkedList<Bus3Phase>();
 				     q.add(StartingBus);
@@ -202,7 +202,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 									Complex vc = va.multiply(phaseShiftCplxFactor(120.0d));
 									
 									((Bus3Phase) findBus).set3PhaseVoltages(new Complex3x1(va,vb,vc));
-									 ((AclfBus)findBus).setVoltage(((Bus3Phase) findBus).get3SeqVoltage().b_1);
+									 ((AclfBus)findBus).setVoltage(((Bus3Phase) findBus).getThreeSeqVoltage().b_1);
 								}
 							} catch (InterpssException e) {
 								
@@ -475,7 +475,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							 bus3P.set3PhaseVoltages(vabc);
 							 
 							 // update the positive sequence voltage
-							 Complex v = bus3P.get3SeqVoltage().b_1;
+							 Complex v = bus3P.getThreeSeqVoltage().b_1;
 							 bus.setVoltage(v);
 							// System.out.println("posV @ bus :"+v.toString()+","+bus.getId());
 							
