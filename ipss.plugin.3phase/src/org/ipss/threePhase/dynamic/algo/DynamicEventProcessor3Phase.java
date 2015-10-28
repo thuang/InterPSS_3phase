@@ -20,7 +20,7 @@ import com.interpss.dstab.devent.DynamicEventType;
 
 public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 	
-	private DStabNetwork3Phase net = null;
+	protected DStabNetwork3Phase net = null;
 	/**
 	 * process network dynamic event
 	 * 
@@ -77,7 +77,7 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 						}
 					}
 					
-					 System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
+					// System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
 
 					// publish Y matrix change event
 					// someone may be interested in the change event, for
@@ -90,7 +90,7 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 					//TODO output the state first
 					
 
-					// if have event condition (applying or clearing)
+					
 					// solve network and update bus voltage
 					//TODO no need any more as network solution is solved at the beginning in the nextStep, or just right after this 
 					net.solveNetEqn();  

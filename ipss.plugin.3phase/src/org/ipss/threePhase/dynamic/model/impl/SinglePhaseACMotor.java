@@ -28,8 +28,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		//stalling setting
 		private double Vstall = 0.6;
-		private double Rstall = 0.1240;
-		private double Xstall = 0.1140;
+		private double Rstall = 0.1140; //0.1240;
+		private double Xstall = 0.1040; // 0.1140;
 		private double Tstall = 0.033;
 		
 		private double LFadj = 0.0;
@@ -108,7 +108,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 
 		private Complex loadPQFactor = null;
 		
+		private double pfactor = 0.;
+		private double qfactor = 0.;
+		private double pfactorStall = 0.;
+		private double qfactorStall = 0.;
+		
 		private boolean disableInternalStallControl = false;
+		
+		
 		
 		
 		public SinglePhaseACMotor(){
@@ -301,8 +308,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			// this can be replaced by a protected method getBusVoltageMag(), which is applicable to both pos-seq and single-phase
 			double v = getBusPhaseVoltage().abs();
 			// exponential factor
-			double pfactor = 0.;
-			double qfactor = 0.;
+
 			if(v>this.Vbrk  & stage == 0){
 				pfactor  = P0 +Kp1*Math.pow((v-Vbrk),Np1);
 				qfactor  = Q0 +Kq1*Math.pow((v-Vbrk),Nq1);
@@ -311,9 +317,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			else if( v<Vbrk & v> Vstall & stage == 0){
 				pfactor = P0 +Kp2*Math.pow((Vbrk-v),Np2);
 				qfactor = Q0 +Kq2*Math.pow((Vbrk-v),Nq2);
+				pfactorStall = pfactor;
+				qfactorStall = qfactor;
 			}
 			//TODO how about v<= Vstall? modeled as a constant impedance Zstall??
-			
+			else if(v<= Vstall & stage == 0){
+				pfactor = pfactorStall*(v/Vstall)*(v/Vstall);
+				qfactor = qfactorStall*(v/Vstall)*(v/Vstall);		
+		    }
 			
 			// consider the frequency dependence
 			if(pfactor !=0.0 ||qfactor!=0){
@@ -358,6 +369,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			if(stage !=1) {
 
 				loadPQFactor = calcLoadCharacterFactor();
+				
+				
 				// p+jq is pu based on system
 				Complex pq = new Complex(p*loadPQFactor.getReal(),q*loadPQFactor.getImaginary());
 				
@@ -370,12 +383,13 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				// I = -conj( (p+j*q - conj(v^2*this.equivY))/v)
 				
 				// consider the situation where the load bus voltage is very low
-				if(vmag<0.4)
-					 this.currInj = new Complex(0.0);
-				else
+				
+//				if(vmag<0.4)
+//					 this.currInj = new Complex(0.0);
+//				else
 				   this.currInj= compPower.divide(v).conjugate().multiply(-1.0d);
 			}
-			//IpssLogger.getLogger().fine
+			
 			//if(this.connectPhase == Phase.A)
 			//System.out.println("AC motor -"+this.getId()+"@"+this.getDStabBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
 		}
@@ -403,7 +417,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			Complex loadPQFactor = calcLoadCharacterFactor();
 			double v = this.getBusPhaseVoltage().abs();
 			// when loadPQFactor = 0, it means the AC is stalled, thus no compensation current
-			if(loadPQFactor.abs() ==0.0) 
+			if(this.stage ==1) 
 				  this.loadPQ =this.getEquivY().multiply( v*v).conjugate();
 			else
 				this.loadPQ = new Complex(p*loadPQFactor.getReal(),q*loadPQFactor.getImaginary());

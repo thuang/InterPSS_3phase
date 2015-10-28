@@ -260,7 +260,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		}
 		
 		
-		//TODO append the equivalent 3phase admittances of dynamic loads to YMatrixABC
+		//TODO append the equivalent 3phase admittance of dynamic loads to YMatrixABC
 		for ( DStabBus bus : getBusList() ) {
 			if(bus.isActive() && bus.isLoad()){
 				Bus3Phase bus3p = (Bus3Phase) bus;
@@ -327,7 +327,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				
                 if(phaseAdynLoadEquivY.abs()>0 || phaseBdynLoadEquivY.abs()>0 || phaseCdynLoadEquivY.abs()>0 ){
                 	Complex3x3 y = new Complex3x3(phaseAdynLoadEquivY,phaseBdynLoadEquivY,phaseCdynLoadEquivY) ;
-                	this.getYMatrixABC().addToA(y, bus.getSortNumber(), bus.getSortNumber());
+                	yMatrixAbc.addToA(y, bus.getSortNumber(), bus.getSortNumber());
                 }
                 	
 			}
