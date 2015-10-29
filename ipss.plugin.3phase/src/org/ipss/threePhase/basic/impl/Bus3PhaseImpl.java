@@ -42,12 +42,12 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	@Override
 	public void set3PhaseVoltages(Complex3x1 vabc) {
 		this.Vabc = vabc;
-		super.set3SeqVoltage(Complex3x1.abc_to_z12(Vabc));
+		super.setThreeSeqVoltage(Complex3x1.abc_to_z12(Vabc));
 		
 	}
 	
 	@Override
-	public Complex3x1 get3SeqVoltage() {
+	public Complex3x1 getThreeSeqVoltage() {
 		  if(this.threeSeqVoltage.abs() ==0.0){
 		    if(this.Vabc!=null)
 			  this.threeSeqVoltage = Complex3x1.abc_to_z12(this.Vabc);
@@ -58,8 +58,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	}
 
 	@Override
-	public void set3SeqVoltage(Complex3x1 v120) {
-		super.set3SeqVoltage(v120);
+	public void setThreeSeqVoltage(Complex3x1 v120) {
+		super.setThreeSeqVoltage(v120);
 		this.Vabc =Complex3x1.z12_to_abc(v120);  // all voltages are saved in three-phase, in order to make sure data consistency
 	}
 

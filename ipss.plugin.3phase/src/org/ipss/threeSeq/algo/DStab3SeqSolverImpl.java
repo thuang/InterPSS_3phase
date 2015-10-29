@@ -88,7 +88,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 
 					}
 					voltageRecTable.put(bus.getId(), bus.getVoltage());
-					bus.get3SeqVoltage().b_1 = bus.getVoltage();
+					bus.getThreeSeqVoltage().b_1 = bus.getVoltage();
 				}
 			}
 			
@@ -134,7 +134,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
   		   Hashtable<String,Complex> negVoltTable = this.solveSeqNetwork(net,SequenceCode.NEGATIVE, negCurTable);
   		   
   		   for(Entry<String,Complex> e: negVoltTable.entrySet()){
-  			   net.getBus(e.getKey()).get3SeqVoltage().c_2 =e.getValue();
+  			   net.getBus(e.getKey()).getThreeSeqVoltage().c_2 =e.getValue();
   		   }
        }
 
@@ -147,7 +147,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 	    	 System.out.println("zeroVoltTable == null ");
 	    	 
 		    for(Entry<String,Complex> e: zeroVoltTable.entrySet()){
-		    	net.getBus(e.getKey()).get3SeqVoltage().a_0 =e.getValue();
+		    	net.getBus(e.getKey()).getThreeSeqVoltage().a_0 =e.getValue();
 		    }
 	    }
 	    
