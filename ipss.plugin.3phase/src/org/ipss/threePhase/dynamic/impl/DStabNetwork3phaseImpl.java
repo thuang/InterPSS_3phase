@@ -46,6 +46,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	protected boolean is3PhaseNetworkInitialized = false;
 	protected Hashtable<String, Complex3x1> threePhaseCurInjTable = null;
 	private boolean isLoadModelConverted = false;
+	private boolean isTransmissionNetwork = true;
 	
 	@Override
 	public boolean initThreePhaseFromLfResult() {
@@ -702,6 +703,17 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	public void set3phaseCustomCurrInjTable(
 			Hashtable<String, Complex3x1> new3PhaseCurInjTable) {
 		this.threePhaseCurInjTable = new3PhaseCurInjTable;
+		
+	}
+
+	@Override
+	public boolean isTransmissionNetwork() {
+		return isTransmissionNetwork;
+	}
+
+	@Override
+	public void setNetworkType(boolean isTransmission) {
+		isTransmissionNetwork = isTransmission;
 		
 	}
 

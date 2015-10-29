@@ -27,5 +27,10 @@ public interface Bus3Phase extends DStabBus {
     public List<DynLoadModel1Phase> getPhaseBDynLoadList();
     
     public List<DynLoadModel1Phase> getPhaseCDynLoadList();
+    
+    
+    public List<Load3Phase> getThreePhaseLoadList();
+    
+    public Complex3x1  calcLoad3PhEquivCurInj();
 
 }

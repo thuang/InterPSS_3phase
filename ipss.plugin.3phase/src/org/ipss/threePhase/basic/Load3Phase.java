@@ -45,5 +45,12 @@ public interface Load3Phase extends AclfLoad {
 	public Complex   getPhaseLoad(PhaseCode phase);
 	
 	public void  setPhaseLoad(Complex phaseLoad, PhaseCode phase);
+	
+	/**
+	 * calculate the equivalent current injection of the load, used in power flow solution
+	 * @param vabc
+	 * @return
+	 */
+	public Complex3x1 getEquivCurrInj(Complex3x1 vabc);
 
 }

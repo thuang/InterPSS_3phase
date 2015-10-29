@@ -15,7 +15,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Network3Phase;
-import org.ipss.threePhase.basic.impl.Network3PhaseImpl;
+import org.ipss.threePhase.basic.impl.AclfNetwork3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;

@@ -10,7 +10,6 @@ public interface Network3Phase {
 	
 
 	
-	
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception;
 	
 	public ISparseEqnComplexMatrix3x3 getYMatrixABC();
@@ -19,5 +18,7 @@ public interface Network3Phase {
 	public boolean run3PhaseLoadflow();
 	
 	
-
+    public boolean isTransmissionNetwork();
+    
+    public void setNetworkType(boolean isTransmission);
 }

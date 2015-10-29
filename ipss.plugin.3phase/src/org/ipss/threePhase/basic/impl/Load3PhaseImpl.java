@@ -13,6 +13,11 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 	Complex3x1 ph3Load = new Complex3x1();
 	Complex3x3 equivYabc = new Complex3x3();
 	
+	//TODO
+	// ADD load connection type, either wye- or delta-connected 
+	
+	private  Complex3x1 equivCurInj = null;
+	
 	@Override
 	public Complex3x3 getEquivYabc() {
 		double v = this.getParentBus().getVoltageMag();
@@ -58,8 +63,13 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 
 	@Override
 	public void initEquivYabc(Complex y1, Complex y2, Complex y0) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 		
+	}
+
+	@Override
+	public Complex3x1 getEquivCurrInj(Complex3x1 vabc) {
+		return equivCurInj = ph3Load.divide(vabc).conjugate().multiply(-1.0);
 	}
 
 }
