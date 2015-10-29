@@ -1,6 +1,8 @@
 package org.ipss.threePhase.dynamic.model;
 
 import org.apache.commons.math3.complex.Complex;
+import org.interpss.numeric.datatype.Complex3x1;
+import org.ipss.threePhase.basic.Bus3Phase;
 
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.dynLoad.DynLoadModel;
@@ -18,7 +20,8 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	
 	protected Complex equivY = null;
 	
-	protected Complex currInj;
+	protected Complex compensateCurrInj;
+	protected Complex currInj2Net = null;
 
 	protected Complex initLoadPQ = null;
 	protected Complex loadPQ;
@@ -66,9 +69,23 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 		return this.equivY ;
 	}
 	
+	
 	@Override
-	public Complex getCompShuntY() {
+	public void setEquivY(Complex value) {
+		this.equivY = value;
+		
+	}
+
+	
+	@Override
+	public Complex getCompensateShuntY() {
 	    return this.compensateShuntY;
+		
+	}
+	
+	@Override
+	public void setCompensateShuntY(Complex value) {
+		this.compensateShuntY = value;
 		
 	}
 	
@@ -95,5 +112,19 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	public void setLoadPQ(Complex loadPQ) {
 		this.loadPQ = loadPQ;
 	}
+
+	@Override
+	public Complex getCurrInjToNet() {
+		
+		return this.compensateCurrInj = getCompCurInj().subtract(getBusPhaseVoltage().multiply( getCompensateShuntY()));
+	}
+
+	@Override
+	public void setCurrInjToNet(Complex value) {
+		this.currInj2Net = value;
+		
+	}
+
+	
 
 }

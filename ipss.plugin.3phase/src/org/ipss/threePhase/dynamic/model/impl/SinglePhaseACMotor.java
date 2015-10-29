@@ -337,33 +337,33 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		}
 		
 		
-		private Complex getBusPhaseVoltage(){
-			Complex3x1 vabc = ((Bus3Phase)this.getDStabBus()).get3PhaseVotlages();
-			
-			switch(this.connectPhase){
-			case A: 
-				return vabc.a_0;
-			case B:
-				return vabc.b_1;
-			default:
-				return vabc.c_2;
-			}
-			
-		}
+//		private Complex getBusPhaseVoltage(){
+//			Complex3x1 vabc = ((Bus3Phase)this.getDStabBus()).get3PhaseVotlages();
+//			
+//			switch(this.connectPhase){
+//			case A: 
+//				return vabc.a_0;
+//			case B:
+//				return vabc.b_1;
+//			default:
+//				return vabc.c_2;
+//			}
+//			
+//		}
 		
 	
 		@Override
 		public Complex getCompCurInj() {
-			if(this.currInj == null) calculateCompensateCurInj();
+			if(this.compensateCurrInj == null) calculateCompensateCurInj();
 			
 			//if(loadPQFactor==null)loadPQFactor = calcLoadCharacterFactor();
 			
 			//calculateCompensateCurInj();
-			return this.currInj;
+			return this.compensateCurrInj;
 		}
 		
 		private void calculateCompensateCurInj(){
-           this.currInj = new Complex(0.0d,0.0d);
+           this.compensateCurrInj = new Complex(0.0d,0.0d);
 			
 			// when loadPQFactor = 0, it means the AC is stalled, thus no compensation current
 			if(stage !=1) {
@@ -387,7 +387,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 //				if(vmag<0.4)
 //					 this.currInj = new Complex(0.0);
 //				else
-				   this.currInj= compPower.divide(v).conjugate().multiply(-1.0d);
+				   this.compensateCurrInj= compPower.divide(v).conjugate().multiply(-1.0d);
 			}
 			
 			//if(this.connectPhase == Phase.A)
@@ -740,6 +740,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	    public void disableInternalStallControl(boolean disableStallControl){
 	    	this.disableInternalStallControl = disableStallControl;
 	    }
+
+	
+
+
 	
 	
 

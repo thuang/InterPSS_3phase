@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.math3.complex.Complex;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.IDynamicModel1Phase;
@@ -31,6 +32,20 @@ public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
 	public void setPhase(Phase p) {
 		this.connectPhase = p;
 
+	}
+	
+	public Complex getBusPhaseVoltage(){
+		Complex3x1 vabc = ((Bus3Phase)this.getDStabBus()).get3PhaseVotlages();
+		
+		switch(this.connectPhase){
+		case A: 
+			return vabc.a_0;
+		case B:
+			return vabc.b_1;
+		default:
+			return vabc.c_2;
+		}
+		
 	}
 	
 	/**
