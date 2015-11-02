@@ -33,10 +33,49 @@ public interface Branch3Phase extends DStabBranch{
 	
 	public Complex3x3 getYtfabc();
 	
-	public Complex3x1 CurrentAbcIntoNetFromSide();
+	public Complex3x1 getCurrentAbcIntoNetFromSide();
+	public void setCurrentAbcIntoNetFromSide(Complex3x1 IabcFromBus);
 	
-	public Complex3x1 CurrentAbcIntoNetToSide();
+	public Complex3x1 getCurrentAbcIntoNetToSide();
+	public void setCurrentAbcIntoNetToSide(Complex3x1 IabcToBus);
 	
 	public Transformer3Phase to3PXformer();
+	
+	/**
+	 * The mapping matrix relating Vabc of to bus to the Vabc of from bus
+	 * @return
+	 */
+	Complex3x3 getToBusVabc2FromBusVabcMatrix();
+	
+	/**
+	 * The mapping matrix relating current flowing into ToBus to the Vabc of frombus
+	 * @return
+	 */
+	Complex3x3 getToBusIabc2FromBusVabcMatrix();
+	
+	/**
+	 * The mapping matrix relating relating Vabc of ToBus to the current (Iabc) into fromBus
+	 * @return
+	 */
+	Complex3x3 getToBusVabc2FromBusIabcMatrix();
+	
+	/**
+	 * The mapping matrix relating Iabc of ToBus to the current (Iabc) into fromBus
+	 * @return
+	 */
+	Complex3x3 getToBusIabc2FromBusIabcMatrix();
+	
+	/**
+	 * The mapping matrix relating  Vabc of fromBus to the Vabc of toBus
+	 * @return
+	 */
+	Complex3x3 getFromBusVabc2ToBusVabcMatrix();
+	
+	/**
+	 * The mapping matrix relating  Iabc of Tobus to the Vabc of toBus
+	 * @return
+	 */
+	Complex3x3 getToBusIabc2ToBusVabcMatrix();
+	
 
 }

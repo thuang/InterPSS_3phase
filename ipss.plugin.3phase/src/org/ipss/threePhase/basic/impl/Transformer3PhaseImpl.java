@@ -20,6 +20,17 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	private Complex y0 =null;
 	private Complex y1 =null; // transformer primitive leakage admittance of a phase 
 	
+	private Complex3x3 LVBusVabc2HVBusVabcMatrix = null;
+	private Complex3x3 LVBusIabc2HVBusVabcMatrix = null;
+	private Complex3x3 LVBusVabc2HVBusIabcMatrix = null;
+	private Complex3x3 LVBusIabc2HVBusIabcMatrix = null;
+	private Complex3x3 HVBusVabc2LVBusVabcMatrix = null;
+	private Complex3x3 LVBusIabc2LVBusVabcMatrix = null;
+	
+	
+	private Complex3x3 turnRatioMatrix = null;
+	
+	
 	public Transformer3PhaseImpl(Branch3Phase threePhBranch){
 		this.ph3Branch =threePhBranch;
 		
@@ -275,6 +286,166 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		return null;
 	}
 
+    //TODO consider to change the naming to HV/LV
+	@Override
+	public Complex3x3 getLVBusVabc2HVBusVabcMatrix() {
+		     //Delta-Delta
+		     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+		    	 
+		     }
+		     // Delta-Grounded Wye
+		     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+		    	 
+		     }
+		    
+		     // Grounded Wye - Grounded Wye
+		     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+		    	 this.LVBusVabc2HVBusVabcMatrix = this.getTurnRatioMatrix();
+		     }
+		    	 
+		return this.LVBusVabc2HVBusVabcMatrix;
+	}
+
+
+	@Override
+	public Complex3x3 getLVBusIabc2HVBusVabcMatrix() {
+		   //Delta-Delta
+	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+	    	 
+	     }
+	     // Delta-Grounded Wye
+	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 
+	     }
+	    
+	     // Grounded Wye - Grounded Wye
+	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 this.LVBusIabc2HVBusVabcMatrix = this.getTurnRatioMatrix().multiply(this.getZabc());
+	     }
+		return this.LVBusIabc2HVBusVabcMatrix;
+	}
+
+
+	@Override
+	public Complex3x3 getLVBusVabc2HVBusIabcMatrix() {
+		  //Delta-Delta
+	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+	    	 
+	     }
+	     // Delta-Grounded Wye
+	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 
+	     }
+	    
+	     // Grounded Wye - Grounded Wye
+	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 this.LVBusVabc2HVBusIabcMatrix = new Complex3x3();
+	     }
+		return this.LVBusVabc2HVBusIabcMatrix;
+	}
+
+
+	@Override
+	public Complex3x3 getLVBusIabc2HVBusIabcMatrix() {
+		 //Delta-Delta
+	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+	    	 
+	     }
+	     // Delta-Grounded Wye
+	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 
+	     }
+	    
+	     // Grounded Wye - Grounded Wye
+	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
+	     }
+		return  this.LVBusIabc2HVBusIabcMatrix;
+	}
+
+
+	@Override
+	public Complex3x3 getHVBusVabc2LVBusVabcMatrix() {
+		 //Delta-Delta
+	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+	    	 
+	     }
+	     // Delta-Grounded Wye
+	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 
+	     }
+	    
+	     // Grounded Wye - Grounded Wye
+	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 this.HVBusVabc2LVBusVabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
+	     }
+		return  this.HVBusVabc2LVBusVabcMatrix;
+	}
+
+
+	@Override
+	public Complex3x3 getLVBusIabc2LVBusVabcMatrix() {
+		//Delta-Delta
+	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+	    	 
+	     }
+	     // Delta-Grounded Wye
+	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 
+	     }
+	    
+	     // Grounded Wye - Grounded Wye
+	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
+	    	 this.LVBusIabc2LVBusVabcMatrix = this.getZabc();
+	     }
+		return null;
+	}
+	private double getTurnRatio(){
+		return this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getToTurnRatio();
+	}
+	private Complex3x3 getTurnRatioMatrix(){
+		if(turnRatioMatrix ==null){
+			
+			//Yg-Yg
+			if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
+				if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
+					turnRatioMatrix = Complex3x3.createUnitMatrix().multiply(getTurnRatio());
+				}
+			}
+		}
+		return turnRatioMatrix; 
+	}
+	private boolean isHVDeltaConnectted(){
+		if(this.ph3Branch.getFromAclfBus().getBaseVoltage() > this.ph3Branch.getToAclfBus().getBaseVoltage()){
+			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA)
+				return true;
+		}
+		else{
+			if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA)
+				return true;
+		}
+		return false;
+	}
+	
+    private boolean isLVDeltaConnectted(){
+    	if(this.ph3Branch.getFromAclfBus().getBaseVoltage() < this.ph3Branch.getToAclfBus().getBaseVoltage()){
+			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA)
+				return true;
+		}
+		else{
+			if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA)
+				return true;
+		}
+		return false;
+	}
+    
+    private boolean isHVWindingOnFromBusSide(){
+    	if(this.ph3Branch.getFromAclfBus().getBaseVoltage() > this.ph3Branch.getToAclfBus().getBaseVoltage())
+    		return true;
+    	else
+    		return false;
+    }
+ 
 
 
 

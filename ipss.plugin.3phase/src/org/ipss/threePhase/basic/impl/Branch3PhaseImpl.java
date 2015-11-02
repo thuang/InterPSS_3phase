@@ -18,6 +18,15 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	private Complex3x3 Yabc =null;
 	private Complex3x3 fromShuntYabc =null;
 	private Complex3x3 toShuntYabc =null;
+	private Complex3x1 currInjAtFromBus = null;
+	private Complex3x1 currInjAtToBus = null; 
+	
+	private Complex3x3 toBusVabc2FromBusVabcMatrix = null;
+	private Complex3x3 toBusVIabc2FromBusVabcMatrix = null;
+	private Complex3x3 toBusVabc2FromBusIabcMatrix = null;
+	private Complex3x3 toBusIabc2FromBusIabcMatrix = null;
+	private Complex3x3 fromBusVabc2ToBusVabcMatrix = null;
+	private Complex3x3 toBusIabc2ToBusVabcMatrix = null;
 	
 	private static final double z0_to_z1_ratio = 2.5;
 	
@@ -163,21 +172,85 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	}
 
 	@Override
-	public Complex3x1 CurrentAbcIntoNetFromSide() {
-		// TODO Auto-generated method stub
-		return null;
+	public Complex3x1 getCurrentAbcIntoNetFromSide() {
+		
+		return this.currInjAtFromBus;
 	}
 
 	@Override
-	public Complex3x1 CurrentAbcIntoNetToSide() {
-		// TODO Auto-generated method stub
-		return null;
+	public Complex3x1 getCurrentAbcIntoNetToSide() {
+		
+		return this.currInjAtToBus;
 	}
 
 	@Override
 	public Transformer3Phase to3PXformer() {
 		
 		return threePhaseXfrAptr.apply(this);
+	}
+
+	@Override
+	public Complex3x3 getToBusVabc2FromBusVabcMatrix() {
+		
+		if(this.toBusVabc2FromBusVabcMatrix == null){
+		    Complex3x3 U = Complex3x3.createUnitMatrix();
+		    this.toBusVabc2FromBusVabcMatrix = U.add(this.getZabc().add(this.getToShuntYabc()));
+		}
+		return this.toBusVabc2FromBusVabcMatrix;
+	}
+
+	@Override
+	public Complex3x3 getToBusIabc2FromBusVabcMatrix() {
+		
+		return this.toBusVabc2FromBusVabcMatrix = this.getZabc();
+	}
+
+	@Override
+	public Complex3x3 getToBusVabc2FromBusIabcMatrix() {
+		 if(this.toBusVabc2FromBusIabcMatrix ==null){
+			 if(this.getFromShuntY()!=null && this.getToShuntY()!=null){
+				 Complex3x3 shuntYabc = this.getFromShuntYabc().add(this.getToShuntYabc());
+				 this.toBusVabc2FromBusIabcMatrix = shuntYabc.multiply(this.Zabc).multiply(shuntYabc);
+				 this.toBusVabc2FromBusIabcMatrix = this.toBusVabc2FromBusIabcMatrix.multiply(1/4).add(shuntYabc);
+			 }
+			 else this.toBusVabc2FromBusIabcMatrix = new Complex3x3();
+		 }
+		return this.toBusVabc2FromBusIabcMatrix;
+	}
+
+	@Override
+	public Complex3x3 getToBusIabc2FromBusIabcMatrix() {
+		       if(this.toBusIabc2FromBusIabcMatrix == null)
+		    	   this.toBusIabc2FromBusIabcMatrix = getToBusVabc2FromBusVabcMatrix();
+		return this.toBusIabc2FromBusIabcMatrix;
+	}
+
+	@Override
+	public Complex3x3 getFromBusVabc2ToBusVabcMatrix() {
+		     if(this.fromBusVabc2ToBusVabcMatrix==null){
+		    	 this.fromBusVabc2ToBusVabcMatrix = this.getToBusVabc2FromBusVabcMatrix().inv();
+		     }
+		return this.fromBusVabc2ToBusVabcMatrix;
+	}
+
+	@Override
+	public Complex3x3 getToBusIabc2ToBusVabcMatrix() {
+		     if(this.toBusIabc2ToBusVabcMatrix==null)
+		    	 this.toBusIabc2ToBusVabcMatrix = this.getToBusVabc2FromBusVabcMatrix().inv().
+		    	                                      multiply(getToBusIabc2FromBusVabcMatrix());
+		return this.toBusIabc2ToBusVabcMatrix;
+	}
+
+	@Override
+	public void setCurrentAbcIntoNetFromSide(Complex3x1 IabcFromBus) {
+		this.currInjAtFromBus = IabcFromBus;
+		
+	}
+
+	@Override
+	public void setCurrentAbcIntoNetToSide(Complex3x1 IabcToBus) {
+		this.currInjAtToBus = IabcToBus;
+		
 	}
 
 }
