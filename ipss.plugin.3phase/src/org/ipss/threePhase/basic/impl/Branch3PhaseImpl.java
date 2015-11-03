@@ -172,13 +172,13 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	}
 
 	@Override
-	public Complex3x1 getCurrentAbcIntoNetFromSide() {
+	public Complex3x1 getCurrentAbcAtFromSide() {
 		
 		return this.currInjAtFromBus;
 	}
 
 	@Override
-	public Complex3x1 getCurrentAbcIntoNetToSide() {
+	public Complex3x1 getCurrentAbcAtToSide() {
 		
 		return this.currInjAtToBus;
 	}
@@ -242,13 +242,13 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	}
 
 	@Override
-	public void setCurrentAbcIntoNetFromSide(Complex3x1 IabcFromBus) {
+	public void setCurrentAbcAtFromSide(Complex3x1 IabcFromBus) {
 		this.currInjAtFromBus = IabcFromBus;
 		
 	}
 
 	@Override
-	public void setCurrentAbcIntoNetToSide(Complex3x1 IabcToBus) {
+	public void setCurrentAbcAtToSide(Complex3x1 IabcToBus) {
 		this.currInjAtToBus = IabcToBus;
 		
 	}

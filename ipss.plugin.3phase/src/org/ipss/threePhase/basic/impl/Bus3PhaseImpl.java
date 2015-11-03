@@ -37,6 +37,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private List<Load3Phase> threePhaseLoadList = null;
 	private Complex3x1 load3PhEquivCurInj = null;
+	private Complex3x1 equivCurInj3Phase = null;
 
 	@Override
 	public Complex3x1 get3PhaseVotlages() {
@@ -167,8 +168,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		return threePhaseLoadList;
 	}
 
-	@Override
-	public Complex3x1 calcLoad3PhEquivCurInj() {
+	
+	private Complex3x1 calcLoad3PhEquivCurInj() {
 		this.load3PhEquivCurInj = new Complex3x1();
 		if(this.isLoad() && this.getThreePhaseLoadList().size()>0){
 			if (Vabc == null ||Vabc.abs()<1.0E-5) 
@@ -179,6 +180,14 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		}
 		return this.load3PhEquivCurInj;
 		
+	}
+
+	@Override
+	public Complex3x1 calc3PhEquivCurInj() {
+		calcLoad3PhEquivCurInj();
+		
+		this.equivCurInj3Phase = this.load3PhEquivCurInj;
+		return this.equivCurInj3Phase;
 	}
 
 

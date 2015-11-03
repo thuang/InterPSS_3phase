@@ -33,11 +33,11 @@ public interface Branch3Phase extends DStabBranch{
 	
 	public Complex3x3 getYtfabc();
 	
-	public Complex3x1 getCurrentAbcIntoNetFromSide();
-	public void setCurrentAbcIntoNetFromSide(Complex3x1 IabcFromBus);
+	public Complex3x1 getCurrentAbcAtFromSide();
+	public void setCurrentAbcAtFromSide(Complex3x1 IabcFromBus);
 	
-	public Complex3x1 getCurrentAbcIntoNetToSide();
-	public void setCurrentAbcIntoNetToSide(Complex3x1 IabcToBus);
+	public Complex3x1 getCurrentAbcAtToSide();
+	public void setCurrentAbcAtToSide(Complex3x1 IabcToBus);
 	
 	public Transformer3Phase to3PXformer();
 	

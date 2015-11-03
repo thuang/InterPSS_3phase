@@ -302,6 +302,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 		    	 this.LVBusVabc2HVBusVabcMatrix = this.getTurnRatioMatrix();
 		     }
+		     else{
+		    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
+		     }
 		    	 
 		return this.LVBusVabc2HVBusVabcMatrix;
 	}
@@ -322,6 +325,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 	    	 this.LVBusIabc2HVBusVabcMatrix = this.getTurnRatioMatrix().multiply(this.getZabc());
 	     }
+	     else{
+	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
+	     }
 		return this.LVBusIabc2HVBusVabcMatrix;
 	}
 
@@ -340,6 +346,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	     // Grounded Wye - Grounded Wye
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 	    	 this.LVBusVabc2HVBusIabcMatrix = new Complex3x3();
+	     }
+	     else{
+	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
 	     }
 		return this.LVBusVabc2HVBusIabcMatrix;
 	}
@@ -360,6 +369,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
 	     }
+	     else{
+	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
+	     }
 		return  this.LVBusIabc2HVBusIabcMatrix;
 	}
 
@@ -378,6 +390,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	     // Grounded Wye - Grounded Wye
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 	    	 this.HVBusVabc2LVBusVabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
+	     }
+	     else{
+	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
 	     }
 		return  this.HVBusVabc2LVBusVabcMatrix;
 	}
@@ -398,7 +413,10 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 	    	 this.LVBusIabc2LVBusVabcMatrix = this.getZabc();
 	     }
-		return null;
+	     else{
+	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
+	     }
+		return this.LVBusIabc2LVBusVabcMatrix;
 	}
 	private double getTurnRatio(){
 		return this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getToTurnRatio();
