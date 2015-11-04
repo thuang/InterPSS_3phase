@@ -291,11 +291,13 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	public Complex3x3 getLVBusVabc2HVBusVabcMatrix() {
 		     //Delta-Delta
 		     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
-		    	 
+		    	 //                      at = [W][AV][D] = [W][D]*nt
+		    	 this.LVBusVabc2HVBusIabcMatrix =this.getDeltaVLL2VLNMatrix().multiply(
+		    			                                      this.getDeltaVLN2VLLMatrix()).multiply(getTurnRatio());
 		     }
-		     // Delta-Grounded Wye
+		     // Delta-Grounded Wye step-down
 		     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-		    	 
+		    	 this.LVBusVabc2HVBusIabcMatrix =this.getDeltaVLL2VLNMatrix().multiply(this.getVtabc2VLLabcMatrix());
 		     }
 		    
 		     // Grounded Wye - Grounded Wye
@@ -314,11 +316,11 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	public Complex3x3 getLVBusIabc2HVBusVabcMatrix() {
 		   //Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
-	    	 
+	    	 this.LVBusIabc2HVBusVabcMatrix = getDeltaDeltaLVIabc2HVVabcMatrix();
 	     }
-	     // Delta-Grounded Wye
+	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-	    	 
+	    	 this.LVBusIabc2HVBusVabcMatrix = getLVBusVabc2HVBusVabcMatrix().multiply(this.getZabc());
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
@@ -336,11 +338,11 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	public Complex3x3 getLVBusVabc2HVBusIabcMatrix() {
 		  //Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
-	    	 
+	    	 this.LVBusVabc2HVBusIabcMatrix = new Complex3x3();
 	     }
-	     // Delta-Grounded Wye
+	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-	    	 
+	    	 this.LVBusVabc2HVBusIabcMatrix = new Complex3x3();
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
@@ -359,10 +361,23 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		 //Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
 	    	 
+	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
 	     }
-	     // Delta-Grounded Wye
+	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
 	    	 
+	    	 Complex3x3 dt = new Complex3x3();
+
+	        	dt.aa = new Complex(1);
+	        	dt.ab = new Complex(-1);
+	        	dt.bb = new Complex(1);
+	        	dt.bc = new Complex(-1);
+	        	dt.ca = new Complex(-1);
+	        	dt.cc = new Complex(1);
+	        	
+	        	dt.multiply(1/this.getTurnRatio());
+	        	
+	    	 this.LVBusIabc2HVBusIabcMatrix = dt;
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
@@ -380,11 +395,23 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	public Complex3x3 getHVBusVabc2LVBusVabcMatrix() {
 		 //Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
-	    	 
+	    	                           // At  =  [W][AV]^-1[D]
+	    	 this.HVBusVabc2LVBusVabcMatrix = this.getDeltaVLL2VLNMatrix().multiply(1/this.getTurnRatio()).multiply(this.getDeltaVLN2VLLMatrix());
 	     }
-	     // Delta-Grounded Wye
+	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-	    	 
+	    		Complex3x3 At = new Complex3x3();
+
+	        	At.aa = new Complex(1);
+	        	At.ac = new Complex(-1);
+	        	At.ba = new Complex(-1);
+	        	At.bb = new Complex(1);
+	        	At.cb = new Complex(-1);
+	        	At.cc = new Complex(1);
+	        	
+	        	At.multiply(1/this.getTurnRatio());
+	        	
+	    	 this.HVBusVabc2LVBusVabcMatrix = At;
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
@@ -402,11 +429,30 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	public Complex3x3 getLVBusIabc2LVBusVabcMatrix() {
 		//Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
+	    	 // Bt  =  [W][Zabc][G1]
+	    	 Complex3x3 F = new Complex3x3();
+	     	F.aa = new Complex(1);
+	     	F.ac = new Complex(-1);
+	     	F.ba = new Complex(-1);
+	     	F.bb = new Complex(1);
+	     	F.ca = getZabc().aa;
+	     	F.cb = getZabc().bb;
+	     	F.cc = getZabc().cc;
+	     	
+	     	// G = [F]^-1
+	     	Complex3x3 G = F.inv();
+	     	
+	     	Complex3x3 G1 = G;
+	     	G1.ac = new Complex(0);
+	     	G1.bc = new Complex(0);
+	     	G1.cc = new Complex(0);
+	     	
+	     	this.LVBusIabc2LVBusVabcMatrix = this.getDeltaVLL2VLNMatrix().multiply(this.getZabc()).multiply(G1);
 	    	 
 	     }
-	     // Delta-Grounded Wye
+	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-	    	 
+	    	 this.LVBusIabc2LVBusVabcMatrix = this.getZabc();
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
@@ -464,11 +510,85 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
     		return false;
     }
  
+   /**
+    * W matrix for delta-grounded wye connection
+    * @return
+    */
+    private Complex3x3 getDeltaVLL2VLNMatrix(){
+    	Complex3x3 W = new Complex3x3();
+    	W.aa = new Complex(2);
+    	W.ab = new Complex(1);
+    	W.bb = new Complex(2);
+    	W.bc = new Complex(1);
+    	W.ca = new Complex(1);
+    	W.cc = new Complex(2);
+    	W.multiply(1/3);
+    	
+    	return W;
+    }
+    
+    /**
+     * D matrix for delta-grounded wye connection
+     * @return
+     */
+     private Complex3x3 getDeltaVLN2VLLMatrix(){
+     	Complex3x3 D = new Complex3x3();
+     	D.aa = new Complex(1);
+     	D.ab = new Complex(-1);
+     	D.bb = new Complex(1);
+     	D.bc = new Complex(-1);
+     	D.ca = new Complex(-1);
+     	D.cc = new Complex(1);
+     
+     	
+     	return D;
+     }
+    
+    /*
+     * AV matrix for delta-grounded wye connection
+     */
+    private Complex3x3 getVtabc2VLLabcMatrix(){
+    	Complex3x3 AV = new Complex3x3();
 
-
-
-
-
+    	AV.ab = new Complex(-1);
+    	AV.bc = new Complex(-1);
+    	AV.ca = new Complex(-1);
+    	AV.multiply(this.getTurnRatio());
+    	
+    	return AV;
+    }
+    
+    private Complex3x3 getDeltaDeltaLVIabc2HVVabcMatrix(){
+    	
+    	// F -> [IOabc] = [F][IDabc]
+    	
+    	// F = [ 1 0 -1; -1 1 0; Ztab, Ztbc, Ztca]
+    	
+    	Complex3x3 F = new Complex3x3();
+    	F.aa = new Complex(1);
+    	F.ac = new Complex(-1);
+    	F.ba = new Complex(-1);
+    	F.bb = new Complex(1);
+    	F.ca = getZabc().aa;
+    	F.cb = getZabc().bb;
+    	F.cc = getZabc().cc;
+    	
+    	// G = [F]^-1
+    	Complex3x3 G = F.inv();
+    	
+    	Complex3x3 G1 = G;
+    	G1.ac = new Complex(0);
+    	G1.bc = new Complex(0);
+    	G1.cc = new Complex(0);
+    	
+    	// bt = [AV][W][Ztabc][G1]
+    	
+    	
+    	Complex3x3 bt = Complex3x3.createUnitMatrix().multiply(this.getTurnRatio());
+    	bt = bt.multiply(this.getDeltaVLL2VLNMatrix()).multiply(this.getZabc()).multiply(G1);
+    	
+    	return bt;
+    }
 
 
 }
