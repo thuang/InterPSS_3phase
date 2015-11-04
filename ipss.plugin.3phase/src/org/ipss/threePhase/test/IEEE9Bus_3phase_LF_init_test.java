@@ -200,7 +200,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 				net.setBaseKva(baseKva);
 			  
 			//Bus 1
-		  		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PBus("Bus1", net);
+		  		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PDStabBus("Bus1", net);
 		  		// set bus name and description attributes
 		  		bus1.setAttributes("Bus 1", "");
 		  		// set bus base voltage 
@@ -223,7 +223,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	// Bus 2
-		  		Bus3Phase bus2 = ThreePhaseObjectFactory.create3PBus("Bus2", net);
+		  		Bus3Phase bus2 = ThreePhaseObjectFactory.create3PDStabBus("Bus2", net);
 		  		// set bus name and description attributes
 		  		bus2.setAttributes("Bus 2", "");
 		  		// set bus base voltage 
@@ -249,7 +249,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	// Bus 3
-		  		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PBus("Bus3", net);
+		  		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PDStabBus("Bus3", net);
 		  		// set bus name and description attributes
 		  		bus3.setAttributes("Bus 3", "");
 		  		// set bus base voltage 
@@ -275,14 +275,14 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	//Bus 4
-		  		Bus3Phase bus4 =ThreePhaseObjectFactory.create3PBus("Bus4", net);
+		  		Bus3Phase bus4 =ThreePhaseObjectFactory.create3PDStabBus("Bus4", net);
 		  		bus4.setAttributes("Bus 4", "");
 		  		bus4.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus4.setGenCode(AclfGenCode.NON_GEN);
 		  		
 		  	//Bus 5	
-		  		Bus3Phase bus5 = ThreePhaseObjectFactory.create3PBus("Bus5", net);
+		  		Bus3Phase bus5 = ThreePhaseObjectFactory.create3PDStabBus("Bus5", net);
 		  		bus5.setAttributes("Bus 5", "");
 		  		bus5.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
@@ -300,7 +300,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	//Bus 6	
-		  		Bus3Phase bus6 = ThreePhaseObjectFactory.create3PBus("Bus6", net);
+		  		Bus3Phase bus6 = ThreePhaseObjectFactory.create3PDStabBus("Bus6", net);
 		  		bus6.setAttributes("Bus 6", "");
 		  		bus6.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
@@ -317,14 +317,14 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		
 		  		
 		  	//Bus 7
-		  		Bus3Phase bus7 = ThreePhaseObjectFactory.create3PBus("Bus7", net);
+		  		Bus3Phase bus7 = ThreePhaseObjectFactory.create3PDStabBus("Bus7", net);
 		  		bus7.setAttributes("Bus 7", "");
 		  		bus7.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
 		  		bus7.setGenCode(AclfGenCode.NON_GEN);
 		  		
 		  	//Bus 8	
-		  		Bus3Phase bus8 = ThreePhaseObjectFactory.create3PBus("Bus8", net);
+		  		Bus3Phase bus8 = ThreePhaseObjectFactory.create3PDStabBus("Bus8", net);
 		  		bus8.setAttributes("Bus 8", "");
 		  		bus8.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus
@@ -341,7 +341,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		  		bus8.getContributeLoadList().add(load);
 		  		
 		  	//Bus 9
-		  		Bus3Phase bus9 = ThreePhaseObjectFactory.create3PBus("Bus9", net);
+		  		Bus3Phase bus9 = ThreePhaseObjectFactory.create3PDStabBus("Bus9", net);
 		  		bus9.setAttributes("Bus 9", "");
 		  		bus9.setBaseVoltage(230000.0);
 		  		// set the bus to a non-generator bus

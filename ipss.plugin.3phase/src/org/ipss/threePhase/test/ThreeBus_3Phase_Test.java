@@ -406,7 +406,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 		net.setBaseKva(baseKva);
 	  
 	//Bus 1
-  		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PBus("Bus1", net);
+  		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PDStabBus("Bus1", net);
   		// set bus name and description attributes
   		bus1.setAttributes("Bus 1", "");
   		// set bus base voltage 
@@ -457,7 +457,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
   		
   		
   	// Bus 2
-  		Bus3Phase bus2 = ThreePhaseObjectFactory.create3PBus("Bus2", net);
+  		Bus3Phase bus2 = ThreePhaseObjectFactory.create3PDStabBus("Bus2", net);
   		// set bus name and description attributes
   		bus2.setAttributes("Bus 2", "");
   		// set bus base voltage 
@@ -477,7 +477,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
   		
   		
   	  	// Bus 3
-  		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PBus("Bus3", net);
+  		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PDStabBus("Bus3", net);
   		// set bus name and description attributes
   		bus3.setAttributes("Bus 2", "");
   		// set bus base voltage 

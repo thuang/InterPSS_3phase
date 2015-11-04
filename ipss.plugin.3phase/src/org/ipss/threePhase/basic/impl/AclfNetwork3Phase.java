@@ -15,11 +15,12 @@ import com.interpss.core.acsc.AcscBranch;
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.impl.AcscNetworkImpl;
+import com.interpss.core.acsc.impl.BaseAcscNetworkImpl;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 
-public class AclfNetwork3Phase extends AcscNetworkImpl implements
+public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus,AcscBranch> implements
 		Network3Phase {
 	
 	protected boolean isTransNetwork = true; // modeling transmission network by default

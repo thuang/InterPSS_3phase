@@ -1,16 +1,14 @@
 package org.ipss.threePhase.powerflow;
 
-import org.ipss.threePhase.basic.Network3Phase;
-
-import com.interpss.core.aclf.AclfNetwork;
+import com.interpss.core.aclf.BaseAclfNetwork;
 
 
 public interface DistributionPowerFlowAlgorithm {
 	
 	
-	AclfNetwork getNetwork();
+	BaseAclfNetwork getNetwork();
 	
-	void setNetwork(AclfNetwork net);
+	void setNetwork(BaseAclfNetwork net);
 	
 	/**
 	 * Order the distribution system buses. If <radialOnly> is set to be true,

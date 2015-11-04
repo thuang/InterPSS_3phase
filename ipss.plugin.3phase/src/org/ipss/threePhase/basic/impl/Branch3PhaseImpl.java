@@ -22,7 +22,7 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	private Complex3x1 currInjAtToBus = null; 
 	
 	private Complex3x3 toBusVabc2FromBusVabcMatrix = null;
-	private Complex3x3 toBusVIabc2FromBusVabcMatrix = null;
+	private Complex3x3 toBusIabc2FromBusVabcMatrix = null;
 	private Complex3x3 toBusVabc2FromBusIabcMatrix = null;
 	private Complex3x3 toBusIabc2FromBusIabcMatrix = null;
 	private Complex3x3 fromBusVabc2ToBusVabcMatrix = null;
@@ -194,7 +194,7 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 		
 		if(this.toBusVabc2FromBusVabcMatrix == null){
 		    Complex3x3 U = Complex3x3.createUnitMatrix();
-		    this.toBusVabc2FromBusVabcMatrix = U.add(this.getZabc().add(this.getToShuntYabc()));
+		    this.toBusVabc2FromBusVabcMatrix = U.add(this.getZabc().multiply(this.getToShuntYabc()));
 		}
 		return this.toBusVabc2FromBusVabcMatrix;
 	}
@@ -202,7 +202,7 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	@Override
 	public Complex3x3 getToBusIabc2FromBusVabcMatrix() {
 		
-		return this.toBusVabc2FromBusVabcMatrix = this.getZabc();
+		return this.toBusIabc2FromBusVabcMatrix = this.getZabc();
 	}
 
 	@Override

@@ -22,14 +22,15 @@ import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranch;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfNetwork;
+import com.interpss.core.aclf.BaseAclfNetwork;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 
 public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlowAlgorithm{
 
-	private AclfNetwork distNet = null;
+	private BaseAclfNetwork<AclfBus,AclfBranch> distNet = null;
 	
-	private DistributionPFMethod pfMethod = null;
+	private DistributionPFMethod pfMethod = DistributionPFMethod.Forward_Backword_Sweep;
 	
 	private double tol = 1.0E-4;
 	private int    maxIteration = 20;
@@ -39,9 +40,10 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	
 	public DistributionPowerFlowAlgorithmImpl(){
 		busVoltTable = new Hashtable<>();
+		
 	}
 	   
-    public DistributionPowerFlowAlgorithmImpl(AclfNetwork net){
+    public DistributionPowerFlowAlgorithmImpl(BaseAclfNetwork net){
 		this.distNet = net;
 		busVoltTable = new Hashtable<>();
 	}
@@ -116,7 +118,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 					Bus3Phase bus = (Bus3Phase) b;
 					
 					if(b.isSwing())
-						 getSwingBusThreePhaseVoltages(b.getVoltageMag(), b.getVoltageAng(UnitType.Deg));
+						bus.set3PhaseVoltages(getSwingBusThreePhaseVoltages(b.getVoltageMag(), b.getVoltageAng(UnitType.Deg)));
 					else if(b.isGenPV()) 
 						bus.set3PhaseVoltages(getPVBusThreePhaseVoltages(b.getVoltageMag()));
 					else
@@ -180,7 +182,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		else{
 			throw new UnsupportedOperationException("The power flow method is not supported yet:"+this.pfMethod);
 		}
-		return false;
+		return pfFlag;
 	}
 	
 	private boolean FBSPowerflow(){
@@ -194,16 +196,23 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		 * 
 		 */
 		
+		
+		
 		for (int i=0;i<this.maxIteration;i++){
 		
 			for (Branch bra: this.distNet.getBranchList()){
 				bra.setIntFlag(0);
 			}
 			
+			for (Bus b: this.distNet.getBusList()){
+				 b.setIntFlag(0);
+			}
+			
+			//-----------------------------------------------------------------------
 			//Step-1 backward sweep step
+			//-----------------------------------------------------------------------
 			
-			
-			for(int sortNum =this.distNet.getNoBus()-1;sortNum>=0;sortNum--){
+			for(int sortNum =this.distNet.getNoBus()-1;sortNum>0;sortNum--){
 				AclfBus bus = this.distNet.getBus(sortNum);
 				if(bus.isActive()){
 					Bus3Phase bus3P = null;
@@ -217,6 +226,19 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 					
 					// update the non-visited branch current based on the bus current injection
 					// and all the currents of all other connected down-stream branches of this bus
+					
+					/*
+					 * The line modeling
+					 * 
+					 *   Vabc,m                                       Vabc,n
+					 *   --|->Iabc,m--------|Zline|----------->Iabc,n---|----
+					 *                |                 |
+					 *             1/2ShuntY         1/2ShuntY
+					 *                |                 |
+					 *                _                 _
+					 * 
+					 */
+					
 					Complex3x1 sumOfBranchCurrents = new Complex3x1();
 					String upStreamBranchId = "";
 					String upStreamBusId="";
@@ -261,16 +283,38 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 						
 						Bus3Phase upStreamBus3P = null;
 						
+						/*
+						 * The line modeling
+						 * 
+						 *   Vabc,m                                       Vabc,n
+						 *   --|->Iabc,m--------|Zline|----------->Iabc,n---|----
+						 *                |                 |
+						 *             1/2ShuntY         1/2ShuntY
+						 *                |                 |
+						 *                _                 _
+						 * 
+						 */
+						
 						// update the upstream branch current and the upstream bus voltage
-						if(upStreamBranch.getFromBus().getId().equals(bus.getId())){
+						if(upStreamBranch != null && upStreamBranch.getFromBus().getId().equals(bus.getId())){
 							
 							//calculate and set the upstream branch current
 							upStreamBranch.setCurrentAbcAtFromSide(busSelfEquivCurInj3Ph.subtract( sumOfBranchCurrents));
 							
 							upStreamBus3P = (Bus3Phase) upStreamBranch.getToBus();
 							
+							//calculate the voltages at the upstream end
+							//NOTE: For, current flowing through the branch, the direction from bus -> to bus  is regarded as positive;
 							Complex3x1 vabc =  upStreamBranch.getToBusVabc2FromBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
 									upStreamBranch.getToBusIabc2FromBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+							
+							//calculate the current injection at the upstream end
+							
+							Complex3x1 iabc = upStreamBranch.getToBusVabc2FromBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+									upStreamBranch.getToBusIabc2FromBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+							
+							
+							upStreamBranch.setCurrentAbcAtToSide(iabc.multiply(-1.0));
 							
 							if(upStreamBus3P.getIntFlag()==0 && !upStreamBus3P.isSwing()){
 							   upStreamBus3P.set3PhaseVoltages(vabc);
@@ -282,8 +326,18 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 							
 	                        upStreamBus3P = (Bus3Phase) upStreamBranch.getFromBus();
 							
+	                        //calculate the bus voltage at the upstream end
 							Complex3x1 vabc =  upStreamBranch.getToBusVabc2FromBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
 									upStreamBranch.getToBusIabc2FromBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+							
+                            //calculate the current injection at the upstream end
+							
+							Complex3x1 iabc = upStreamBranch.getToBusVabc2FromBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+									upStreamBranch.getToBusIabc2FromBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+							
+							
+							upStreamBranch.setCurrentAbcAtFromSide(iabc.multiply(1.0));
+							
 							
 							if(upStreamBus3P.getIntFlag()==0 && !upStreamBus3P.isSwing()){
 								   upStreamBus3P.set3PhaseVoltages(vabc);
@@ -297,8 +351,10 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 				}
 			}
 			
-			//TODO refer to Disting's reference book for the logic
+			
+			//-----------------------------------------------------------------------
 			//Step-2 check convergence.
+			//-----------------------------------------------------------------------
 			
 			// compare the voltage results of the last two steps
 			
@@ -322,7 +378,65 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			if(i>0 && this.pfFlag) break;
 			
 			
+			//-----------------------------------------------------------------------
 			//Step-3 :backward sweep step
+			//-----------------------------------------------------------------------
+			
+			for(int sortNum2 = 0;sortNum2<this.distNet.getNoBus();sortNum2++){
+				
+				AclfBus bus = this.distNet.getBus(sortNum2);
+				
+				if(bus.isActive()){
+					// update the bus state, with intFlag =2 meaning this bus voltage has been updated 
+					bus.setIntFlag(2);
+					Bus3Phase bus3P = (Bus3Phase) bus;
+					for(Branch bra:bus.getConnectedPhysicalBranchList()){
+						
+						if(bra.isActive()){
+							Branch3Phase bra3Phase = (Branch3Phase) bra;
+							
+							Bus3Phase downStreamBus = null;
+							try {
+								downStreamBus = (Bus3Phase) bra.getOppositeBus(bus);
+							} catch (InterpssException e) {
+								e.printStackTrace();
+							}
+							
+							if(downStreamBus.getIntFlag()<2){
+								Complex3x1 vabc = null;
+								if(bra.isFromBus(bus)){
+									 //calculate the bus voltage at the downstream end
+									//  the current flow definition is align with the up/downstream definition
+									//  which is the same as the definition in Dr.Kersting's book
+									vabc =  bra3Phase.getFromBusVabc2ToBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).subtract(
+											bra3Phase.getToBusIabc2ToBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtToSide())); 
+									
+							
+								}
+								else{
+									
+									 //calculate the bus voltage at the downstream end
+									//TODO   Positive current direction definition:
+									//     upstream  |--<-Iabc,To-------Zline-----<--Iabc,from---| downstream
+									//   because the current flow definition is opposited to the up/downstream definition
+									//   the subtract() operation has been changed to add() in the following calculation
+									//   aslo the current is measured at the downstream side, which is the fromside
+									vabc =  bra3Phase.getFromBusVabc2ToBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+											bra3Phase.getToBusIabc2ToBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtFromSide())); 
+									
+								}
+								
+								downStreamBus.set3PhaseVoltages(vabc);
+								downStreamBus.setIntFlag(2);
+							}
+						}
+					}
+					
+					
+				}
+				
+			}
+			
 		
 		}
 		
@@ -364,13 +478,13 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	}
 
 	@Override
-	public AclfNetwork getNetwork() {
+	public BaseAclfNetwork getNetwork() {
 		
 		return this.distNet;
 	}
 
 	@Override
-	public void setNetwork(AclfNetwork net) {
+	public void setNetwork(BaseAclfNetwork net) {
 		this.distNet = net;
 		
 	}

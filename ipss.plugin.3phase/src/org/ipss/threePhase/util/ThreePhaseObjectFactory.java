@@ -16,10 +16,14 @@ import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
 import org.ipss.threePhase.dynamic.model.impl.DStabGen3PhaseImpl;
+import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
+import org.ipss.threePhase.powerflow.impl.DistributionPowerFlowAlgorithmImpl;
 
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.datatype.Constants;
 import com.interpss.common.exp.InterpssException;
+import com.interpss.core.aclf.AclfNetwork;
+import com.interpss.core.aclf.BaseAclfNetwork;
 import com.interpss.core.aclf.netAdj.AclfNetAdjustment;
 import com.interpss.core.aclf.netAdj.NetAdjustFactory;
 import com.interpss.core.acsc.AcscFactory;
@@ -40,8 +44,6 @@ public class ThreePhaseObjectFactory {
 			netAdj.setAclfNet(net);
 			net.setId("undefined");
 			net.setOriginalDataFormat(OriginalDataFormat.IPSS_API);
-			net.setNetEqnIterationNoEvent(Constants.DStabNetItrNoEvent);
-			net.setNetEqnIterationWithEvent(Constants.DStabNetItrWithEvent);
 			net.setStaticLoadModel(StaticLoadModel.CONST_Z);
 			net.setStaticLoadSwitchVolt(Constants.DStabStaticLoadSwithVolt);
 			net.setStaticLoadSwitchDeadZone(Constants.DStabStaticLoadSwithDeadband);
@@ -52,7 +54,17 @@ public class ThreePhaseObjectFactory {
 	   return ph3Xfr;
 	}
 	
-	public static Bus3Phase create3PBus(String busId, DStabNetwork3Phase net) throws InterpssException{
+	public static Bus3Phase create3PAclfBus(String busId, BaseAclfNetwork net) throws InterpssException{
+		Bus3Phase bus = new Bus3PhaseImpl();
+	  
+		//The following is copied from the DStabObjectFactory
+		bus.setId(busId);
+		net.addBus(bus);
+		
+		return bus;
+	}
+	
+	public static Bus3Phase create3PDStabBus(String busId, DStabNetwork3Phase net) throws InterpssException{
 		Bus3Phase bus = new Bus3PhaseImpl();
 	  
 		//The following is copied from the DStabObjectFactory
@@ -71,7 +83,10 @@ public class ThreePhaseObjectFactory {
 		return bus;
 	}
 	
-	public static Branch3Phase create3PBranch(String fromBusId, String toBusId, String cirId,DStabNetwork3Phase net) throws InterpssException{
+	
+
+	
+	public static Branch3Phase create3PBranch(String fromBusId, String toBusId, String cirId,BaseAclfNetwork net) throws InterpssException{
 		Branch3Phase branch = new Branch3PhaseImpl();
 		net.addBranch(branch, fromBusId, toBusId, cirId);
 		return branch;
@@ -97,6 +112,12 @@ public class ThreePhaseObjectFactory {
 	public static Branch3Phase create3PBranch() {
 		Branch3Phase branch = new Branch3PhaseImpl();
 		return branch;
+	}
+	
+	public static DistributionPowerFlowAlgorithm createDistPowerFlowAlgorithm(BaseAclfNetwork net){
+		DistributionPowerFlowAlgorithmImpl algo = new DistributionPowerFlowAlgorithmImpl(net);
+		
+		return algo;
 	}
 
 }

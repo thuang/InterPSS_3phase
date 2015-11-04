@@ -109,7 +109,7 @@ protected IPSSMsgHub msg = null;
 				for (JAXBElement<? extends BusXmlType> bus : xmlNet.getBusList().getBus()) {
 					DStabBusXmlType dstabBusXml = (DStabBusXmlType) bus.getValue();
 					
-					Bus3Phase dstabBus = ThreePhaseObjectFactory.create3PBus(dstabBusXml.getId(), dstabNet);
+					Bus3Phase dstabBus = ThreePhaseObjectFactory.create3PDStabBus(dstabBusXml.getId(), dstabNet);
 						
 					// base the base bus info part
 					mapBaseBusData(dstabBusXml, dstabBus, dstabNet);
