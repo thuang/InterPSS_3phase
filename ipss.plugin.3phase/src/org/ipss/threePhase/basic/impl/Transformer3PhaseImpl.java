@@ -61,8 +61,12 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	}
 
 	@Override
-	public void setZabc(Complex Z1, Complex Z2, Complex Z0) {
-		this.ph3Branch.setZabc(Z1,Z2,Z0);
+	public void setZabc(Complex Za, Complex Zb, Complex Zc) {
+		Complex3x3 zabc = new Complex3x3();
+		zabc.aa =Za;
+		zabc.bb =Zb;
+		zabc.cc =Zc;
+		this.ph3Branch.setZabc(zabc);
 		
 	}
 
@@ -285,6 +289,15 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 
 		return null;
 	}
+    
+    /**
+     * ------------------------------------------------------------------------
+     *    The following models and matrices are based on W.H.Kersting's book: 
+     *    Distribution system modeling and analysis (3rd Ed). 2012
+     * 
+     * ------------------------------------------------------------------------
+     * 
+     */
 
     //TODO consider to change the naming to HV/LV
 	@Override

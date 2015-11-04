@@ -14,7 +14,7 @@ public interface Transformer3Phase extends AcscXformer{
 	    
 	    public void setZabc(Complex3x3 Zabc);
 	    
-	    public void setZabc(Complex Z1, Complex Z2, Complex Z0);
+	    public void setZabc(Complex Za, Complex Zb, Complex Zc);
 		
 		public Complex3x3 getZabc() ;
 		

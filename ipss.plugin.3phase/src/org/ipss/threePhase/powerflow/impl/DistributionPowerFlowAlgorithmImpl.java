@@ -12,6 +12,7 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Network3Phase;
+import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.basic.impl.AclfNetwork3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.powerflow.DistributionPFMethod;
@@ -305,13 +306,32 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 							
 							//calculate the voltages at the upstream end
 							//NOTE: For, current flowing through the branch, the direction from bus -> to bus  is regarded as positive;
-							Complex3x1 vabc =  upStreamBranch.getToBusVabc2FromBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
-									upStreamBranch.getToBusIabc2FromBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+							Complex3x1 vabc = null;
+							Complex3x1 iabc = null;
 							
-							//calculate the current injection at the upstream end
 							
-							Complex3x1 iabc = upStreamBranch.getToBusVabc2FromBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
-									upStreamBranch.getToBusIabc2FromBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+							// line 
+							if(upStreamBranch.isLine()){
+								vabc = upStreamBranch.getToBusVabc2FromBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										upStreamBranch.getToBusIabc2FromBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+								
+								//calculate the current injection at the upstream end
+								
+								iabc= upStreamBranch.getToBusVabc2FromBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										upStreamBranch.getToBusIabc2FromBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+								
+							}
+							
+							// transformer
+							else if (upStreamBranch.isXfr()){
+								Transformer3Phase xfr3p = upStreamBranch.to3PXformer();
+								vabc = xfr3p.getLVBusVabc2HVBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										xfr3p.getLVBusIabc2HVBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+								
+								iabc= xfr3p.getLVBusVabc2HVBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										xfr3p.getLVBusIabc2HVBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtFromSide().multiply(-1)));
+								
+							}
 							
 							
 							upStreamBranch.setCurrentAbcAtToSide(iabc.multiply(-1.0));
@@ -327,13 +347,36 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	                        upStreamBus3P = (Bus3Phase) upStreamBranch.getFromBus();
 							
 	                        //calculate the bus voltage at the upstream end
-							Complex3x1 vabc =  upStreamBranch.getToBusVabc2FromBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
-									upStreamBranch.getToBusIabc2FromBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+							Complex3x1 vabc = null;
+							Complex3x1 iabc = null;
 							
-                            //calculate the current injection at the upstream end
+							// line 
+							if(upStreamBranch.isLine()){
+								vabc =	upStreamBranch.getToBusVabc2FromBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										upStreamBranch.getToBusIabc2FromBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+								
+	                            //calculate the current injection at the upstream end
+								
+								
+								iabc = upStreamBranch.getToBusVabc2FromBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										upStreamBranch.getToBusIabc2FromBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+							}
 							
-							Complex3x1 iabc = upStreamBranch.getToBusVabc2FromBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
-									upStreamBranch.getToBusIabc2FromBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+							// transformer
+							else if (upStreamBranch.isXfr()){
+								Transformer3Phase xfr3p = upStreamBranch.to3PXformer();
+								
+								vabc =	xfr3p.getLVBusVabc2HVBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										xfr3p.getLVBusIabc2HVBusVabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+								
+	                            //calculate the current injection at the upstream end
+								
+								
+								iabc =  xfr3p.getLVBusVabc2HVBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+										xfr3p.getLVBusVabc2HVBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+								
+								
+							}
 							
 							
 							upStreamBranch.setCurrentAbcAtFromSide(iabc.multiply(1.0));
@@ -405,25 +448,43 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 							if(downStreamBus.getIntFlag()<2){
 								Complex3x1 vabc = null;
 								if(bra.isFromBus(bus)){
+									
 									 //calculate the bus voltage at the downstream end
 									//  the current flow definition is align with the up/downstream definition
 									//  which is the same as the definition in Dr.Kersting's book
-									vabc =  bra3Phase.getFromBusVabc2ToBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).subtract(
-											bra3Phase.getToBusIabc2ToBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtToSide())); 
+									if(bra3Phase.isLine()){
 									
+									   vabc =  bra3Phase.getFromBusVabc2ToBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).subtract(
+											bra3Phase.getToBusIabc2ToBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtToSide())); 
+									}
+									else if (bra3Phase.isXfr()){
+										Transformer3Phase xfr3p = bra3Phase.to3PXformer();
+										vabc =  xfr3p.getHVBusVabc2LVBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).subtract(
+												xfr3p.getLVBusIabc2LVBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtToSide()));
+									}
 							
 								}
 								else{
 									
 									 //calculate the bus voltage at the downstream end
+									
+									
 									//TODO   Positive current direction definition:
 									//     upstream  |--<-Iabc,To-------Zline-----<--Iabc,from---| downstream
-									//   because the current flow definition is opposited to the up/downstream definition
+									//   because the current flow definition is opposite to the up/downstream definition
 									//   the subtract() operation has been changed to add() in the following calculation
-									//   aslo the current is measured at the downstream side, which is the fromside
-									vabc =  bra3Phase.getFromBusVabc2ToBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
-											bra3Phase.getToBusIabc2ToBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtFromSide())); 
+									//   also the current is measured at the downstream side, which is the fromside
 									
+									if(bra3Phase.isLine()){
+										vabc =  bra3Phase.getFromBusVabc2ToBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+												bra3Phase.getToBusIabc2ToBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtFromSide())); 
+									}
+									else if (bra3Phase.isXfr()){
+										Transformer3Phase xfr3p = bra3Phase.to3PXformer();
+										
+										vabc =  xfr3p.getHVBusVabc2LVBusVabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
+												xfr3p.getLVBusIabc2LVBusVabcMatrix().multiply(bra3Phase.getCurrentAbcAtFromSide())); 
+									}
 								}
 								
 								downStreamBus.set3PhaseVoltages(vabc);

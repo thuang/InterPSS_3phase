@@ -30,7 +30,7 @@ public class TestDistributionPowerflowAlgo {
 		AclfNetwork3Phase net = createDistNet();
 		
 		// 1. Test the distribution line models
-		Branch3Phase line2_4 = (Branch3Phase) net.getBranch("Bus2", "Bus4", "0");
+		Branch3Phase line2_4 = (Branch3Phase) net.getBranch("Bus4", "Bus2", "0");
 		
 		/*
 		 *  [a] = U
@@ -108,6 +108,12 @@ public class TestDistributionPowerflowAlgo {
 		
 		assertTrue(distPFAlgo.powerflow());
 		
+		/*
+		 *  Vabc of bus -Bus1,1.0100 + j0.0000  -0.5050 + j-0.87469  -0.5050 + j0.87469
+			Vabc of bus -Bus2,0.99636 + j-0.05941  -0.54963 + j-0.83317  -0.44673 + j0.89258
+			Vabc of bus -Bus3,0.99075 + j-0.07914  -0.56392 + j-0.81844  -0.42683 + j0.89759
+			Vabc of bus -Bus4,0.98834 + j-0.09907  -0.57997 + j-0.80639  -0.40837 + j0.90546
+		 */
 		for(AclfBus bus:net.getBusList()){
 			Bus3Phase bus3P = (Bus3Phase) bus;
 			System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
@@ -146,6 +152,7 @@ public class TestDistributionPowerflowAlgo {
   		bus3.setGenCode(AclfGenCode.NON_GEN);
   		// set the bus to a constant power load bus
   		bus3.setLoadCode(AclfLoadCode.CONST_P);
+  		
   		Load3Phase load1 = new Load3PhaseImpl();
   		load1.set3PhaseLoad(new Complex3x1(new Complex(0.5,0.1),new Complex(0.5,0.1),new Complex(0.5,0.1)));
   		bus3.getThreePhaseLoadList().add(load1);
@@ -178,7 +185,7 @@ public class TestDistributionPowerflowAlgo {
 		Line2_3.setZ0( new Complex(0.0, 0.08 ));
   		
 		
-		Branch3Phase Line2_4 = ThreePhaseObjectFactory.create3PBranch("Bus2", "Bus4", "0", net);
+		Branch3Phase Line2_4 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus2", "0", net);
 		Line2_4.setBranchCode(AclfBranchCode.LINE);
 		Line2_4.setZ( new Complex( 0.0, 0.04 ));
 		Line2_4.setZ0( new Complex(0.0, 0.08 ));
