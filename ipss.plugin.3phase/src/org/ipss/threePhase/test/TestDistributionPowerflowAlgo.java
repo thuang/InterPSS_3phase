@@ -1,13 +1,16 @@
 package org.ipss.threePhase.test;
 
 import static org.junit.Assert.*;
+import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
+import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.basic.impl.AclfNetwork3Phase;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
@@ -20,16 +23,21 @@ import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.aclf.BaseAclfNetwork;
+import com.interpss.core.acsc.XfrConnectCode;
+import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.net.Bus;
 
 public class TestDistributionPowerflowAlgo {
 	
-	@Test
+	//@Test
 	public void testLineAndXfrGeneralizedMatrices() throws InterpssException {
 		
 		AclfNetwork3Phase net = createDistNet();
 		
+		//--------------------------------------------------------------------------------------------
 		// 1. Test the distribution line models
+
+	
 		Branch3Phase line2_4 = (Branch3Phase) net.getBranch("Bus4", "Bus2", "0");
 		
 		/*
@@ -79,8 +87,167 @@ public class TestDistributionPowerflowAlgo {
 		System.out.println("[B] ="+B.toString());
 		assertTrue(line2_4.getZabc().subtract(B).abs()<1.0E-7);
 		
+		//---------------------------------------------------------------------------------------
+		//             2. Test the transformer models
+		//---------------------------------------------------------------------------------------
 		
-		//2. Test the transformer models
+		// Grounded Wye- Grounded Wye
+		Branch3Phase line1_2 = (Branch3Phase) net.getBranch("Bus1", "Bus2", "0");
+		
+		System.out.println("Zabc of xfr1_2 = "+line1_2.getZabc());
+		
+		Transformer3Phase xfr1_2 = line1_2.to3PXformer();
+		AcscXformer xfr0 = acscXfrAptr.apply(line1_2);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+		System.out.println("------------Grounded Wye- Grounded Wye------------");
+		/*
+		 * at 
+		 */
+		Complex3x3 at = xfr1_2.getLVBusVabc2HVBusVabcMatrix();
+		System.out.println("[at] ="+at.toString());
+		assertTrue(Complex3x3.createUnitMatrix().multiply(1/xfr1_2.getToTurnRatio()).subtract(at).abs()<1.0E-7);
+		
+		/*
+		 * bt 
+		 */
+		
+		Complex3x3 bt = xfr1_2.getLVBusIabc2HVBusVabcMatrix();
+		System.out.println("[bt] ="+bt.toString());
+		assertTrue(xfr1_2.getZabc().multiply(1/xfr1_2.getToTurnRatio()).subtract(bt).abs()<1.0E-7);
+		
+		/*
+		 * ct 
+		 */
+		
+		Complex3x3 ct = xfr1_2.getLVBusVabc2HVBusIabcMatrix();
+		System.out.println("[ct] ="+ct.toString());
+		assertTrue(ct.abs()<1.0E-7);
+		
+		/*
+		 * dt 
+		 */
+		
+		Complex3x3 dt = xfr1_2.getLVBusIabc2HVBusIabcMatrix();
+		System.out.println("[dt] ="+dt.toString());
+		assertTrue(Complex3x3.createUnitMatrix().multiply(xfr1_2.getToTurnRatio()).subtract(dt).abs()<1.0E-7);
+		
+		
+		/*
+		 * At
+		 */
+		
+		Complex3x3 At = xfr1_2.getHVBusVabc2LVBusVabcMatrix();
+		System.out.println("[At] ="+At.toString());
+		assertTrue(Complex3x3.createUnitMatrix().multiply(xfr1_2.getToTurnRatio()).subtract(At).abs()<1.0E-7);
+		
+		/*
+		 * Bt
+		 */
+		
+		Complex3x3 Bt = xfr1_2.getLVBusIabc2LVBusVabcMatrix();
+		System.out.println("[Bt] ="+Bt.toString());
+		assertTrue(xfr1_2.getZabc().subtract(Bt).abs()<1.0E-7);
+		
+		
+		
+		
+		
+		
+		//
+		// Delta-Grounded Wye
+		//
+		xfr0 = acscXfrAptr.apply(line1_2);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+		System.out.println("-----------Delta-Grounded Wye Step-down------------");
+		/*
+		 * at 
+		 */
+		at = xfr1_2.getLVBusVabc2HVBusVabcMatrix();
+		System.out.println("[at] ="+at.toString());
+		Complex3x3 W_AV = new Complex3x3();
+		W_AV.ab = new Complex(2);
+		W_AV.ac = new Complex(1);
+		
+		W_AV.ba = new Complex(1);
+		W_AV.bc = new Complex(2);
+		
+		W_AV.ca = new Complex(2);
+		W_AV.cb = new Complex(1);
+		
+		W_AV = W_AV.multiply(-1.0/3.0*(xfr1_2.getFromTurnRatio()*Math.sqrt(3)/xfr1_2.getToTurnRatio()));
+		
+		
+		assertTrue(W_AV.subtract(at).abs()<1.0E-7);
+		
+		/*
+		 * bt 
+		 */
+		
+		bt = xfr1_2.getLVBusIabc2HVBusVabcMatrix();
+		System.out.println("[bt] ="+bt.toString());
+		assertTrue(W_AV.multiply(xfr1_2.getZabc()).subtract(bt).abs()<1.0E-7);
+		
+		/*
+		 * ct 
+		 */
+		
+		ct = xfr1_2.getLVBusVabc2HVBusIabcMatrix();
+		System.out.println("[ct] ="+ct.toString());
+		assertTrue(ct.abs()<1.0E-7);
+		
+		/*
+		 * dt 
+		 */
+		
+		dt = xfr1_2.getLVBusIabc2HVBusIabcMatrix();
+		System.out.println("[dt] ="+dt.toString());
+		
+		Complex3x3 dt1 = new Complex3x3();
+		dt1.aa = new Complex(1);
+		dt1.ab = new Complex(-1);
+		
+		dt1.bb = new Complex(1);
+		dt1.bc = new Complex(-1);
+		
+		dt1.ca = new Complex(-1);
+		dt1.cc = new Complex(1);
+		
+		//dt1 = dt1.multiply(xfr1_2.getToTurnRatio());
+		
+		assertTrue(dt1.multiply(xfr1_2.getToTurnRatio()/Math.sqrt(3)/xfr1_2.getFromTurnRatio()).subtract(dt).abs()<1.0E-7);
+		
+		
+		/*
+		 * At
+		 */
+		
+		At = xfr1_2.getHVBusVabc2LVBusVabcMatrix();
+		System.out.println("[At] ="+At.toString());
+		
+		Complex3x3 AV = new Complex3x3();
+		AV.ab = new Complex(-1);
+		
+		AV.bc = new Complex(-1);
+		
+		AV.ca = new Complex(-1);
+		
+		AV = AV.multiply(Math.sqrt(3)*xfr1_2.getFromTurnRatio()/xfr1_2.getToTurnRatio());
+	
+		
+		assertTrue(AV.inv().multiply(dt1).subtract(At).abs()<1.0E-7);
+		
+		/*
+		 * Bt
+		 */
+		
+		Bt = xfr1_2.getLVBusIabc2LVBusVabcMatrix();
+		System.out.println("[Bt] ="+Bt.toString());
+		assertTrue(xfr1_2.getZabc().subtract(Bt).abs()<1.0E-7);
+		
 		
 	}
 	
@@ -127,8 +294,8 @@ public class TestDistributionPowerflowAlgo {
 		((AclfNetwork3Phase) net).setNetworkType(false);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PAclfBus("Bus1", net);
-  		bus1.setAttributes("13.8 kV feeder source", "");
-  		bus1.setBaseVoltage(13800.0);
+  		bus1.setAttributes("69 kV feeder source", "");
+  		bus1.setBaseVoltage(69000.0);
   		// set the bus to a non-generator bus
   		bus1.setGenCode(AclfGenCode.SWING);
   		// set the bus to a constant power load bus
@@ -174,10 +341,26 @@ public class TestDistributionPowerflowAlgo {
   		bus4.getThreePhaseLoadList().add(load2);
   		
   		
-		Branch3Phase Line1_2 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus2", "0", net);
-		Line1_2.setBranchCode(AclfBranchCode.LINE);
-		Line1_2.setZ( new Complex( 0.0, 0.04 ));
-		Line1_2.setZ0( new Complex(0.0, 0.08 ));
+//		Branch3Phase Line1_2 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus2", "0", net);
+//		Line1_2.setBranchCode(AclfBranchCode.LINE);
+//		Line1_2.setZ( new Complex( 0.0, 0.04 ));
+//		Line1_2.setZ0( new Complex(0.0, 0.08 ));
+  		
+  		Branch3Phase xfr1_2 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus2", "0", net);
+  		xfr1_2.setBranchCode(AclfBranchCode.XFORMER);
+  		xfr1_2.setToTurnRatio(1.02);
+  		//xfr1_2.setZ( new Complex( 0.0, 0.04 ));
+  		xfr1_2.setZabc(Complex3x3.createUnitMatrix().multiply(new Complex( 0.0, 0.04 )));
+  		//xfr1_2.setZ0( new Complex(0.0, 0.4 ));
+		
+		
+		AcscXformer xfr0 = acscXfrAptr.apply(xfr1_2);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+		// for testing connection and from-to relationship only
+//		xfr0.setToConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+//		xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
 		
 		Branch3Phase Line2_3 = ThreePhaseObjectFactory.create3PBranch("Bus2", "Bus3", "0", net);
 		Line2_3.setBranchCode(AclfBranchCode.LINE);
@@ -238,8 +421,8 @@ public class TestDistributionPowerflowAlgo {
 		((AclfNetwork3Phase) net).setNetworkType(false);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PAclfBus("Bus1", net);
-  		bus1.setAttributes("13.8 kV feeder source", "");
-  		bus1.setBaseVoltage(13800.0);
+  		bus1.setAttributes("69 kV feeder source", "");
+  		bus1.setBaseVoltage(69000.0);
   		// set the bus to a non-generator bus
   		bus1.setGenCode(AclfGenCode.SWING);
   		// set the bus to a constant power load bus
@@ -287,6 +470,7 @@ public class TestDistributionPowerflowAlgo {
 		Line1_2.setBranchCode(AclfBranchCode.LINE);
 		Line1_2.setZ( new Complex( 0.0, 0.04 ));
 		Line1_2.setZ0( new Complex(0.0, 0.08 ));
+  		
 		
 		Branch3Phase Line2_3 = ThreePhaseObjectFactory.create3PBranch("Bus2", "Bus3", "0", net);
 		Line2_3.setBranchCode(AclfBranchCode.LINE);

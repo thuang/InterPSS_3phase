@@ -46,10 +46,22 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	public Complex3x3 getZabc() {
 		// if Zabc is not set, initialize it from the three-sequence impedances
 		if(Zabc ==null){
-			if(this.getZ0()!=null)
-				setZabc(getZ(),getZ(),getZ0());
-			else
-				setZabc(getZ(),getZ(),getZ().multiply(z0_to_z1_ratio));
+			if(this.isLine()){
+				if(this.getZ0()!=null && this.getZ0().abs()>0)
+					setZabc(getZ(),getZ(),getZ0());
+				else
+					setZabc(getZ(),getZ(),getZ().multiply(z0_to_z1_ratio));
+			}
+			else{
+				if(this.getZ()!=null && this.getZ().abs()>0){
+					Complex3x3 Zabc = new Complex3x3();
+					Zabc.aa = this.getZ();
+					Zabc.bb = this.getZ();
+					Zabc.cc = this.getZ();
+					setZabc(Zabc);
+				}
+			}
+				
 		}
 		
 		return this.Zabc;

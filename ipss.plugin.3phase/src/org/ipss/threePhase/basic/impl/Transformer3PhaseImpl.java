@@ -299,18 +299,18 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
      * 
      */
 
-    //TODO consider to change the naming to HV/LV
+ 
 	@Override
 	public Complex3x3 getLVBusVabc2HVBusVabcMatrix() {
 		     //Delta-Delta
 		     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
 		    	 //                      at = [W][AV][D] = [W][D]*nt
-		    	 this.LVBusVabc2HVBusIabcMatrix =this.getDeltaVLL2VLNMatrix().multiply(
-		    			                                      this.getDeltaVLN2VLLMatrix()).multiply(getTurnRatio());
+		    	 this.LVBusVabc2HVBusVabcMatrix =this.getDeltaVLL2VLNMatrix().multiply(
+		    			                                      this.getDeltaVLN2VLLMatrix()).multiply(getWindingTurnRatioPU());
 		     }
 		     // Delta-Grounded Wye step-down
 		     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-		    	 this.LVBusVabc2HVBusIabcMatrix =this.getDeltaVLL2VLNMatrix().multiply(this.getVtabc2VLLabcMatrix());
+		    	 this.LVBusVabc2HVBusVabcMatrix =this.getDeltaVLL2VLNMatrix().multiply(this.getVtabc2VLLabcMatrix());
 		     }
 		    
 		     // Grounded Wye - Grounded Wye
@@ -374,7 +374,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		 //Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
 	    	 
-	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
+	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getWindingTurnRatioPU());
 	     }
 	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
@@ -383,19 +383,21 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 
 	        	dt.aa = new Complex(1);
 	        	dt.ab = new Complex(-1);
+	        	
 	        	dt.bb = new Complex(1);
 	        	dt.bc = new Complex(-1);
+	        	
 	        	dt.ca = new Complex(-1);
 	        	dt.cc = new Complex(1);
 	        	
-	        	dt.multiply(1/this.getTurnRatio());
+	        	dt = dt.multiply(1/this.getWindingTurnRatioPU());
 	        	
 	    	 this.LVBusIabc2HVBusIabcMatrix = dt;
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
+	    	 this.LVBusIabc2HVBusIabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getWindingTurnRatioPU());
 	     }
 	     else{
 	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
@@ -409,7 +411,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		 //Delta-Delta
 	     if(this.isHVDeltaConnectted() && this.isLVDeltaConnectted()){
 	    	                           // At  =  [W][AV]^-1[D]
-	    	 this.HVBusVabc2LVBusVabcMatrix = this.getDeltaVLL2VLNMatrix().multiply(1/this.getTurnRatio()).multiply(this.getDeltaVLN2VLLMatrix());
+	    	 this.HVBusVabc2LVBusVabcMatrix = this.getDeltaVLL2VLNMatrix().multiply(1/this.getWindingTurnRatioPU()).multiply(this.getDeltaVLN2VLLMatrix());
 	     }
 	     // Delta-Grounded Wye step-down
 	     else if (this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
@@ -422,14 +424,14 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	At.cb = new Complex(-1);
 	        	At.cc = new Complex(1);
 	        	
-	        	At.multiply(1/this.getTurnRatio());
+	        	At = At.multiply(1/this.getWindingTurnRatioPU());
 	        	
 	    	 this.HVBusVabc2LVBusVabcMatrix = At;
 	     }
 	    
 	     // Grounded Wye - Grounded Wye
 	     else if (!this.isHVDeltaConnectted() && !this.isLVDeltaConnectted()){
-	    	 this.HVBusVabc2LVBusVabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getTurnRatio());
+	    	 this.HVBusVabc2LVBusVabcMatrix = Complex3x3.createUnitMatrix().multiply(1/this.getWindingTurnRatioPU());
 	     }
 	     else{
 	    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
@@ -477,8 +479,46 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	     }
 		return this.LVBusIabc2LVBusVabcMatrix;
 	}
-	private double getTurnRatio(){
-		return this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getToTurnRatio();
+	
+	/**
+	 * Define the turn ratio as winding turn ratio between HV to LV, not VLL(HV)/VLL(LV)
+	 * @return
+	 */
+	private double getWindingTurnRatioPU(){
+		boolean isHVOnFromBusSide = true;
+		double t = this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getToTurnRatio();
+		
+		// t = winding (HV)/ winding(LV)
+		if(this.ph3Branch.getFromAclfBus().getBaseVoltage() < this.ph3Branch.getToAclfBus().getBaseVoltage()){
+			 t = this.ph3Branch.getToTurnRatio()/this.ph3Branch.getFromTurnRatio();
+			 isHVOnFromBusSide = false;
+		}
+		
+		if(this.ph3Branch.getXfrFromConnectCode() !=this.ph3Branch.getXfrToConnectCode()){
+			
+			//Delta Grounded Wye
+			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA){
+				if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.WYE_SOLID_GROUNDED){
+					if(isHVOnFromBusSide) // Delta Grounded Wye step down
+					  t= t*Math.sqrt(3);
+					else{
+						throw new UnsupportedOperationException(" Grounded Wye -Delta  step up transformer is not supported yet");
+					}
+						
+				}
+			}
+			else if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.WYE_SOLID_GROUNDED){
+				if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA){
+					if(!isHVOnFromBusSide) // Delta Grounded Wye step down
+					   t= t*Math.sqrt(3);
+					else
+						throw new UnsupportedOperationException(" Grounded Wye -Delta  step up transformer is not supported yet");
+				}
+				
+			}
+				
+		}
+		return t;
 	}
 	private Complex3x3 getTurnRatioMatrix(){
 		if(turnRatioMatrix ==null){
@@ -486,7 +526,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 			//Yg-Yg
 			if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
 				if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED){
-					turnRatioMatrix = Complex3x3.createUnitMatrix().multiply(getTurnRatio());
+					turnRatioMatrix = Complex3x3.createUnitMatrix().multiply(getWindingTurnRatioPU());
 				}
 			}
 		}
@@ -535,7 +575,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
     	W.bc = new Complex(1);
     	W.ca = new Complex(1);
     	W.cc = new Complex(2);
-    	W.multiply(1/3);
+    	W=W.multiply(1.0/3.0);
     	
     	return W;
     }
@@ -566,7 +606,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
     	AV.ab = new Complex(-1);
     	AV.bc = new Complex(-1);
     	AV.ca = new Complex(-1);
-    	AV.multiply(this.getTurnRatio());
+    	AV=AV.multiply(this.getWindingTurnRatioPU());
     	
     	return AV;
     }
@@ -597,7 +637,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
     	// bt = [AV][W][Ztabc][G1]
     	
     	
-    	Complex3x3 bt = Complex3x3.createUnitMatrix().multiply(this.getTurnRatio());
+    	Complex3x3 bt = Complex3x3.createUnitMatrix().multiply(this.getWindingTurnRatioPU());
     	bt = bt.multiply(this.getDeltaVLL2VLNMatrix()).multiply(this.getZabc()).multiply(G1);
     	
     	return bt;
