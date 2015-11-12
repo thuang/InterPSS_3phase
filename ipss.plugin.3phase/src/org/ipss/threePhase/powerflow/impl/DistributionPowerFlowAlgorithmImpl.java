@@ -33,11 +33,12 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	
 	private DistributionPFMethod pfMethod = DistributionPFMethod.Forward_Backword_Sweep;
 	
-	private double tol = 1.0E-4;
+	private double tol = 1.0E-6;
 	private int    maxIteration = 20;
 	private boolean radialNetworkOnly = true;
 	private boolean pfFlag =false;
 	private Hashtable<String,Complex3x1> busVoltTable =null;
+	private boolean initBusVoltagesEnabled = true;
 	
 	public DistributionPowerFlowAlgorithmImpl(){
 		busVoltTable = new Hashtable<>();
@@ -54,13 +55,17 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	public boolean orderDistributionBuses(boolean radialOnly) {
 		Queue<Bus3Phase> onceVisitedBuses = new  LinkedList<>();
 		
-			// find the source bus, which is the swing bus for radial feeders;
-			for(AclfBus b: distNet.getBusList()){
+		// find the source bus, which is the swing bus for radial feeders;
+		for(AclfBus b: distNet.getBusList()){
 				if(b.isActive() && b.isSwing()){
 					onceVisitedBuses.add((Bus3Phase) b);
 				}
-			}
-			
+		}
+		
+		//make sure all internal branches are unvisited
+		for(AclfBranch bra:distNet.getBranchList()){
+			bra.setVisited(false);
+		}
 
 		// perform BFS and set the bus sortNumber 
 		BFS(onceVisitedBuses);
@@ -84,8 +89,8 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			startingBus.setIntFlag(2);
 			
 			if(startingBus!=null){
-				  for(Branch connectedBra: startingBus.getBranchList()){
-						if(!connectedBra.isVisited()){
+				  for(Branch connectedBra: startingBus.getConnectedPhysicalBranchList()){
+						if(connectedBra.isActive() && !connectedBra.isVisited()){
 							try {
 								Bus findBus = connectedBra.getOppositeBus(startingBus);
 								
@@ -163,6 +168,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 				e.printStackTrace();
 			}
 		else{
+			if(this.initBusVoltagesEnabled)
 			pfFlag = this.initBusVoltages();
 		}
 			
@@ -215,6 +221,10 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			
 			for(int sortNum =this.distNet.getNoBus()-1;sortNum>0;sortNum--){
 				AclfBus bus = this.distNet.getBus(sortNum);
+				if(bus==null){
+					throw new Error(" The bus sort num # "+sortNum +" returns null bus object in distribution #"+this.distNet.getId());
+					
+				}
 				if(bus.isActive()){
 					Bus3Phase bus3P = null;
 					if(bus instanceof Bus3Phase){
@@ -274,7 +284,12 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 					//Error in the searching
 					if(bus.getBranchList().size()==1 && unvisitedBranchNum !=1 && !bus.isSwing()){
 						throw new Error(" There must be only one 'upstream' unvisited branch for an active, non-swing bus:"+bus.getId());
-					}else {
+					}
+					
+					if(bus.getId().equals("Bus2")){
+						System.out.println("processing bus 2");
+					}
+					//else {
 						
 						// consider the existing bus current injection into the network from generators, loads, shunt capacitors, etc.
 						Complex3x1 busSelfEquivCurInj3Ph =bus3P.calc3PhEquivCurInj();
@@ -373,7 +388,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 								
 								
 								iabc =  xfr3p.getLVBusVabc2HVBusIabcMatrix().multiply(bus3P.get3PhaseVotlages()).add(
-										xfr3p.getLVBusVabc2HVBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
+										xfr3p.getLVBusIabc2HVBusIabcMatrix().multiply(upStreamBranch.getCurrentAbcAtToSide()));
 								
 								
 							}
@@ -389,7 +404,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 							
 						}
 						
-					}
+					//}
 						
 				}
 			}
@@ -408,7 +423,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 				if(bus.isActive()){
 					Bus3Phase bus3P = (Bus3Phase) bus;
 					if(i>=1){
-						mis=bus3P.get3PhaseVotlages().subtract(busVoltTable.get(bus3P.getId())).abs();
+						mis=bus3P.get3PhaseVotlages().subtract(busVoltTable.get(bus3P.getId())).absMax();
 						if(mis>this.getTolerance()){
 							this.pfFlag = false;
 						}
@@ -504,12 +519,14 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		
 		}
 		
+		
+		
 		return this.pfFlag;
 		
 		
-		
-		
 	}
+	
+	
 
 	@Override
 	public DistributionPFMethod getPFMethod() {
@@ -551,6 +568,18 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	public void setNetwork(BaseAclfNetwork net) {
 		this.distNet = net;
 		
+	}
+
+	@Override
+	public void setInitBusVoltageEnabled(boolean enableInitBus3PhaseVolts) {
+		this.initBusVoltagesEnabled = enableInitBus3PhaseVolts;
+		
+	}
+
+	@Override
+	public boolean isInitBusVoltageEnabled() {
+		
+		return this.initBusVoltagesEnabled;
 	}
     
 	

@@ -14,6 +14,7 @@ import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.basic.impl.AclfNetwork3Phase;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
+import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
@@ -285,6 +286,8 @@ public class TestDistributionPowerflowAlgo {
 			Bus3Phase bus3P = (Bus3Phase) bus;
 			System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
 		}
+		
+		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(net));
 		
 	}
 	
