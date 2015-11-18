@@ -8,7 +8,7 @@ import org.ipss.threePhase.basic.Transformer3Phase;
 import com.interpss.dstab.DStabGen;
 
 import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 
 public class ThreePhaseUtilFunction {
 	
@@ -19,8 +19,8 @@ public class ThreePhaseUtilFunction {
 		return adpter;
 	};
 	
-	public static Function<DStabGen, DStabGen3Phase> threePhaseGenAptr = gen -> {
-		DStabGen3Phase adpter = ThreePhaseObjectFactory.create3PDynGenerator(gen.getId());
+	public static Function<DStabGen, DStabGen3PhaseAdapter> threePhaseGenAptr = gen -> {
+		DStabGen3PhaseAdapter adpter = ThreePhaseObjectFactory.create3PDynGenerator(gen.getId());
 		adpter.setGen(gen);
 		return adpter;
 	};

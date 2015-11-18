@@ -5,13 +5,13 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynamicModel3Phase;
 
 import com.interpss.core.net.impl.NameTagImpl;
 import com.interpss.dstab.DStabGen;
 
-public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3Phase {
+public class DStabGen3PhaseAdapterImpl extends DynamicModel3Phase implements DStabGen3PhaseAdapter {
 	/**
 	 * 
 	 */
@@ -101,7 +101,8 @@ public class DStabGen3PhaseImpl extends DynamicModel3Phase implements DStabGen3P
 	@Override
 	public Complex3x1 getISource3Phase() {
 		 // Complex3x1(a0,b1,c2)
-		return Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),this.dynGen.getMach().getIgen(), new Complex(0,0)));
+		Complex ipos = (Complex) this.dynGen.getDynamicDevice().getOutputObject();
+		return Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),ipos, new Complex(0,0)));
 	}
 	
 	public Complex3x1 getIinj2Network3Phase(){

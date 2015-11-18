@@ -1,5 +1,6 @@
 package org.ipss.threePhase.powerflow.impl;
 
+import org.apache.commons.math3.complex.Complex;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 
@@ -17,7 +18,15 @@ public class DistPowerFlowOutFunc {
 		sb.append("Bus results: \n");
 		for(AclfBus b:distNet.getBusList()){
 			Bus3Phase bus = (Bus3Phase) b;
-			sb.append(bus.getId()+","+bus.get3PhaseVotlages().toString()+"\n");
+		
+			Complex va = bus.get3PhaseVotlages().a_0;
+			Complex vb = bus.get3PhaseVotlages().b_1;
+			Complex vc = bus.get3PhaseVotlages().c_2;
+			sb.append(bus.getId()+","+va.abs()+","+vb.abs()+","+vc.abs()+",");
+			sb.append(bus.get3PhaseVotlages().toString()+"\n");
+			
+			
+			
 		}
 		sb.append("\nBranch results: \n");
 		for(AclfBranch bra:distNet.getBranchList()){

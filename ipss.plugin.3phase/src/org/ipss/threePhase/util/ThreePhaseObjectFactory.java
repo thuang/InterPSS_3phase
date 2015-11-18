@@ -14,8 +14,8 @@ import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Transformer3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
-import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
-import org.ipss.threePhase.dynamic.model.impl.DStabGen3PhaseImpl;
+import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
+import org.ipss.threePhase.dynamic.model.impl.DStabGen3PhaseAdapterImpl;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistributionPowerFlowAlgorithmImpl;
 
@@ -98,8 +98,8 @@ public class ThreePhaseObjectFactory {
 		return gen;
 	}
 	
-	public static DStabGen3Phase  create3PDynGenerator(String genId){
-		DStabGen3Phase gen = new DStabGen3PhaseImpl();
+	public static DStabGen3PhaseAdapter  create3PDynGenerator(String genId){
+		DStabGen3PhaseAdapter gen = new DStabGen3PhaseAdapterImpl();
 		gen.setId(genId);
 		return gen;
 	}

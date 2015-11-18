@@ -19,7 +19,7 @@ import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
-import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
 import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.junit.Test;
@@ -136,7 +136,7 @@ public class TestODM3PhaseDstabMapper {
 							      if(gen.isActive() && gen instanceof DStabGen){
 							    	  DStabGen dynGen = (DStabGen)gen;
 							    	  if( dynGen.getMach()!=null){
-							    		  DStabGen3Phase gen3P = threePhaseGenAptr.apply(dynGen);
+							    		  DStabGen3PhaseAdapter gen3P = threePhaseGenAptr.apply(dynGen);
 							    		  iInject = iInject.add(gen3P.getIinj2Network3Phase());
 							    		  
 							    	      

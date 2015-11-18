@@ -11,7 +11,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.dynamic.model.DStabGen3Phase;
+import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
