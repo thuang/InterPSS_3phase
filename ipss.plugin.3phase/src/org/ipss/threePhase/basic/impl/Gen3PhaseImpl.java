@@ -170,7 +170,7 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 			}
 			
 			//step-5 combine both the positive- and negative-sequence currents and transform it to a three-phase current injection
-			currInj = new Complex3x1(new Complex(0,0),ipos,ineg).ToAbc();
+			currInj = new Complex3x1(new Complex(0,0),ipos,ineg).toABC();
 			
 			}
 				
