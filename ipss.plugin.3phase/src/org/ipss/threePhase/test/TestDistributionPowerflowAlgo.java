@@ -501,9 +501,9 @@ public class TestDistributionPowerflowAlgo {
   		gen1.setParentBus(bus4);
   		gen1.setGen(new Complex(0.5,0));  // total gen power, system mva based
   		gen1.setMvaBase(10);
-  		gen1.setPosGenZ(new Complex(0.001,0.05));
-  		gen1.setNegGenZ(new Complex(0.001,0.05));
-  		gen1.setZeroGenZ(new Complex(0.001,0.15));
+  		//gen1.setPosGenZ(new Complex(0.001,0.05));
+  		//gen1.setNegGenZ(new Complex(0.001,0.05));
+  		//gen1.setZeroGenZ(new Complex(0.001,0.15));
   		bus4.getThreePhaseGenList().add(gen1);
   		
 //		Branch3Phase Line1_2 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus2", "0", net);

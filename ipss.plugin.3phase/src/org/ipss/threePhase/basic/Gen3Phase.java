@@ -53,6 +53,7 @@ public interface Gen3Phase extends DStabGen{
 	public GenType    getGenType();
 	
 	public void setGenType(GenType type);
+
 	
 	
 }

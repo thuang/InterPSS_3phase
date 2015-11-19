@@ -148,7 +148,13 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 double Ir =  Ip_prod*Math.cos(vtAng)-Iq_prod*Math.sin(vtAng);
     	 double Ix =  Ip_prod*Math.sin(vtAng)-Iq_prod*Math.cos(vtAng);
     	 
-    	 genCurSource = new Complex(Ir,Ix);
+    	 Complex effectiveCurrInj = new Complex(Ir,Ix);
+    	 
+    	 //TODO positive sequence power drawn by the equivalent Ypos at the terminal
+    	 //if(this.getParentGen().getPosGenZ()!=null && this.getParentGen().getPosGenZ())
+    		 
+    		 
+    	 genCurSource = effectiveCurrInj;
     	 
          return genCurSource;
     	 

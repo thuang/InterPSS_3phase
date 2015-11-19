@@ -14,6 +14,7 @@ import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
+import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
 import com.interpss.core.aclf.AclfGen;
@@ -36,11 +37,17 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private List<DynLoadModel1Phase> phaseCDynLoadList;
 	
+	private List<DynLoadModel3Phase> threePhaseDynLoadList;
+	
 	private List<Load3Phase> threePhaseLoadList = null;
 	private List<Gen3Phase> threePhaseGenList = null;
 	
 	private Complex3x1 load3PhEquivCurInj = null;
 	private Complex3x1 equivCurInj3Phase = null;
+	
+	private Complex3x1 netLoad3Phase = null;
+	
+	private Complex3x1 totalLoad3Phase = null;
 
 	@Override
 	public Complex3x1 get3PhaseVotlages() {
@@ -103,13 +110,26 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		 
 		 //TODO 06/16/2015
 		 //EquivLoadYabc does not limit to load buses, otherwise buses with sequence shuntY cannot be correctly modeled
-				    
-		     yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
+		 //ALSO NOTE: The contribution from the generators has been considered in the  <EquivLoadYabc> above   		    
+		  
+		 yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
 		 
 		
 		     
-		   //NOTE: The contribution from the generators has been considered in the  <EquivLoadYabc> above    
-		
+		//TODO 11/19/2015 work on three-phase and single-phase loads
+		//ONly consider the net Load after excluding the effects of dynamic loads
+		  
+		 if(this.get3PhaseNetLoadResults() != null && this.get3PhaseNetLoadResults().abs() >0.0){
+			 double va = this.get3PhaseVotlages().a_0.abs();
+			 double vb = this.get3PhaseVotlages().b_1.abs();
+			 double vc = this.get3PhaseVotlages().c_2.abs();
+			 Complex ya = this.get3PhaseNetLoadResults().a_0.conjugate().divide(va*va);
+			 Complex yb = this.get3PhaseNetLoadResults().b_1.conjugate().divide(vb*vb);
+			 Complex yc = this.get3PhaseNetLoadResults().c_2.conjugate().divide(vc*vc);
+			 
+			 yiiAbc = yiiAbc.add(new Complex3x3(ya,yb,yc));
+		 }
+
 
         
 		
@@ -170,7 +190,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	}
 	
 	
-
+   // for power flow purpose
 	@Override
 	public Complex3x1 calc3PhEquivCurInj() {
 		calcLoad3PhEquivCurInj();
@@ -183,6 +203,76 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		
 		return this.equivCurInj3Phase;
 	}
+  
+	
+	// for dynamic purpose
+	@Override
+	public List<DynLoadModel3Phase> getThreePhaseDynLoadList() {
+		if(threePhaseDynLoadList ==null)
+			threePhaseDynLoadList = new ArrayList<>();
+		return threePhaseDynLoadList;
+
+	}
+
+	@Override
+	public Complex3x1 get3PhaseNetLoadResults() {
+		
+		
+//		// 1, process the 1-phase dynamic loads
+//
+//		
+//		Complex totalPhaseADynLoadPQ = new Complex(0,0);
+//		Complex totalPhaseBDynLoadPQ = new Complex(0,0);
+//		Complex totalPhaseCDynLoadPQ = new Complex(0,0);
+//		
+//        
+//        for(DynLoadModel1Phase dynLoadPA : getPhaseADynLoadList()){
+//        	if(dynLoadPA.isActive()){
+//        		dynLoadPA.initStates();
+//        		
+//        		totalPhaseADynLoadPQ = totalPhaseADynLoadPQ.add(dynLoadPA.getInitLoadPQ()); 
+//        	}
+//		}
+//        
+//        for(DynLoadModel1Phase dynLoadPB : getPhaseBDynLoadList()){
+//        	if(dynLoadPB.isActive()){
+//        		dynLoadPB.initStates();
+//        		
+//        		totalPhaseBDynLoadPQ = totalPhaseBDynLoadPQ.add(dynLoadPB.getInitLoadPQ()); 
+//        	}
+//		}
+//        
+//        
+//        for(DynLoadModel1Phase dynLoadPC : getPhaseCDynLoadList()){
+//        	if(dynLoadPC.isActive()){
+//        		dynLoadPC.initStates();
+//        	
+//        		totalPhaseCDynLoadPQ = totalPhaseCDynLoadPQ.add(dynLoadPC.getInitLoadPQ()); 
+//        	}
+//		}
+       
+		
+		return netLoad3Phase ;
+	}
+	
+	
+	@Override
+	public void set3PhaseNetLoadResults(Complex3x1 netLoad3Phase) {
+		  this.netLoad3Phase = netLoad3Phase;
+		
+	}
+	
+
+	@Override
+	public Complex3x1 get3PhaseTotalLoad() {
+		this.totalLoad3Phase = new Complex3x1();
+		for(Load3Phase load: this.getThreePhaseLoadList()){
+			this.totalLoad3Phase = this.totalLoad3Phase.add(load.get3PhaseLoad());  
+		}
+		return this.totalLoad3Phase;
+	}
+
+	
 
 
 

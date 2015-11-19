@@ -46,7 +46,7 @@ import com.interpss.simu.SimuCtxType;
 
 public class IEEE9_3Phase_1PAC_test {
 	
-	//@Test
+	@Test
 	public void test_IEEE9_1pac_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -353,12 +353,12 @@ public class IEEE9_3Phase_1PAC_test {
 			}
 		}
 		
-		//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
-		//System.out.println(sm.toCSVString(sm.getBusVoltTable()));
-		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_GenSpd.csv", sm.toCSVString(sm.getMachSpeedTable()));
-		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_GenAngle.csv", sm.toCSVString(sm.getMachAngleTable()));
-		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_busVolt.csv", sm.toCSVString(sm.getBusVoltTable()));
-		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_ac_Results.txt",sb.toString());
+		System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+		System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_GenSpd.csv", sm.toCSVString(sm.getMachSpeedTable()));
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_GenAngle.csv", sm.toCSVString(sm.getMachAngleTable()));
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_busVolt.csv", sm.toCSVString(sm.getBusVoltTable()));
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_dist_3p_SLG@Bus10_ac_Results.txt",sb.toString());
 	}
 	
 	

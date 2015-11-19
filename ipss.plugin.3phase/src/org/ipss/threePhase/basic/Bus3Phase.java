@@ -5,6 +5,7 @@ import java.util.List;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
+import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.acsc.AcscBus;
@@ -28,11 +29,24 @@ public interface Bus3Phase extends DStabBus {
     
     public List<DynLoadModel1Phase> getPhaseCDynLoadList();
     
+    public List<DynLoadModel3Phase> getThreePhaseDynLoadList();
+    
     
     public List<Load3Phase> getThreePhaseLoadList();
     
     public List<Gen3Phase> getThreePhaseGenList();
     
     public Complex3x1  calc3PhEquivCurInj();
+    
+    public Complex3x1 get3PhaseTotalLoad();
+    
+	/**
+	 * Get the 3-phase net loads (in power) by subtracting the dynamic phase-oriented (including single-phase and three-phase) loads 
+	 * from the bus total phase-oriented loads 
+	 * @return
+	 */
+	public Complex3x1 get3PhaseNetLoadResults();
+	
+	public void set3PhaseNetLoadResults(Complex3x1 netLoad3Phase);
 
 }

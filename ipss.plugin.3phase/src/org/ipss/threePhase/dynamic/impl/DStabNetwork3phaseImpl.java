@@ -20,6 +20,7 @@ import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
+import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
 import com.interpss.common.datatype.Constants;
@@ -267,9 +268,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				Bus3Phase bus3p = (Bus3Phase) bus;
 				
 				//TODO process three-phase dynamic loads
-				
-				
-				
+
 				
 				//TODO process 1-phase dynamic loads on each phase
 				Complex phaseAdynLoadEquivY = new Complex(0,0);
@@ -281,12 +280,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					for(DynLoadModel1Phase load:bus3p.getPhaseADynLoadList()){
 						if(load.isActive()){
 							phaseAdynLoadEquivY = phaseAdynLoadEquivY.add(load.getEquivY());
-							//TODO when a compensation shuntY is needed, as the remaining loadQ is negative, 
-							// with the existing load conversion mechanism, such a compensation is modeled as 
-							// equivShuntY. Thus, it is not necessary to add it to the Ymatrix again here.
-							
-							// The info of compShuntY is only needed when the AC motor is tripped/reconnected to the system.
-					
+
 						}
 					}
 					
@@ -298,11 +292,6 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					for(DynLoadModel1Phase load:bus3p.getPhaseBDynLoadList()){
 						if(load.isActive()){
 							phaseBdynLoadEquivY = phaseBdynLoadEquivY.add(load.getEquivY());
-							//TODO when a compensation shuntY is needed, as the remaining loadQ is negative, 
-							// with the existing load conversion mechanism, such a compensation is modeled as 
-							// equivShuntY. Thus, it is not necessary to add it to the Ymatrix again here.
-							
-							// The info of compShuntY is only needed when the AC motor is tripped/reconnected to the system.
 					
 						}
 					}
@@ -314,11 +303,6 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					for(DynLoadModel1Phase load:bus3p.getPhaseBDynLoadList()){
 						if(load.isActive()){
 							phaseCdynLoadEquivY = phaseCdynLoadEquivY.add(load.getEquivY());
-							//TODO when a compensation shuntY is needed, as the remaining loadQ is negative, 
-							// with the existing load conversion mechanism, such a compensation is modeled as 
-							// equivShuntY. Thus, it is not necessary to add it to the Ymatrix again here.
-							
-							// The info of compShuntY is only needed when the AC motor is tripped/reconnected to the system.
 					
 						}
 					}
@@ -527,11 +511,20 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					for(AclfGen gen: bus.getContributeGenList()){
 						if(gen.isActive() && gen instanceof DStabGen){
 							DStabGen dynGen = (DStabGen) gen;
+							//TODO 11/19/2015 consider generic generation models
+							/*
 							if(dynGen.getMach()!=null){
 								dynGen.getMach().calMultiFactors();
 							    if(!dynGen.getMach().initStates(bus))
 								   initFlag = false;
 							}
+							*/
+							
+							if(dynGen.getDynamicDevice()!=null){
+							    if(!dynGen.getDynamicDevice().initStates(bus))
+								   initFlag = false;
+							}
+							
 						}
 					}
 					
@@ -544,7 +537,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 						// first process the 3phase dynamic loads
 						double totalDynLoadPercent = 0;
-						Complex total3PhaseDynLoadPQ = new Complex(0,0);
+						Complex totalPosSeqDynLoadPQ = new Complex(0,0);
 						
 						if( b.getDynLoadModelList().size()>0){
 							for(DynLoadModel load:bus.getDynLoadModelList()){
@@ -569,47 +562,33 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							for(DynLoadModel load:bus.getDynLoadModelList()){
 								if(load.isActive()){
 							       load.initStates();
-							       total3PhaseDynLoadPQ = total3PhaseDynLoadPQ.add(load.getInitLoadPQ());
+							       totalPosSeqDynLoadPQ = totalPosSeqDynLoadPQ.add(load.getInitLoadPQ());
 								}
 							}
 
 							
 						}
 						
-		
+						Complex orginalLoadPQ  = bus.getNetLoadResults();
+						bus.setNetLoadResults(orginalLoadPQ.subtract(totalPosSeqDynLoadPQ));
+						
+						
+						//TODO init the single-phase, three-phase dynamic loads
+						
 						
 						// second, process the 1-phase dynamic loads
-						double phaseADynLoadPercent = 0;
-						double phaseBDynLoadPercent = 0;
-						double phaseCDynLoadPercent = 0;
+			
 						
 						Complex totalPhaseADynLoadPQ = new Complex(0,0);
 						Complex totalPhaseBDynLoadPQ = new Complex(0,0);
 						Complex totalPhaseCDynLoadPQ = new Complex(0,0);
-						
-                        for(DynLoadModel1Phase dynLoadPA : ((Bus3Phase)b).getPhaseADynLoadList()){
-                        	if(dynLoadPA.isActive())
-                        		phaseADynLoadPercent += dynLoadPA.getLoadPercent(); 
-                        	
-						}
-                        
-                        for(DynLoadModel1Phase dynLoadPB : ((Bus3Phase)b).getPhaseBDynLoadList()){
-                        	if(dynLoadPB.isActive())
-                        		phaseBDynLoadPercent += dynLoadPB.getLoadPercent(); 
-                        	
-						}
-                        
-                        
-                        for(DynLoadModel1Phase dynLoadPC : ((Bus3Phase)b).getPhaseCDynLoadList()){
-                        	if(dynLoadPC.isActive())
-                        		phaseCDynLoadPercent += dynLoadPC.getLoadPercent(); 
-                        	
-						}
+						Complex3x1 total3PhaseDynLoadPQ = new Complex3x1();
+                      
                         
                         //TODO check the total dynamic LOAD percentage
                         
                         
-                        for(DynLoadModel1Phase dynLoadPA : ((Bus3Phase)b).getPhaseADynLoadList()){
+                        for(DynLoadModel1Phase dynLoadPA : bus.getPhaseADynLoadList()){
                         	if(dynLoadPA.isActive()){
                         		dynLoadPA.initStates();
                         		
@@ -617,7 +596,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
                         	}
 						}
                         
-                        for(DynLoadModel1Phase dynLoadPB : ((Bus3Phase)b).getPhaseBDynLoadList()){
+                        for(DynLoadModel1Phase dynLoadPB : bus.getPhaseBDynLoadList()){
                         	if(dynLoadPB.isActive()){
                         		dynLoadPB.initStates();
                         		
@@ -626,7 +605,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						}
                         
                         
-                        for(DynLoadModel1Phase dynLoadPC : ((Bus3Phase)b).getPhaseCDynLoadList()){
+                        for(DynLoadModel1Phase dynLoadPC : bus.getPhaseCDynLoadList()){
                         	if(dynLoadPC.isActive()){
                         		dynLoadPC.initStates();
                         	
@@ -634,27 +613,32 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
                         	}
 						}
                         
-                        //TODO Now only three-phase balanced condition is supported
                         
-                        if(totalPhaseADynLoadPQ.subtract(totalPhaseBDynLoadPQ).abs()>1.0E-5)
-                        	ipssLogger.severe("phase dyanmic loads are not balanced, @ "+b.getId());
+                        for(DynLoadModel3Phase dynLoad3P : bus.getThreePhaseDynLoadList()){
+                        	if(dynLoad3P.isActive()){
+                        		dynLoad3P.initStates();
+                        		total3PhaseDynLoadPQ = total3PhaseDynLoadPQ.add(dynLoad3P.getInitLoadPQ3Phase());
+                        	}
+                        }
                         
-                        if(totalPhaseADynLoadPQ.subtract(totalPhaseCDynLoadPQ).abs()>1.0E-5)
-                        	ipssLogger.severe("phase dyanmic loads are not balanced, @"+b.getId());
+                        // sum up the 1-phase and 3-phase dynamic loads
+                        total3PhaseDynLoadPQ = total3PhaseDynLoadPQ.add(
+                        		new Complex3x1(totalPhaseADynLoadPQ,totalPhaseBDynLoadPQ,totalPhaseCDynLoadPQ));
+
                         
+                        if(bus.get3PhaseTotalLoad().abs()>0 && total3PhaseDynLoadPQ.abs()>0){
                         
+                        	  bus.set3PhaseNetLoadResults(bus.get3PhaseTotalLoad().subtract(total3PhaseDynLoadPQ));
+                        }
 						
-						Complex orginalLoadPQ  = bus.getNetLoadResults();
-						
-						
-						bus.setNetLoadResults(orginalLoadPQ.subtract(total3PhaseDynLoadPQ).subtract(totalPhaseADynLoadPQ));
+
 							
 						// add the dynamic loads to dynamicBusDeviceList()
-						bus.getDynamicBusDeviceList().addAll(bus.getDynLoadModelList());
-						bus.getDynamicBusDeviceList().addAll(bus.getPhaseADynLoadList());
-						bus.getDynamicBusDeviceList().addAll(bus.getPhaseBDynLoadList());
-						bus.getDynamicBusDeviceList().addAll(bus.getPhaseCDynLoadList());
-						
+						bus.getDynamicBusDeviceList().addAll(bus.getDynLoadModelList());  //three-sequence based
+						bus.getDynamicBusDeviceList().addAll(bus.getPhaseADynLoadList()); // single-phase based
+						bus.getDynamicBusDeviceList().addAll(bus.getPhaseBDynLoadList()); // single-phase based
+						bus.getDynamicBusDeviceList().addAll(bus.getPhaseCDynLoadList()); // single-phase based
+						bus.getDynamicBusDeviceList().addAll(bus.getThreePhaseDynLoadList()); // three-phase based
 				   }//end if-isLoad
 				   
 					
@@ -662,6 +646,10 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				
 				
 				
+			}
+			//end of if- check if the processing bus is of Bus3Phase type
+			else{
+				throw new Error("The processing bus is not a Bus3Phase type # "+b.getId());
 			}
 		}
 		

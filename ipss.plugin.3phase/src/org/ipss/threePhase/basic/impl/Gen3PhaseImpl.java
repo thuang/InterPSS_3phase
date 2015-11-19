@@ -56,10 +56,13 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 
 	@Override
 	public Complex3x3 getZabc(boolean machineMVABase) {
-		if(this.zAbc == null)
+		if(this.zAbc == null){
 			if(this.getPosGenZ()!=null && this.getZeroGenZ()!=null){
 				setZabc(this.getPosGenZ(),this.getNegGenZ(),this.getZeroGenZ());
 			}
+			else
+				return null;
+		}
 		if(!machineMVABase) 
 			  return this.zAbc.multiply(this.getZMultiFactor());
 		return this.zAbc;

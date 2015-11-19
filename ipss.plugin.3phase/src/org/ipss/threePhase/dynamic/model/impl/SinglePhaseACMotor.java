@@ -146,11 +146,26 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			//TODO the initLoad is the toal load at the bus ,include constant Z and I load
 			//In the future, this may need to be update to consider the constant P load only
-	        Complex busTotalLoad = this.getDStabBus().getInitLoad();
+	       
+	        //TODO 11/19/2015 need to add three-phase InitLoad to differentiate phase loads
 	        
+	       
+	        Complex phaseTotalLoad = null;
+	        Complex3x1 totalLoad3Phase = this.getParentBus().get3PhaseTotalLoad();
+	        if(totalLoad3Phase.abs()>0.0){
+	        	switch(this.getPhase()){
+	        		case A: phaseTotalLoad = totalLoad3Phase.a_0; break; 
+	        		case B: phaseTotalLoad = totalLoad3Phase.b_1; break;
+	        		case C: phaseTotalLoad = totalLoad3Phase.c_2; break;
+	        	}
+	        	
+	        }
+	        else{ // TODO assuming three-phase balanced
+	        	phaseTotalLoad = this.getDStabBus().getInitLoad();
 	        
-	        // TODO assuming three-phase balanced
-			pac = busTotalLoad.getReal()*this.loadPercent/100.0d;
+	        }
+	        
+			pac = phaseTotalLoad.getReal()*this.loadPercent/100.0d;
 			qac = pac*Math.tan(Math.acos(this.powerFactor));
 			
 			
@@ -172,9 +187,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			//Check whether a compensation is needed. If yes, calculate the compensation shuntY
 
 			// if bus.loadQ < ld1pac.q, then compShuntB = ld1pac.q-bus.loadQ
-			if(qac >busTotalLoad.getImaginary()){
+			if(qac >phaseTotalLoad.getImaginary()){
 				 double v = this.getBusPhaseVoltage().abs();
-				 double b = (qac - busTotalLoad.getImaginary())/v/v;
+				 double b = (qac - phaseTotalLoad.getImaginary())/v/v;
 				 this.compensateShuntY = new Complex(0,b);
 			}
 			

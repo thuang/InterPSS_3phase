@@ -22,7 +22,13 @@ public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
 	protected  Phase     connectPhase = null;
 	protected  Bus3Phase parentBus = null;
 	
-
+    public Bus3Phase getParentBus(){
+    	if(this.getDStabBus() instanceof Bus3Phase)
+    		return (Bus3Phase)this.getDStabBus();
+    	else
+    		throw new Error("The parentBus is not a Bus3Phase type, #"+this.getDStabBus().getId());
+    }
+	
 	@Override
 	public Phase getPhase() {
 		return this.connectPhase;
