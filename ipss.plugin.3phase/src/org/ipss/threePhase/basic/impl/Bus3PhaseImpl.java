@@ -10,6 +10,7 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
@@ -36,6 +37,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	private List<DynLoadModel1Phase> phaseCDynLoadList;
 	
 	private List<Load3Phase> threePhaseLoadList = null;
+	private List<Gen3Phase> threePhaseGenList = null;
+	
 	private Complex3x1 load3PhEquivCurInj = null;
 	private Complex3x1 equivCurInj3Phase = null;
 
@@ -138,6 +141,13 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	}
 
 	@Override
+	public List<Gen3Phase> getThreePhaseGenList() {
+		if(threePhaseGenList ==null)
+			threePhaseGenList = new ArrayList<>();
+		return threePhaseGenList;
+	}
+
+	@Override
 	public List<Load3Phase> getThreePhaseLoadList() {
 		if(threePhaseLoadList ==null)
 			threePhaseLoadList = new ArrayList<>();
@@ -153,18 +163,27 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 			for(Load3Phase load:this.getThreePhaseLoadList()){
 				this.load3PhEquivCurInj=this.load3PhEquivCurInj.add(load.getEquivCurrInj(Vabc));
 			}
+			
 		}
 		return this.load3PhEquivCurInj;
 		
 	}
+	
+	
 
 	@Override
 	public Complex3x1 calc3PhEquivCurInj() {
 		calcLoad3PhEquivCurInj();
 		
 		this.equivCurInj3Phase = this.load3PhEquivCurInj;
+		
+		for(Gen3Phase gen:this.getThreePhaseGenList()){
+			this.equivCurInj3Phase = this.equivCurInj3Phase.add(gen.getPowerflowEquivCurrInj());
+		}
+		
 		return this.equivCurInj3Phase;
 	}
+
 
 
 

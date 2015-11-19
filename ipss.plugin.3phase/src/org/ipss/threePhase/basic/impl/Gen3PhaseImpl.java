@@ -6,9 +6,20 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
+import org.ipss.threePhase.basic.GenType;
 
 import com.interpss.dstab.impl.DStabGenImpl;
 
+/**
+ *  NOTE: 
+ *  for synchronous machine based generators, total generation is equally divided among three-phases;
+ *  
+ *  for inverter-based generators, total generation is equal to the positive sequence part power.
+ *	
+ * 
+ * @author Qiuhua
+ *
+ */
 public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	
 	private Complex3x3   zAbc = null;
@@ -18,6 +29,11 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	private Bus3Phase parentBus3P = null;
 
 	private Complex3x1 igen3Ph = null;
+	
+	private GenType    genType = GenType.Inverter_based; // inverter-based by default 
+	
+	
+	
 
 
 	/**
@@ -112,6 +128,67 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 				e.printStackTrace();
 			}
 			return null;
+	}
+
+	@Override
+	public Complex3x1 getPowerflowEquivCurrInj() {
+		
+		Complex3x1 currInj = new Complex3x1();
+		
+		
+		// calculate the equivalent current injection based on the GenType
+		if(this.getGenType().equals(GenType.Synchrounous_machine)){
+			currInj = this.getPower3Phase(UnitType.PU).divide(this.getParentBus().get3PhaseVotlages()).conjugate();
+		}
+		else if(this.getGenType().equals(GenType.Inverter_based)){
+			
+			//TODO here assuming the inverter based DG only produces positive sequence current. negative sequence current is based on 
+			//negative sequence impedance of the generator
+			
+			//step-1 calculate the total generation
+			Complex genPQ = this.getGen();
+			Complex ipos = new Complex(0,0);
+			Complex ineg = new Complex(0,0);
+			if(genPQ == null || genPQ.abs()==0.0){
+			
+			}
+			else{
+			
+			//step-2 obtain the terminal positive and negative sequence voltages
+			Complex v1 = this.getParentBus().getThreeSeqVoltage().b_1;
+			Complex v2 = this.getParentBus().getThreeSeqVoltage().c_2;
+				
+			//step-3 calculate the desired positive sequence current injection
+			
+			ipos = genPQ.divide(v1).conjugate(); 
+			
+			//step-4 calculate the negative sequence current injection
+			Complex3x3 zabc = getZabc(false);
+			if(zabc !=null && zabc.abs()>0){
+				Complex z2 = zabc.To120().bb;
+				ineg = v2.divide(z2).multiply(-1.0);
+			}
+			
+			//step-5 combine both the positive- and negative-sequence currents and transform it to a three-phase current injection
+			currInj = new Complex3x1(new Complex(0,0),ipos,ineg).ToAbc();
+			
+			}
+				
+		}
+		
+		return currInj;
+	}
+
+	@Override
+	public GenType getGenType() {
+		
+		return this.genType;
+	}
+
+	@Override
+	public void setGenType(GenType type) {
+		this.genType = type;
+		
 	}
 	
 

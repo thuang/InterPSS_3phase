@@ -47,6 +47,12 @@ public interface Gen3Phase extends DStabGen{
 	public Complex3x1 getPower3Phase(UnitType unit);
 	
 	public  void setPower3Phase(Complex3x1 genPQ,UnitType unit);
+
+	public Complex3x1 getPowerflowEquivCurrInj();
+	
+	public GenType    getGenType();
+	
+	public void setGenType(GenType type);
 	
 	
 }

@@ -31,6 +31,8 @@ public interface Bus3Phase extends DStabBus {
     
     public List<Load3Phase> getThreePhaseLoadList();
     
+    public List<Gen3Phase> getThreePhaseGenList();
+    
     public Complex3x1  calc3PhEquivCurInj();
 
 }

@@ -9,9 +9,11 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.basic.impl.AclfNetwork3Phase;
+import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
@@ -33,7 +35,7 @@ public class TestDistributionPowerflowAlgo {
 	//@Test
 	public void testLineAndXfrGeneralizedMatrices() throws InterpssException {
 		
-		AclfNetwork3Phase net = createDistNet();
+		AclfNetwork3Phase net = createDistNetNoDG();
 		
 		//--------------------------------------------------------------------------------------------
 		// 1. Test the distribution line models
@@ -255,7 +257,7 @@ public class TestDistributionPowerflowAlgo {
 	
 	//@Test
 	public void testDistBusOrdering() throws InterpssException {
-		AclfNetwork3Phase net = createDistNet();
+		AclfNetwork3Phase net = createDistNetNoDG();
 		
 		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
 		distPFAlgo.orderDistributionBuses(true);
@@ -269,7 +271,7 @@ public class TestDistributionPowerflowAlgo {
 	
 	@Test
 	public void testDistBusPF() throws InterpssException {
-		AclfNetwork3Phase net = createDistNet();
+		AclfNetwork3Phase net = createDistNetNoDG();
 		
 		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
 		//distPFAlgo.orderDistributionBuses(true);
@@ -291,7 +293,31 @@ public class TestDistributionPowerflowAlgo {
 		
 	}
 	
-	private AclfNetwork3Phase createDistNet() throws InterpssException{
+	@Test
+	public void testDistPFWithDG() throws InterpssException {
+		AclfNetwork3Phase net = createDistNetWithDG();
+		
+		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
+		//distPFAlgo.orderDistributionBuses(true);
+		
+		assertTrue(distPFAlgo.powerflow());
+		
+		/*
+		 *  Vabc of bus -Bus1,1.0100 + j0.0000  -0.5050 + j-0.87469  -0.5050 + j0.87469
+			Vabc of bus -Bus2,0.99636 + j-0.05941  -0.54963 + j-0.83317  -0.44673 + j0.89258
+			Vabc of bus -Bus3,0.99075 + j-0.07914  -0.56392 + j-0.81844  -0.42683 + j0.89759
+			Vabc of bus -Bus4,0.98834 + j-0.09907  -0.57997 + j-0.80639  -0.40837 + j0.90546
+		 */
+		for(AclfBus bus:net.getBusList()){
+			Bus3Phase bus3P = (Bus3Phase) bus;
+			System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
+		}
+		
+		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(net));
+		
+	}
+	
+	private AclfNetwork3Phase createDistNetNoDG() throws InterpssException{
 		BaseAclfNetwork net = new AclfNetwork3Phase();
 		// identify this is a distribution network
 		((AclfNetwork3Phase) net).setNetworkType(false);
@@ -417,6 +443,143 @@ public class TestDistributionPowerflowAlgo {
 	    return (AclfNetwork3Phase) net;
   		
 	}
+	
+	private AclfNetwork3Phase createDistNetWithDG() throws InterpssException{
+		BaseAclfNetwork net = new AclfNetwork3Phase();
+		// identify this is a distribution network
+		((AclfNetwork3Phase) net).setNetworkType(false);
+		
+		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PAclfBus("Bus1", net);
+  		bus1.setAttributes("69 kV feeder source", "");
+  		bus1.setBaseVoltage(69000.0);
+  		// set the bus to a non-generator bus
+  		bus1.setGenCode(AclfGenCode.SWING);
+  		// set the bus to a constant power load bus
+  		bus1.setLoadCode(AclfLoadCode.NON_LOAD);
+  		bus1.setVoltage(new Complex(1.01,0));
+
+  		
+		Bus3Phase bus2 = ThreePhaseObjectFactory.create3PAclfBus("Bus2", net);
+  		bus2.setAttributes("13.8 V feeder bus 2", "");
+  		bus2.setBaseVoltage(13800.0);
+  		// set the bus to a non-generator bus
+  		bus2.setGenCode(AclfGenCode.NON_GEN);
+  		// set the bus to a constant power load bus
+  		bus2.setLoadCode(AclfLoadCode.NON_LOAD);
+  		
+  		
+		Bus3Phase bus3 = ThreePhaseObjectFactory.create3PAclfBus("Bus3", net);
+  		bus3.setAttributes("13.8 V feeder bus 3", "");
+  		bus3.setBaseVoltage(13800.0);
+  		// set the bus to a non-generator bus
+  		bus3.setGenCode(AclfGenCode.NON_GEN);
+  		// set the bus to a constant power load bus
+  		bus3.setLoadCode(AclfLoadCode.CONST_P);
+  		
+  		Load3Phase load1 = new Load3PhaseImpl();
+  		load1.set3PhaseLoad(new Complex3x1(new Complex(0.5,0.1),new Complex(0.5,0.1),new Complex(0.5,0.1)));
+  		bus3.getThreePhaseLoadList().add(load1);
+  		//bus3.setLoadPQ(new Complex(0.5,0.1));
+  		
+  		
+		Bus3Phase bus4 = ThreePhaseObjectFactory.create3PAclfBus("Bus4", net);
+  		bus4.setAttributes("13.8 V feeder bus 4", "");
+  		bus4.setBaseVoltage(13800.0);
+  		// set the bus to a non-generator bus
+  		bus4.setGenCode(AclfGenCode.NON_GEN);
+  		// set the bus to a constant power load bus
+  		bus4.setLoadCode(AclfLoadCode.CONST_P);
+
+  		//bus4.setLoadPQ(new Complex(1,0.1));
+  		
+  		Load3Phase load2 = new Load3PhaseImpl();
+  		load2.set3PhaseLoad(new Complex3x1(new Complex(1.5,0.1),new Complex(1.5,0.1),new Complex(1.5,0.1)));
+  		bus4.getThreePhaseLoadList().add(load2);
+  		
+  		
+  		Gen3Phase gen1 = new Gen3PhaseImpl();
+  		gen1.setParentBus(bus4);
+  		gen1.setGen(new Complex(0.5,0));  // total gen power, system mva based
+  		gen1.setMvaBase(10);
+  		gen1.setPosGenZ(new Complex(0.001,0.05));
+  		gen1.setNegGenZ(new Complex(0.001,0.05));
+  		gen1.setZeroGenZ(new Complex(0.001,0.15));
+  		bus4.getThreePhaseGenList().add(gen1);
+  		
+//		Branch3Phase Line1_2 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus2", "0", net);
+//		Line1_2.setBranchCode(AclfBranchCode.LINE);
+//		Line1_2.setZ( new Complex( 0.0, 0.04 ));
+//		Line1_2.setZ0( new Complex(0.0, 0.08 ));
+  		
+  		Branch3Phase xfr1_2 = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus2", "0", net);
+  		xfr1_2.setBranchCode(AclfBranchCode.XFORMER);
+  		xfr1_2.setToTurnRatio(1.02);
+  		//xfr1_2.setZ( new Complex( 0.0, 0.04 ));
+  		xfr1_2.setZabc(Complex3x3.createUnitMatrix().multiply(new Complex( 0.0, 0.04 )));
+  		//xfr1_2.setZ0( new Complex(0.0, 0.4 ));
+		
+		
+		AcscXformer xfr0 = acscXfrAptr.apply(xfr1_2);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+		// for testing connection and from-to relationship only
+//		xfr0.setToConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+//		xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+		
+		Branch3Phase Line2_3 = ThreePhaseObjectFactory.create3PBranch("Bus2", "Bus3", "0", net);
+		Line2_3.setBranchCode(AclfBranchCode.LINE);
+		Line2_3.setZ( new Complex( 0.0, 0.04 ));
+		Line2_3.setZ0( new Complex(0.0, 0.08 ));
+  		
+		
+		Branch3Phase Line2_4 = ThreePhaseObjectFactory.create3PBranch("Bus4", "Bus2", "0", net);
+		Line2_4.setBranchCode(AclfBranchCode.LINE);
+		Line2_4.setZ( new Complex( 0.0, 0.04 ));
+		Line2_4.setZ0( new Complex(0.0, 0.08 ));
+  		
+  		
+  		
+		//////////////////transformers///////////////////////////////////////////
+  		
+//		Branch3Phase xfr5_10 = ThreePhaseObjectFactory.create3PBranch("Bus5", "Bus10", "0", dsNet);
+//		xfr5_10.setBranchCode(AclfBranchCode.XFORMER);
+//		xfr5_10.setZ( new Complex( 0.0, 0.08 ));
+//		xfr5_10.setZ0( new Complex(0.0, 0.08 ));
+//		
+//		
+//		AcscXformer xfr0 = acscXfrAptr.apply(xfr5_10);
+//		xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+//		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+//  		
+//  		
+//		Branch3Phase xfr10_11 = ThreePhaseObjectFactory.create3PBranch("Bus10", "Bus11", "0", dsNet);
+//		xfr10_11.setBranchCode(AclfBranchCode.XFORMER);
+//		xfr10_11.setZ( new Complex( 0.0, 0.06 ));
+//		xfr10_11.setZ0( new Complex(0.0, 0.06 ));
+//		
+//		AcscXformer xfr1 = acscXfrAptr.apply(xfr10_11);
+//		xfr1.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+//		xfr1.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+//		
+//	    
+//		
+//		Branch3Phase xfr11_12 = ThreePhaseObjectFactory.create3PBranch("Bus11", "Bus12", "0", dsNet);
+//		xfr11_12.setBranchCode(AclfBranchCode.XFORMER);
+//		xfr11_12.setZ( new Complex( 0.0, 0.025 ));
+//		xfr11_12.setZ0( new Complex(0.0, 0.025 ));
+//		xfr11_12.setToTurnRatio(1.01);
+//		AcscXformer xfr2 = acscXfrAptr.apply(xfr11_12);
+//		xfr2.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+//		xfr2.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
+
+  		
+  		
+  		
+	    return (AclfNetwork3Phase) net;
+  		
+	}
+	
 	
 	private AclfNetwork3Phase createNet4PosSeqPF() throws InterpssException{
 		BaseAclfNetwork net = new AclfNetwork3Phase();

@@ -286,9 +286,9 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 						throw new Error(" There must be only one 'upstream' unvisited branch for an active, non-swing bus:"+bus.getId());
 					}
 					
-					if(bus.getId().equals("Bus2")){
-						System.out.println("processing bus 2");
-					}
+//					if(bus.getId().equals("Bus2")){
+//						System.out.println("processing bus 2");
+//					}
 					//else {
 						
 						// consider the existing bus current injection into the network from generators, loads, shunt capacitors, etc.
