@@ -1,0 +1,10 @@
+It seems that we need to create the following structure for 3-phase representation
+
+
+           AcscBus  (AcscBranch, AcscGen)
+           ^     ^
+           |     |
+           |  Acsc3PhaseBus
+           |     ^
+           |     |
+           DStabBus
