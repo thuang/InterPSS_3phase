@@ -32,7 +32,7 @@ import com.interpss.core.net.Bus;
 
 public class TestDistributionPowerflowAlgo {
 	
-	//@Test
+	@Test
 	public void testLineAndXfrGeneralizedMatrices() throws InterpssException {
 		
 		AclfNetwork3Phase net = createDistNetNoDG();
@@ -537,42 +537,6 @@ public class TestDistributionPowerflowAlgo {
 		Line2_4.setBranchCode(AclfBranchCode.LINE);
 		Line2_4.setZ( new Complex( 0.0, 0.04 ));
 		Line2_4.setZ0( new Complex(0.0, 0.08 ));
-  		
-  		
-  		
-		//////////////////transformers///////////////////////////////////////////
-  		
-//		Branch3Phase xfr5_10 = ThreePhaseObjectFactory.create3PBranch("Bus5", "Bus10", "0", dsNet);
-//		xfr5_10.setBranchCode(AclfBranchCode.XFORMER);
-//		xfr5_10.setZ( new Complex( 0.0, 0.08 ));
-//		xfr5_10.setZ0( new Complex(0.0, 0.08 ));
-//		
-//		
-//		AcscXformer xfr0 = acscXfrAptr.apply(xfr5_10);
-//		xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
-//		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
-//  		
-//  		
-//		Branch3Phase xfr10_11 = ThreePhaseObjectFactory.create3PBranch("Bus10", "Bus11", "0", dsNet);
-//		xfr10_11.setBranchCode(AclfBranchCode.XFORMER);
-//		xfr10_11.setZ( new Complex( 0.0, 0.06 ));
-//		xfr10_11.setZ0( new Complex(0.0, 0.06 ));
-//		
-//		AcscXformer xfr1 = acscXfrAptr.apply(xfr10_11);
-//		xfr1.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
-//		xfr1.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
-//		
-//	    
-//		
-//		Branch3Phase xfr11_12 = ThreePhaseObjectFactory.create3PBranch("Bus11", "Bus12", "0", dsNet);
-//		xfr11_12.setBranchCode(AclfBranchCode.XFORMER);
-//		xfr11_12.setZ( new Complex( 0.0, 0.025 ));
-//		xfr11_12.setZ0( new Complex(0.0, 0.025 ));
-//		xfr11_12.setToTurnRatio(1.01);
-//		AcscXformer xfr2 = acscXfrAptr.apply(xfr11_12);
-//		xfr2.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
-//		xfr2.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
-
   		
   		
   		

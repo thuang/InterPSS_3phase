@@ -11,8 +11,9 @@ public abstract class DynGenModel3Phase extends DynamicModel3Phase{
 	
 	
 	protected Gen3Phase parentGen = null;
-	 private Complex3x3   zAbc = null;
+	private Complex3x3   zAbc = null;
 	private Complex3x1   puPowerAbc = null;
+	private Complex3x3   yAbc = null;
 	
 	
 	public Gen3Phase getParentGen(){
@@ -45,12 +46,16 @@ public abstract class DynGenModel3Phase extends DynamicModel3Phase{
 
 		@Override
 		public Complex3x3 getZabc(boolean machineMVABase) {
-			this.zAbc = null;
-			if(this.parentGen.getPosGenZ()!=null && this.parentGen.getZeroGenZ()!=null){
-				this.zAbc = new Complex3x3(this.parentGen.getPosGenZ(),this.parentGen.getNegGenZ(),this.parentGen.getZeroGenZ()).ToAbc();
+			if(this.zAbc == null){
+				if(this.parentGen.getPosGenZ()!=null && this.parentGen.getZeroGenZ()!=null){
+					this.zAbc = new Complex3x3(this.parentGen.getPosGenZ(),this.parentGen.getNegGenZ(),this.parentGen.getZeroGenZ()).ToAbc();
+				}
 			}
-			if(!machineMVABase) 
+			
+				
+			if(this.zAbc != null && !machineMVABase) 
 				  return this.zAbc.multiply(this.parentGen.getZMultiFactor());
+			
 			return this.zAbc;
 		}
 		
@@ -58,7 +63,9 @@ public abstract class DynGenModel3Phase extends DynamicModel3Phase{
 
 		@Override
 		public Complex3x3 getYabc(boolean machineMVABase) {
-			return getZabc(machineMVABase).inv();
+			if(getZabc(machineMVABase) ==null) return null;
+			else
+			    return getZabc(machineMVABase).inv();
 		}
 		
 		@Override
@@ -100,8 +107,9 @@ public abstract class DynGenModel3Phase extends DynamicModel3Phase{
 			Complex3x1 iInj =getISource3Phase();
 			Complex3x1 Vabc = ((Bus3Phase)this.parentGen.getParentBus()).get3PhaseVotlages();
 			
+			if(getYabc(false)!= null)
+			     iInj = iInj.subtract(getYabc(false).multiply(Vabc));
 			
-			iInj = iInj.subtract(getYabc(false).multiply(Vabc));
 			return iInj;
 		}
 

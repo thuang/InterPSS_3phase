@@ -1,16 +1,11 @@
 package org.ipss.threePhase.dynamic.model;
 
 import org.apache.commons.math3.complex.Complex;
-import org.interpss.numeric.datatype.Complex3x1;
-import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.ComplexFunc;
-import org.interpss.numeric.datatype.Unit.UnitType;
 
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.dstab.DStabBus;
-import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuMethod;
-import com.interpss.dstab.device.DynamicBusDevice;
 
 /**
  * PV Distributed generation dynamic model.
@@ -59,7 +54,13 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 		 this.posSeqGenPQ = genPQ;
 	 }
 	 
+	 
 	 public Complex getPosSeqGenPQ(){
+		 // if the positive sequence genPQ is not set, then use the phase A genPQ, assuming that all three-phase are the same
+		 if(this.posSeqGenPQ == null) {
+			 this.posSeqGenPQ = this.getParentGen().getGen();
+		 }
+		 
 		 return this.posSeqGenPQ; 
 	 }
 	 
@@ -139,8 +140,8 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 
          this.Ipq_pos = new Complex(Ip_prod,Iq_prod);
     	 
-    	 //TODO transfer Idq to Ir_x based on network reference frame;
-    	 
+    	 //transfer Idq to Ir_x based on network reference frame;
+    	
     	 // |IR|    | cos(Theta)  -sin(Theta)|  |IP|
     	 // |IX|  = | sin(Theta)  cos(Theta) |  |IQ|
     	 
@@ -150,7 +151,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 
     	 Complex effectiveCurrInj = new Complex(Ir,Ix);
     	 
-    	 //TODO positive sequence power drawn by the equivalent Ypos at the terminal
+    	 //TODO consider the positive sequence power drawn by the equivalent Ypos at the terminal
     	 //if(this.getParentGen().getPosGenZ()!=null && this.getParentGen().getPosGenZ())
     		 
     		 
@@ -165,7 +166,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 if(lowValue >=upValue){
     		 return 1.0;
     	 }
-    		 
+    	 	 
     	 if(input <=lowValue) return 0;
     	 else if(input >=upValue) return 1;
     	 else{
