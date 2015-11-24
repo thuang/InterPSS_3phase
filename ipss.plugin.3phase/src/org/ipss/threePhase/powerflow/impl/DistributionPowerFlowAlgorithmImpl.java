@@ -29,7 +29,7 @@ import com.interpss.core.net.Bus;
 
 public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlowAlgorithm{
 
-	private BaseAclfNetwork<AclfBus,AclfBranch> distNet = null;
+	private BaseAclfNetwork<? extends AclfBus,? extends AclfBranch> distNet = null;
 	
 	private DistributionPFMethod pfMethod = DistributionPFMethod.Forward_Backword_Sweep;
 	
@@ -189,6 +189,13 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		else{
 			throw new UnsupportedOperationException("The power flow method is not supported yet:"+this.pfMethod);
 		}
+		
+		this.distNet.setLfConverged(pfFlag);
+        
+		//TODO avoid network initialization in initDstabNet() 
+//		if(this.distNet instanceof DStabNetwork3Phase){
+//			((DStabNetwork3Phase)this.distNet).is
+//		}
 		return pfFlag;
 	}
 	
@@ -289,6 +296,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 //					if(bus.getId().equals("Bus2")){
 //						System.out.println("processing bus 2");
 //					}
+					
 					//else {
 						
 						// consider the existing bus current injection into the network from generators, loads, shunt capacitors, etc.
@@ -435,6 +443,10 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			// power flow is converged, break the outer iteration and return
 			if(i>0 && this.pfFlag) {
 				System.out.println("\n\nDistribution power flow converged, iterations = "+i+"\n");
+				
+				
+				calcSwingBusGenPower();
+				
 				break;
 			}
 			
@@ -524,6 +536,40 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		return this.pfFlag;
 		
 		
+	}
+
+	private void calcSwingBusGenPower() {
+		// update the swing bus generation output based on the converged power flow result
+		
+		for(AclfBus bus: this.distNet.getBusList()){ 
+			if(bus.isActive() && bus.isSwing()){
+				Bus3Phase bus3p = (Bus3Phase) bus;
+				Complex3x1 sumOfBranchCurrents = new Complex3x1();
+				for (Branch bra: bus.getBranchList()){
+					Branch3Phase bra3P = (Branch3Phase) bra;
+					// all visited branches are on the downstream side, and there should be only one upstream branch
+					if(bra.isActive()){
+						
+						if(bra.getFromBus().getId().equals(bus.getId())){
+						 
+							
+						   sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtFromSide());
+						}
+						else{ 
+							
+							
+							sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtToSide().multiply(-1.0));
+						}
+					}
+			}
+				
+				Complex posGenPQ = bus3p.getThreeSeqVoltage().b_1.multiply(sumOfBranchCurrents.to012().b_1.conjugate());
+				if(bus.getContributeGenList().size()>0){
+				   bus.getContributeGenList().get(0).setGen(posGenPQ);
+				
+				}
+			}
+		}
 	}
 	
 	

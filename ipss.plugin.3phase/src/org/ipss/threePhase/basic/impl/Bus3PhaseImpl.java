@@ -45,7 +45,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	private Complex3x1 load3PhEquivCurInj = null;
 	private Complex3x1 equivCurInj3Phase = null;
 	
-	private Complex3x1 netLoad3Phase = null;
+	private Complex3x1 netTotalLoad3Phase = null;
 	
 	private Complex3x1 totalLoad3Phase = null;
 
@@ -252,13 +252,13 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 //		}
        
 		
-		return netLoad3Phase ;
+		return this.netTotalLoad3Phase ;
 	}
 	
 	
 	@Override
 	public void set3PhaseNetLoadResults(Complex3x1 netLoad3Phase) {
-		  this.netLoad3Phase = netLoad3Phase;
+		  this.netTotalLoad3Phase = netLoad3Phase;
 		
 	}
 	

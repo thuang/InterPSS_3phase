@@ -152,6 +152,7 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 			Complex genPQ = this.getGen();
 			Complex ipos = new Complex(0,0);
 			Complex ineg = new Complex(0,0);
+			Complex izero = new Complex(0,0);
 			if(genPQ == null || genPQ.abs()==0.0){
 			
 			}
@@ -160,17 +161,20 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 			//step-2 obtain the terminal positive and negative sequence voltages
 			Complex v1 = this.getParentBus().getThreeSeqVoltage().b_1;
 			Complex v2 = this.getParentBus().getThreeSeqVoltage().c_2;
-				
+			Complex v0 = this.getParentBus().getThreeSeqVoltage().a_0;
+			
 			//step-3 calculate the desired positive sequence current injection
 			
 			ipos = genPQ.divide(v1).conjugate(); 
 			
 			//step-4 calculate the negative sequence current injection
 			Complex3x3 zabc = getZabc(false);
-			if(zabc !=null && zabc.abs()>0){
-				Complex z2 = zabc.To120().bb;
-				ineg = v2.divide(z2).multiply(-1.0);
-			}
+//			if(zabc !=null && zabc.abs()>0){
+//				Complex z2 = zabc.To120().bb;
+//				ineg = v2.divide(z2).multiply(-1.0);
+//			}
+			
+			
 			
 			//step-5 combine both the positive- and negative-sequence currents and transform it to a three-phase current injection
 			currInj = new Complex3x1(new Complex(0,0),ipos,ineg).toABC();

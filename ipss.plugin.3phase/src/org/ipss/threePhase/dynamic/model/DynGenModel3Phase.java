@@ -99,7 +99,7 @@ public abstract class DynGenModel3Phase extends DynamicModel3Phase{
 		@Override
 		public Complex3x1 getISource3Phase() {
 			 // Complex3x1(a0,b1,c2)
-			Complex ipos = (Complex) this.parentGen.getDynamicDevice().getOutputObject();
+			Complex ipos = (Complex) this.parentGen.getDynamicGenDevice().getOutputObject();
 			return Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),ipos, new Complex(0,0)));
 		}
 		

@@ -91,9 +91,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					 bra.setVisited(true);
 					 
-                     //NOTE When Delta connection is on the low voltage side, such as the case of Generation connection
+                     //NOTE When Delta connection is on the low voltage side (step up), such as the case of Generation connection
 					 // all buses on the low side should be shifted -30 deg. On the hand, if the the Delta Connection is on the high
-					 // voltage side, the low voltage side should be shifted + 30 deg.
+					 // voltage side, the low voltage side should be shifted - 30 deg.
 					 // 
 					 phaseShiftDeg = -30;
 					 Bus3Phase  StartingBus =null;
@@ -103,12 +103,19 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						 
 						 StartingBus = (Bus3Phase) bra.getToAclfBus();
 						 
-						 if(isDeltaConnected(bra.getXfrFromConnectCode()))   phaseShiftDeg = +30;
+						 if(isDeltaConnected(bra.getXfrFromConnectCode()))  { // if low voltage side is delta connected, then it is delta11
+							//TODO fix the input xfr connect code issue
+							 bra.setXfrFromConnectCode(XfrConnectCode.DELTA11);
+						 }
 					 }		
 					 else {
 					
 						 StartingBus = (Bus3Phase) bra.getFromAclfBus();
-						 if(isDeltaConnected(bra.getXfrToConnectCode()))   phaseShiftDeg = +30;
+						 if(isDeltaConnected(bra.getXfrToConnectCode())) { // if low voltage side is delta connected, then it is delta11
+						
+							 //TODO fix the input xfr connect code issue
+							 bra.setXfrToConnectCode(XfrConnectCode.DELTA11);
+						 }
 					 }
 					 
 					    Complex vpos = StartingBus.getVoltage();
@@ -283,8 +290,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 						}
 					}
-					
-					
+										
 				}
 				
                  if(bus3p.getPhaseBDynLoadList().size()>0){
@@ -373,7 +379,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						 for(AclfGen gen: bus.getContributeGenList()){
 						      if(gen.isActive() && gen instanceof DStabGen){
 						    	  DStabGen dynGen = (DStabGen)gen;
-						    	  if( dynGen.getMach()!=null){
+						    	  if( dynGen.getDynamicGenDevice()!=null){
 						    		  DStabGen3PhaseAdapter gen3P = threePhaseGenAptr.apply(dynGen);
 						    		  iInject = iInject.add(gen3P.getISource3Phase());
 						    	  }
@@ -427,6 +433,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 								iInject.c_2 = iInject.c_2.add(iPhCInj);
 						}
 						
+						//TODO three-phase dynamic loads
 						
 						
 					}
@@ -493,7 +500,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		
 	  	//TODO this is a must step, otherwise the system cannot be initialized properly
-		if(!is3PhaseNetworkInitialized)
+		if(this.isTransmissionNetwork() && !is3PhaseNetworkInitialized)
 	  	     initThreePhaseFromLfResult();
 		
 		for ( DStabBus b : getBusList() ) {
@@ -506,6 +513,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					// set bus initial vaule 
 					bus.setInitLoad(bus.getLoadPQ());
 					bus.setInitVoltMag(bus.getVoltageMag());
+					bus.setVoltage(bus.getThreeSeqVoltage().b_1); // make sure the positive sequence voltage is set up;
 					
 					//1) init bus dynamic signal calculation, 
 					// for example, bus Frequency measurement
@@ -513,6 +521,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 					
 					//2) initialize the bus generator
+					//TODO add the three-phase dynamic generation list to the bus
+					bus.getContributeGenList().addAll(bus.getThreePhaseGenList());
+					
 					for(AclfGen gen: bus.getContributeGenList()){
 						if(gen.isActive() && gen instanceof DStabGen){
 							DStabGen dynGen = (DStabGen) gen;
@@ -525,8 +536,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							}
 							*/
 							
-							if(dynGen.getDynamicDevice()!=null){
-							    if(!dynGen.getDynamicDevice().initStates(bus))
+							if(dynGen.getDynamicGenDevice()!=null){
+							    if(!dynGen.getDynamicGenDevice().initStates(bus))
 								   initFlag = false;
 							}
 							
@@ -631,7 +642,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
                         		new Complex3x1(totalPhaseADynLoadPQ,totalPhaseBDynLoadPQ,totalPhaseCDynLoadPQ));
 
                         
-                        if(bus.get3PhaseTotalLoad().abs()>0 && total3PhaseDynLoadPQ.abs()>0){
+                        if(bus.get3PhaseTotalLoad().abs()>0){
                         
                         	  bus.set3PhaseNetLoadResults(bus.get3PhaseTotalLoad().subtract(total3PhaseDynLoadPQ));
                         }

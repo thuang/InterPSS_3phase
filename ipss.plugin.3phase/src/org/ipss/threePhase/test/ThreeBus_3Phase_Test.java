@@ -129,6 +129,7 @@ public class ThreeBus_3Phase_Test {
 	  	 
 	  	Complex3x3 yftabc  =	xfr.getYftabc();
 	  	System.out.println("xfr yftabc = \n"+yftabc );
+	  	System.out.println("xfr yft120 = \n"+yftabc.To120() );
 	  	assertTrue(NumericUtil.equals(yftabc.aa, new Complex(-0.0, 11.547005383792515),1.0E-5));
 	  	assertTrue(NumericUtil.equals(yftabc.ab, new Complex(-0.0, -11.547005383792515),1.0E-5));
 	  	assertTrue(NumericUtil.equals(yftabc.ba, new Complex(-0.0, 0),1.0E-5));
@@ -233,8 +234,6 @@ public class ThreeBus_3Phase_Test {
 	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(0.5);
-		net.setNetEqnIterationNoEvent(1);
-		net.setNetEqnIterationWithEvent(1);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
 		net.addDynamicEvent(create3PhaseFaultEvent("Bus2",net,0.2,0.05),"3phaseFault@Bus2");
         
@@ -357,6 +356,14 @@ public class ThreeBus_3Phase_Test {
 		
 	  	
 		net.initDStabNet();
+		
+		  for(DStabBus bus: net.getBusList()){
+			  if(bus instanceof Bus3Phase){
+				  Bus3Phase ph3Bus = (Bus3Phase) bus;
+				  
+				  System.out.println(bus.getId() +": Vabc =  "+ph3Bus.get3PhaseVotlages());
+			  }
+		  }
 	  	
 	  //	ISparseEqnComplexMatrix3x3  Yabc = net.getYMatrixABC();
 	   //	System.out.println(Yabc.getSparseEqnComplex());
@@ -509,8 +516,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 		mach2.setRa(0.02);
 		mach2.setXd1(0.20);
 
-  		
-
+  
       
 		
 		//////////////////transformers///////////////////////////////////////////

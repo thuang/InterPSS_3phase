@@ -2,6 +2,7 @@ package org.ipss.threePhase.dynamic.model;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.ComplexFunc;
+import org.ipss.threePhase.basic.Gen3Phase;
 
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.dstab.DStabBus;
@@ -40,6 +41,15 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	private double overFreqTripAll = 99.0;	// below  this voltage, all generation are tripped
 	
 	
+	public PVDistGen3Phase(){
+		
+	}
+	
+	public PVDistGen3Phase(Gen3Phase gen) {
+		this.parentGen = gen;
+		gen.setDynamicGenDevice(this);
+	}
+
 	public double getCurrLimit(){
 		return currLimit;
 	}
@@ -66,7 +76,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	 
 	 @Override
 	 public boolean initStates(DStabBus abus){
-		 if(this.posSeqGenPQ == null)
+		 if(this.getPosSeqGenPQ() == null)
 			 return false;
 		 this.genPQInit = new Complex(this.posSeqGenPQ.getReal(),this.posSeqGenPQ.getImaginary());
 		 this.vtmeasured = getPosSeqVt().abs();
@@ -197,6 +207,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
      }
      
      public Complex getPosSeqIpq() {
+    	 if(Ipq_pos==null) calcPosSeqCurInjection();
  		return Ipq_pos;
  	}
      

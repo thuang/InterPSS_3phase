@@ -384,7 +384,7 @@ public class TestDistributionPowerflowAlgo {
 		
 		
 		AcscXformer xfr0 = acscXfrAptr.apply(xfr1_2);
-		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
 		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
 		
 		// for testing connection and from-to relationship only
@@ -520,7 +520,7 @@ public class TestDistributionPowerflowAlgo {
 		
 		
 		AcscXformer xfr0 = acscXfrAptr.apply(xfr1_2);
-		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
 		xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
 		
 		// for testing connection and from-to relationship only

@@ -104,7 +104,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		}
 		
 		//D
-        else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA){
+        else if(this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA|| this.ph3Branch.getXfrFromConnectCode() == XfrConnectCode.DELTA11){
         	yffabc = getY2().multiply(1/this.ph3Branch.getFromTurnRatio()/this.ph3Branch.getFromTurnRatio());
     		
 		} else
@@ -135,7 +135,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 			}
 			
 			//D
-	        else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA){
+	        else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA || this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11){
 	        	yttabc = getY2().multiply(1/this.ph3Branch.getToTurnRatio()/this.ph3Branch.getToTurnRatio());
 	    		
 			} else
@@ -192,7 +192,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	     yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	        	    //TODO original 11/23/2015
+					yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+					
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA)
 					 yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
@@ -205,7 +207,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	     yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+	        	    ////TODO original 11/23/2015 
+					//yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				yftabc = getY3().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA || this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 					 yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
@@ -497,7 +501,7 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		if(this.ph3Branch.getXfrFromConnectCode() !=this.ph3Branch.getXfrToConnectCode()){
 			
 			//Delta Grounded Wye
-			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA){
+			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA11 || this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA){
 				if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.WYE_SOLID_GROUNDED){
 					if(isHVOnFromBusSide) // Delta Grounded Wye step down
 					  t= t*Math.sqrt(3);
@@ -508,13 +512,16 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 				}
 			}
 			else if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.WYE_SOLID_GROUNDED){
-				if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA){
+				if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA11 || this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA){
 					if(!isHVOnFromBusSide) // Delta Grounded Wye step down
 					   t= t*Math.sqrt(3);
 					else
 						throw new UnsupportedOperationException(" Grounded Wye -Delta  step up transformer is not supported yet");
 				}
 				
+			}
+			else {
+				throw new UnsupportedOperationException(" Grounded Wye -Delta  step up transformer is not supported yet");
 			}
 				
 		}
@@ -534,11 +541,12 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	}
 	private boolean isHVDeltaConnectted(){
 		if(this.ph3Branch.getFromAclfBus().getBaseVoltage() > this.ph3Branch.getToAclfBus().getBaseVoltage()){
-			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA)
+			//TODO note: the standard conection for the high voltage side is Delta 11
+			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA11 ||this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA)  
 				return true;
 		}
 		else{
-			if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA)
+			if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA11 ||this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA)
 				return true;
 		}
 		return false;
@@ -546,11 +554,11 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	
     private boolean isLVDeltaConnectted(){
     	if(this.ph3Branch.getFromAclfBus().getBaseVoltage() < this.ph3Branch.getToAclfBus().getBaseVoltage()){
-			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA)
+			if(this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA || this.ph3Branch.getXfrFromConnectCode()==XfrConnectCode.DELTA11)
 				return true;
 		}
 		else{
-			if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA)
+			if(this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA||this.ph3Branch.getXfrToConnectCode()==XfrConnectCode.DELTA11)
 				return true;
 		}
 		return false;

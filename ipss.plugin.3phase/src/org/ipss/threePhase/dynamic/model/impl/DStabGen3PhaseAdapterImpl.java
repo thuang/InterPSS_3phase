@@ -101,7 +101,7 @@ public class DStabGen3PhaseAdapterImpl extends DynamicModel3Phase implements DSt
 	@Override
 	public Complex3x1 getISource3Phase() {
 		 // Complex3x1(a0,b1,c2)
-		Complex ipos = (Complex) this.dynGen.getDynamicDevice().getOutputObject();
+		Complex ipos = (Complex) this.dynGen.getDynamicGenDevice().getOutputObject();
 		return Complex3x1.z12_to_abc(new Complex3x1(new Complex(0,0),ipos, new Complex(0,0)));
 	}
 	
