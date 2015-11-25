@@ -149,6 +149,8 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 Iq_prod =  Iq_prod*protectCutRatio ;
     	 
          this.Ipq_pos = new Complex(Ip_prod,Iq_prod);
+         
+         
     	 
     	 //transfer Idq to Ir_x based on network reference frame;
     	
@@ -161,15 +163,34 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 
     	 Complex effectiveCurrInj = new Complex(Ir,Ix);
     	 
+    	 Complex compensateCurrent = new Complex(0,0);
     	 //TODO consider the positive sequence power drawn by the equivalent Ypos at the terminal
-    	 //if(this.getParentGen().getPosGenZ()!=null && this.getParentGen().getPosGenZ())
+    	 if(this.getParentGen().getPosGenZ()!=null && this.getParentGen().getPosGenZ().abs()>0){
+    		 Complex zpos = this.getParentGen().getPosGenZ().multiply(this.getParentGen().getZMultiFactor());
+    		 compensateCurrent = getPosSeqVt().divide(zpos);
+    	 }
     		 
     		 
-    	 genCurSource = effectiveCurrInj;
+    	 genCurSource = effectiveCurrInj.add(compensateCurrent);
     	 
          return genCurSource;
     	 
      }
+     
+     @Override
+     public boolean updateAttributes(boolean netChange) {
+    	 double vt = getPosSeqVt().abs();
+    	         
+    	 Complex genPQ = this.Ipq_pos.multiply(vt);
+    	 //update the positive sequence generation output
+    	 this.setPosSeqGenPQ(genPQ);
+    	 
+    	 //TODO consider other attributes
+    	 
+    	 return true;
+     }
+     
+     
      
      private double getUnderValueProtectionOutput(double lowValue, double upValue, double input){
     	 // check the values 
@@ -197,6 +218,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 }
      }
      
+   
 	 
 	 // set the positive sequence equivalent current injection as the output object
      

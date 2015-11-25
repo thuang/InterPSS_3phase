@@ -17,12 +17,15 @@ import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
+import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.PVDistGen3Phase;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
+import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
+import com.interpss.CoreObjectFactory;
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranchCode;
@@ -30,13 +33,18 @@ import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
+import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabGen;
+import com.interpss.dstab.algo.DynamicSimuAlgorithm;
+import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.cache.StateMonitor.MonitorRecord;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 
 public class TestPVDistGen3Phase {
 	
-	@Test
+	//@Test
 	public void testYMatrix3Phase() throws InterpssException{
         IpssCorePlugin.init();
 		
@@ -61,21 +69,43 @@ public class TestPVDistGen3Phase {
 		
 		Complex3x3 yiibus1 = ymatrix.getA(0, 0);
 		
+		/*
+		 * yijbus12 = 
+				aa = (-0.0, 24.509803921568626),ab = (0.0, 0.0),ac = (0.0, 0.0)
+				ba = (0.0, 0.0),bb = (-0.0, 24.509803921568626),bc = (0.0, 0.0)
+				ca = (0.0, 0.0),cb = (0.0, 0.0),cc = (-0.0, 24.509803921568626)
+				
+				yiibus2 = 
+				aa = (1.428751220055992, -24.124469612386697),ab = (0.0, 0.0),ac = (0.0, 0.0)
+				ba = (0.0, -6.462348535570529E-27),bb = (1.428751220055992, -24.124469612386697),bc = (-6.462348535570529E-27, 0.0)
+				ca = (0.0, -6.462348535570529E-27),cb = (-6.462348535570529E-27, 0.0),cc = (1.4287512200559913, -24.124469612386697)
+				
+				yijbus21 = 
+				aa = (-0.0, 24.509803921568626),ab = (0.0, 0.0),ac = (0.0, 0.0)
+				ba = (0.0, 0.0),bb = (-0.0, 24.509803921568626),bc = (0.0, 0.0)
+				ca = (0.0, 0.0),cb = (0.0, 0.0),cc = (-0.0, 24.509803921568626)
+		 */
 		
 		Complex3x3 yiibus2 = ymatrix.getA(1, 1);
+		
 		Complex3x3 yijbus12 = ymatrix.getA(0, 1);
-		// bus1 side is the delta 11, leading 30 degrees related to wye side
-		System.out.println("yijbus12 = "+ yijbus12);
-		System.out.println("yijbus12 = "+ yijbus12);
+		// bus1 side is the delta 11, leading 30 degrees related to wye side (bus2)
+		System.out.println("yijbus12 = \n"+ yijbus12);
+		
+		System.out.println("yiibus2 = \n"+ yiibus2);
 		
 		Complex3x3 yijbus21 = ymatrix.getA(1, 0);
 		
-		Complex3x3 yiiBus2Load = yiibus2.add(yijbus21);
+		System.out.println("yijbus21 = \n"+ yijbus21);
+		
+		//Complex3x3 yiiBus2Load = yiibus2.add(yijbus21);
+		
+		//System.out.println(yiiBus2Load.toString());
 		
 	}
 	
 	//@Test
-	public void testPVDistGen3Phase() throws InterpssException{
+	public void testPVDistGen3Model() throws InterpssException{
 		
 		IpssCorePlugin.init();
 		
@@ -167,7 +197,7 @@ public class TestPVDistGen3Phase {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testNetworkSolutionNOPV() throws InterpssException{
 		
 		IpssCorePlugin.init();
@@ -205,9 +235,9 @@ public class TestPVDistGen3Phase {
 		//ymatrix.setBi(new Complex3x1, i);
 		//check the network solution
 		assertTrue(distNet.solveNetEqn());
-		assertTrue(distNet.solveNetEqn());
-		assertTrue(distNet.solveNetEqn());
-		assertTrue(distNet.solveNetEqn());
+//		assertTrue(distNet.solveNetEqn());
+//		assertTrue(distNet.solveNetEqn());
+//		assertTrue(distNet.solveNetEqn());
 		
 		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(distNet));
 		
@@ -227,6 +257,103 @@ public class TestPVDistGen3Phase {
 		Bus2->Bus3(0), Iabc (from) = -0.41928 + j0.24913  0.42539 + j0.23854  -0.00611 + j-0.48767, Iabc (to) = -0.41928 + j0.24913  0.42539 + j0.23854  -0.00611 + j-0.48767
 
 	 */
+	
+	@Test
+	public void testTwoBusLoadOnlyDstabSim() throws InterpssException{
+		
+        IpssCorePlugin.init();
+		
+		DStabNetwork3Phase distNet = createDistNetNoDG();
+		
+		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(distNet);
+		//distPFAlgo.orderDistributionBuses(true);
+		
+		assertTrue(distPFAlgo.powerflow());
+		
+		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(distNet));
+		
+		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
+				distNet, IpssCorePlugin.getMsgHub());
+			
+	
+	  	
+	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
+		dstabAlgo.setSimuStepSec(0.005d);
+		dstabAlgo.setTotalSimuTimeSec(0.5);
+	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+		//distNet.addDynamicEvent(create3PhaseFaultEvent("Bus2",distNet,0.2,0.05),"3phaseFault@Bus2");
+        
+		
+		StateMonitor sm = new StateMonitor();
+		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus2","Bus1"});
+		// set the output handler
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(1);
+		
+		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+				
+	  	if(dstabAlgo.initialization()){
+	  		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(distNet));
+	  		System.out.println(distNet.getMachineInitCondition());
+	  	
+	  		dstabAlgo.performSimulation();
+	  	}
+	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus2").get(1);
+	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus2").get(20);
+	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
+	}
+	
+	
+	@Test
+	public void testThreeBusWithPVDstabSim() throws InterpssException{
+		
+        IpssCorePlugin.init();
+		
+		DStabNetwork3Phase distNet = createDistNetWithDG();
+		
+		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(distNet);
+		//distPFAlgo.orderDistributionBuses(true);
+		
+		assertTrue(distPFAlgo.powerflow());
+		
+		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(distNet));
+		
+		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
+				distNet, IpssCorePlugin.getMsgHub());
+			
+	
+	  	
+	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
+		dstabAlgo.setSimuStepSec(0.005d);
+		dstabAlgo.setTotalSimuTimeSec(0.5);
+	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
+		//distNet.addDynamicEvent(create3PhaseFaultEvent("Bus2",distNet,0.2,0.05),"3phaseFault@Bus2");
+        
+		
+		StateMonitor sm = new StateMonitor();
+		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus2","Bus1"});
+		// set the output handler
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(1);
+		
+		dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
+				
+	  	if(dstabAlgo.initialization()){
+	  		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(distNet));
+	  		System.out.println(distNet.getMachineInitCondition());
+	  	
+	  		dstabAlgo.performSimulation();
+	  	}
+	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus2").get(1);
+	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus2").get(20);
+	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
+	}
 	
 	private DStabNetwork3Phase createDistNetWithDG() throws InterpssException{
 		

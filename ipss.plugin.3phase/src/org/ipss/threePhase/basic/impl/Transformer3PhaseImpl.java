@@ -192,7 +192,8 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 	        	//D-Yg or Y
 				if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_SOLID_GROUNDED ||
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
-	        	    //TODO original 11/23/2015
+	        	    // Delta side lags 30 degrees related to wye side,  that is why transpose() is required
+					// y3 matrix is corresponding to the case where wye on the from side. 
 					yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 					
 				
@@ -209,7 +210,9 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 						this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.WYE_UNGROUNDED)
 	        	    ////TODO original 11/23/2015 
 					//yftabc = getY3().transpose().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
-				yftabc = getY3().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
+				  
+					// Delta side leads 30 degrees related to wye side
+					yftabc = getY3().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
 				
 				else if(this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA || this.ph3Branch.getXfrToConnectCode() == XfrConnectCode.DELTA11)
 					 yftabc = getY2().multiply(-1/this.getFromTurnRatio()/this.getToTurnRatio());
