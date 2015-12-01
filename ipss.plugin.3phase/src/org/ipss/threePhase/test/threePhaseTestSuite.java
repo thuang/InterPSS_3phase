@@ -12,8 +12,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	TestODM3PhaseDstabMapper.class,
 	IEEE9Bus_3phase_LF_init_test.class,
 	TestSinglePhaseACMotorModel.class,
-	IEEE9_3Phase_1PAC_test.class
-
+	IEEE9_3Phase_1PAC_test.class,
+    Test6BusFeeder.class,
+    TestPVDistGen3Phase.class
 	
 })
 public class threePhaseTestSuite {
