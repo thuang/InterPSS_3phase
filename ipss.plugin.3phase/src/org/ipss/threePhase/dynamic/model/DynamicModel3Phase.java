@@ -24,6 +24,18 @@ public abstract class DynamicModel3Phase extends DynamicBusDeviceImpl implements
     protected  Bus3Phase parentBus = null;
 	protected  Complex3x3 equivYabc = new Complex3x3();
 	
+	
+	public Bus3Phase getParentBus(){
+		if(parentBus != null)
+			return parentBus;
+		else{
+			if(this.getDStabBus() instanceof Bus3Phase)
+		         return parentBus = (Bus3Phase) this.getDStabBus();
+		}
+		return null;
+		
+	}
+	
 	@Override
 	public Complex3x3 getEquivYabc(){
 		 equivYabc = getYabc(false);

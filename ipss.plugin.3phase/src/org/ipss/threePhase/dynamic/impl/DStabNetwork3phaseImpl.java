@@ -448,7 +448,13 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						
 						//TODO three-phase dynamic loads
 						
-						
+						if(bus3p.getThreePhaseDynLoadList().size()>0){
+							for(DynLoadModel3Phase load3p:bus3p.getThreePhaseDynLoadList()){
+								if(load3p.isActive()){
+									iInject = iInject.add(load3p.getISource3Phase());
+								}
+							}
+						}
 					}
 				  
 				  if(iInject == null){

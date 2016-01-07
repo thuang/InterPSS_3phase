@@ -235,7 +235,7 @@ public class TestSinglePhaseACMotorModel {
 	}
 	
 	
-private DStabNetwork3Phase create2BusSys() throws InterpssException{
+  private DStabNetwork3Phase create2BusSys() throws InterpssException{
 		
 		DStabNetwork3Phase net = new DStabNetwork3phaseImpl();
 
@@ -294,7 +294,6 @@ private DStabNetwork3Phase create2BusSys() throws InterpssException{
 		mach2.setRa(0.02);
 		mach2.setXd1(0.20);
   				
-  	
   		
   		Branch3Phase bra = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus3", "0", net);
 		bra.setBranchCode(AclfBranchCode.LINE);
