@@ -151,14 +151,30 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 							yfaultABC.aa = yfault ;
 							net.getYMatrixABC().addToA(yfaultABC, i, i);
 						}
-						//TODO need to check how to model LL
+						//TODO need to check how to model LL, phase B to C
 						else if(fault.getFaultCode()==SimpleFaultCode.GROUND_LL){
-							Complex3x3 yii = net.getYMatrixABC().getA(i, i);
-							yii.ab = new Complex(0,0);
-							yii.ba = new Complex(0,0);
-							//TODO whether it will affect the yii.aa and yii.bb
+							//Complex3x3 yii = net.getYMatrixABC().getA(i, i);
 							
-							net.getYMatrixABC().setA(yii,i,i);
+							// Based on Ifa = 0;
+							//          Ifb = (VFb-VFc)/Zf
+							//          Ifc = (-VFb+VFc)/Zf
+							
+							//Thus   Yfault = [0 0 0; 0 1, -1; 0 -1 1]/Zf
+							
+							Complex yfault = ylarge;
+							if(fault.getZLLFault()!=null){
+								if(fault.getZLLFault().abs()>1.0E-7)
+								     yfault = new Complex(1.0,0).divide(fault.getZLLFault());
+							}
+							
+							
+							yfaultABC.bb = yfault;
+							yfaultABC.bc = yfault.multiply(-1);
+							yfaultABC.cb = yfault.multiply(-1);
+							yfaultABC.cc = ylarge;
+							
+							
+							net.getYMatrixABC().addToA(yfaultABC, i, i);
 							
 						}
 	                    else if(fault.getFaultCode()==SimpleFaultCode.GROUND_LLG){

@@ -33,6 +33,7 @@ import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
+import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -330,7 +331,7 @@ public class TestPVDistGen3Phase {
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(0.5);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
-		//distNet.addDynamicEvent(create3PhaseFaultEvent("Bus2",distNet,0.2,0.05),"3phaseFault@Bus2");
+		distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus2",distNet, SimpleFaultCode.GROUND_3P, new Complex(0,0), null, 0.2, 0.05),"fault@bus2");
         
 		
 		StateMonitor sm = new StateMonitor();

@@ -44,6 +44,12 @@ public interface IDynamicModel3Phase extends DynamicBusDevice{
 		public Complex3x3 getYabc(boolean machineMVABase);
 		
 		/**
+		 * 
+		 * @return EquivYabc -- the equivalent Yabc of this model used in forming the YABC matrix of the system in dynamic simulation
+		 */
+		public Complex3x3 getEquivYabc();
+		
+		/**
 		 * Power = VABC*conj(IgenABC-YgenABC*VABC)
 		 * If unit = pu, it is on system MVA base
 		 * @param unit

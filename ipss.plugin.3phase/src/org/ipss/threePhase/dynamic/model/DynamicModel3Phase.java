@@ -21,9 +21,15 @@ import com.interpss.dstab.mach.Machine;
 public abstract class DynamicModel3Phase extends DynamicBusDeviceImpl implements
 		IDynamicModel3Phase {
 
-   protected  Bus3Phase parentBus = null;
+    protected  Bus3Phase parentBus = null;
+	protected  Complex3x3 equivYabc = new Complex3x3();
 	
-
+	@Override
+	public Complex3x3 getEquivYabc(){
+		 equivYabc = getYabc(false);
+		if(equivYabc ==null)  equivYabc = new Complex3x3();
+		return equivYabc;
+	}
 	
 	/**
 	 * <!-- begin-user-doc -->

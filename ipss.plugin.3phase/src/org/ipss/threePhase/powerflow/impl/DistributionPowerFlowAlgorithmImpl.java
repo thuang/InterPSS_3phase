@@ -40,6 +40,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	private Hashtable<String,Complex3x1> busVoltTable =null;
 	private boolean initBusVoltagesEnabled = true;
 	
+	
 	public DistributionPowerFlowAlgorithmImpl(){
 		busVoltTable = new Hashtable<>();
 		
@@ -538,7 +539,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		
 	}
 
-	private void calcSwingBusGenPower() {
+	public void calcSwingBusGenPower() {
 		// update the swing bus generation output based on the converged power flow result
 		
 		for(AclfBus bus: this.distNet.getBusList()){ 
@@ -546,21 +547,29 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 				Bus3Phase bus3p = (Bus3Phase) bus;
 				Complex3x1 sumOfBranchCurrents = new Complex3x1();
 				for (Branch bra: bus.getBranchList()){
-					Branch3Phase bra3P = (Branch3Phase) bra;
-					// all visited branches are on the downstream side, and there should be only one upstream branch
 					if(bra.isActive()){
+					    if(bra instanceof Branch3Phase){
+					
+						Branch3Phase bra3P = (Branch3Phase) bra;
+						// all visited branches are on the downstream side, and there should be only one upstream branch
 						
-						if(bra.getFromBus().getId().equals(bus.getId())){
-						 
 							
-						   sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtFromSide());
+							if(bra.getFromBus().getId().equals(bus.getId())){
+							 
+								
+							   sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtFromSide());
+							}
+							else{ 
+								
+								
+								sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtToSide().multiply(-1.0));
+							}
 						}
-						else{ 
-							
-							
-							sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtToSide().multiply(-1.0));
+					    else{
+							throw new Error("The branch is not a three-phase type #"+bra.getId() );
 						}
 					}
+					
 			}
 				
 				Complex posGenPQ = bus3p.getThreeSeqVoltage().b_1.multiply(sumOfBranchCurrents.to012().b_1.conjugate());

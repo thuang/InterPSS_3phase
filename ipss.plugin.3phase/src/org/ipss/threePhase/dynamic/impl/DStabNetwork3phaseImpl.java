@@ -274,8 +274,17 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 			if(bus.isActive() && bus.isLoad()){
 				Bus3Phase bus3p = (Bus3Phase) bus;
 				
+				Complex3x3 threePhasedynLoadEquivY = new Complex3x3();
+				
 				//TODO process three-phase dynamic loads
-
+                 if(bus3p.getThreePhaseDynLoadList().size()>0){
+					
+					for(DynLoadModel3Phase load3p:bus3p.getThreePhaseDynLoadList()){
+						if(load3p.isActive()){
+							threePhasedynLoadEquivY = threePhasedynLoadEquivY.add(load3p.getEquivYabc());
+						}
+					}
+                 }
 				
 				//TODO process 1-phase dynamic loads on each phase
 				Complex phaseAdynLoadEquivY = new Complex(0,0);
@@ -318,12 +327,16 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				
                 if(phaseAdynLoadEquivY.abs()>0 || phaseBdynLoadEquivY.abs()>0 || phaseCdynLoadEquivY.abs()>0 ){
                 	Complex3x3 y = new Complex3x3(phaseAdynLoadEquivY,phaseBdynLoadEquivY,phaseCdynLoadEquivY) ;
+                	
+                	
                 	yMatrixAbc.addToA(y, bus.getSortNumber(), bus.getSortNumber());
                 }
                 
                 
-                //TODO Consider the equivalent Y of three-phase dynamic loads
-                
+               // Consider the equivalent Y of three-phase dynamic loads
+                if(threePhasedynLoadEquivY.abs()>0){
+                	yMatrixAbc.addToA(threePhasedynLoadEquivY, bus.getSortNumber(), bus.getSortNumber());
+                }
                 
                 	
 			}
@@ -655,7 +668,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						bus.getDynamicBusDeviceList().addAll(bus.getPhaseBDynLoadList()); // single-phase based
 						bus.getDynamicBusDeviceList().addAll(bus.getPhaseCDynLoadList()); // single-phase based
 						bus.getDynamicBusDeviceList().addAll(bus.getThreePhaseDynLoadList()); // three-phase based
-				   }//end if-isLoad
+				  
+					}//end if-isLoad
 				   
 					
 				}
