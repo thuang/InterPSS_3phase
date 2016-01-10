@@ -410,7 +410,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseADynLoadList()){
 								if(load1p.isActive()){
-							        iPhAInj = iPhAInj.add(load1p.getCompCurInj());
+							        iPhAInj = iPhAInj.add(load1p.getCompensateCurInj());
 								}
 							}
 							
@@ -424,7 +424,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseBDynLoadList()){
 								if(load1p.isActive()){
-							        iPhBInj = iPhBInj.add(load1p.getCompCurInj());
+							        iPhBInj = iPhBInj.add(load1p.getCompensateCurInj());
 								}
 							}
 							
@@ -438,7 +438,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseCDynLoadList()){
 								if(load1p.isActive()){
-							        iPhCInj = iPhCInj.add(load1p.getCompCurInj());
+							        iPhCInj = iPhCInj.add(load1p.getCompensateCurInj());
 								}
 							}
 							

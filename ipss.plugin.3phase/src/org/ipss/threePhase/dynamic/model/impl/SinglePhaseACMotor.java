@@ -368,7 +368,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 	
 		@Override
-		public Complex getCompCurInj() {
+		public Complex getCompensateCurInj() {
 			if(this.compensateCurrInj == null) calculateCompensateCurInj();
 			
 			//if(loadPQFactor==null)loadPQFactor = calcLoadCharacterFactor();
@@ -412,7 +412,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		@Override
 		public Object getOutputObject() {
-		     return this.getCompCurInj();
+		     return this.getCompensateCurInj();
 		}
 		
 		
