@@ -71,10 +71,10 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		//step (1)
 		for(AcscBranch bra: this.getBranchList()){
-			bra.setVisited(false);
+			bra.setBooleanFlag(false);
 		}
 		for(Bus b: this.getBusList()){
-			b.setVisited(false);
+			b.setBooleanFlag(false);
 			b.setIntFlag(0);
 		}
 		
@@ -89,7 +89,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						(!isDeltaConnected(bra.getXfrFromConnectCode()) &&
 						    isDeltaConnected(bra.getXfrToConnectCode()))){
 					
-					 bra.setVisited(true);
+					 bra.setBooleanFlag(true);
 					 
                      //NOTE When Delta connection is on the low voltage side (step up), such as the case of Generation connection
 					 // all buses on the low side should be shifted -30 deg. On the hand, if the the Delta Connection is on the high
@@ -138,7 +138,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		// initialize the phase voltages of those which are not set before, three-phase generation power output and load
 		for(AcscBus b: this.getBusList()){
 			
-			if(b.isActive() && !b.isVisited()){
+			if(b.isActive() && !b.isBooleanFlag()){
 				   Complex vpos = b.getVoltage();
 					Complex va = vpos;
 					Complex vb = va.multiply(phaseShiftCplxFactor(-120));
@@ -186,17 +186,17 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		//Retrieves and removes the head of this queue, or returns null if this queue is empty.
 	    while(!onceVisitedBuses.isEmpty()){
 			Bus3Phase  startingBus = onceVisitedBuses.poll();
-			startingBus.setVisited(true);
+			startingBus.setBooleanFlag(true);
 			startingBus.setIntFlag(2);
 			
 			if(startingBus!=null){
 				  for(Branch connectedBra: startingBus.getBranchList()){
-						if(connectedBra.isActive() && !connectedBra.isVisited()){
+						if(connectedBra.isActive() && !connectedBra.isBooleanFlag()){
 							try {
 								Bus findBus = connectedBra.getOppositeBus(startingBus);
 								
 								//update status
-								connectedBra.setVisited(true);
+								connectedBra.setBooleanFlag(true);
 								
 								//for first time visited buses
 								

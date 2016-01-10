@@ -65,7 +65,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		
 		//make sure all internal branches are unvisited
 		for(AclfBranch bra:distNet.getBranchList()){
-			bra.setVisited(false);
+			bra.setBooleanFlag(false);
 		}
 
 		// perform BFS and set the bus sortNumber 
@@ -86,17 +86,17 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	    while(!onceVisitedBuses.isEmpty()){
 			Bus3Phase  startingBus = onceVisitedBuses.poll();
 			startingBus.setSortNumber(orderNumber++);
-			startingBus.setVisited(true);
+			startingBus.setBooleanFlag(true);
 			startingBus.setIntFlag(2);
 			
 			if(startingBus!=null){
 				  for(Branch connectedBra: startingBus.getConnectedPhysicalBranchList()){
-						if(connectedBra.isActive() && !connectedBra.isVisited()){
+						if(connectedBra.isActive() && !connectedBra.isBooleanFlag()){
 							try {
 								Bus findBus = connectedBra.getOppositeBus(startingBus);
 								
 								//update status
-								connectedBra.setVisited(true);
+								connectedBra.setBooleanFlag(true);
 								
 								//for first time visited buses
 								if(findBus.getIntFlag()==0){

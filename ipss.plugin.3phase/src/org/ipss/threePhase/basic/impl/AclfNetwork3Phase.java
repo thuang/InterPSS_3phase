@@ -37,17 +37,17 @@ public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus,AcscBranch> i
 		//Retrieves and removes the head of this queue, or returns null if this queue is empty.
 	    while(!onceVisitedBuses.isEmpty()){
 			Bus3Phase  startingBus = onceVisitedBuses.poll();
-			startingBus.setVisited(true);
+			startingBus.setBooleanFlag(true);
 			startingBus.setIntFlag(2);
 			
 			if(startingBus!=null){
 				  for(Branch connectedBra: startingBus.getBranchList()){
-						if(connectedBra.isActive() && !connectedBra.isVisited()){
+						if(connectedBra.isActive() && !connectedBra.isBooleanFlag()){
 							try {
 								Bus findBus = connectedBra.getOppositeBus(startingBus);
 								
 								//update status
-								connectedBra.setVisited(true);
+								connectedBra.setBooleanFlag(true);
 								
 								//for first time visited buses
 								
