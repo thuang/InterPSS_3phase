@@ -62,7 +62,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 		     */
 			
 			Bus3Phase bus1 = (Bus3Phase) net.getDStabBus("Bus1");
-			InductionMotor indMotor= new InductionMotorImpl("1");
+			InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
 			indMotor.setDStabBus(bus1);
 
 			indMotor.setXm(3.0);
