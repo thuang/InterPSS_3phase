@@ -54,7 +54,7 @@ public class Test6BusFeeder {
 	}
 	
 	@Test
-	public void testTwoBusLoadOnlyDstabSim() throws InterpssException{
+	public void test6BusFeederDstabSim() throws InterpssException{
 		
         IpssCorePlugin.init();
 		

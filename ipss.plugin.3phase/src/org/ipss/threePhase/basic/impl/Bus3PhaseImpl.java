@@ -28,6 +28,7 @@ import com.interpss.dstab.impl.DStabBusImpl;
 public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private Complex3x1 Vabc = null;
+	private Complex3x1 initVabc = null;
 	private Complex3x3 shuntYabc = null;
 	Complex3x3 yiiAbc = new Complex3x3();
 	
@@ -120,9 +121,10 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		//ONly consider the net Load after excluding the effects of dynamic loads
 		  
 		 if(this.get3PhaseNetLoadResults() != null && this.get3PhaseNetLoadResults().abs() >0.0){
-			 double va = this.get3PhaseVotlages().a_0.abs();
-			 double vb = this.get3PhaseVotlages().b_1.abs();
-			 double vc = this.get3PhaseVotlages().c_2.abs();
+			 Complex3x1 initVoltABC = this.get3PhaseInitVoltage();
+			 double va = initVoltABC.a_0.abs();
+			 double vb = initVoltABC.b_1.abs();
+			 double vc = initVoltABC.c_2.abs();
 			 Complex ya = this.get3PhaseNetLoadResults().a_0.conjugate().divide(va*va);
 			 Complex yb = this.get3PhaseNetLoadResults().b_1.conjugate().divide(vb*vb);
 			 Complex yc = this.get3PhaseNetLoadResults().c_2.conjugate().divide(vc*vc);
@@ -270,6 +272,19 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 			this.totalLoad3Phase = this.totalLoad3Phase.add(load.get3PhaseLoad());  
 		}
 		return this.totalLoad3Phase;
+	}
+
+	@Override
+	public void setThreePhaseInitVoltage(Complex3x1 initVoltAbc) {
+		this.initVabc = initVoltAbc;
+		
+	}
+
+	@Override
+	public Complex3x1 get3PhaseInitVoltage() {
+		
+		
+		return this.initVabc;
 	}
 
 	

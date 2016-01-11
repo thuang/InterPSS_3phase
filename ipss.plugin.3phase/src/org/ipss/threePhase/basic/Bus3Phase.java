@@ -18,7 +18,6 @@ public interface Bus3Phase extends DStabBus {
 	
     public void set3PhaseVoltages(Complex3x1 vabc);
     
-    
     public Complex3x3 getYiiAbc();
     
     // TODO in the next phase, put all dynamic models in one array;
@@ -40,6 +39,8 @@ public interface Bus3Phase extends DStabBus {
     
     public Complex3x1 get3PhaseTotalLoad();
     
+    
+    
 	/**
 	 * Get the 3-phase net loads (in power) by subtracting the dynamic phase-oriented (including single-phase and three-phase) loads 
 	 * from the bus total phase-oriented loads 
@@ -48,5 +49,14 @@ public interface Bus3Phase extends DStabBus {
 	public Complex3x1 get3PhaseNetLoadResults();
 	
 	public void set3PhaseNetLoadResults(Complex3x1 netLoad3Phase);
+	
+	public void setThreePhaseInitVoltage(Complex3x1 initVoltAbc);
+	
+	public Complex3x1 get3PhaseInitVoltage();
+	
+	
+	
+	
+	
 
 }

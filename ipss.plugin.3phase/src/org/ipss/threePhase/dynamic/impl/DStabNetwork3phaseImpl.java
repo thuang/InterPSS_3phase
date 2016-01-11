@@ -534,6 +534,9 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					bus.setInitVoltMag(bus.getVoltageMag());
 					bus.setVoltage(bus.getThreeSeqVoltage().b_1); // make sure the positive sequence voltage is set up;
 					
+					//save the three-phase voltage
+					bus.setThreePhaseInitVoltage(bus.get3PhaseVotlages());
+					
 					//1) init bus dynamic signal calculation, 
 					// for example, bus Frequency measurement
 					bus.initStates();
