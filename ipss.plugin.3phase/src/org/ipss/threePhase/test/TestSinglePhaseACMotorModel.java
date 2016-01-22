@@ -4,31 +4,34 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
-import org.interpss.display.AclfOutFunc;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.util.NumericUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Phase;
+import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
+import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
+import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
-import com.interpss.CoreObjectFactory;
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
-import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 
@@ -40,20 +43,15 @@ public class TestSinglePhaseACMotorModel {
 		
 		DStabNetwork3Phase net = create2BusSys();
 	
-		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
-		net.initContributeGenLoad();
-			
-		//create a load flow algorithm object
-	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
-	  	//run load flow using default setting
-	  	
-		// run power flow
-	  	assertTrue(algo.loadflow())	;
- 
-	  	
-		System.out.println(AclfOutFunc.loadFlowSummary(net));
+		net.setNetworkType(false);
 		
-		net.initThreePhaseFromLfResult();
+		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
+		//distPFAlgo.orderDistributionBuses(true);
+		
+		assertTrue(distPFAlgo.powerflow());
+		
+		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(net));
+
 		
 	    /*
 	     *   create the 1-phase AC model 
@@ -98,17 +96,22 @@ public class TestSinglePhaseACMotorModel {
   			sm.addGeneratorStdMonitor(new String[]{"Bus3-mach1"});
   			sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
   			
+  			// AC MOTOR extended Id
+  			//"ACMotor_"+this.getId()+"@"+this.getParentBus().getId()+"_phase"+this.getPhase();
+  			sm.addMultiDynDeviceMonitor(DynDeviceType.ACMotor, new String[]{"ACMotor_1@Bus1_phaseA","ACMotor_2@Bus1_phaseB"});
+  			
+  			
   			// set the output handler
   			dstabAlgo.setSimuOutputHandler(sm);
   			dstabAlgo.setOutPutPerSteps(1);
   			
-  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_LG,new Complex(0,0.1),null, 0.005,0.06), "SLG@Bus1");
+  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_LG,new Complex(0,0.1),null, 0.1,0.06), "SLG@Bus1");
   			dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
   			
   		  	if(dstabAlgo.initialization()){
-  		  	    System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
+  		  	    //System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
   		  	    while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
-  		  	    System.out.print("\n\n time = "+dstabAlgo.getSimuTime()+"\n");
+  		  	   // System.out.print("\n\n time = "+dstabAlgo.getSimuTime()+"\n");
   		  		      dstabAlgo.solveDEqnStep(true);
   		  	    }
   		  	}
@@ -116,29 +119,32 @@ public class TestSinglePhaseACMotorModel {
   		
   		  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
   		  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+  		    System.out.println(sm.toCSVString(sm.getAcMotorPTable()));
+  		    
+  		  
+  		  
+	      assertTrue(Math.abs(sm.getBusAngleTable().get("Bus1").get(1).getValue()-
+					sm.getBusAngleTable().get("Bus1").get(10).getValue())<1.0E-1);
+		  assertTrue(Math.abs(sm.getBusVoltTable().get("Bus1").get(1).getValue()-
+					sm.getBusVoltTable().get("Bus1").get(10).getValue())<1.0E-3);
+		  assertTrue(Math.abs(sm.getAcMotorPTable().get("ACMotor_1@Bus1_phaseA").get(1).getValue()-
+				  sm.getAcMotorPTable().get("ACMotor_1@Bus1_phaseA").get(10).getValue())<1.0E-3);
 	}
 	
-	//@Test
+	@Test
 	public void test1PAC() throws InterpssException{
 		
        IpssCorePlugin.init();
 		
 		DStabNetwork3Phase net = create2BusSys();
+		net.setNetworkType(false);
 	
-		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
-		net.initContributeGenLoad();
-			
-		//create a load flow algorithm object
-	  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
-	  	//run load flow using default setting
-	  	
-		// run power flow
-	  	assertTrue(algo.loadflow())	;
- 
-	  	
-		System.out.println(AclfOutFunc.loadFlowSummary(net));
+		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
+		//distPFAlgo.orderDistributionBuses(true);
 		
-		net.initThreePhaseFromLfResult();
+		assertTrue(distPFAlgo.powerflow());
+		
+		System.out.println(DistPowerFlowOutFunc.powerflowResultSummary(net));
 		
 	    /*
 	     *   create the 1-phase AC model 
@@ -192,16 +198,18 @@ public class TestSinglePhaseACMotorModel {
 				Complex loadPQ = new Complex(0.5,0.5*Math.tan(Math.acos(0.97)));
 				assertTrue( NumericUtil.equals(ac1.getInitLoadPQ(),loadPQ,1.0E-5));
 				
-				//check only 50% load left as static load
-				Complex remainLoadPQ = new Complex(1,0.2).subtract(loadPQ);
-				assertTrue( NumericUtil.equals(bus1.getNetLoadResults(),remainLoadPQ,1.0E-5));
-				
-				// correct equivY = 1/(0.124+j0.114)
-				Complex y = new Complex(1.5,0).divide(new Complex(0.124,0.114));
-				assertTrue( NumericUtil.equals(ac1.getEquivY(),y,1.0E-5));
-				
 				// check the calculated loadPQ
 				assertTrue(NumericUtil.equals(ac1.getLoadPQ(),loadPQ,1.0E-5));
+				
+				//check only 50% load left as static load
+				Complex remainLoadPQ = new Complex(1,0.2).subtract(loadPQ);
+				assertTrue( NumericUtil.equals(bus1.get3PhaseNetLoadResults().a_0,remainLoadPQ,1.0E-5));
+				
+				// correct equivY = 1/(0.124+j0.114)
+				Complex y = new Complex(1.5,0).divide(new Complex(ac1.getRstall(),ac1.getXstall()));
+				assertTrue( NumericUtil.equals(ac1.getEquivY(),y,1.0E-5));
+				
+
 				
 				 double v = 0.599;
 				 bus1.get3PhaseVotlages().a_0 = new Complex(v,0.0);
@@ -255,8 +263,10 @@ public class TestSinglePhaseACMotorModel {
   		// adapt the bus object to a swing bus object
   		bus1.setLoadCode(AclfLoadCode.CONST_P);
   		
-  		bus1.setLoadPQ(new Complex(1.0,0.2));
-  		
+  		//bus1.setLoadPQ(new Complex(1.0,0.2));
+  		Load3Phase load1 = new Load3PhaseImpl();
+		load1.set3PhaseLoad(new Complex3x1(new Complex(1.0,0.2),new Complex(1.0,0.2),new Complex(1.0,0.2)));
+		bus1.getThreePhaseLoadList().add(load1);
   		//bus1.setScLoadShuntY2( new Complex (1.0,0.2));
   		//bus1.setScLoadShuntY0( new Complex (1.0,0.2));
   		

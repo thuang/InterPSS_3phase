@@ -1,5 +1,7 @@
 package org.ipss.threePhase.dynamic.model;
 
+import java.util.Hashtable;
+
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.ComplexFunc;
 import org.ipss.threePhase.basic.Gen3Phase;
@@ -7,6 +9,7 @@ import org.ipss.threePhase.basic.Gen3Phase;
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.common.DStabOutSymbol;
 
 /**
  * PV Distributed generation dynamic model.
@@ -23,7 +26,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	private Complex  genCurSource = null;
 	private double   currLimit = 9999;
 	private Complex  Ipq_pos = null;
-
+	
 	
 	private double TR = 0.01 ;
 	private double vtmeasured = 0;
@@ -40,14 +43,24 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	private double overFreqTripStart = 99.0; // below this voltage, generation starts to trip
 	private double overFreqTripAll = 99.0;	// below  this voltage, all generation are tripped
 	
+	private Hashtable<String, Object> states = null;
+	private static final String OUT_SYMBOL_PQ ="PVGenPQ";
+
+	private static final String OUT_SYMBOL_V ="PVGenVt";
+	private static final String OUT_SYMBOL_I ="PVGenIt";
+	private static final String OUT_SYMBOL_IP ="PVGenIp";	
+	private static final String OUT_SYMBOL_IQ ="PVGenIq";
+	private  String extended_device_Id= "";
 	
 	public PVDistGen3Phase(){
-		
+		states = new Hashtable<>();
 	}
 	
 	public PVDistGen3Phase(Gen3Phase gen) {
 		this.parentGen = gen;
 		gen.setDynamicGenDevice(this);
+		
+		states = new Hashtable<>();
 	}
 
 	public double getCurrLimit(){
@@ -80,6 +93,10 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 			 return false;
 		 this.genPQInit = new Complex(this.posSeqGenPQ.getReal(),this.posSeqGenPQ.getImaginary());
 		 this.vtmeasured = getPosSeqVt().abs();
+		 
+		 extended_device_Id = "PVGen3Phase_"+this.getId()+"@"+this.getParentGen().getParentBus().getId();
+		 this.states.put(DStabOutSymbol.OUT_SYMBOL_BUS_DEVICE_ID, extended_device_Id);
+		 
 		 
 		 return true;
 	 }
@@ -176,6 +193,16 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
          return genCurSource;
     	 
      }
+     
+     @Override
+		public Hashtable<String, Object> getStates(Object ref) {
+			states.put(OUT_SYMBOL_PQ, this.getPower3Phase(null));
+			states.put(OUT_SYMBOL_V, this.getPosSeqVt().abs());
+			states.put(OUT_SYMBOL_I, this.Ipq_pos.abs());
+			states.put(OUT_SYMBOL_IP, this.Ipq_pos.getReal());
+			states.put(OUT_SYMBOL_IQ, this.Ipq_pos.getImaginary());
+			return this.states;
+		}
      
      @Override
      public boolean updateAttributes(boolean netChange) {

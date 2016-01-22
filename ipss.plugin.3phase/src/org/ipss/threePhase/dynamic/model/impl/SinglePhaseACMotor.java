@@ -1,5 +1,7 @@
 package org.ipss.threePhase.dynamic.model.impl;
 
+import java.util.Hashtable;
+
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
@@ -9,8 +11,15 @@ import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 import com.interpss.common.util.IpssLogger;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
+import com.interpss.dstab.common.DStabOutSymbol;
 import com.interpss.dstab.device.DynamicBusDeviceType;
-
+/**
+ * This dynamic model of single phase AC motor must be used under the condition that the 
+ * loads in the power flow data is input as Load3phase in the threePhaseLoadList
+ * 
+ * @author Qiuhua
+ *
+ */
 public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	
 	
@@ -115,14 +124,20 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		private boolean disableInternalStallControl = false;
 		
-		
-		
+		private Hashtable<String, Object> states = null;
+		private static final String OUT_SYMBOL_P ="ACMotorP";
+		private static final String OUT_SYMBOL_Q ="ACMotorQ";
+		private static final String OUT_SYMBOL_VT ="ACMotorVt";
+		private static final String OUT_SYMBOL_STATE ="ACMotorState";
+		private String extended_device_Id = "";
 		
 		public SinglePhaseACMotor(){
-			
+			states = new Hashtable<>();
+		
 		}
 		
 		public SinglePhaseACMotor(String Id){
+			this();
 			this.id = Id;
 		}
 		
@@ -132,8 +147,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		 * @param Id
 		 */
 		public SinglePhaseACMotor(Bus3Phase bus,String Id){
+			this(Id);
 			this.setDStabBus(bus);
-			this.id = Id;
+			
 			
 		}
 		
@@ -218,6 +234,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				thEqnB = 0.0;
 			}
 				
+			extended_device_Id = "ACMotor_"+this.getId()+"@"+this.getParentBus().getId()+"_phase"+this.getPhase();
+			this.states.put(DStabOutSymbol.OUT_SYMBOL_BUS_DEVICE_ID, extended_device_Id);
 			
 			return flag;
 		}
@@ -388,7 +406,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				
 				// p+jq is pu based on system
 				Complex pq = new Complex(p*loadPQFactor.getReal(),q*loadPQFactor.getImaginary());
-				
+				pac = pq.getReal();
+				qac =pq.getImaginary();
 				
 				//TODO replace the pos-seq voltage with phase voltage
 				Complex v = this.getBusPhaseVoltage();
@@ -415,6 +434,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		     return this.getCompensateCurInj();
 		}
 		
+		@Override
+		public Hashtable<String, Object> getStates(Object ref) {
+			states.put(OUT_SYMBOL_P, this.getPac());
+			states.put(OUT_SYMBOL_Q, this.getQac());
+			states.put(OUT_SYMBOL_VT, this.getBusPhaseVoltage().abs());
+			states.put(OUT_SYMBOL_STATE, stage==1?0:1);
+			return this.states;
+		}
 		
 		@Override
 		public Complex getEquivY() {

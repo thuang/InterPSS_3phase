@@ -1,5 +1,7 @@
 package org.ipss.threePhase.dynamic.model;
 
+import java.util.Hashtable;
+
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
@@ -157,6 +159,10 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 		this.indMotor.setLoadPercent(-100); // such that the load percent is not used, used the initLoadPQ instead
 	}
 	
-	
+	  @Override
+	public Hashtable<String, Object> getStates(Object ref) {
+		  
+		  return this.indMotor.getStates(ref);
+	}
 
 }
