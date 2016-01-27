@@ -35,6 +35,7 @@ import com.interpss.core.acsc.SequenceCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
+import com.interpss.core.net.NetworkType;
 import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabGen;
@@ -47,7 +48,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	protected boolean is3PhaseNetworkInitialized = false;
 	protected Hashtable<String, Complex3x1> threePhaseCurInjTable = null;
 	private boolean isLoadModelConverted = false;
-	private boolean isTransmissionNetwork = true;
+
 	
 	@Override
 	public boolean initThreePhaseFromLfResult() {
@@ -519,7 +520,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		
 	  	//TODO this is a must step, otherwise the system cannot be initialized properly
-		if(this.isTransmissionNetwork() && !is3PhaseNetworkInitialized)
+		if(this.getNetworkType()==NetworkType.TRANSMISSION && !is3PhaseNetworkInitialized)
 	  	     initThreePhaseFromLfResult();
 		
 		for ( DStabBus b : getBusList() ) {
@@ -733,16 +734,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 	}
 
-	@Override
-	public boolean isTransmissionNetwork() {
-		return isTransmissionNetwork;
-	}
 
-	@Override
-	public void setNetworkType(boolean isTransmission) {
-		isTransmissionNetwork = isTransmission;
-		
-	}
 
 
 

@@ -25,6 +25,7 @@ import org.junit.Test;
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
+import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
@@ -43,7 +44,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
         IpssCorePlugin.init();
 		
 		DStabNetwork3Phase distNet = this.create6BusFeeder();
-		distNet.setNetworkType(false);
+		distNet.setNetworkType(NetworkType.DISTRIBUTION);
 		
 		
 		//Add composite load component to each load bus

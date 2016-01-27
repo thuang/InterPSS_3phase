@@ -23,7 +23,6 @@ import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus,AcscBranch> implements
 		Network3Phase {
 	
-	protected boolean isTransNetwork = true; // modeling transmission network by default
 	protected ISparseEqnComplexMatrix3x3 yMatrixAbc =null;
 
 	
@@ -123,17 +122,7 @@ public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus,AcscBranch> i
 		return this.yMatrixAbc;
 	}
 
-	@Override
-	public boolean isTransmissionNetwork() {
-		
-		return this.isTransNetwork;
-	}
 
-	@Override
-	public void setNetworkType(boolean isTransmission) {
-		this.isTransNetwork = isTransmission;
-		
-	}
 
 	
 	

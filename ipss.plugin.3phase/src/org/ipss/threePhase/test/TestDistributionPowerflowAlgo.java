@@ -29,6 +29,7 @@ import com.interpss.core.aclf.BaseAclfNetwork;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.net.Bus;
+import com.interpss.core.net.NetworkType;
 
 public class TestDistributionPowerflowAlgo {
 	
@@ -320,7 +321,7 @@ public class TestDistributionPowerflowAlgo {
 	private AclfNetwork3Phase createDistNetNoDG() throws InterpssException{
 		BaseAclfNetwork net = new AclfNetwork3Phase();
 		// identify this is a distribution network
-		((AclfNetwork3Phase) net).setNetworkType(false);
+		((AclfNetwork3Phase) net).setNetworkType(NetworkType.DISTRIBUTION);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PAclfBus("Bus1", net);
   		bus1.setAttributes("69 kV feeder source", "");
@@ -447,7 +448,7 @@ public class TestDistributionPowerflowAlgo {
 	private AclfNetwork3Phase createDistNetWithDG() throws InterpssException{
 		BaseAclfNetwork net = new AclfNetwork3Phase();
 		// identify this is a distribution network
-		((AclfNetwork3Phase) net).setNetworkType(false);
+		((AclfNetwork3Phase) net).setNetworkType(NetworkType.DISTRIBUTION);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PAclfBus("Bus1", net);
   		bus1.setAttributes("69 kV feeder source", "");
@@ -548,7 +549,7 @@ public class TestDistributionPowerflowAlgo {
 	private AclfNetwork3Phase createNet4PosSeqPF() throws InterpssException{
 		BaseAclfNetwork net = new AclfNetwork3Phase();
 		// identify this is a distribution network
-		((AclfNetwork3Phase) net).setNetworkType(false);
+		((AclfNetwork3Phase) net).setNetworkType(NetworkType.DISTRIBUTION);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PAclfBus("Bus1", net);
   		bus1.setAttributes("69 kV feeder source", "");

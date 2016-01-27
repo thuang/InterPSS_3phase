@@ -50,6 +50,7 @@ import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
+import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
@@ -311,7 +312,7 @@ ca = (0.0, 0.0),cb = (1.734723475976807E-18, -3.469446951953614E-18),cc = (-1.73
 		
 		// Create an AclfNetwork object
 				DStabNetwork3Phase net = new DStabNetwork3phaseImpl();
-				net.setNetworkType(true);
+				net.setNetworkType(NetworkType.TRANSMISSION);
 
 				double baseKva = 100000.0;
 				

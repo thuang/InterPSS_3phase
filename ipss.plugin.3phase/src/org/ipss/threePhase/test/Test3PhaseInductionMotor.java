@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;
+import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
@@ -28,7 +29,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 	       IpssCorePlugin.init();
 			
 			DStabNetwork3Phase net = create2BusSys();
-		    net.setNetworkType(false);
+		    net.setNetworkType(NetworkType.DISTRIBUTION);
 		    
 //			// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
 //			net.initContributeGenLoad();

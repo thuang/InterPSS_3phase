@@ -27,6 +27,7 @@ import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
+import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
@@ -43,7 +44,7 @@ public class TestSinglePhaseACMotorModel {
 		
 		DStabNetwork3Phase net = create2BusSys();
 	
-		net.setNetworkType(false);
+		net.setNetworkType(NetworkType.DISTRIBUTION);
 		
 		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
 		//distPFAlgo.orderDistributionBuses(true);
@@ -137,7 +138,7 @@ public class TestSinglePhaseACMotorModel {
        IpssCorePlugin.init();
 		
 		DStabNetwork3Phase net = create2BusSys();
-		net.setNetworkType(false);
+		net.setNetworkType(NetworkType.DISTRIBUTION);
 	
 		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
 		//distPFAlgo.orderDistributionBuses(true);

@@ -21,6 +21,7 @@ import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
+import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
@@ -111,7 +112,7 @@ public class TestBase {
 			
 			
 			// identify this is a distribution network
-			net.setNetworkType(false);
+			net.setNetworkType(NetworkType.DISTRIBUTION);
 			
 			Bus3Phase bus1 = ThreePhaseObjectFactory.create3PDStabBus("Bus1", net);
 			bus1.setAttributes("69 kV feeder source", "");

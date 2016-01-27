@@ -35,6 +35,7 @@ import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
+import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
@@ -364,7 +365,7 @@ public class TestPVDistGen3Phase {
 		
 		
 		// identify this is a distribution network
-		net.setNetworkType(false);
+		net.setNetworkType(NetworkType.DISTRIBUTION);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PDStabBus("Bus1", net);
 			bus1.setAttributes("69 kV feeder source", "");
@@ -468,7 +469,7 @@ private DStabNetwork3Phase createDistNetNoDG() throws InterpssException{
 		DStabNetwork3Phase net = ThreePhaseObjectFactory.create3PhaseDStabNetwork();
 		
 		// identify this is a distribution network
-		net.setNetworkType(false);
+		net.setNetworkType(NetworkType.DISTRIBUTION);
 		
 		Bus3Phase bus1 = ThreePhaseObjectFactory.create3PDStabBus("Bus1", net);
 			bus1.setAttributes("69 kV feeder source", "");
