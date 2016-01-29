@@ -91,7 +91,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
   			dstabAlgo.setSimuStepSec(0.005d);
-  			dstabAlgo.setTotalSimuTimeSec(0.2);
+  			dstabAlgo.setTotalSimuTimeSec(13.2);
   			
   			StateMonitor sm = new StateMonitor();
   			sm.addGeneratorStdMonitor(new String[]{"Bus3-mach1"});
@@ -104,9 +104,9 @@ public class TestSinglePhaseACMotorModel {
   			
   			// set the output handler
   			dstabAlgo.setSimuOutputHandler(sm);
-  			dstabAlgo.setOutPutPerSteps(1);
+  			dstabAlgo.setOutPutPerSteps(5);
   			
-  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_LG,new Complex(0,0.1),null, 0.1,0.06), "SLG@Bus1");
+  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_3P,new Complex(0,0.1),null, 0.5,0.06), "SLG@Bus1");
   			dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
   			
   		  	if(dstabAlgo.initialization()){
@@ -132,7 +132,7 @@ public class TestSinglePhaseACMotorModel {
 				  sm.getAcMotorPTable().get("ACMotor_1@Bus1_phaseA").get(10).getValue())<1.0E-3);
 	}
 	
-	@Test
+	//@Test
 	public void test1PAC() throws InterpssException{
 		
        IpssCorePlugin.init();
