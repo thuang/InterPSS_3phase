@@ -85,9 +85,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		//Thermal relay setting 
 		// Based on  "WECC air conditioner motor model test report", Page.75
-		private double	Tth =  10;
-		private double	Th1t = 0.7;
-		private double	Th2t = 1.3;
+		private double	Tth =  8;
+		private double	Th1t = 1.3;
+		private double	Th2t = 4.3;
 		
 
 		
@@ -129,6 +129,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		private static final String OUT_SYMBOL_Q ="ACMotorQ";
 		private static final String OUT_SYMBOL_VT ="ACMotorVt";
 		private static final String OUT_SYMBOL_STATE ="ACMotorState";
+		private static final String OUT_SYMBOL_RemainFraction ="ACMotorRemainFraction";
 		private String extended_device_Id = "";
 		
 		public SinglePhaseACMotor(){
@@ -158,7 +159,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public boolean initStates() {
 	       boolean flag = true;
 			
-	       this.equivY = this.getEquivY();
+	       
 			
 			//TODO the initLoad is the toal load at the bus ,include constant Z and I load
 			//In the future, this may need to be update to consider the constant P load only
@@ -196,8 +197,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				else 
 					this.loadFactor = 1.0;
 				// phase mva base is the 1/3 of the system 3phaes mva base
-				this.setMVABase(this.pac*this.getDStabBus().getNetwork().getBaseMva()/3.0d/this.loadFactor);
+				double calcMva = this.pac*this.getDStabBus().getNetwork().getBaseMva()/3.0d/this.loadFactor;
+				this.setMVABase(calcMva);
 			}
+			
 			
 			
 			//Check whether a compensation is needed. If yes, calculate the compensation shuntY
@@ -234,6 +237,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				thEqnB = 0.0;
 			}
 				
+			this.equivY = this.getEquivY();
+			
 			extended_device_Id = "ACMotor_"+this.getId()+"@"+this.getParentBus().getId()+"_phase"+this.getPhase();
 			this.states.put(DStabOutSymbol.OUT_SYMBOL_BUS_DEVICE_ID, extended_device_Id);
 			
@@ -295,7 +300,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			 */
 				
 			if(stage ==1){
-				// current need to convert to motor mva based
+				
 				
 				// Iac_pu =  Vt/Zstall
 				Complex zstall = new Complex(this.Rstall,this.Xstall);
@@ -309,9 +314,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				if(this.temperature>=this.Th1t){
 					if(this.thEqnA<0.0){
 					    this.remainFraction = this.temperature*this.thEqnA+this.thEqnB;
+					   
 					    if( this.remainFraction <0) this.remainFraction = 0.0;
 					    
-					    //this.mva = this.mva*this.tripFraction;
+					  
 					    // stage = -1, means it is tripped;
 					    if(this.remainFraction <=0.0) stage = -1;
 					}
@@ -371,29 +377,33 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		}
 		
 		
-//		private Complex getBusPhaseVoltage(){
-//			Complex3x1 vabc = ((Bus3Phase)this.getDStabBus()).get3PhaseVotlages();
-//			
-//			switch(this.connectPhase){
-//			case A: 
-//				return vabc.a_0;
-//			case B:
-//				return vabc.b_1;
-//			default:
-//				return vabc.c_2;
-//			}
-//			
-//		}
+
+		
+		private double getMotor2SysMVARatio(){
+			double ratio = this.remainFraction*this.mva*3.0d/this.getDStabBus().getNetwork().getBaseMva();
+		    return ratio;
+		}
 		
 	
 		@Override
 		public Complex getCompensateCurInj() {
+			
 			if(this.compensateCurrInj == null) calculateCompensateCurInj();
 			
-			//if(loadPQFactor==null)loadPQFactor = calcLoadCharacterFactor();
+	        Complex v = this.getBusPhaseVoltage();
 			
-			//calculateCompensateCurInj();
+		    if(stage == 1 && this.remainFraction <1.0){
+				 this.compensateCurrInj = this.getEquivY().multiply(v).multiply(1-this.remainFraction);
+			}
+			else if(stage ==-1){
+				 this.compensateCurrInj = this.getEquivY().multiply(v);
+			}
+		    
+		    
+		    //System.out.println(this.extended_device_Id+", compensate current ="+ this.compensateCurrInj);
+		    
 			return this.compensateCurrInj;
+			
 		}
 		
 		private void calculateCompensateCurInj(){
@@ -411,24 +421,27 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				pac = pq.getReal();
 				qac =pq.getImaginary();
 				
-				//TODO replace the pos-seq voltage with phase voltage
+				
 				
 				Complex compPower = pq.subtract(this.getEquivY().multiply(vmag*vmag).conjugate());
 				
 				// I = -conj( (p+j*q - conj(v^2*this.equivY))/v)
 				
-				// consider the situation where the load bus voltage is very low
-				
-//				if(vmag<0.4)
-//					 this.currInj = new Complex(0.0);
-//				else
 				   this.compensateCurrInj= compPower.divide(v).conjugate().multiply(-1.0d);
 			}
 			
+			
 			// considering the tripping after stalling
-			else if(stage == 1 && this.remainFraction <1.0){
-				 this.compensateCurrInj = this.getEquivY().multiply(v).multiply((1-this.remainFraction)*-1.0);
-			}
+			
+			// Move to the get getCompensateCurInj(), such that this will be updated each iteration
+//			else if(stage == 1 && this.remainFraction <1.0){
+//				 this.compensateCurrInj = this.getEquivY().multiply(v).multiply((1-this.remainFraction)*-1.0);
+//			}
+//			else if(stage ==-1){
+//				 this.compensateCurrInj = this.getEquivY().multiply(v).multiply(-1.0);
+//			}
+			
+
 			
 			//if(this.connectPhase == Phase.A)
 			//System.out.println("AC motor -"+this.getId()+"@"+this.getDStabBus().getId()+", Phase - "+this.connectPhase+", dyn current injection: "+this.currInj);
@@ -437,6 +450,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		@Override
 		public Object getOutputObject() {
+			
 		     return this.getCompensateCurInj();
 		}
 		
@@ -446,15 +460,17 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			states.put(OUT_SYMBOL_Q, this.getQac());
 			states.put(OUT_SYMBOL_VT, this.getBusPhaseVoltage().abs());
 			states.put(OUT_SYMBOL_STATE, stage==1?0:(stage ==-1? -1:1));
+			states.put(OUT_SYMBOL_RemainFraction, this.remainFraction);
 			return this.states;
 		}
 		
 		@Override
 		public Complex getEquivY() {
-			Complex zstall = new Complex(this.Rstall,this.Xstall);
-			Complex y = new Complex(1.0,0).divide(zstall);
-			this.equivY = y.multiply(this.mva/this.getDStabBus().getNetwork().getBaseMva()*3.0d);
-			
+			if(this.equivY == null){
+				Complex zstall = new Complex(this.Rstall,this.Xstall);
+				Complex y = new Complex(1.0,0).divide(zstall);
+				this.equivY = y.multiply(this.mva/this.getDStabBus().getNetwork().getBaseMva()*3.0d);
+			}
 			return this.equivY;
 		}
 	
@@ -462,15 +478,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	
 		@Override
 		public Complex getLoadPQ() {
-			Complex loadPQFactor = calcLoadCharacterFactor();
-			double v = this.getBusPhaseVoltage().abs();
-			// when loadPQFactor = 0, it means the AC is stalled, thus no compensation current
-			if(this.stage ==1) 
-				  this.loadPQ =this.getEquivY().multiply( v*v).conjugate();
-			else
-				this.loadPQ = new Complex(p*loadPQFactor.getReal(),q*loadPQFactor.getImaginary());
 			
-			return this.loadPQ;
+			
+			return this.loadPQ = new Complex(getPac(),getQac());
 			
 		}
 	
@@ -490,10 +500,11 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public double getPac() {
 			if(this.stage ==1){
 				double vt = this.getBusPhaseVoltage().abs();
-				Complex PQ =this.getEquivY().conjugate().multiply(this.remainFraction*vt*vt);
+				Complex PQ =this.getEquivY().conjugate().multiply(vt*vt*this.remainFraction);
 				this.pac = PQ.getReal();
 				this.qac = PQ.getImaginary();
 			}
+			else if (stage ==-1) pac = 0.0;
 				
 			return pac;
 		}
@@ -505,10 +516,11 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public double getQac() {
 			if(this.stage ==1){
 				double vt = this.getBusPhaseVoltage().abs();
-				Complex PQ =this.getEquivY().conjugate().multiply(this.remainFraction*vt*vt);
+				Complex PQ =this.getEquivY().conjugate().multiply(vt*vt*this.remainFraction);
 				this.pac = PQ.getReal();
 				this.qac = PQ.getImaginary();
 			}
+			else if (stage ==-1) qac = 0.0;
 			return qac;
 		}
 

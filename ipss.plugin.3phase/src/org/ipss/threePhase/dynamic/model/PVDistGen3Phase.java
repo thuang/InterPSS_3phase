@@ -28,7 +28,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	private Complex  Ipq_pos = null;
 	
 	
-	private double TR = 0.01 ;
+	private double TR = 0.02 ;
 	private double vtmeasured = 0;
 	
 	// under and over voltage protection 
@@ -44,8 +44,8 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	private double overFreqTripAll = 99.0;	// below  this voltage, all generation are tripped
 	
 	private Hashtable<String, Object> states = null;
-	private static final String OUT_SYMBOL_PQ ="PVGenPQ";
-
+	private static final String OUT_SYMBOL_P ="PVGenP";
+	private static final String OUT_SYMBOL_Q ="PVGenQ";
 	private static final String OUT_SYMBOL_V ="PVGenVt";
 	private static final String OUT_SYMBOL_I ="PVGenIt";
 	private static final String OUT_SYMBOL_IP ="PVGenIp";	
@@ -97,6 +97,8 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 		 extended_device_Id = "PVGen3Phase_"+this.getId()+"@"+this.getParentGen().getParentBus().getId();
 		 this.states.put(DStabOutSymbol.OUT_SYMBOL_BUS_DEVICE_ID, extended_device_Id);
 		 
+		 if(this.currLimit>99)
+		     this.currLimit = this.genPQInit.abs()*2.0;
 		 
 		 return true;
 	 }
@@ -174,6 +176,8 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 // |IR|    | cos(Theta)  -sin(Theta)|  |IP|
     	 // |IX|  = | sin(Theta)  cos(Theta) |  |IQ|
     	 
+         posSeqGenPQ = getPosSeqVt().multiply(Ipq_pos.conjugate());
+         
     	 double vtAng = ComplexFunc.arg(getPosSeqVt());
     	 double Ir =  Ip_prod*Math.cos(vtAng)-Iq_prod*Math.sin(vtAng);
     	 double Ix =  Ip_prod*Math.sin(vtAng)-Iq_prod*Math.cos(vtAng);
@@ -196,7 +200,8 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
      
      @Override
 		public Hashtable<String, Object> getStates(Object ref) {
-			states.put(OUT_SYMBOL_PQ, this.getPower3Phase(null));
+			states.put(OUT_SYMBOL_P, this.posSeqGenPQ.getReal());
+			states.put(OUT_SYMBOL_Q, this.posSeqGenPQ.getImaginary());
 			states.put(OUT_SYMBOL_V, this.getPosSeqVt().abs());
 			states.put(OUT_SYMBOL_I, this.Ipq_pos.abs());
 			states.put(OUT_SYMBOL_IP, this.Ipq_pos.getReal());
