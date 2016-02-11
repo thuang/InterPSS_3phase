@@ -100,7 +100,7 @@ public class Test8BusFeeder {
 	/**
 	 * The first bus is feeder sending end, no load is connected; all the loads are connected at bus [2,...BusNum];
 	 * 
-	 * The base case of the feeder is assumed to serve 5 MW load, feeder impedances are re-scaled based on the totalMW
+	 * The base case of the feeder is assumed to serve 8 MW load, feeder impedances are re-scaled based on the totalMW
 	 * @param totalMW
 	 * @return
 	 * @throws InterpssException
