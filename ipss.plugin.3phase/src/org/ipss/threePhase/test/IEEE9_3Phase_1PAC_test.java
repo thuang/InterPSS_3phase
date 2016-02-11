@@ -18,7 +18,9 @@ import org.interpss.numeric.util.PerformanceTimer;
 import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Phase;
+import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
@@ -176,11 +178,18 @@ public class IEEE9_3Phase_1PAC_test {
 	    DStabNetwork3Phase dsNet =(DStabNetwork3Phase) simuCtx.getDStabilityNet();
 	    
 	    
-//	    /*
-//	     *   create the 1-phase AC model 
-//	     */
-//		
-//		Bus3Phase bus5 = (Bus3Phase) dsNet.getBus("Bus5");
+	    /*
+	     *   create the 1-phase AC model 
+	     */
+	   
+		
+	    
+	    
+		Bus3Phase bus5 = (Bus3Phase) dsNet.getBus("Bus5");
+		
+//		Load3Phase load1 = new Load3PhaseImpl();
+//		load1.set3PhaseLoad(new Complex3x1(new Complex(1.25,0.5),new Complex(1.25,0.5),new Complex(1.25,0.5)));
+//		bus5.getThreePhaseLoadList().add(load1);
 //		
 //	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus5,"1");
 //  		ac1.setLoadPercent(50);

@@ -414,7 +414,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseADynLoadList()){
 								if(load1p.isActive()){
 							        iPhAInj = iPhAInj.add(load1p.getCompensateCurInj());
-							        System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
+							       // System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
 								}
 							}
 							
@@ -429,7 +429,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseBDynLoadList()){
 								if(load1p.isActive()){
 							        iPhBInj = iPhBInj.add(load1p.getCompensateCurInj());
-							        System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
+							       // System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
 								}
 							}
 							
@@ -444,7 +444,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseCDynLoadList()){
 								if(load1p.isActive()){
 							        iPhCInj = iPhCInj.add(load1p.getCompensateCurInj());
-							        System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
+							       // System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
 								}
 							}
 							
@@ -488,7 +488,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				if(bus.isActive()){
 					Complex3x1 vabc = getYMatrixABC().getX(bus.getSortNumber());
 					//if(bus.getId().equals("Bus12"))
-					System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
+					//System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
 					
 					if(!vabc.a_0.isNaN()){
                     

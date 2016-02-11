@@ -232,17 +232,25 @@ public class Test6BusFeeder {
 	
 	//TODO  1 Mile = 5280 feets
 	//ohms per 1000ft
+	/*
+	 * New linecode.601 nphases=3 BaseFreq=60
+		~ rmatrix = [0.065625    | 0.029545455  0.063920455  | 0.029924242  0.02907197  0.064659091]
+		~ xmatrix = [0.192784091 | 0.095018939  0.19844697   | 0.080227273  0.072897727  0.195984848]
+		~ cmatrix = [3.164838036 | -1.002632425  2.993981593 | -0.632736516  -0.372608713  2.832670203]
+		
+		unit: per 1000 ft
+	 */
 	private Complex3x3 getFeederZabc601(){
 		  Complex3x3 zabc= new Complex3x3();
-		  zabc.aa = new Complex(0.0882,0.2074);
-		  zabc.ab = new Complex(0.0312,0.0935);
-		  zabc.ac = new Complex(0.0306,0.0760);
+		  zabc.aa = new Complex(0.065625,0.192784091);
+		  zabc.ab = new Complex( 0.029545455,0.095018939);
+		  zabc.ac = new Complex(0.029924242,0.080227273);
 		  zabc.ba =  zabc.ab;
-		  zabc.bb =  new Complex(0.0902, 0.2008);
-		  zabc.bc =  new Complex(0.0316,0.0856);
+		  zabc.bb =  new Complex(0.063920455, 0.19844697);
+		  zabc.bc =  new Complex(0.02907197,0.072897727);
 		  zabc.ca =  zabc.ac;
 		  zabc.cb =  zabc.bc;
-		  zabc.cc =  new Complex(0.0890,0.2049);
+		  zabc.cc =  new Complex(0.064659091,0.195984848);
 		  
 		  return zabc;
 		  

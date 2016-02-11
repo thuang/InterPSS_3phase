@@ -61,25 +61,25 @@ public class TestSinglePhaseACMotorModel {
 		Bus3Phase bus1 = (Bus3Phase) net.getBus("Bus1");
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
-  		ac1.setLoadPercent(50);
+  		ac1.setLoadPercent(25);
   		ac1.setPhase(Phase.A);
-  		ac1.setMVABase(40);
+  		ac1.setMVABase(25);
   		bus1.getPhaseADynLoadList().add(ac1);
   		
   		
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
-  		ac2.setLoadPercent(50);
+  		ac2.setLoadPercent(30);
   		ac2.setPhase(Phase.B);
-  		ac2.setMVABase(40);
+  		ac2.setMVABase(30);
   		bus1.getPhaseBDynLoadList().add(ac2);
   		
 
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
-  		ac3.setLoadPercent(50);
+  		ac3.setLoadPercent(20);
   		ac3.setPhase(Phase.C);
-  		ac3.setMVABase(40);
+  		ac3.setMVABase(20);
   		bus1.getPhaseCDynLoadList().add(ac3);
   		
   		// run dstab to test 1-phase ac model
@@ -91,11 +91,12 @@ public class TestSinglePhaseACMotorModel {
   		
   		  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
   			dstabAlgo.setSimuStepSec(0.005d);
-  			dstabAlgo.setTotalSimuTimeSec(13.2);
+  			dstabAlgo.setTotalSimuTimeSec(.2);
   			
   			StateMonitor sm = new StateMonitor();
   			sm.addGeneratorStdMonitor(new String[]{"Bus3-mach1"});
   			sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
+  			sm.add3PhaseBusStdMonitor("Bus1");
   			
   			// AC MOTOR extended Id
   			//"ACMotor_"+this.getId()+"@"+this.getParentBus().getId()+"_phase"+this.getPhase();
@@ -104,23 +105,28 @@ public class TestSinglePhaseACMotorModel {
   			
   			// set the output handler
   			dstabAlgo.setSimuOutputHandler(sm);
-  			dstabAlgo.setOutPutPerSteps(5);
+  			dstabAlgo.setOutPutPerSteps(1);
   			
-  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_3P,new Complex(0,0.1),null, 0.5,0.06), "SLG@Bus1");
+  			net.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", net, SimpleFaultCode.GROUND_3P,new Complex(0,0.1),null, 0.1,0.06), "SLG@Bus1");
   			dstabAlgo.setDynamicEventHandler(new DynamicEventProcessor3Phase());
   			
   		  	if(dstabAlgo.initialization()){
-  		  	    //System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
+  		  	    System.out.print(net.getYMatrixABC().getSparseEqnComplex().toString());
   		  	    while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
-  		  	   // System.out.print("\n\n time = "+dstabAlgo.getSimuTime()+"\n");
+  		  	          System.out.print("\n\n time = "+dstabAlgo.getSimuTime()+"\n");
   		  		      dstabAlgo.solveDEqnStep(true);
+  		  		      sm.addBusPhaseVoltageMonitorRecord("Bus1", dstabAlgo.getSimuTime(), bus1.get3PhaseVotlages());
   		  	    }
   		  	}
   		  	
   		
-  		  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
-  		  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+  		  	//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+//  		  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+  			System.out.println(sm.toCSVString(sm.getBusPhAVoltTable()));
+  			System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
+  			System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
   		    System.out.println(sm.toCSVString(sm.getAcMotorPTable()));
+  		    System.out.println(sm.toCSVString( sm.getAcMotorRemainFractionTable()));
   		    
   		  
   		  
@@ -130,6 +136,9 @@ public class TestSinglePhaseACMotorModel {
 					sm.getBusVoltTable().get("Bus1").get(10).getValue())<1.0E-3);
 		  assertTrue(Math.abs(sm.getAcMotorPTable().get("ACMotor_1@Bus1_phaseA").get(1).getValue()-
 				  sm.getAcMotorPTable().get("ACMotor_1@Bus1_phaseA").get(10).getValue())<1.0E-3);
+		  
+		  assertTrue(Math.abs(sm.getBusPhAVoltTable().get("Bus1").get(1).getValue()-
+					sm.getBusPhAVoltTable().get("Bus1").get(10).getValue())<1.0E-3);
 	}
 	
 	//@Test
@@ -287,8 +296,8 @@ public class TestSinglePhaseACMotorModel {
   		gen2.setMvaBase(100.0);
   		gen2.setDesiredVoltMag(1.025);
   		//gen2.setGen(new Complex(0.7164,0.2710));
-  		gen2.setPosGenZ(new Complex(0.02,0.2));
-  		gen2.setNegGenZ(new Complex(0.02,0.2));
+  		gen2.setPosGenZ(new Complex(0.002,0.02));
+  		gen2.setNegGenZ(new Complex(0.002,0.02));
   		gen2.setZeroGenZ(new Complex(0.000,1.0E9));
   		
   		//add to contributed gen list
@@ -302,15 +311,15 @@ public class TestSinglePhaseACMotorModel {
 		mach2.calMultiFactors();
 		mach2.setH(5.0E6);
 		mach2.setD(0.01);
-		mach2.setRa(0.02);
-		mach2.setXd1(0.20);
+		mach2.setRa(0.0020);
+		mach2.setXd1(0.020);
   				
   		
   		Branch3Phase bra = ThreePhaseObjectFactory.create3PBranch("Bus1", "Bus3", "0", net);
 		bra.setBranchCode(AclfBranchCode.LINE);
-		bra.setZ( new Complex(0.000,   0.100));
+		bra.setZ( new Complex(0.000,   0.0500));
 		bra.setHShuntY(new Complex(0, 0.200/2));
-		bra.setZ0( new Complex(0.0,	  0.3));
+		bra.setZ0( new Complex(0.0,	  0.15));
 		bra.setHB0(0.200/2);
       
 	

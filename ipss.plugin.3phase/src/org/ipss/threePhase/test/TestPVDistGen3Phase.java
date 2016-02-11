@@ -40,6 +40,7 @@ import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
 import com.interpss.dstab.cache.StateMonitor.MonitorRecord;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
@@ -260,7 +261,7 @@ public class TestPVDistGen3Phase {
 
 	 */
 	
-	@Test
+	//@Test
 	public void testTwoBusLoadOnlyDstabSim() throws InterpssException{
 		
         IpssCorePlugin.init();
@@ -338,6 +339,9 @@ public class TestPVDistGen3Phase {
 		StateMonitor sm = new StateMonitor();
 		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
 		sm.addBusStdMonitor(new String[]{"Bus2","Bus1"});
+		
+		sm.addDynDeviceMonitor(DynDeviceType.PVGen, "PVGen3Phase_1@Bus3");
+		
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
 		dstabAlgo.setOutPutPerSteps(1);
@@ -350,11 +354,15 @@ public class TestPVDistGen3Phase {
 	  	
 	  		dstabAlgo.performSimulation();
 	  	}
-	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+	  	//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus2").get(1);
 	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus2").get(20);
 	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
+	  	
+	  	System.out.println(sm.toCSVString(sm.getPvGenPTable()));
+	  	System.out.println(sm.toCSVString(sm.getPvGenQTable()));
+	  	System.out.println(sm.toCSVString(sm.getPvGenIpTable()));
 	}
 	
 	private DStabNetwork3Phase createDistNetWithDG() throws InterpssException{
@@ -430,6 +438,7 @@ public class TestPVDistGen3Phase {
 			gen1.setZeroGenZ(new Complex(0,1.0E-1));
 			//create the PV Distributed gen model
 			PVDistGen3Phase pv = new PVDistGen3Phase(gen1);
+			pv.setId("1");
 			
 			
 			
