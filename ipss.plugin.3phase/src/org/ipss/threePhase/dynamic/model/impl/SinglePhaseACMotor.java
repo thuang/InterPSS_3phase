@@ -15,7 +15,41 @@ import com.interpss.dstab.common.DStabOutSymbol;
 import com.interpss.dstab.device.DynamicBusDeviceType;
 /**
  * This dynamic model of single phase AC motor must be used under the condition that the 
- * loads in the power flow data is input as Load3phase in the threePhaseLoadList
+ * loads in the power flow data is input as Load3phase in the threePhaseLoadList.
+ * 
+ * Reference: WECC Dynamic Composite Load Model (CMPLDW) Specifications published 01-27-2015 
+ * The compressor motor model is divided into two parts:
+	Motor A â€“ Those compressors that canâ€™t restart soon after stalling
+	Motor B â€“ Those compressors that can restart soon after stalling
+	
+	The motors are represented by algebraic equations, as follows:
+		If V > 0.86:
+		P  =  Po * (1 + ï„f )  
+		Q  =  [Qâ€™o + 6 * (V â€“ 0.86) 2 ] * (1 - 3.3 * ï„f ) 
+		If V < 0.86 and V > Vâ€™stall:
+		P  =  [Po +  12 * (0.86 â€“ V) 3.2 ] * (1 + ï„f ) 
+		Q  =  [Qâ€™o + 11 * (0.86 â€“ V) 2.5 ] * (1 - 3.3 * ï„f ) 
+		If V < Vâ€™stall:
+			P = Gstall * V * V
+			Q = - Bstall * V * V
+		If V < Vstall for t > Tstall, motor stays in stalled state.
+		For â€œBâ€ motor, if V > Vrst for t > Trst, the motor restarts.
+	
+	Initialization calculations:
+		Qâ€™o = Po * tan ( acos(CompPF)  ) - 6 * (1. â€“ 0.86) 2
+	
+	Vâ€™stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
+			for ( V = 0.4; V < Vstall; V += 0.01 )
+				{
+				pst = Gstall * V2
+				p_comp = Po + 12 * (0.86 â€“ V) 3.2 
+				if ( p_comp < pst )
+					{
+					Vâ€™stall = V
+					break
+					}
+				}
+
  * 
  * @author Qiuhua
  *
@@ -291,12 +325,12 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			// thermal overload protection
 			/*
-			 * When the motor is stalled, the ¡°temperature¡± of the motor is computed by
+			 * When the motor is stalled, the â€œtemperatureâ€ of the motor is computed by
 				integrating I^2 R through the thermal time constant Tth.  If the temperature reaches Th2t, all of the load is
 				tripped.   If the temperature is between  Th1t and  Th2t, a linear fraction of the load is tripped.   The
-				¡°termperatures¡± of the ¡°A¡± and ¡°B¡± portions of the load are computed separately.  The fractions of the ¡°A¡±
-				and ¡°B¡± parts of the load that have not been tripped by the thermal protection is output as ¡° fthA¡± and
-				¡°fthB¡±, respectively.	
+				â€œtermperaturesâ€ of the â€œAâ€ and â€œBâ€ portions of the load are computed separately.  The fractions of the â€œAâ€
+				and â€œBâ€ parts of the load that have not been tripped by the thermal protection is output as â€œ fthAâ€ and
+				â€œfthBâ€, respectively.	
 			 */
 				
 			if(stage ==1){
@@ -327,10 +361,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				
 			// contractor
 			/*
-			 *  Contactor ¨C If the voltage drops to below Vc2off, all of the load is tripped; if the voltage is between
+			 *  Contactor â€“ If the voltage drops to below Vc2off, all of the load is tripped; if the voltage is between
 				Vc1off and Vc2off, a linear fraction of the load is tripped.  If the voltage later recovers to above Vc2on, all
 				of the motor is reconnected; if the voltage recovers to between Vc2on and Vc1on, a linear fraction of the
-				load is reconnected.  The fraction of the load that has not been tripped by the contactor is output as ¡°fcon¡±.
+				load is reconnected.  The fraction of the load that has not been tripped by the contactor is output as â€œfconâ€.
 			 */
 			
 			
@@ -391,6 +425,25 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			if(this.compensateCurrInj == null) calculateCompensateCurInj();
 			
 	        Complex v = this.getBusPhaseVoltage();
+	        
+	        //TODO based on the WECC Dynamic Composite Load Model (CMPLDW) Specifications published 01-27-2015 
+	        // A/C are modeled as like "stalled A/C", if V<V'stall. 
+	        /*
+	         * Vâ€™stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
+				for ( V = 0.4; V < Vstall; V += 0.01 )
+					{
+					pst = Gstall * V2
+					p_comp = Po + 12 * (0.86 â€“ V) 3.2 
+					if ( p_comp < pst )
+						{
+						Vâ€™stall = V
+						break
+						}
+					}
+
+
+	         */
+
 			
 		    if(stage == 1 && this.remainFraction <1.0){
 				 this.compensateCurrInj = this.getEquivY().multiply(v).multiply(1-this.remainFraction);
