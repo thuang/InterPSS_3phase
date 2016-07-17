@@ -27,6 +27,7 @@ import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
+import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -77,12 +78,13 @@ public class Test6BusFeeder {
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(0.5);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
-		//distNet.addDynamicEvent(create3PhaseFaultEvent("Bus2",distNet,0.2,0.05),"3phaseFault@Bus2");
+		distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("Bus1", distNet, SimpleFaultCode.GROUND_LG,new Complex(0,0.0),new Complex(0,0.0), 0.1,0.07), "SLG@Bus1");
         
 		
 		StateMonitor sm = new StateMonitor();
 		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
 		sm.addBusStdMonitor(new String[]{"Bus2","Bus1"});
+		sm.add3PhaseBusStdMonitor(new String[]{"Bus2","Bus1"});
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
 		dstabAlgo.setOutPutPerSteps(1);
@@ -93,13 +95,28 @@ public class Test6BusFeeder {
 	  		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(distNet));
 	  		System.out.println(distNet.getMachineInitCondition());
 	  	
-	  		dstabAlgo.performSimulation();
+	  		//dstabAlgo.performSimulation();
+	  		while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
+				
+				dstabAlgo.solveDEqnStep(true);
+				
+				for(String busId: sm.getBusPhAVoltTable().keySet()){
+					
+					 sm.addBusPhaseVoltageMonitorRecord( busId,dstabAlgo.getSimuTime(), ((Bus3Phase)distNet.getBus(busId)).get3PhaseVotlages());
+				}
+				
+			}
 	  	}
-	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
-	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	  	//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
+	  	//System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus2").get(1);
 	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus2").get(20);
 	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
+	  	
+	  	
+	  	System.out.println(sm.toCSVString(sm.getBusPhAVoltTable()));
+	  	System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
+	  	System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
 	}
 	
 	
