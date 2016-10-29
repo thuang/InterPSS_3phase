@@ -234,7 +234,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	@Override
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
 		
-		
+		double yiiMinTolerance = 1.0E-8;
 		
 		// check if load model is converted
 		if(!this.isLoadModelConverted )
@@ -247,7 +247,25 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 				if(b instanceof Bus3Phase){
 					int i = b.getSortNumber();
 					Bus3Phase ph3Bus = (Bus3Phase) b;
-					yMatrixAbc.setA(ph3Bus.getYiiAbc() ,i, i);
+					Complex3x3 yii = ph3Bus.getYiiAbc();
+					// check if there is any Yii = 0.0 (abs(Yii) <1.0E-8)
+					
+				    if(yii.aa.abs()<yiiMinTolerance){
+				    	yii.aa = new Complex(1.0,0);
+				    	IpssLogger.getLogger().info(b.getId()+": abs of Yii.aa of is less than 1.0E-8, changed to 1.0 ");
+				    }
+				    
+				    if(yii.bb.abs()<yiiMinTolerance){
+				    	yii.bb = new Complex(1.0,0);
+				    	IpssLogger.getLogger().info(b.getId()+": abs of Yii.bb of is less than 1.0E-8, changed to 1.0 ");
+				    }
+				    
+				    if(yii.cc.abs()<yiiMinTolerance){
+				    	yii.cc = new Complex(1.0,0);
+				    	IpssLogger.getLogger().info(b.getId()+": abs of Yii.cc of is less than 1.0E-8, changed to 1.0 ");
+				    }
+										
+					yMatrixAbc.setA( yii,i, i);
 				}
 				else
 					throw new Exception("The processing bus # "+b.getId()+"  is not a threePhaseBus");
@@ -342,6 +360,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
                 	
 			}
 		}
+		
+		
 		
 		
 		setYMatrixDirty(true);

@@ -86,9 +86,9 @@ protected IPSSMsgHub msg = null;
 			
 			try {
 				// create a DStabilityNetwork object and map the net info 
-				if(xmlNet.isPositiveSeqDataOnly()){
-					throw new Exception("The negative and zero sequence data must be provided so as to create three-phase network");
-				}
+//				if(xmlNet.isPositiveSeqDataOnly()){
+//					throw new Exception("The negative and zero sequence data must be provided so as to create three-phase network");
+//				}
 				DStabNetwork3Phase dstabNet = mapDStabNetworkData(xmlNet);
 				simuCtx.setDStabilityNet(dstabNet);
 				simuCtx.setNetType(SimuCtxType.DSTABILITY_NET);
@@ -133,8 +133,7 @@ protected IPSSMsgHub msg = null;
 					Branch dstabBranch = null;
 					if   (branch instanceof Xfr3WDStabXmlType ||
 							branch instanceof PSXfr3WDStabXmlType){
-						//dstabBranch = DStabObjectFactory.createDStab3WBranch();
-						throw new UnsupportedOperationException();
+						dstabBranch = ThreePhaseObjectFactory.createBranch3W3Phase();
 					}
 					else if (branch instanceof LineDStabXmlType || 
 							branch instanceof XfrDStabXmlType ||

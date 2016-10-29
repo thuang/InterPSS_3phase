@@ -9,6 +9,8 @@ import com.interpss.dstab.DStabBranch;
 
 public interface Branch3Phase extends DStabBranch{
 	
+	//TODO add phase info
+	
     public void setZabc(Complex3x3 Zabc);
     
     public void setZabc(Complex Z1, Complex Z2, Complex Z0);
@@ -33,10 +35,24 @@ public interface Branch3Phase extends DStabBranch{
 	
 	public Complex3x3 getYtfabc();
 	
+	/**
+	 *  Return the current flowing from the "from" bus to the "to" bus, measured at the from bus side
+	 */
 	public Complex3x1 getCurrentAbcAtFromSide();
+	
 	public void setCurrentAbcAtFromSide(Complex3x1 IabcFromBus);
 	
+	/**
+	 * Return the current flowing into the "to" bus
+	 * Note: the branch current direction is defined with "from->to" as positive at both ends
+	 * @return
+	 */
 	public Complex3x1 getCurrentAbcAtToSide();
+	
+	/**
+	 * Note: the branch current direction is defined with "from->to" as positive at both ends
+	 * @param IabcToBus
+	 */
 	public void setCurrentAbcAtToSide(Complex3x1 IabcToBus);
 	
 	public Transformer3Phase to3PXformer();

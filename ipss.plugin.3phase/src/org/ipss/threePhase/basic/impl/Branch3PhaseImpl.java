@@ -69,8 +69,134 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 
 	@Override
 	public Complex3x3 getBranchYabc() {
-		if(this.Yabc ==null) Yabc= getZabc().inv();
+		double zeroTolerance  = 1.0E-8;
+		int dim = 3;
+		boolean hasPhaseA = true;
+	    boolean hasPhaseB = true;
+		boolean hasPhaseC = true;
+		if(this.Yabc ==null){
+			Complex3x3 zabc = getZabc();
+			
+			if(zabc.aa.abs() > 0.0 && zabc.bb.abs() > 0.0 && zabc.cc.abs() > 0.0){
+			    Yabc= getZabc().inv();
+			}
+			else{
+				if(zabc.aa.abs() <zeroTolerance) {
+					hasPhaseA = false;
+					dim = dim-1;
+				}
+				if(zabc.bb.abs() <zeroTolerance) {
+					hasPhaseB = false;
+					dim = dim-1;
+				}
+				if(zabc.cc.abs() <zeroTolerance) {
+					hasPhaseC = false;
+					dim = dim-1;
+				}
+				
+				if(dim == 0){
+					throw new Error(" The branch Yii diagonal elements are zero! # "+this.getId());
+				}
+				else if(dim ==1){
+					if( hasPhaseA) {
+						Complex yphase = new Complex(1,0).divide(zabc.aa);
+						this.Yabc = new Complex3x3(yphase, new Complex(0,0),new Complex(0,0));
+					}
+					else if( hasPhaseB) {
+						Complex yphase = new Complex(1,0).divide(zabc.bb);
+						this.Yabc = new Complex3x3( new Complex(0,0),yphase,new Complex(0,0));
+					}
+					else{
+						Complex yphase = new Complex(1,0).divide(zabc.cc);
+						this.Yabc = new Complex3x3( new Complex(0,0),new Complex(0,0),yphase);
+					}
+					
+				}
+				else{ // dim =2
+					
+					/*
+					 * for a 2x2 Matrix the Inverse is: swap the positions of a and d, 
+					 * put negatives in front of b and c, and divide everything by the determinant (ad-bc).
+					 */
+					if(!hasPhaseA) {
+						// phase B and C
+						Complex[][] zbc = new Complex[2][2];
+						zbc[0][0] = zabc.bb;
+						zbc[0][1] = zabc.bc;
+						zbc[1][0] = zabc.cb;
+						zbc[1][1] = zabc.cc;
+						
+						Complex[][] ybc = inv2x2Matrix(zbc);
+						
+						this.Yabc = new Complex3x3();
+						
+						this.Yabc.bb = ybc[0][0];
+						this.Yabc.bc = ybc[0][1];
+						this.Yabc.cb = ybc[1][0];
+						this.Yabc.cc = ybc[1][1];
+						
+					}
+					else if(!hasPhaseB){
+						
+						// phase A and C
+						Complex[][] zac = new Complex[2][2];
+						zac[0][0] = zabc.aa;
+						zac[0][1] = zabc.ac;
+						zac[1][0] = zabc.ca;
+						zac[1][1] = zabc.cc;
+						
+						Complex[][] yac = inv2x2Matrix(zac);
+						
+						this.Yabc = new Complex3x3();
+						
+						this.Yabc.aa = yac[0][0];
+						this.Yabc.ac = yac[0][1];
+						this.Yabc.ca = yac[1][0];
+						this.Yabc.cc = yac[1][1];
+						
+					}
+					else{
+						// phases A and B
+						Complex[][] zab = new Complex[2][2];
+						zab[0][0] = zabc.aa;
+						zab[0][1] = zabc.ab;
+						zab[1][0] = zabc.ba;
+						zab[1][1] = zabc.bb;
+						
+						Complex[][] yab = inv2x2Matrix(zab);
+						
+						this.Yabc = new Complex3x3();
+						
+						this.Yabc.aa = yab[0][0];
+						this.Yabc.ab = yab[0][1];
+						this.Yabc.ba = yab[1][0];
+						this.Yabc.bb = yab[1][1];
+						
+					}
+					
+				}
+				
+			}
+		}
 		return this.Yabc;
+	}
+	
+	private Complex[][]  inv2x2Matrix(Complex[][] m2x2){
+		Complex[][] inv = new Complex[2][2];
+		// [ a  b]
+		// [ c  d]
+		// det = ad-bc
+		// inv = 1/det*[d -b; -c a]
+		Complex det =  m2x2[0][0].multiply(m2x2[1][1]).subtract(m2x2[0][1].multiply(m2x2[1][0]));
+		if(det.abs()>0.0){
+			inv[0][0] = m2x2[1][1].divide(det);
+			inv[1][1] = m2x2[0][0].divide(det);
+			inv[0][1] = m2x2[0][1].divide(det).multiply(-1.0);
+			inv[1][0] = m2x2[1][0].divide(det).multiply(-1.0);
+		}
+		else 
+			inv = null;
+		return inv;
 	}
 
 	@Override
