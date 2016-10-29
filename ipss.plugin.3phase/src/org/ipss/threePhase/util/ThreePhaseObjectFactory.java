@@ -2,12 +2,14 @@ package org.ipss.threePhase.util;
 
 import org.interpss.numeric.NumericConstant;
 import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Branch3W3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Network3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 import org.ipss.threePhase.basic.impl.Branch3PhaseImpl;
+import org.ipss.threePhase.basic.impl.Branch3W3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Bus3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
@@ -82,7 +84,17 @@ public class ThreePhaseObjectFactory {
 		
 		return bus;
 	}
+
+	public static Branch3W3Phase createBranch3W3Phase(){
+		Branch3W3Phase branch = new Branch3W3PhaseImpl();
+		return branch;
+	}
 	
+	public static Branch3W3Phase createBranch3W3Phase(String fromBusId, String toBusId, String cirId,BaseAclfNetwork net) throws InterpssException{
+		Branch3W3Phase branch = new Branch3W3PhaseImpl();
+		net.addBranch(branch, fromBusId, toBusId, cirId);
+		return branch;
+	}
 	
 
 	

@@ -325,7 +325,8 @@ public class Transformer3PhaseImpl extends AcscXformerImpl implements Transforme
 		    	 this.LVBusVabc2HVBusVabcMatrix = this.getTurnRatioMatrix();
 		     }
 		     else{
-		    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet!");
+		    	 throw new UnsupportedOperationException("The input transformer connection type is not supported yet! Transformer, fromConnect, toConnect :"+
+		    			 this.ph3Branch.getId()+", "+this.ph3Branch.getXfrFromConnectCode()+", "+this.ph3Branch.getXfrToConnectCode());
 		     }
 		    	 
 		return this.LVBusVabc2HVBusVabcMatrix;
