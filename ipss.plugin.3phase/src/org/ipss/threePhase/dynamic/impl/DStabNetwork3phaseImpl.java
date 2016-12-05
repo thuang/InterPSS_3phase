@@ -30,8 +30,7 @@ import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.AcscBranch;
-import com.interpss.core.acsc.AcscBus;
-import com.interpss.core.acsc.SequenceCode;
+import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
@@ -137,7 +136,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		
 		// initialize the phase voltages of those which are not set before, three-phase generation power output and load
-		for(AcscBus b: this.getBusList()){
+		for(BaseAcscBus b: this.getBusList()){
 			
 			if(b.isActive() && !b.isBooleanFlag()){
 				   Complex vpos = b.getVoltage();

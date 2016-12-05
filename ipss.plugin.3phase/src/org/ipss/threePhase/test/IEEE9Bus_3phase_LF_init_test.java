@@ -6,15 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.logging.Level;
 
 import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.complex.ComplexUtils;
-import org.ieee.odm.adapter.IODMAdapter.NetType;
-import org.ieee.odm.adapter.psse.PSSEAdapter;
-import org.ieee.odm.adapter.psse.PSSEAdapter.PsseVersion;
-import org.ieee.odm.model.dstab.DStabModelParser;
 import org.interpss.IpssCorePlugin;
 import org.interpss.display.AclfOutFunc;
-import org.interpss.display.AclfOutFunc.BusIdStyle;
-import org.interpss.display.impl.AclfOut_BusStyle;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.util.PerformanceTimer;
@@ -22,30 +15,21 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.basic.Network3Phase;
-import org.ipss.threePhase.basic.Phase;
-import org.ipss.threePhase.basic.impl.AclfNetwork3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.impl.DStabNetwork3phaseImpl;
-import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
-import org.ipss.threePhase.odm.ODM3PhaseDStabParserMapper;
 import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
 import com.interpss.DStabObjectFactory;
-import com.interpss.SimuObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
-import com.interpss.core.aclf.adpter.AclfLoadBusAdapter;
-import com.interpss.core.aclf.adpter.AclfPVGenBus;
-import com.interpss.core.aclf.adpter.AclfSwingBus;
-import com.interpss.core.acsc.AcscBus;
+import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
@@ -54,8 +38,6 @@ import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
-import com.interpss.simu.SimuContext;
-import com.interpss.simu.SimuCtxType;
 
 public class IEEE9Bus_3phase_LF_init_test {
 	
@@ -149,7 +131,7 @@ Load Flow Summary
 		
 	   net.initThreePhaseFromLfResult();
 	   
-	  for(AcscBus bus: net.getBusList()){
+	  for(BaseAcscBus bus: net.getBusList()){
 		  if(bus instanceof Bus3Phase){
 			  Bus3Phase ph3Bus = (Bus3Phase) bus;
 			  

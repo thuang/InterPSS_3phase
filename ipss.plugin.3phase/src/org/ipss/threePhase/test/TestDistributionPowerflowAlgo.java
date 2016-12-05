@@ -1,7 +1,7 @@
 package org.ipss.threePhase.test;
 
-import static org.junit.Assert.*;
 import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
@@ -25,6 +25,7 @@ import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.aclf.BaseAclfBus;
 import com.interpss.core.aclf.BaseAclfNetwork;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
@@ -285,7 +286,7 @@ public class TestDistributionPowerflowAlgo {
 			Vabc of bus -Bus3,0.99075 + j-0.07914  -0.56392 + j-0.81844  -0.42683 + j0.89759
 			Vabc of bus -Bus4,0.98834 + j-0.09907  -0.57997 + j-0.80639  -0.40837 + j0.90546
 		 */
-		for(AclfBus bus:net.getBusList()){
+		for(BaseAclfBus bus:net.getBusList()){
 			Bus3Phase bus3P = (Bus3Phase) bus;
 			System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
 		}
@@ -309,7 +310,7 @@ public class TestDistributionPowerflowAlgo {
 			Vabc of bus -Bus3,0.99075 + j-0.07914  -0.56392 + j-0.81844  -0.42683 + j0.89759
 			Vabc of bus -Bus4,0.98834 + j-0.09907  -0.57997 + j-0.80639  -0.40837 + j0.90546
 		 */
-		for(AclfBus bus:net.getBusList()){
+		for(BaseAclfBus bus:net.getBusList()){
 			Bus3Phase bus3P = (Bus3Phase) bus;
 			System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
 		}

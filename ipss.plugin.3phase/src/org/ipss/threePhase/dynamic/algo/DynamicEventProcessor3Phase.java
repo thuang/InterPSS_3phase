@@ -10,7 +10,7 @@ import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 
 import com.interpss.common.exp.InterpssRuntimeException;
 import com.interpss.common.msg.IpssMessage;
-import com.interpss.core.acsc.AcscBus;
+import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.core.acsc.fault.AcscBusFault;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.dstab.algo.defaultImpl.DynamicEventProcessor;
@@ -130,7 +130,7 @@ public class DynamicEventProcessor3Phase extends DynamicEventProcessor {
 				if (e.isActive()) {
 					if (e.getType() == DynamicEventType.BUS_FAULT) {
 						AcscBusFault fault = e.getBusFault();
-						AcscBus bus = fault.getBus();
+						BaseAcscBus bus = fault.getBus();
 						
 						int i = bus.getSortNumber();
 						

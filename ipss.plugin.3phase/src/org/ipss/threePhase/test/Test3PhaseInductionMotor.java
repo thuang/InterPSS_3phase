@@ -13,13 +13,12 @@ import org.junit.Test;
 
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
-import com.interpss.core.aclf.AclfBus;
+import com.interpss.core.aclf.BaseAclfBus;
 import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.dynLoad.InductionMotor;
-import com.interpss.dstab.dynLoad.impl.InductionMotorImpl;
 
 public class Test3PhaseInductionMotor extends TestBase{
 
@@ -51,7 +50,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 			
 			assertTrue(distPFAlgo.powerflow());
 		
-			for(AclfBus bus:net.getBusList()){
+			for(BaseAclfBus bus:net.getBusList()){
 				Bus3Phase bus3P = (Bus3Phase) bus;
 				System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
 			}
