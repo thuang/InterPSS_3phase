@@ -30,6 +30,7 @@ import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.AcscBranch;
+import com.interpss.core.acsc.AcscGen;
 import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.net.Branch;
@@ -136,7 +137,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		
 		// initialize the phase voltages of those which are not set before, three-phase generation power output and load
-		for(BaseAcscBus b: this.getBusList()){
+		for(BaseAcscBus<?,?> b: this.getBusList()){
 			
 			if(b.isActive() && !b.isBooleanFlag()){
 				   Complex vpos = b.getVoltage();
@@ -402,7 +403,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
   			
 		  	// Calculate and set generator injection current
 			for( Bus b : getBusList()) {
-				DStabBus bus = (DStabBus)b;
+				DStabBus<?,?> bus = (DStabBus<?,?>)b;
 
 				if(bus.isActive()){
 					Bus3Phase bus3p = (Bus3Phase) bus;
@@ -547,7 +548,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		if(this.getNetworkType()==NetworkType.TRANSMISSION && !is3PhaseNetworkInitialized)
 	  	     initThreePhaseFromLfResult();
 		
-		for ( DStabBus b : getBusList() ) {
+		for ( DStabBus<?,?> b : getBusList() ) {
 
 			if( b instanceof Bus3Phase){
 			    Bus3Phase bus =(Bus3Phase) b;
@@ -571,7 +572,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					//TODO add the three-phase dynamic generation list to the bus
 					bus.getContributeGenList().addAll(bus.getThreePhaseGenList());
 					
-					for(AclfGen gen: bus.getContributeGenList()){
+					for(Object obj: bus.getContributeGenList()){
+						AclfGen gen = (AclfGen)obj;
 						if(gen.isActive() && gen instanceof DStabGen){
 							DStabGen dynGen = (DStabGen) gen;
 							//TODO 11/19/2015 consider generic generation models
@@ -603,7 +605,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 						Complex totalPosSeqDynLoadPQ = new Complex(0,0);
 						
 						if( b.getDynLoadModelList().size()>0){
-							for(DynLoadModel load:bus.getDynLoadModelList()){
+							for(Object obj:bus.getDynLoadModelList()){
+								DynLoadModel load = (DynLoadModel)obj;
 								if(load.isActive()){
 									totalDynLoadPercent += load.getLoadPercent(); 
 							
@@ -613,7 +616,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							// check the value of totalDynLoadPercent, it must be <=100.0; otherwise rescale it down to 100.
 							if(totalDynLoadPercent>100.0){
 								ipssLogger.severe("The total dynamic loads accout for more than 100% of the bus load. Rescaled down to 100%");
-								for(DynLoadModel load:bus.getDynLoadModelList()){
+								for(Object obj :bus.getDynLoadModelList()){
+									DynLoadModel load = (DynLoadModel)obj;
 									if(load.isActive()){
 								       load.setLoadPercent(load.getLoadPercent()*100.0/totalDynLoadPercent);
 									}
@@ -622,7 +626,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							}
 							
 							// the init load is only available after initialization
-							for(DynLoadModel load:bus.getDynLoadModelList()){
+							for(Object obj :bus.getDynLoadModelList()){
+								DynLoadModel load = (DynLoadModel)obj;
 								if(load.isActive()){
 							       load.initStates();
 							       totalPosSeqDynLoadPQ = totalPosSeqDynLoadPQ.add(load.getInitLoadPQ());

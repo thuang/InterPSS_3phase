@@ -13,14 +13,15 @@ import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.acsc.AcscBranch;
 import com.interpss.core.acsc.AcscBus;
+import com.interpss.core.acsc.AcscGen;
+import com.interpss.core.acsc.AcscLoad;
 import com.interpss.core.acsc.XfrConnectCode;
-import com.interpss.core.acsc.impl.AcscNetworkImpl;
 import com.interpss.core.acsc.impl.BaseAcscNetworkImpl;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 
-public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus,AcscBranch> implements
+public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscGen, AcscLoad, AcscBus, AcscBranch> implements
 		Network3Phase {
 	
 	protected ISparseEqnComplexMatrix3x3 yMatrixAbc =null;

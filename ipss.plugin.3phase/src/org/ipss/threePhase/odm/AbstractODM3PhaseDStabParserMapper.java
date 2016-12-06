@@ -10,19 +10,13 @@ import org.ieee.odm.schema.BaseBranchXmlType;
 import org.ieee.odm.schema.BranchXmlType;
 import org.ieee.odm.schema.BusXmlType;
 import org.ieee.odm.schema.DStabBusXmlType;
-import org.ieee.odm.schema.DStabGenDataXmlType;
 import org.ieee.odm.schema.DStabNetXmlType;
-import org.ieee.odm.schema.ExciterModelXmlType;
-import org.ieee.odm.schema.GovernorModelXmlType;
 import org.ieee.odm.schema.IpssStudyScenarioXmlType;
 import org.ieee.odm.schema.LineDStabXmlType;
-import org.ieee.odm.schema.LoadflowGenDataXmlType;
-import org.ieee.odm.schema.MachineModelXmlType;
 import org.ieee.odm.schema.NetworkCategoryEnumType;
 import org.ieee.odm.schema.OriginalDataFormatEnumType;
 import org.ieee.odm.schema.PSXfr3WDStabXmlType;
 import org.ieee.odm.schema.PSXfrDStabXmlType;
-import org.ieee.odm.schema.StabilizerModelXmlType;
 import org.ieee.odm.schema.Xfr3WDStabXmlType;
 import org.ieee.odm.schema.XfrDStabXmlType;
 import org.interpss.mapper.odm.ODMAclfNetMapper;
@@ -31,10 +25,6 @@ import org.interpss.mapper.odm.impl.aclf.AbstractODMAclfNetMapper;
 import org.interpss.mapper.odm.impl.aclf.AclfBusDataHelper;
 import org.interpss.mapper.odm.impl.dstab.AbstractODMDStabParserMapper;
 import org.interpss.mapper.odm.impl.dstab.DStabScenarioHelper;
-import org.interpss.mapper.odm.impl.dstab.ExciterDataHelper;
-import org.interpss.mapper.odm.impl.dstab.GovernorDataHelper;
-import org.interpss.mapper.odm.impl.dstab.MachDataHelper;
-import org.interpss.mapper.odm.impl.dstab.StabilizerDataHelper;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
@@ -49,9 +39,8 @@ import com.interpss.dstab.DStab3WBranch;
 import com.interpss.dstab.DStabBranch;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabGen;
-import com.interpss.dstab.DStabilityNetwork;
+import com.interpss.dstab.DStabLoad;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
-import com.interpss.dstab.mach.Machine;
 import com.interpss.simu.SimuContext;
 import com.interpss.simu.SimuCtxType;
 
@@ -105,7 +94,7 @@ protected IPSSMsgHub msg = null;
 				dstabAlgo.setAclfAlgorithm(lfAlgo);
 
 				// map the bus info
-				AclfBusDataHelper<DStabBus> helper = new AclfBusDataHelper<>(dstabNet);
+				AclfBusDataHelper<DStabGen,DStabLoad,DStabBus<DStabGen,DStabLoad>> helper = new AclfBusDataHelper<>(dstabNet);
 				for (JAXBElement<? extends BusXmlType> bus : xmlNet.getBusList().getBus()) {
 					DStabBusXmlType dstabBusXml = (DStabBusXmlType) bus.getValue();
 					

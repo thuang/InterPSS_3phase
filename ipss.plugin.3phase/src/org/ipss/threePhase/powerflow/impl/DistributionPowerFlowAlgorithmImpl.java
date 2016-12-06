@@ -29,7 +29,7 @@ import com.interpss.core.net.Bus;
 
 public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlowAlgorithm{
 
-	private BaseAclfNetwork<? extends AclfBus,? extends AclfBranch> distNet = null;
+	private BaseAclfNetwork<?, ?, ? extends AclfBus,? extends AclfBranch> distNet = null;
 	
 	private DistributionPFMethod pfMethod = DistributionPFMethod.Forward_Backword_Sweep;
 	

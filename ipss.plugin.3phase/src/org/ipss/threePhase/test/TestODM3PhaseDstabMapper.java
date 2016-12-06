@@ -132,7 +132,8 @@ public class TestODM3PhaseDstabMapper {
 						Complex3x1 iInject = new Complex3x1();
 
 						if(bus.getContributeGenList().size()>0){
-							 for(AclfGen gen: bus.getContributeGenList()){
+							 for(Object obj: bus.getContributeGenList()){
+								 AclfGen gen = (AclfGen)obj;
 							      if(gen.isActive() && gen instanceof DStabGen){
 							    	  DStabGen dynGen = (DStabGen)gen;
 							    	  if( dynGen.getMach()!=null){
