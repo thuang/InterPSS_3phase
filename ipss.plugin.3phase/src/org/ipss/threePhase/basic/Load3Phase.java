@@ -4,10 +4,10 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 
-import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.PhaseCode;
+import com.interpss.dstab.DStabLoad;
 
-public interface Load3Phase extends AclfLoad {
+public interface Load3Phase extends DStabLoad {
 	
 	/**
 	 * calcuate the Yabc from Y120

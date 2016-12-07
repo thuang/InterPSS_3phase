@@ -6,10 +6,10 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 
-import com.interpss.core.aclf.impl.AclfLoadImpl;
 import com.interpss.core.acsc.PhaseCode;
+import com.interpss.dstab.impl.DStabLoadImpl;
 
-public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
+public class Load3PhaseImpl extends DStabLoadImpl implements Load3Phase {
 
 	Complex3x1 ph3Load = new Complex3x1();
 	Complex3x3 equivYabc = new Complex3x3();
