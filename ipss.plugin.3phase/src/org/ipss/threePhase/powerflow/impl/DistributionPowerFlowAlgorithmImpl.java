@@ -22,14 +22,17 @@ import com.interpss.common.exp.InterpssException;
 import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranch;
 import com.interpss.core.aclf.AclfBus;
+import com.interpss.core.aclf.AclfGen;
+import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.aclf.AclfNetwork;
+import com.interpss.core.aclf.BaseAclfBus;
 import com.interpss.core.aclf.BaseAclfNetwork;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 
 public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlowAlgorithm{
 
-	private BaseAclfNetwork<? extends AclfBus,? extends AclfBranch> distNet = null;
+	private BaseAclfNetwork<? extends BaseAclfBus<? extends AclfGen, ? extends AclfLoad>,? extends AclfBranch> distNet = null;
 	
 	private DistributionPFMethod pfMethod = DistributionPFMethod.Forward_Backword_Sweep;
 	
@@ -57,7 +60,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		Queue<Bus3Phase> onceVisitedBuses = new  LinkedList<>();
 		
 		// find the source bus, which is the swing bus for radial feeders;
-		for(AclfBus b: distNet.getBusList()){
+		for(BaseAclfBus<?,?> b: distNet.getBusList()){
 				if(b.isActive() && b.isSwing()){
 					onceVisitedBuses.add((Bus3Phase) b);
 				}
@@ -121,7 +124,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	public boolean initBusVoltages() {
 	
 			
-			for(AclfBus b: distNet.getBusList()){
+			for(BaseAclfBus b: distNet.getBusList()){
 					Bus3Phase bus = (Bus3Phase) b;
 					
 					if(b.isSwing())
@@ -228,7 +231,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			//-----------------------------------------------------------------------
 			
 			for(int sortNum =this.distNet.getNoBus()-1;sortNum>0;sortNum--){
-				AclfBus bus = this.distNet.getBus(sortNum);
+				BaseAclfBus bus = this.distNet.getBus(sortNum);
 				if(bus==null){
 					throw new Error(" The bus sort num # "+sortNum +" returns null bus object in distribution #"+this.distNet.getId());
 					
@@ -428,7 +431,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 				
 			double mis = 0;
 			this.pfFlag =true;
-			for(AclfBus bus: this.distNet.getBusList()){ 
+			for(BaseAclfBus bus: this.distNet.getBusList()){ 
 				if(bus.isActive()){
 					Bus3Phase bus3P = (Bus3Phase) bus;
 					if(i>=1){
@@ -458,7 +461,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			
 			for(int sortNum2 = 0;sortNum2<this.distNet.getNoBus();sortNum2++){
 				
-				AclfBus bus = this.distNet.getBus(sortNum2);
+				BaseAclfBus bus = this.distNet.getBus(sortNum2);
 				
 				if(bus.isActive()){
 					// update the bus state, with intFlag =2 meaning this bus voltage has been updated 
@@ -542,7 +545,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	public void calcSwingBusGenPower() {
 		// update the swing bus generation output based on the converged power flow result
 		
-		for(AclfBus bus: this.distNet.getBusList()){ 
+		for(BaseAclfBus<? extends AclfGen, ? extends AclfLoad> bus: this.distNet.getBusList()){ 
 			if(bus.isActive() && bus.isSwing()){
 				Bus3Phase bus3p = (Bus3Phase) bus;
 				Complex3x1 sumOfBranchCurrents = new Complex3x1();
