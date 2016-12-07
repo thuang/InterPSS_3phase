@@ -21,7 +21,7 @@ import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
 
-public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscGen, AcscLoad, AcscBus, AcscBranch> implements
+public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus, AcscBranch> implements
 		Network3Phase {
 	
 	protected ISparseEqnComplexMatrix3x3 yMatrixAbc =null;
