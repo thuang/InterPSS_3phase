@@ -6,7 +6,8 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.ComplexFunc;
 import org.ipss.threePhase.basic.Gen3Phase;
 
-import com.interpss.core.acsc.AcscBus;
+
+import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.common.DStabOutSymbol;
@@ -118,7 +119,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
      }
      
      private Complex getPosSeqVt(){
-    	 Complex vt = ((AcscBus)this.getParentGen().getParentBus()).getThreeSeqVoltage().b_1;
+    	 Complex vt = ((BaseAcscBus)this.getParentGen().getParentBus()).getThreeSeqVoltage().b_1;
     	 return vt;
      }
      

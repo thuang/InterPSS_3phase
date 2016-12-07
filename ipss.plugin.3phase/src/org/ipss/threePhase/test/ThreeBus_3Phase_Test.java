@@ -70,7 +70,7 @@ import com.interpss.simu.SimuCtxType;
 
 public class ThreeBus_3Phase_Test {
 	
-	//@Test
+	@Test
 	public void testYMatrixabc() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -218,7 +218,7 @@ public class ThreeBus_3Phase_Test {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testDstab3Phase() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -289,7 +289,7 @@ public class ThreeBus_3Phase_Test {
         for(DStabBranch bra: net.getBranchList()){
 			
 			Branch3Phase bra3p = (Branch3Phase) bra;
-			System.out.println(bra.getId()+"： "+bra3p.getBranchYabc().toString());
+			System.out.println(bra.getId()+"锛� "+bra3p.getBranchYabc().toString());
 		}
 		
 		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
@@ -344,7 +344,7 @@ public class ThreeBus_3Phase_Test {
 	  	System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
 	}
 	
-	//@Test
+	@Test
 	public void testDstabPosSeq() throws Exception{
 		
 		IpssCorePlugin.init();
@@ -408,7 +408,7 @@ public class ThreeBus_3Phase_Test {
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	}
 	
-	//@Test
+	@Test
 	public void testSolvNetwork() throws Exception{
 		
 		IpssCorePlugin.init();
