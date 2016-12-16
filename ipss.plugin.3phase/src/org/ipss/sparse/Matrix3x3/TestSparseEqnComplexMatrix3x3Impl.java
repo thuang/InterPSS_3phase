@@ -37,7 +37,7 @@ public class TestSparseEqnComplexMatrix3x3Impl {
 	
 	try {
 		
-		matrix3x3.luMatrixAndSolveEqn(1.0e-5);
+		matrix3x3.solveEqn(1.0e-5);
 	} catch (IpssNumericException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -79,7 +79,7 @@ public class TestSparseEqnComplexMatrix3x3Impl {
 	
 	try {
 		
-		matrix3x3.luMatrixAndSolveEqn(1.0e-5);
+		matrix3x3.solveEqn(1.0e-5);
 	} catch (IpssNumericException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

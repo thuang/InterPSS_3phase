@@ -201,7 +201,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 			   ISparseEqnComplex negSeqYMatrix = subnet.getNegSeqYMatrix();
 			   if(!negSeqYMatrix.isFactorized()){
 				   try {
-						negSeqYMatrix.luMatrix(1.0E-8);
+						negSeqYMatrix.factorization(1.0E-8);
 					} catch (IpssNumericException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
@@ -238,7 +238,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 			
 			   if(!zeroSeqYMatrix.isFactorized()){
 				   try {
-					     zeroSeqYMatrix.luMatrix(1.0E-8);
+					     zeroSeqYMatrix.factorization(1.0E-8);
 						} catch (IpssNumericException e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();

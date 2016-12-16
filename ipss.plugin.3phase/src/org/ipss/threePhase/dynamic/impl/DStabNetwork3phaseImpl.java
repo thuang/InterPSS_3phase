@@ -397,7 +397,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
   		try {
   			
   			if(isYMatrixDirty()){
-	  			getYMatrixABC().luMatrix(Constants.Matrix_LU_Tolerance);
+	  			getYMatrixABC().factorization(Constants.Matrix_LU_Tolerance);
 				setYMatrixDirty(false);
   			}
   			
