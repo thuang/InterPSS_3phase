@@ -11,7 +11,7 @@ import org.ipss.threePhase.dynamic.IDynamicModel1Phase;
 
 import com.interpss.core.net.Network;
 import com.interpss.core.net.impl.NameTagImpl;
-import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.device.impl.DynamicBusDeviceImpl;
 import com.interpss.dstab.mach.Machine;
@@ -70,7 +70,7 @@ public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean initStates(DStabBus abus) {
+	public boolean initStates(BaseDStabBus abus) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -81,7 +81,7 @@ public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean initStates(DStabBus abus, Machine mach) {
+	public boolean initStates(BaseDStabBus abus, Machine mach) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();

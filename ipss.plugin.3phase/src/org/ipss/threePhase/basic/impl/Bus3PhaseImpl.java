@@ -1,7 +1,5 @@
 package org.ipss.threePhase.basic.impl;
 
-import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,20 +10,16 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
-import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.net.Branch;
-import com.interpss.dstab.DStabGen;
-import com.interpss.dstab.dynLoad.DynLoadModel;
-import com.interpss.dstab.impl.DStabBusImpl;
+import com.interpss.dstab.impl.BaseDStabBusImpl;
 
 
 
-public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
+public class Bus3PhaseImpl extends BaseDStabBusImpl<Gen3Phase,Load3Phase> implements Bus3Phase{
 	
 	private Complex3x1 Vabc = null;
 	private Complex3x1 initVabc = null;

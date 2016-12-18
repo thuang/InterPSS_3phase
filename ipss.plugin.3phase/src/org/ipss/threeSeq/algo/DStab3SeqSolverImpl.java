@@ -18,9 +18,9 @@ import com.interpss.core.acsc.SequenceCode;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 import com.interpss.dstab.DStabBranch;
-import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabGen;
-import com.interpss.dstab.DStabilityNetwork;
+import com.interpss.dstab.BaseDStabNetwork;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.algo.defaultImpl.DStabSolverImpl;
@@ -31,7 +31,7 @@ import com.interpss.dstab.mach.Machine;
 
 public class DStab3SeqSolverImpl extends DStabSolverImpl {
     
-	private DStabilityNetwork net = null;
+	private BaseDStabNetwork<?,?> net = null;
 	
 	private double negZeroSeqCurrTolerance = 1.0E-3;
 	
@@ -80,7 +80,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 				throw new DStabSimuException("Exception in dstabNet.solveNetEqn()");
 			
 			for ( Bus busi : dstabAlgo.getNetwork().getBusList() ) {
-				DStabBus bus = (DStabBus)busi;
+				BaseDStabBus bus = (BaseDStabBus)busi;
 				if(bus.isActive()){
 					if(i>=1){
 						if(!NumericUtil.equals(bus.getVoltage(),voltageRecTable.get(bus.getId()),this.converge_tol))
@@ -156,13 +156,13 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 	}
 	
 
-	@Override protected void output(DStabBus bus, double t, boolean plotOutput) throws DStabSimuException {
+	@Override protected void output(BaseDStabBus bus, double t, boolean plotOutput) throws DStabSimuException {
 		super.output(bus, t, plotOutput);
 		
 		//TODO output three-sequence bus voltages
 	}
 	
-	private Hashtable<String, Complex> solveSeqNetwork(DStabilityNetwork subnet, SequenceCode seq,Hashtable<String, Complex> seqCurInjTable){
+	private Hashtable<String, Complex> solveSeqNetwork(BaseDStabNetwork<?,?> subnet, SequenceCode seq,Hashtable<String, Complex> seqCurInjTable){
 		
 		 Hashtable<String, Complex>  busVoltResults = new  Hashtable<>();
 		// solve the Ymatrix
@@ -189,7 +189,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 					e1.printStackTrace();
 					return null;
 				}
-			   for(DStabBus bus:subnet.getBusList()){
+			   for(BaseDStabBus bus:subnet.getBusList()){
 			    	  busVoltResults.put(bus.getId(), subNetY.getX(bus.getSortNumber()));
 			   }
 			   
@@ -227,7 +227,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 					return null;
 			   }
 			   
-			   for(DStabBus bus:subnet.getBusList()){
+			   for(BaseDStabBus bus:subnet.getBusList()){
 			    	  busVoltResults.put(bus.getId(), negSeqYMatrix.getX(bus.getSortNumber()));
 			   }
 			
@@ -259,7 +259,7 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 					return null;
 			   }
 			   
-			   for(DStabBus bus:subnet.getBusList()){
+			   for(BaseDStabBus bus:subnet.getBusList()){
 			    	  busVoltResults.put(bus.getId(), zeroSeqYMatrix.getX(bus.getSortNumber()));
 			   }
 			

@@ -56,7 +56,8 @@ import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.DStabBranch;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabGen;
-import com.interpss.dstab.DStabilityNetwork;
+import com.interpss.dstab.BaseDStabBus;
+import com.interpss.dstab.BaseDStabNetwork;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
@@ -97,7 +98,7 @@ public class ThreeBus_3Phase_Test {
 	    //System.out.println(Yabc.getSparseEqnComplex());
 	    // MatrixOutputUtil.matrixToMatlabMFile("output/ThreeBusYabc.m", Yabc.getSparseEqnComplex());
 	  	
-	  	DStabBus bus1 = net.getBus("Bus1");
+	  	BaseDStabBus<?,?> bus1 = net.getBus("Bus1");
 	  	Bus3Phase bus13p = (Bus3Phase) bus1;
 	  	Gen3Phase gen1 = (Gen3Phase) bus1.getContributeGen("Gen1");
 	  	Complex3x3 yg1abc= gen1.getYabc(false);
@@ -175,7 +176,7 @@ public class ThreeBus_3Phase_Test {
 	  	assertTrue(NumericUtil.equals(ytfabc.ab, yftabc.ba,1.0E-5));
 	  	assertTrue(NumericUtil.equals(ytfabc.ba, yftabc.ab,1.0E-5));
 	  	
-	  	DStabBus bus3 = net.getBus("Bus3");
+	  	BaseDStabBus<?,?> bus3 = net.getBus("Bus3");
 	  	Bus3Phase bus33p = (Bus3Phase) bus3;
 	  	Gen3Phase gen2 = (Gen3Phase) bus3.getContributeGen("Gen2");
 	  	Complex3x3 yg2abc= gen2.getYabc(false);
@@ -279,7 +280,7 @@ public class ThreeBus_3Phase_Test {
 		
 		assertTrue(distPFAlgo.powerflow());
 		
-		for(DStabBus bus: net.getBusList()){
+		for(BaseDStabBus<?,?> bus: net.getBusList()){
 			System.out.println("id, sortNum: "+bus.getId()+","+bus.getSortNumber());
 		}
 		
@@ -369,7 +370,7 @@ public class ThreeBus_3Phase_Test {
 		}
 		
 		
-	    DStabilityNetwork net =simuCtx.getDStabilityNet();
+	    BaseDStabNetwork net =simuCtx.getDStabilityNet();
 		
 	
 		// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
@@ -444,7 +445,7 @@ public class ThreeBus_3Phase_Test {
 	  	
 		net.initDStabNet();
 		
-		  for(DStabBus bus: net.getBusList()){
+		  for(BaseDStabBus<?,?> bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
 				  Bus3Phase ph3Bus = (Bus3Phase) bus;
 				  
@@ -472,7 +473,7 @@ public class ThreeBus_3Phase_Test {
 	    
 		System.out.println(ThreePhaseAclfOutFunc.busLfSummary(net));
 	    
-	    for(DStabBus bus: net.getBusList()){
+	    for(BaseDStabBus<?,?> bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
 				  Bus3Phase bus3p = (Bus3Phase) bus;
 				  
@@ -518,8 +519,7 @@ public class ThreeBus_3Phase_Test {
 			source.setVoltage(new Complex(1.0,0));
 		    //source.set3PhaseVoltages(new Complex());
 			
-			DStabGen constantGen = DStabObjectFactory.createDStabGen();
-			constantGen.setId("1");
+			Gen3Phase constantGen = ThreePhaseObjectFactory.create3PGenerator("1");
 			constantGen.setMvaBase(1.0);
 			constantGen.setPosGenZ(new Complex(0.0,0.05));
 			constantGen.setNegGenZ(new Complex(0.0,0.05));
@@ -816,7 +816,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 		
 	}
 
-	private DynamicEvent create3PhaseFaultEvent(String faultBusId, DStabilityNetwork net,double startTime, double durationTime){
+	private DynamicEvent create3PhaseFaultEvent(String faultBusId, BaseDStabNetwork net,double startTime, double durationTime){
 	    // define an event, set the event id and event type.
 			DynamicEvent event1 = DStabObjectFactory.createDEvent("BusFault3P@"+faultBusId, "Bus Fault 3P@"+faultBusId, 
 					DynamicEventType.BUS_FAULT, net);
@@ -824,7 +824,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 			event1.setDurationSec(durationTime);
 			
 	   // define a bus fault
-			DStabBus faultBus = net.getDStabBus(faultBusId);
+			BaseDStabBus<?,?> faultBus = net.getDStabBus(faultBusId);
 			AcscBusFault fault = CoreObjectFactory.createAcscBusFault("Bus Fault 3P@"+faultBusId, net);
 			fault.setBus(faultBus);
 			fault.setFaultCode(SimpleFaultCode.GROUND_3P);

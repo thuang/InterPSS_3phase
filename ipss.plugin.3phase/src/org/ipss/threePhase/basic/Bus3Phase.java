@@ -7,12 +7,9 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 
-import com.interpss.core.aclf.AclfBus;
-import com.interpss.core.acsc.AcscBus;
-import com.interpss.dstab.DStabBus;
-import com.interpss.dstab.dynLoad.DynLoadModel;
+import com.interpss.dstab.BaseDStabBus;
 
-public interface Bus3Phase extends DStabBus {
+public interface Bus3Phase extends BaseDStabBus<Gen3Phase,Load3Phase> {
 	
 	public Complex3x1 get3PhaseVotlages();
 	

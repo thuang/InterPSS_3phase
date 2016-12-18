@@ -31,6 +31,7 @@ import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.acsc.AcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.algo.LoadflowAlgorithm;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -76,7 +77,7 @@ public class TwoBus_3Phase_Test {
 		
 		   net.initThreePhaseFromLfResult();
 		   
-			  for(DStabBus bus: net.getBusList()){
+			  for(BaseDStabBus<?,?> bus: net.getBusList()){
 				  if(bus instanceof Bus3Phase){
 					  Bus3Phase ph3Bus = (Bus3Phase) bus;
 					  
@@ -192,7 +193,7 @@ public class TwoBus_3Phase_Test {
 	  	//assertTrue(net.initDStabNet());
 	  	assertTrue(net.solveNetEqn());
 	  	
-	  	 for(DStabBus bus: net.getBusList()){
+	  	 for(BaseDStabBus<?,?> bus: net.getBusList()){
 			  if(bus instanceof Bus3Phase){
 				  Bus3Phase ph3Bus = (Bus3Phase) bus;
 				  
@@ -295,7 +296,7 @@ private DStabNetwork3Phase create2BusSys() throws InterpssException{
   		// create contribute generator
   		// MVABase, power, sourceZ1/2/0
   		
-  		DStabGen gen1 = DStabObjectFactory.createDStabGen("Gen1");
+  		Gen3Phase gen1 = ThreePhaseObjectFactory.create3PGenerator("Gen1");
   		gen1.setMvaBase(100.0);
   		gen1.setDesiredVoltMag(1.04);
   		gen1.setGen(new Complex(0.7164,0.2710));
@@ -343,7 +344,7 @@ private DStabNetwork3Phase create2BusSys() throws InterpssException{
   		
   		bus3.setSortNumber(1);
   		
-  		DStabGen gen2 = DStabObjectFactory.createDStabGen("Gen2");
+  		Gen3Phase gen2 = ThreePhaseObjectFactory.create3PGenerator("Gen2");
   		gen2.setMvaBase(100.0);
   		gen2.setDesiredVoltMag(1.025);
   		//gen2.setGen(new Complex(0.7164,0.2710));

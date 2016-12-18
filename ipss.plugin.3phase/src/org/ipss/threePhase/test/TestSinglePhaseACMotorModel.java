@@ -9,6 +9,7 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.util.NumericUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
@@ -292,7 +293,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		bus3.setSortNumber(1);
   		
-  		DStabGen gen2 = DStabObjectFactory.createDStabGen("Gen2");
+  		Gen3Phase gen2 = ThreePhaseObjectFactory.create3PGenerator("Gen2");
   		gen2.setMvaBase(100.0);
   		gen2.setDesiredVoltMag(1.025);
   		//gen2.setGen(new Complex(0.7164,0.2710));

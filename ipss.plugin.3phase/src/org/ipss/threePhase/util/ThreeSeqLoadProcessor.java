@@ -5,11 +5,12 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Bus3Phase;
 
 import com.interpss.core.acsc.SequenceCode;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabBus;
 
 public class ThreeSeqLoadProcessor {
 	
-	public static Complex3x3 getEquivLoadYabc(DStabBus bus){
+	public static Complex3x3 getEquivLoadYabc(BaseDStabBus<?,?> bus){
 
 		Complex loadEquivY1 =  new Complex(1.0,0).divide(bus.getEquivZ1());
 		Complex loadEquivY2 =  new Complex(1.0,0).divide(bus.getEquivZ2());
@@ -18,7 +19,7 @@ public class ThreeSeqLoadProcessor {
 		return Complex3x3.z12_to_abc( new Complex3x3(loadEquivY1,loadEquivY2,loadEquivY0));
 	}
 	
-	public static void initEquivLoadY120(DStabBus bus){
+	public static void initEquivLoadY120(BaseDStabBus<?,?> bus){
 	    bus.initSeqEquivLoad(SequenceCode.POSITIVE);
 	    bus.initSeqEquivLoad(SequenceCode.NEGATIVE);
 	    bus.initSeqEquivLoad(SequenceCode.ZERO);

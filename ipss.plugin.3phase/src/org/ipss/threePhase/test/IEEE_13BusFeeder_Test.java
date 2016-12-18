@@ -12,6 +12,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.IEEEFeederLineCode;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
@@ -19,7 +20,6 @@ import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
-import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 
@@ -31,9 +31,8 @@ import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.net.NetworkType;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabBranch;
-import com.interpss.dstab.DStabBus;
-import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
@@ -57,7 +56,7 @@ public class IEEE_13BusFeeder_Test {
 		
 		assertTrue(distPFAlgo.powerflow());
 		
-		for(DStabBus bus: net.getBusList()){
+		for(BaseDStabBus<?,?> bus: net.getBusList()){
 			System.out.println("id, sortNum: "+bus.getId()+","+bus.getSortNumber());
 		}
 		
@@ -79,7 +78,7 @@ public class IEEE_13BusFeeder_Test {
 		
 		assertTrue(distPFAlgo.powerflow());
 		
-		for(DStabBus bus: net.getBusList()){
+		for(BaseDStabBus<?,?> bus: net.getBusList()){
 			System.out.println("id, sortNum: "+bus.getId()+","+bus.getSortNumber());
 		}
 		
@@ -90,7 +89,7 @@ public class IEEE_13BusFeeder_Test {
 		for(DStabBranch bra: net.getBranchList()){
 			
 			Branch3Phase bra3p = (Branch3Phase) bra;
-			System.out.println(bra.getId()+"： "+bra3p.getBranchYabc().toString());
+			System.out.println(bra.getId()+"锛� "+bra3p.getBranchYabc().toString());
 		}
 		
 		
@@ -157,8 +156,7 @@ public class IEEE_13BusFeeder_Test {
 			source.setVoltage(new Complex(1.0,0));
 		    //source.set3PhaseVoltages(new Complex());
 			
-			DStabGen constantGen = DStabObjectFactory.createDStabGen();
-			constantGen.setId("Source");
+			Gen3Phase constantGen = ThreePhaseObjectFactory.create3PGenerator("Source");
 			constantGen.setMvaBase(1.0);
 			constantGen.setPosGenZ(new Complex(0.0,0.05));
 			constantGen.setNegGenZ(new Complex(0.0,0.05));

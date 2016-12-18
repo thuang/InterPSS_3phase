@@ -28,6 +28,7 @@ import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.net.NetworkType;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabBus;
 
 public class Test_oneSource_multiFeeder {
@@ -68,7 +69,7 @@ public class Test_oneSource_multiFeeder {
 		
 		assertTrue(distPFAlgo.powerflow());
 		
-		for(DStabBus bus: net.getBusList()){
+		for(BaseDStabBus<?,?> bus: net.getBusList()){
 			System.out.println("id, sortNum: "+bus.getId()+","+bus.getSortNumber());
 		}
 		

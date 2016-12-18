@@ -10,6 +10,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
@@ -137,8 +138,7 @@ public class Test6BusFeeder {
 		bus1.setLoadCode(AclfLoadCode.NON_LOAD);
 		bus1.setVoltage(new Complex(1.01,0));
 		
-		DStabGen constantGen = DStabObjectFactory.createDStabGen();
-		constantGen.setId("Source");
+		Gen3Phase constantGen = ThreePhaseObjectFactory.create3PGenerator("Source");
 		constantGen.setMvaBase(100);
 		constantGen.setPosGenZ(new Complex(0.0,0.05));
 		constantGen.setNegGenZ(new Complex(0.0,0.05));

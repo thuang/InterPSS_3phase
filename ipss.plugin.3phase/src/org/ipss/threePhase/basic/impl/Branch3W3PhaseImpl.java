@@ -1,5 +1,6 @@
 package org.ipss.threePhase.basic.impl;
 
+import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Branch3W3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
@@ -7,7 +8,6 @@ import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfBus;
-import com.interpss.dstab.DStabBranch;
 import com.interpss.dstab.impl.DStab3WBranchImpl;
 
 public class Branch3W3PhaseImpl extends DStab3WBranchImpl implements Branch3W3Phase{
@@ -36,7 +36,7 @@ public class Branch3W3PhaseImpl extends DStab3WBranchImpl implements Branch3W3Ph
 			((AclfBus)starBus).setVoltage(this.voltageStarBus);
 		
 		// create the from branch: fromBudId -> starBusId
-		DStabBranch branch = ThreePhaseObjectFactory.create3PBranch();
+		Branch3Phase branch = ThreePhaseObjectFactory.create3PBranch();
 		net.addBranch(branch, fromId, starBusId, properties[1]);
 		this.setFromBranch(branch);
 		branch.setBranchCode(branchCode);

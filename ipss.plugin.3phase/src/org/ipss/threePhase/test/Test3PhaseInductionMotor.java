@@ -50,7 +50,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 			
 			assertTrue(distPFAlgo.powerflow());
 		
-			for(BaseAclfBus bus:net.getBusList()){
+			for(BaseAclfBus<?,?> bus:net.getBusList()){
 				Bus3Phase bus3P = (Bus3Phase) bus;
 				System.out.println("Vabc of bus -"+bus3P.getId()+","+bus3P.get3PhaseVotlages().toString());
 			}
@@ -61,7 +61,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 		     *   create the 3phase induction motor model 
 		     */
 			
-			Bus3Phase bus1 = (Bus3Phase) net.getDStabBus("Bus1");
+			Bus3Phase bus1 = (Bus3Phase) net.getBus("Bus1");
 			InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
 			indMotor.setDStabBus(bus1);
 

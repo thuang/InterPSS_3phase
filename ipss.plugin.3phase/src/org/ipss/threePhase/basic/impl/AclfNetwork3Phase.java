@@ -13,8 +13,7 @@ import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.acsc.AcscBranch;
 import com.interpss.core.acsc.AcscBus;
-import com.interpss.core.acsc.AcscGen;
-import com.interpss.core.acsc.AcscLoad;
+import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.impl.BaseAcscNetworkImpl;
 import com.interpss.core.net.Branch;
@@ -84,7 +83,7 @@ public class AclfNetwork3Phase extends BaseAcscNetworkImpl<AcscBus, AcscBranch> 
 	public ISparseEqnComplexMatrix3x3 formYMatrixABC() throws Exception {
 		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
-		for(AcscBus b:this.getBusList()){
+		for(BaseAcscBus<?,?> b:this.getBusList()){
 			if(b instanceof Bus3Phase){
 				int i = b.getSortNumber();
 				Bus3Phase ph3Bus = (Bus3Phase) b;

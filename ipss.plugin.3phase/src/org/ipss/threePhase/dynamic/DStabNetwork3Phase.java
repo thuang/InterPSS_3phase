@@ -3,11 +3,13 @@ package org.ipss.threePhase.dynamic;
 import java.util.Hashtable;
 
 import org.interpss.numeric.datatype.Complex3x1;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Network3Phase;
 
-import com.interpss.dstab.DStabilityNetwork;
+import com.interpss.dstab.BaseDStabNetwork;
 
-public interface DStabNetwork3Phase extends Network3Phase, DStabilityNetwork{
+public interface DStabNetwork3Phase extends Network3Phase, BaseDStabNetwork<Bus3Phase, Branch3Phase>{
 	
 
 	

@@ -26,6 +26,8 @@ import org.interpss.mapper.odm.impl.aclf.AclfBusDataHelper;
 import org.interpss.mapper.odm.impl.dstab.AbstractODMDStabParserMapper;
 import org.interpss.mapper.odm.impl.dstab.DStabScenarioHelper;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Gen3Phase;
+import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 
@@ -37,9 +39,6 @@ import com.interpss.core.algo.LoadflowAlgorithm;
 import com.interpss.core.net.Branch;
 import com.interpss.dstab.DStab3WBranch;
 import com.interpss.dstab.DStabBranch;
-import com.interpss.dstab.DStabBus;
-import com.interpss.dstab.DStabGen;
-import com.interpss.dstab.DStabLoad;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.simu.SimuContext;
 import com.interpss.simu.SimuCtxType;
@@ -94,7 +93,7 @@ protected IPSSMsgHub msg = null;
 				dstabAlgo.setAclfAlgorithm(lfAlgo);
 
 				// map the bus info
-				AclfBusDataHelper helper = new AclfBusDataHelper(dstabNet);
+				AclfBusDataHelper<Gen3Phase,Load3Phase> helper = new AclfBusDataHelper<>(dstabNet);
 				for (JAXBElement<? extends BusXmlType> bus : xmlNet.getBusList().getBus()) {
 					DStabBusXmlType dstabBusXml = (DStabBusXmlType) bus.getValue();
 					

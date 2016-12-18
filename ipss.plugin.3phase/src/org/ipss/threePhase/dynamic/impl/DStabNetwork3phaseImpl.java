@@ -30,19 +30,18 @@ import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGen;
 import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.acsc.AcscBranch;
-import com.interpss.core.acsc.AcscGen;
 import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.Bus;
 import com.interpss.core.net.NetworkType;
 import com.interpss.core.sparse.impl.SparseEqnComplexMatrix3x3Impl;
-import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.dynLoad.DynLoadModel;
-import com.interpss.dstab.impl.DStabilityNetworkImpl;
+import com.interpss.dstab.impl.BaseDStabNetworkImpl;
 
-public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DStabNetwork3Phase {
+public class DStabNetwork3phaseImpl extends BaseDStabNetworkImpl<Bus3Phase, Branch3Phase> implements DStabNetwork3Phase {
     
 	protected ISparseEqnComplexMatrix3x3 yMatrixAbc = null;
 	protected boolean is3PhaseNetworkInitialized = false;
@@ -242,7 +241,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		yMatrixAbc = new SparseEqnComplexMatrix3x3Impl(getNoBus());
 		
-		for(DStabBus b:this.getBusList()){
+		for(BaseDStabBus b:this.getBusList()){
 			if(b.isActive()){
 				if(b instanceof Bus3Phase){
 					int i = b.getSortNumber();
@@ -289,7 +288,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		
 		
 		//TODO append the equivalent admittance of dynamic loads to YMatrixABC
-		for ( DStabBus bus : getBusList() ) {
+		for ( BaseDStabBus bus : getBusList() ) {
 			if(bus.isActive() && bus.isLoad()){
 				Bus3Phase bus3p = (Bus3Phase) bus;
 				
@@ -370,7 +369,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 	}
 	
 	private void convertLoadModel() {
-		for ( DStabBus busi : getBusList() ) {
+		for ( BaseDStabBus<?,?> busi : getBusList() ) {
 			   //only the active buses will be initialized
 				if(busi.isActive()){
 					//init three sequence load
@@ -403,7 +402,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
   			
 		  	// Calculate and set generator injection current
 			for( Bus b : getBusList()) {
-				DStabBus<?,?> bus = (DStabBus<?,?>)b;
+				BaseDStabBus<?,?> bus = (BaseDStabBus<?,?>)b;
 
 				if(bus.isActive()){
 					Bus3Phase bus3p = (Bus3Phase) bus;
@@ -504,7 +503,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 			// update bus voltage and machine Pe
 			for( Bus b : getBusList()) {
-				DStabBus bus = (DStabBus)b;
+				BaseDStabBus bus = (BaseDStabBus)b;
 				if(bus.isActive()){
 					Complex3x1 vabc = getYMatrixABC().getX(bus.getSortNumber());
 					//if(bus.getId().equals("Bus12"))
@@ -548,7 +547,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 		if(this.getNetworkType()==NetworkType.TRANSMISSION && !is3PhaseNetworkInitialized)
 	  	     initThreePhaseFromLfResult();
 		
-		for ( DStabBus<?,?> b : getBusList() ) {
+		for ( BaseDStabBus<?,?> b : getBusList() ) {
 
 			if( b instanceof Bus3Phase){
 			    Bus3Phase bus =(Bus3Phase) b;

@@ -4,8 +4,8 @@ import java.util.Hashtable;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.ComplexFunc;
+import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
-
 
 import com.interpss.core.acsc.BaseAcscBus;
 import com.interpss.dstab.DStabBus;
@@ -88,8 +88,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 		 return this.posSeqGenPQ; 
 	 }
 	 
-	 @Override
-	 public boolean initStates(DStabBus abus){
+	 public boolean initStates(Bus3Phase abus){
 		 if(this.getPosSeqGenPQ() == null)
 			 return false;
 		 this.genPQInit = new Complex(this.posSeqGenPQ.getReal(),this.posSeqGenPQ.getImaginary());

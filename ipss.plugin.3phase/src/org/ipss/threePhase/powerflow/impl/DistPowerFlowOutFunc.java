@@ -12,7 +12,7 @@ import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.BaseAclfBus;
 import com.interpss.core.aclf.BaseAclfNetwork;
 import com.interpss.core.net.Branch;
-import com.interpss.dstab.DStabBus;
+import com.interpss.dstab.BaseDStabBus;
 
 public class DistPowerFlowOutFunc {
 	
@@ -78,7 +78,7 @@ public class DistPowerFlowOutFunc {
 		  sb.append("--------------------------------------------------------------------\n");
 		  sb.append("BusId   Bus Name    BaseKv   Voltage A(Mag, Ang)      Voltage B(Mag, Ang)      Voltage C(Mag, Ang)  \n");
 		  sb.append("-------------------------------------------------------------------------------------------------\n");
-		 for(DStabBus bus: net.getBusList()){
+		 for(BaseDStabBus bus: net.getBusList()){
 			  if( bus.isActive() && bus instanceof Bus3Phase){
 				  
 				  Bus3Phase Bus3P = (Bus3Phase) bus;
