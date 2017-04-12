@@ -6,13 +6,50 @@ public class LineConfiguration {
 	
 	enum InputType { Physical, ZYMatrix, LineCode} 
 	
-
+	private String id = "";
+	private int nphases = 1;
+	private int baseFreq = 60;
+	private InputType type =null;
+    
+	//TODO units
 
 	private Complex3x3 zMtx = null;
 	
 	private Complex3x3 shuntYMtx = null;
 	
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getNphases() {
+		return nphases;
+	}
+
+	public void setNphases(int nphases) {
+		this.nphases = nphases;
+	}
+
+	public int getBaseFreq() {
+		return baseFreq;
+	}
+
+	public void setBaseFreq(int baseFreq) {
+		this.baseFreq = baseFreq;
+	}
+
+	public InputType getType() {
+		return type;
+	}
+
+	public void setType(InputType type) {
+		this.type = type;
+	}
+
 	public Complex3x3 getZ3x3Matrix() {
 		return zMtx;
 	}
@@ -28,5 +65,8 @@ public class LineConfiguration {
 	public void setShuntY3x3Matrix(Complex3x3 shuntYMtx) {
 		this.shuntYMtx = shuntYMtx;
 	}
+	
+	
+	
 
 }

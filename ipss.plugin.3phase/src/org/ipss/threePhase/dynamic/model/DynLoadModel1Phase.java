@@ -1,8 +1,7 @@
+
 package org.ipss.threePhase.dynamic.model;
 
 import org.apache.commons.math3.complex.Complex;
-import org.interpss.numeric.datatype.Complex3x1;
-import org.ipss.threePhase.basic.Bus3Phase;
 
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.dynLoad.DynLoadModel;
@@ -137,3 +136,4 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	
 
 }
+
