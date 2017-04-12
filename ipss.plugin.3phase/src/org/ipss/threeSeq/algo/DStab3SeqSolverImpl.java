@@ -49,10 +49,13 @@ public class DStab3SeqSolverImpl extends DStabSolverImpl {
 			return false;
 		}
 		//build the negative and zero sequence Y matrix
-		this.net.formScYMatrix(SequenceCode.NEGATIVE, true);
+//		this.net.formScYMatrix(SequenceCode.NEGATIVE, true);
+//		
+//		this.net.formScYMatrix(SequenceCode.ZERO, true);
 		
-		this.net.formScYMatrix(SequenceCode.ZERO, true);
+		this.net.formYMatrix(SequenceCode.NEGATIVE, true);
 		
+		this.net.formYMatrix(SequenceCode.ZERO, true);
 	
 		return flag;
 		

@@ -433,7 +433,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseADynLoadList()){
 								if(load1p.isActive()){
-							        iPhAInj = iPhAInj.add(load1p.getCompensateCurInj());
+							        iPhAInj = iPhAInj.add(load1p.getNortonCurInj());
 							       // System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
 								}
 							}
@@ -448,7 +448,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseBDynLoadList()){
 								if(load1p.isActive()){
-							        iPhBInj = iPhBInj.add(load1p.getCompensateCurInj());
+							        iPhBInj = iPhBInj.add(load1p.getNortonCurInj());
 							       // System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
 								}
 							}
@@ -463,7 +463,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 							
 							for(DynLoadModel1Phase load1p:bus3p.getPhaseCDynLoadList()){
 								if(load1p.isActive()){
-							        iPhCInj = iPhCInj.add(load1p.getCompensateCurInj());
+							        iPhCInj = iPhCInj.add(load1p.getNortonCurInj());
 							       // System.out.println("Iinj@Load-"+bus3p.getId()+", "+ load1p.getId()+","+load1p.getCompensateCurInj().toString());
 								}
 							}

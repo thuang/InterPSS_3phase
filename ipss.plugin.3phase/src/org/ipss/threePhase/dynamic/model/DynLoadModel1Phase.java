@@ -116,7 +116,7 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	@Override
 	public Complex getCurrInj2Net() {
 		
-		return this.currInj2Net = getCompensateCurInj().subtract(getBusPhaseVoltage().multiply( getCompensateShuntY()));
+		return this.currInj2Net = getNortonCurInj().subtract(getBusPhaseVoltage().multiply( getCompensateShuntY()));
 	}
 
 	@Override
@@ -126,12 +126,12 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	}
 	
 	@Override
-	public Complex getCompensateCurInj(){
+	public Complex getNortonCurInj(){
 		return this.compensateCurrInj;
 	}
  
 	@Override
-	public void setCompensateCurInj(Complex compCurrent){
+	public void setNortonCurInj(Complex compCurrent){
 		this.compensateCurrInj = compCurrent;
 	}
 	

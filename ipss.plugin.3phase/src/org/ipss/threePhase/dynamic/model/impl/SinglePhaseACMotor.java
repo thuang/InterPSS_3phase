@@ -422,7 +422,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 	
 		@Override
-		public Complex getCompensateCurInj() {
+		public Complex getNortonCurInj() {
 			
 			if(this.compensateCurrInj == null) calculateCompensateCurInj();
 			
@@ -506,7 +506,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		@Override
 		public Object getOutputObject() {
 			
-		     return this.getCompensateCurInj();
+		     return this.getNortonCurInj();
 		}
 		
 		@Override
