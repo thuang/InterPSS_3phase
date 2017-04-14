@@ -274,10 +274,14 @@ public class OpenDSSLineCodeParser {
 	        			lineConfig.setShuntY3x3Matrix(yMatrix);
                     	
 	        		}
-	        		
+                    else if( str.contains("units")){
+                    	//TODO
+                    }
 	        		
 	        		
 	        	}
+	        	
+	        	
 	        } while(str != null);
 			
 			
