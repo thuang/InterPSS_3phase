@@ -10,6 +10,9 @@ public class OpenDSSDataParser {
 	protected Hashtable<String,LineConfiguration> lineConfigTable = null;
 
 	public Hashtable<String, LineConfiguration> getLineConfigTable() {
+		if(lineConfigTable == null){
+			lineConfigTable = new Hashtable<>();
+		}
 		return lineConfigTable;
 	}
 
@@ -18,5 +21,9 @@ public class OpenDSSDataParser {
 	}
 	
 	
-
+	
 }
+
+
+
+
