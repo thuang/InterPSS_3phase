@@ -54,9 +54,16 @@ public class OpenDSSDataParser {
     	 
     	 boolean no_error = true;
     	 //TODO parse the linecode,if any
-    	 no_error=this.lineCodeParser.parseLineCode(lineCodeFile);
+    	 if(!lineCodeFile.equals(""))
+    	      no_error=this.lineCodeParser.parseLineCode(lineCodeFile);
     			 
     	 //parse the master file, first create an network object as well as the sourceBus
+    	 if(!feederFile.equals("")){
+    		 //TODO
+    		 //check if start with  (new) || NEW	
+    	 }
+    		 
+    	 
     	 
     	 //parse the lines, transformers, regulators, loads and capacitors
     	 
