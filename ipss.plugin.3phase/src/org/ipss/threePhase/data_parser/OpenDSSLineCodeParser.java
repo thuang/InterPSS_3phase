@@ -62,7 +62,7 @@ public class OpenDSSLineCodeParser {
 	        			//StringTokenizer st = new StringTokenizer(str);
 	        			//while (st.hasMoreTokens()) {
 	        			
-	        			lineData = str.split("\\s");
+	        			lineData = str.split("\\s+");
 	        			code_id =lineData[1];
 	        			nphaseStr =lineData[2];
 	        			baseFreqStr =lineData[3];
@@ -86,30 +86,38 @@ public class OpenDSSLineCodeParser {
 	        			// get the matrix data within the brackets,
 	        			int startIdx = str.indexOf("[");
 	        			int lastIdx = str.indexOf("]");
+	        			if( startIdx <0 ){
+	        				startIdx= str.indexOf("(");
+	        				if(startIdx<0){
+	        					throw new Error("line code format error: "+ str);
+	        				}
+	        				else
+	        				  lastIdx=str.indexOf(")");
+	        			}
 	        			// if it has "|", tokenizer by "|", otherwise it is only one phase data, need to check <nphases>
 	        			String dataStr = str.substring(startIdx+1, lastIdx).trim();
 	        			String[] rDataStr = null;
 	        					
 	        			if (dataStr.contains("|")){
-	        				 rDataStr = dataStr.split("|");
+	        				 rDataStr = dataStr.split("\\|");
 	        				 
 	        					int idx = 0;
 	    	        			for(int i = 0; i< rDataStr.length;i++){
 	    	        				if(i==0){
-	    	        				   xMatrixData[idx] = Double.valueOf(rDataStr[i]);
+	    	        				   rMatrixData[idx] = Double.valueOf(rDataStr[i]);
 	    	        				   idx +=1;
 	    	        				}
 	    	        				else if(i==1){
-	    	        					String[] xDataStr2 = rDataStr[i].split("\\s");
-	    	        					for(int j =0; j<xDataStr2.length;j++){
-	    	        						xMatrixData[idx] = Double.valueOf(xDataStr2[j]);
+	    	        					String[] rDataStr2 = rDataStr[i].trim().split("\\s+");
+	    	        					for(int j =0; j<rDataStr2.length;j++){
+	    	        						rMatrixData[idx] = Double.valueOf(rDataStr2[j]);
 	    	        								 idx +=1;		
 	    	        					}
 	    	        				}
 	    	        				else if(i==2){
-	    	        					String[] xDataStr3 = rDataStr[i].split("\\s");
-	    	        					for(int j =0; j<xDataStr3.length;j++){
-	    	        						xMatrixData[idx] = Double.valueOf(xDataStr3[j]);
+	    	        					String[] rDataStr3 = rDataStr[i].trim().split("\\s+");
+	    	        					for(int j =0; j<rDataStr3.length;j++){
+	    	        						rMatrixData[idx] = Double.valueOf(rDataStr3[j]);
 	    	        						idx +=1;		
 	    	        					}
 	    	        					
@@ -118,8 +126,8 @@ public class OpenDSSLineCodeParser {
 	    	        			}
 	        			}
 	        			else{
-	        				rDataStr[0]= dataStr;
-	        				xMatrixData[0] = Double.valueOf(rDataStr[0]);
+	        				///rDataStr[0]= dataStr;
+	        				rMatrixData[0] = Double.valueOf(dataStr);
 	        			}
 	        		}
                     else if(str.contains("xmatrix")){
@@ -128,12 +136,20 @@ public class OpenDSSLineCodeParser {
 	        			
                			int startIdx = str.indexOf("[");
 	        			int lastIdx = str.indexOf("]");
+	        			if( startIdx <0 ){
+	        				startIdx= str.indexOf("(");
+	        				if(startIdx<0){
+	        					throw new Error("line code format error: "+ str);
+	        				}
+	        				else
+	        				  lastIdx=str.indexOf(")");
+	        			}
 	        			// if it has "|", tokenizer by "|", otherwise it is only one phase data, need to check <nphases>
 	        			String dataStr = str.substring(startIdx+1, lastIdx).trim();
 	        			
 	        			String[] xDataStr = null;
 	        			if (dataStr.contains("|")){
-	        				 xDataStr = dataStr.split("|");
+	        				 xDataStr = dataStr.split("\\|");
 	        				 
 	        					int idx = 0;
 	    	        			for(int i = 0; i< xDataStr.length;i++){
@@ -142,14 +158,14 @@ public class OpenDSSLineCodeParser {
 	    	        				   idx +=1;
 	    	        				}
 	    	        				else if(i==1){
-	    	        					String[] xDataStr2 = xDataStr[i].split("\\s");
+	    	        					String[] xDataStr2 = xDataStr[i].trim().split("\\s+");
 	    	        					for(int j =0; j<xDataStr2.length;j++){
 	    	        						xMatrixData[idx] = Double.valueOf(xDataStr2[j]);
 	    	        								 idx +=1;		
 	    	        					}
 	    	        				}
 	    	        				else if(i==2){
-	    	        					String[] xDataStr3 = xDataStr[i].split("\\s");
+	    	        					String[] xDataStr3 = xDataStr[i].trim().split("\\s+");
 	    	        					for(int j =0; j<xDataStr3.length;j++){
 	    	        						xMatrixData[idx] = Double.valueOf(xDataStr3[j]);
 	    	        						idx +=1;		
@@ -160,8 +176,8 @@ public class OpenDSSLineCodeParser {
 	    	        			}
 	        			}
 	        			else{
-	        				xDataStr[0]= dataStr;
-	        				xMatrixData[0] = Double.valueOf(xDataStr[0]);
+	        				//xDataStr[0]= dataStr;
+	        				xMatrixData[0] = Double.valueOf(dataStr);
 	        			}
 	        			
 	        	
@@ -204,12 +220,21 @@ public class OpenDSSLineCodeParser {
 	        			
                			int startIdx = str.indexOf("[");
 	        			int lastIdx = str.indexOf("]");
+	        			
+	        			if( startIdx <0 ){
+	        				startIdx= str.indexOf("(");
+	        				if(startIdx<0){
+	        					throw new Error("line code format error: "+ str);
+	        				}
+	        				else
+	        				  lastIdx=str.indexOf(")");
+	        			}
 	        			// if it has "|", tokenizer by "|", otherwise it is only one phase data, need to check <nphases>
 	        			String dataStr = str.substring(startIdx+1, lastIdx).trim();
 	        			
 	        			String[] cDataStr = null;
 	        			if (dataStr.contains("|")){
-	        				 cDataStr = dataStr.split("|");
+	        				 cDataStr = dataStr.split("\\|");
 	        				 
 	        					int idx = 0;
 	    	        			for(int i = 0; i< cDataStr.length;i++){
@@ -218,14 +243,14 @@ public class OpenDSSLineCodeParser {
 	    	        				   idx +=1;
 	    	        				}
 	    	        				else if(i==1){
-	    	        					String[] cDataStr2 = cDataStr[i].split("\\s");
+	    	        					String[] cDataStr2 = cDataStr[i].trim().split("\\s+");
 	    	        					for(int j =0; j<cDataStr2.length;j++){
 	    	        						cMatrixData[idx] = Double.valueOf(cDataStr2[j]);
 	    	        								 idx +=1;		
 	    	        					}
 	    	        				}
 	    	        				else if(i==2){
-	    	        					String[] cDataStr3 = cDataStr[i].split("\\s");
+	    	        					String[] cDataStr3 = cDataStr[i].trim().split("\\s+");
 	    	        					for(int j =0; j<cDataStr3.length;j++){
 	    	        						cMatrixData[idx] = Double.valueOf(cDataStr3[j]);
 	    	        						idx +=1;		
@@ -235,9 +260,9 @@ public class OpenDSSLineCodeParser {
 	    	        				
 	    	        			}
 	        			}
-	        			else{
-	        				cDataStr[0]= dataStr;
-	        				cMatrixData[0] = Double.valueOf(cDataStr[0]);
+	        			else{ // only one data input
+	        				//cDataStr[0]= dataStr;
+	        				cMatrixData[0] = Double.valueOf(dataStr);
 	        			}
 	        			
 	        	
@@ -253,18 +278,18 @@ public class OpenDSSLineCodeParser {
 	        			if(nphases>=2){
 	        				
 	        				yMatrix.ab = new Complex (0.0, cMatrixData[1]);
-	        				yMatrix.ba = new Complex (0.0, xMatrixData[1]);
-	        				yMatrix.bb = new Complex (0.0, xMatrixData[2]);
+	        				yMatrix.ba = new Complex (0.0, cMatrixData[1]);
+	        				yMatrix.bb = new Complex (0.0, cMatrixData[2]);
 	        				
 	        			}
 	        			if(nphases==3){
-	        				yMatrix.ac = new Complex (0.0, xMatrixData[3]);
-	        				yMatrix.ca = new Complex (0.0, xMatrixData[3]);
+	        				yMatrix.ac = new Complex (0.0, cMatrixData[3]);
+	        				yMatrix.ca = new Complex (0.0, cMatrixData[3]);
 	        				
-	        				yMatrix.bc = new Complex (0.0, xMatrixData[4]);
-	        				yMatrix.cb = new Complex (0.0, xMatrixData[4]);
+	        				yMatrix.bc = new Complex (0.0, cMatrixData[4]);
+	        				yMatrix.cb = new Complex (0.0, cMatrixData[4]);
 	        				
-	        				yMatrix.cc = new Complex (0.0, xMatrixData[5]);
+	        				yMatrix.cc = new Complex (0.0, cMatrixData[5]);
 	        				
 	        			}
 	        			else if(nphases>3){

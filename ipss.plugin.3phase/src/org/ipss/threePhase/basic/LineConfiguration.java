@@ -67,6 +67,20 @@ public class LineConfiguration {
 	}
 	
 	
+	public String toString(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("Line Configuration:\n");
+		sb.append("Id: "+id+"\n");
+		sb.append("InputType: "+type+"\n");
+		sb.append("nphases: "+nphases+"\n");
+		sb.append("baseFreq: "+baseFreq+"\n");
+		sb.append("zmatrix: "+this.zMtx.toString()+"\n");
+		sb.append("ymatrix: "+ (this.shuntYMtx==null? "":this.shuntYMtx.toString())+"\n");
+		
+		return sb.toString();
+	}
+	
+	
 	
 
 }
