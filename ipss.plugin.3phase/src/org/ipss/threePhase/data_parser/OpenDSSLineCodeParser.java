@@ -54,7 +54,7 @@ public class OpenDSSLineCodeParser {
 	          	str = din.readLine();   
 	        	if (str != null && !str.trim().equals("")) {
 	        		str = str.trim();
-	        		if(str.startsWith("!")){
+	        		if(str.startsWith("!") || str.startsWith("//")){
 	        			//bypass the comment
 	        		}
 	        		else if(str.startsWith("New")){
@@ -82,6 +82,11 @@ public class OpenDSSLineCodeParser {
 	        			
 	        			
 	        		}
+	        		
+	        		/*
+	        		 * rmatrix Resistance matrix, lower triangle, ohms per unit length.
+	        		 */
+	        		
 	        		else if(str.contains("rmatrix")){
 	        			// get the matrix data within the brackets,
 	        			int startIdx = str.indexOf("[");
@@ -97,7 +102,9 @@ public class OpenDSSLineCodeParser {
 	        			// if it has "|", tokenizer by "|", otherwise it is only one phase data, need to check <nphases>
 	        			String dataStr = str.substring(startIdx+1, lastIdx).trim();
 	        			String[] rDataStr = null;
-	        					
+	        			
+	        			// Symmetrical matrices can be entered in a lower triangle form, for example
+	        		    // Xmatrix=[ 1.2 | .3 1.2 | .3 .3 1.2 ] ! (3x3 matrix lower triangle)			
 	        			if (dataStr.contains("|")){
 	        				 rDataStr = dataStr.split("\\|");
 	        				 
@@ -130,6 +137,9 @@ public class OpenDSSLineCodeParser {
 	        				rMatrixData[0] = Double.valueOf(dataStr);
 	        			}
 	        		}
+	        		/*
+	        		 * xmatrix: Reactance matrix, lower triangle, ohms per unit length.
+	        		 */
                     else if(str.contains("xmatrix")){
                     	
                         // get the matrix data within the brackets,
@@ -214,6 +224,12 @@ public class OpenDSSLineCodeParser {
 	        			lineConfig.setZ3x3Matrix(zMatrix);
 	        			
 	        		}
+	        		
+	        		/*
+	        		 * 
+	        		 * Nodal Capacitance matrix, lower triangle, nf per unit length.Order of the matrix is the number of phases. May be used to specify the shunt capacitance of any line configuration
+	        		 */
+	        		 
                     else if(str.contains("cmatrix")){
 	        			
 // get the matrix data within the brackets,

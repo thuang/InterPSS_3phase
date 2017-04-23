@@ -43,6 +43,14 @@ public class OpenDSSLineParser {
 	
 		int phaseIdx = -1, lineCodeIdx = -1;
 		
+		/*
+		 * (6) r1 Positive sequence Resistance, ohms per unit length. See also Rmatrix.
+			(7) x1 Positive sequence Reactance, ohms per unit length. See also Xmatrix
+			(8) r0 Zero sequence Resistance, ohms per unit length.
+			(9) x0 Zero sequence Reactance, ohms per unit length.
+			(10) c1 Positive sequence capacitance, nf per unit length. See also Cmatrix.
+			(11) c0 Zero sequence capacitance, nf per unit length.
+		 */
 		double r1= 0,r0 = 0, x1 = 0, x0 = 0, c1 = 0, c0 = 0;
 		
 
@@ -91,15 +99,7 @@ public class OpenDSSLineParser {
 			
 			
 		}
-		
-//		if(phaseIdx>0)
-//		     phaseNum  = Integer.valueOf(lineStrAry[phaseIdx].substring(7));
-//		
-//		lineId    = lineStrAry[lineIdIdx].substring(4);
-//		fromBusStr = lineStrAry[fromBusIdx].substring(4);
-//		toBusStr   = lineStrAry[toBusIdx].substring(4);
-//		lineCodeId = lineStrAry[lineCodeIdx].substring(9);
-//		lineLength = Double.valueOf(lineStrAry[lengthIdx].substring(7));		
+				
 		
 		//busId is the substring before the first DOT
 		//phases info is defined in the substring after the first DOT
@@ -140,7 +140,8 @@ public class OpenDSSLineParser {
 				Complex z1 = new Complex(r1,x1);
 				Complex z0 = new Complex(r0,x0);
 				
-				zabc = new Complex3x3(z1,z1,z0);
+				// input as three sequence data and then converted it three-phase
+				zabc = new Complex3x3(z1,z1,z0).ToAbc(); 
 			}
 			else{
 				throw new Error("Error in Line Z, Y parameter raw data: "+lineStr);
@@ -224,8 +225,9 @@ public class OpenDSSLineParser {
 		// the format of Zmatrix need to be consistent with the number of phases and the phases in use.
 		
 		
-		
-		line.setZabc(zabc);
+		// need to consider the line length
+		//TODO consistency of the unit types
+		line.setZabc(zabc.multiply(lineLength));
 		
 		//TODO ShuntY is not considered for this initial implementation 
 		//line.setFromShuntYabc(yshuntabc.multiply(0.5));
