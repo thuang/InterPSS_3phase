@@ -52,5 +52,33 @@ public interface Load3Phase extends AclfLoad {
 	 * @return
 	 */
 	public Complex3x1 getEquivCurrInj(Complex3x1 vabc);
+	
+	/**
+	 * set the load model type, such as constant PQ, constant current, constant impedance, etc.
+	 * @param loadModelType
+	 */
+	public void setLoadModelType(DistLoadType loadModelType);
+	
+	/**
+	 * get the load model type, such as constant PQ, constant current, constant impedance, etc.
+	 * @return
+	 */
+	public DistLoadType getLoadModelType();
+	
+	/**
+	 * set the load connection type. The connection type could be single phase wye, single phase delta, three phase wye and three phase delta.
+	 * @param loadConnectType
+	 */
+	public void setLoadConnectionType(LoadConnectionType loadConnectType);
+	
+	/**
+	 * get the load connection type. The connection type could be single phase wye, single phase delta, three phase wye and three phase delta.
+	 * @return
+	 */
+	public LoadConnectionType getLoadConnectionType();
+	
+	public void setNominalKV(double ratedkV);
+	
+	public double getNominalKV();
 
 }

@@ -4,12 +4,18 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.DistLoadType;
 import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.basic.LoadConnectionType;
 
 import com.interpss.core.aclf.impl.AclfLoadImpl;
 import com.interpss.core.acsc.PhaseCode;
 
 public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
+	
+	DistLoadType loadType = DistLoadType.CONST_PQ; // by default constant PQ
+	LoadConnectionType loadConnectType = LoadConnectionType.Three_Phase_Wye; // by default three-phase wye;
+	double nominalKV = 0;
 
 	Complex3x1 ph3Load = new Complex3x1();
 	Complex3x3 equivYabc = new Complex3x3();
@@ -74,6 +80,41 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 	@Override
 	public Complex3x1 getEquivCurrInj(Complex3x1 vabc) {
 		return equivCurInj = ph3Load.divide(vabc).conjugate().multiply(-1.0);
+	}
+
+	@Override
+	public void setLoadModelType(DistLoadType loadModelType) {
+		this.loadType = loadModelType;
+		
+	}
+
+	@Override
+	public DistLoadType getLoadModelType() {
+		return this.loadType;
+	}
+
+	@Override
+	public void setLoadConnectionType(LoadConnectionType loadConnectType) {
+		this.loadConnectType = loadConnectType;
+		
+	}
+
+	@Override
+	public LoadConnectionType getLoadConnectionType() {
+		
+		return this.loadConnectType;
+	}
+
+	@Override
+	public void setNominalKV(double ratedkV) {
+		this.nominalKV = ratedkV;
+		
+	}
+
+	@Override
+	public double getNominalKV() {
+		
+		return this.nominalKV;
 	}
 
 }

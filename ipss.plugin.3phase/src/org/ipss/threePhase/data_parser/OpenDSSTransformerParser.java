@@ -112,6 +112,7 @@ public class OpenDSSTransformerParser {
 		// create a transformer object
 		Branch3Phase xfrBranch = ThreePhaseObjectFactory.create3PBranch(fromBusId, toBusId, "0", this.dataParser.getDistNetwork());
 		xfrBranch.setBranchCode(AclfBranchCode.XFORMER);
+		
 		xfrBranch.getFromAclfBus().setBaseVoltage(normKV1, UnitType.kV);
 		xfrBranch.getToAclfBus().setBaseVoltage(normKV2, UnitType.kV);
 		

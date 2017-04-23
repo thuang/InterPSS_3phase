@@ -57,7 +57,7 @@ public class OpenDSSLineCodeParser {
 	        		if(str.startsWith("!") || str.startsWith("//")){
 	        			//bypass the comment
 	        		}
-	        		else if(str.startsWith("New")){
+	        		else if(str.startsWith("New")||str.startsWith("new")){
 	        			//tokenizer by blank
 	        			//StringTokenizer st = new StringTokenizer(str);
 	        			//while (st.hasMoreTokens()) {
