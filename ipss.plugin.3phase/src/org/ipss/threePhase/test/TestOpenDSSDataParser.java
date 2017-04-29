@@ -15,7 +15,8 @@ public class TestOpenDSSDataParser {
 	@Test
 	public void test_LineCodeParser(){
 		OpenDSSDataParser parser = new OpenDSSDataParser();
-		parser.parseFeederData("testData\\feeder\\IEEE123\\IEEELineCodes.DSS", "", "", "");
+		
+		parser.getLineCodeParser().parseLineCodeFile("testData\\feeder\\IEEE123\\IEEELineCodes.DSS");
 		
 		System.out.print("line code table:\n" );
 		
@@ -83,6 +84,14 @@ public class TestOpenDSSDataParser {
 		assertTrue(linecode_9.getZ3x3Matrix().subtract(zabc9).absMax()<1.0E-6);
 		
 		assertTrue(linecode_9.getShuntY3x3Matrix().subtract(yabc9).absMax()<1.0E-6);
+	}
+	
+//	@Test
+	public void testLineParser(){
+		OpenDSSDataParser parser = new OpenDSSDataParser();
+		parser.parseFeederData("testData\\feeder\\IEEE123","IEEE123Master.dss");
+		
+		
 	}
 
 }

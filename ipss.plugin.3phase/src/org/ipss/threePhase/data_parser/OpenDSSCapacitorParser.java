@@ -7,5 +7,12 @@ public class OpenDSSCapacitorParser {
 	public OpenDSSCapacitorParser(OpenDSSDataParser parser){
 		this.dataParser = parser;
 	}
+	
+	public boolean parseCapDataString(String capStr){
+		boolean no_error = true;
+		
+		
+		return no_error;
+	}
 
 }

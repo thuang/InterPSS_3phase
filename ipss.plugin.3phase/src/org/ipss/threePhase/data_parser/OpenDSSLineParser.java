@@ -221,6 +221,7 @@ public class OpenDSSLineParser {
 			toBus = ThreePhaseObjectFactory.create3PDStabBus(toBusId, distNet);
 		
 		Branch3Phase line = ThreePhaseObjectFactory.create3PBranch(fromBusId, toBusId, "1", distNet);
+		
 		line.setBranchCode(AclfBranchCode.LINE);
 		// the format of Zmatrix need to be consistent with the number of phases and the phases in use.
 		
