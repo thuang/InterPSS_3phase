@@ -97,7 +97,7 @@ public class OpenDSSLoadParser {
 			}
 			
 			if(loadId_phases.contains(DOT)){
-				String[] idPhasesAry = loadId_phases.split(DOT);
+				String[] idPhasesAry = loadId_phases.split("\\.");
 				busName = idPhasesAry[0];
 				if(idPhasesAry.length>1){
 					phase1 = idPhasesAry[1];

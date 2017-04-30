@@ -25,7 +25,7 @@ public class OpenDSSLineParser {
     	
         final String  DOT = ".";
 		
-		String  lineId = "";
+		String  lineName = "";
 		String  fromBusId = "";
 		String  fromBusPhases  ="1.2.3"; // by default;;
 		String  toBusId = "";
@@ -58,7 +58,7 @@ public class OpenDSSLineParser {
 		
 		for(int i = 0;i<lineStrAry.length;i++){
 			if(lineStrAry[i].contains("Line.")){
-				lineId    = lineStrAry[i].substring(4);
+				lineName    = lineStrAry[i].substring(4);
 			}
 			else if(lineStrAry[i].contains("Phases=")){
 				phaseIdx = i;
@@ -66,16 +66,16 @@ public class OpenDSSLineParser {
 			}
 			
 			else if(lineStrAry[i].contains("Bus1=")){
-				fromBusStr = lineStrAry[i].substring(4);
+				fromBusStr = lineStrAry[i].substring(5);
 			}
 			else if(lineStrAry[i].contains("Bus2=")){
-				toBusStr = lineStrAry[i].substring(4);
+				toBusStr = lineStrAry[i].substring(5);
 			}
-			else if(lineStrAry[i].contains("LineCode")){
+			else if(lineStrAry[i].contains("LineCode=")){
 				lineCodeIdx = i;
 				lineCodeId= lineStrAry[i].substring(9);
 			}
-			else if(lineStrAry[i].contains("Length")){
+			else if(lineStrAry[i].contains("Length=")){
 				lineLength = Double.valueOf(lineStrAry[i].substring(7));
 			}
 			else if(lineStrAry[i].contains("r1=")){
@@ -105,7 +105,7 @@ public class OpenDSSLineParser {
 		//phases info is defined in the substring after the first DOT
 		if(fromBusStr.contains(DOT)){
 			fromBusId = fromBusStr.substring(0, fromBusStr.indexOf(DOT));
-		    fromBusPhases = fromBusId = fromBusStr.substring( fromBusStr.indexOf(DOT)+1);
+		    fromBusPhases = fromBusStr.substring( fromBusStr.indexOf(DOT)+1);
 		}else{
 			fromBusId = fromBusStr;
 			
@@ -113,9 +113,9 @@ public class OpenDSSLineParser {
 		
 		if(toBusStr.contains(DOT)){
 			toBusId = toBusStr.substring(0, toBusStr.indexOf(DOT));
-		    toBusPhases = toBusId = toBusStr.substring( toBusStr.indexOf(DOT)+1);
+		    toBusPhases =  toBusStr.substring( toBusStr.indexOf(DOT)+1);
 		}else{
-			fromBusId = toBusStr;
+			toBusId = toBusStr;
 			
 		}
 		
@@ -135,7 +135,7 @@ public class OpenDSSLineParser {
 			}
 		}
 		else{ // line parameters defined by raw data
-			if(r1>= 0 & x1>0){
+			if(r1>= 0 || x1>0){
 		
 				Complex z1 = new Complex(r1,x1);
 				Complex z0 = new Complex(r0,x0);
@@ -189,9 +189,12 @@ public class OpenDSSLineParser {
 			}
 		}
 		else if(phaseNum==1){
-			// by default, phase = "1"
 			
-			if(fromBusPhases.equals("2")){
+			
+			if(fromBusPhases.equals("1")){
+				// by default, phase = "1", no change is needed
+			}
+			else if(fromBusPhases.equals("2")){
 				zabc.bb = zabc.aa;
 				zabc.aa = new Complex(0.0);
 			}
@@ -200,7 +203,7 @@ public class OpenDSSLineParser {
 				zabc.aa = new Complex(0.0);
 			}
 			else{
-				throw new Error("phase arrangement not support yet : "+fromBusPhases);
+				throw new Error("phase arrangement not support yet : "+lineStr);
 			}
 		}
 		else{
@@ -221,6 +224,8 @@ public class OpenDSSLineParser {
 			toBus = ThreePhaseObjectFactory.create3PDStabBus(toBusId, distNet);
 		
 		Branch3Phase line = ThreePhaseObjectFactory.create3PBranch(fromBusId, toBusId, "1", distNet);
+		
+		line.setName(lineName);
 		
 		line.setBranchCode(AclfBranchCode.LINE);
 		// the format of Zmatrix need to be consistent with the number of phases and the phases in use.

@@ -3,8 +3,10 @@ package org.ipss.threePhase.test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import org.apache.commons.math3.complex.Complex;
+import org.interpss.IpssCorePlugin;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.LineConfiguration;
 import org.ipss.threePhase.data_parser.OpenDSSDataParser;
@@ -12,7 +14,7 @@ import org.junit.Test;
 
 public class TestOpenDSSDataParser {
 	
-	@Test
+	//@Test
 	public void test_LineCodeParser(){
 		OpenDSSDataParser parser = new OpenDSSDataParser();
 		
@@ -86,11 +88,16 @@ public class TestOpenDSSDataParser {
 		assertTrue(linecode_9.getShuntY3x3Matrix().subtract(yabc9).absMax()<1.0E-6);
 	}
 	
-//	@Test
+	@Test
 	public void testLineParser(){
+		
+		IpssCorePlugin.init();
+		IpssCorePlugin.setLoggerLevel(Level.INFO);
+		
 		OpenDSSDataParser parser = new OpenDSSDataParser();
 		parser.parseFeederData("testData\\feeder\\IEEE123","IEEE123Master.dss");
 		
+		System.out.println(parser.getDistNetwork().toString());
 		
 	}
 

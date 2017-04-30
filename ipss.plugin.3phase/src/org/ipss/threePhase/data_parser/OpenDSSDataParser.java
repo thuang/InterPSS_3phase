@@ -10,14 +10,17 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.ieee.odm.common.IFileReader;
+import org.ieee.odm.common.ODMException;
 import org.ieee.odm.common.ODMLogger;
 import org.ieee.odm.common.ODMTextFileReader;
 import org.interpss.numeric.datatype.Unit.UnitType;
+import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.LineConfiguration;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 
+import com.interpss.core.net.Branch;
 import com.interpss.core.net.NetworkType;
 
 public class OpenDSSDataParser {
@@ -44,7 +47,7 @@ public class OpenDSSDataParser {
     	this.lineParser = new  OpenDSSLineParser (this);
     	this.loadParser = new  OpenDSSLoadParser (this);
     	this.capParser =  new  OpenDSSCapacitorParser (this);
-    	
+    	this.xfrParser =  new  OpenDSSTransformerParser (this);
     	//TODO tentatively, treat regulator as a fixed tap transformer
     	this.regulatorParser = new  OpenDSSRegulatorParser(this); 
     }
@@ -70,11 +73,7 @@ public class OpenDSSDataParser {
 	
 	
 	
-     public DStabNetwork3Phase getDistNet() {
-		return distNet;
-	}
-
-	public OpenDSSLineCodeParser getLineCodeParser() {
+ 	public OpenDSSLineCodeParser getLineCodeParser() {
 		return lineCodeParser;
 	}
 
@@ -106,7 +105,7 @@ public class OpenDSSDataParser {
 			
 		 String str ="", nextLine = "";
 	     int lineCnt = 0;
-	     boolean useLastStepLine = true;
+	     boolean useLastLineString = false;
 	     
 	     List<String> redirectFiles  = new ArrayList<>();
 	     
@@ -121,19 +120,27 @@ public class OpenDSSDataParser {
     				ODMLogger.getLogger().info("Start to parse feeder file and create the parser object # " + fullFilePath);
 
     		    	do {
-    		    		if(useLastStepLine){
+    		    		if(useLastLineString){
     		    			str = nextLine;
+    		    			useLastLineString = false;
     		    		}
     		    		else{
     		    			str = reader.readLine(); 
     		                lineCnt++;
     		    		}
+    		    		System.out.println("Parsing: "+str);
     		        	if (str != null && !str.trim().equals("")) {
     		        		str = str.trim();
     		        		if(str.startsWith("!") || str.startsWith("//")){
     		        			//bypass the comment
     		        		}
     		        		else if(str.startsWith("New")||str.startsWith("new")){	
+    		        			
+    		        			//Consider in-line comment using !
+    		        			if(str.indexOf("!")>0){
+    		        				str = str.substring(0, str.indexOf("!"));
+    		        			}
+    		        			
     		        			String[] tempAry = str.split("\\s+");
     		        			if(tempAry[1].contains("object=")||tempAry[1].contains("Object=")){
     		        				tempAry[1] = tempAry[1].substring(7);
@@ -149,12 +156,12 @@ public class OpenDSSDataParser {
     		        				Bus3Phase sourceBus = null;
     		        				
     		        				if(!str.contains("basekv=")){
-    		        				  nextLine  = reader.readLine();
+    		        				  nextLine  = reader.readLine().trim();
     		        				  lineCnt++;
     		        				  
     		        				  int continueIdx = nextLine.indexOf("~");
-    		        				  if(continueIdx>0){
-    		        					  nextLine = nextLine.substring(continueIdx+1);
+    		        				  if(continueIdx==0){
+    		        					  nextLine = nextLine.substring(continueIdx+1).trim();
     		        					  String[] tempAry2 = nextLine.split("\\s+");
     		        					  
     		        					  for(int i=0;i<tempAry2.length;i++ ){
@@ -197,28 +204,34 @@ public class OpenDSSDataParser {
                                 	String [] xfrStrAry = new String[3];
                                 	xfrStrAry[0] = str;
                                 	
-                                	//TODO call the getNextDataInputString() function
-                                	nextLine = reader.readLine().trim();
-                                	lineCnt++;
+                                	String[] nextStrAry = getNextDataInputString(reader);
+                                	if(nextStrAry[0]==null){
+                                		break;
+                                	}
+                                	nextLine = nextStrAry[0].trim();
+                                	lineCnt = lineCnt + Integer.valueOf(nextStrAry[1]);
                                 	
                                 	if(nextLine.startsWith("~")){
                                 		xfrStrAry[1] = nextLine;
                                 		// by default there are three line strings for one transformer definition
-                                		nextLine =reader.readLine().trim();
+                                		nextLine = reader.readLine().trim();
                                     	lineCnt++;
                                     	if(nextLine.startsWith("~")){
                                     		xfrStrAry[2] = nextLine;
                                     	}
                                     	else{
-                                    		useLastStepLine = true;
+                                    		useLastLineString = true;
                                     	}
                                 	}
                                 	else{
-                                		useLastStepLine = true;
+                                		useLastLineString = true;
                                 	}
                                 	
-                                	//TODO in the next phase, append all continuation lines to one line to simplify the implementation
-    		        				this.xfrParser.parseTransformerData(xfrStrAry);
+                                	
+    		        				if(useLastLineString) // if true, it means all xfr data is in one line
+    		        					this.xfrParser.parseTransformerDataOneLine(str);
+    		        				else
+                                	   this.xfrParser.parseTransformerDataMultiLines(xfrStrAry);
     		        			}
     		        			else if(tempAry[1].contains("Load.") ||tempAry[1].contains("load.")){
     		        				this.loadParser.parseLoadData(str);
@@ -234,8 +247,8 @@ public class OpenDSSDataParser {
     		        		else if(str.startsWith("redirect")||str.startsWith("Redirect")){
     		        			ODMLogger.getLogger().info(str);
     		        			String redictFileName = str.split("\\s+")[1];
-    		        			if(redictFileName.contains("LineCode")|| redictFileName.contains("linecode")){
-    		        				no_error=this.lineCodeParser.parseLineCodeFile(redictFileName);
+    		        			if(redictFileName.toLowerCase().contains("linecode")){
+    		        				no_error=this.lineCodeParser.parseLineCodeFile(folderPath+"\\"+redictFileName);
     		        			}
     		        			else{
     		        				no_error = no_error&&parseFile(folderPath,redictFileName);
@@ -275,7 +288,7 @@ public class OpenDSSDataParser {
     	 boolean no_error = true;
     	 String str ="", nextLine = "";
 	     int lineCnt = 0;
-	     boolean useLastStepLine = true;
+	     boolean useLastLineString = true;
 	     
 	     List<String> redirectFiles  = new ArrayList<>();
 	     
@@ -290,13 +303,15 @@ public class OpenDSSDataParser {
     				ODMLogger.getLogger().info("Start to parse file: " + fullFilePath);
     				
     		    	do {
-    		    		if(useLastStepLine){
+    		    		if(useLastLineString){
     		    			str = nextLine;
+    		    			useLastLineString =false;
     		    		}
     		    		else{
     		    			str = reader.readLine(); 
     		                lineCnt++;
     		    		}
+    		    		System.out.println("Parsing :" +str);
     		        	if (str != null && !str.trim().equals("")) {
     		        		str = str.trim();
     		        		if(str.startsWith("!") || str.startsWith("//")){
@@ -367,9 +382,13 @@ public class OpenDSSDataParser {
                                 	String [] xfrStrAry = new String[3];
                                 	xfrStrAry[0] = str;
                                 	
-                                	//TODO call the getNextDataInputString() function
-                                	nextLine = reader.readLine().trim();
-                                	lineCnt++;
+                                	
+                                	String[] nextStrAry = getNextDataInputString(reader);
+                                	if(nextStrAry[0]==null){
+                                		break;
+                                	}
+                                	nextLine = nextStrAry[0].trim();
+                                	lineCnt = lineCnt + Integer.valueOf(nextStrAry[1]);
                                 	
                                 	if(nextLine.startsWith("~")){
                                 		xfrStrAry[1] = nextLine;
@@ -380,15 +399,18 @@ public class OpenDSSDataParser {
                                     		xfrStrAry[2] = nextLine;
                                     	}
                                     	else{
-                                    		useLastStepLine = true;
+                                    		useLastLineString = true;
                                     	}
                                 	}
                                 	else{
-                                		useLastStepLine = true;
+                                		useLastLineString = true;
                                 	}
                                 	
-                                	//TODO in the next phase, append all continuation lines to one line to simplify the implementation
-    		        				this.xfrParser.parseTransformerData(xfrStrAry);
+                                	
+    		        				if(useLastLineString) // all data in one line
+    		        					this.xfrParser.parseTransformerDataOneLine(str);
+    		        				else
+                                	   this.xfrParser.parseTransformerDataMultiLines(xfrStrAry);
     		        			}
     		        			else if(tempAry[1].contains("Load.") ||tempAry[1].contains("load.")){
     		        				this.loadParser.parseLoadData(str);
@@ -449,17 +471,67 @@ public class OpenDSSDataParser {
      /**
       * skip all the comment lines (including in-line comments and block comments) to get the next data input line string, so that processing can be performed to check
       * if the next data input string is a valid input or only comments
+      * 
+      * The first return string is the data string, while the second return string is the skip line numbers
       * @param din
       * @param useLastLineString
-      * @return
+      * @return String[2] 
+      * @throws ODMException 
       */
-     private String getNextDataInputString(BufferedReader din, boolean useLastLineString){
-    	 String dataString = "";
-    	 
-    	 
-    			 
-    	return dataString;		 
+     private String[] getNextDataInputString(IFileReader reader) throws ODMException{
+    	 String dataString = null;
+    	 int skipLineNum = 0;
+    	 do{
+    		 dataString =reader.readLine();
+    		 if(dataString!=null){
+    			 dataString = dataString.trim().toLowerCase();
+    			 if(dataString.trim().length()>0){
+    				 if(dataString.startsWith("!") ||dataString.startsWith("//")){
+    					 //it is a comment line, skip
+    					 skipLineNum++;
+    				 }
+    				 else if(dataString.startsWith("/*")){
+    					 //keep search until find the "*/", which denotes the end of the comment block.
+    					 skipLineNum++;
+    					 if(!dataString.contains("*/")){
+    						 
+	    					 do{
+	    						 dataString =reader.readLine();
+	    						 skipLineNum++;
+	    						 
+	    			    		 if(dataString!=null){
+	  
+	    			    			 if(dataString.contains("*/")){
+	    			    				 break;
+	    			    			 }
+	    			    			
+	    			    		 }
+	    			    		 
+	    					 }while(dataString !=null);
+    					 }
+    				 }
+    				 else{
+    					 // now we find the next non-comment data string;
+    					 break;
+    				 }
+    			 }
+    		 }
+    		 
+    	 }while(dataString !=null);
+        
+    	String[] returnStr =  new String[]{dataString,Integer.toString(skipLineNum)};
+    	
+    	return returnStr;		 
     		
+     }
+     
+     public Branch3Phase getBranchByName(String branchName){
+    	 for(Branch bra: this.getDistNetwork().getBranchList()){
+    		 if(bra.getName().equals(branchName)){
+    			 return (Branch3Phase) bra;
+    		 }
+    	 }
+    	 return null;
      }
     
 	

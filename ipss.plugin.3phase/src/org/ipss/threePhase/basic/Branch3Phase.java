@@ -9,7 +9,7 @@ import com.interpss.dstab.DStabBranch;
 
 public interface Branch3Phase extends DStabBranch{
 	
-	//TODO add phase info
+	//TODO add phase info, 
 	
     public void setZabc(Complex3x3 Zabc);
     
