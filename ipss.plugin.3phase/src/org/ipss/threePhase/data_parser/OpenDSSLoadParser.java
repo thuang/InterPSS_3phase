@@ -1,10 +1,13 @@
 package org.ipss.threePhase.data_parser;
 
 import org.apache.commons.math3.complex.Complex;
+import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.DistLoadType;
+import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.LoadConnectionType;
+import org.ipss.threePhase.basic.impl.Load1PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 
 import com.interpss.common.exp.InterpssException;
@@ -126,7 +129,11 @@ public class OpenDSSLoadParser {
 			//get the bus object
 			Bus3Phase bus = (Bus3Phase) this.dataParser.getDistNetwork().getBus(busName);
 			
-			Load3Phase load= new Load3PhaseImpl();
+			Load1Phase load= null;
+			if(phaseNum==3)
+			    load= new Load3PhaseImpl();
+			else
+				load= new Load1PhaseImpl();
 			
 			// rated KV
 			load.setNominalKV(nominalKV);
@@ -134,15 +141,24 @@ public class OpenDSSLoadParser {
 			//load model type
 			if(modelType==1){
 				load.setLoadModelType(DistLoadType.CONST_PQ);
-				
+				if(phaseNum==3)
+					((Load3Phase)load).set3PhaseLoad(new Complex3x1(loadPQ.divide(3),loadPQ.divide(3),loadPQ.divide(3)));
+				else
+				  load.setLoadCP(loadPQ);
 			}
 			else if(modelType==2){
 				load.setLoadModelType(DistLoadType.CONST_Z);
-				
+				if(phaseNum==3)
+					((Load3Phase)load).set3PhaseLoad(new Complex3x1(loadPQ.divide(3),loadPQ.divide(3),loadPQ.divide(3)));
+				else
+				    load.setLoadCZ(loadPQ);
 			}
 			else if(modelType==5){
 				load.setLoadModelType(DistLoadType.CONST_I);
-				
+				if(phaseNum==3)
+					((Load3Phase)load).set3PhaseLoad(new Complex3x1(loadPQ.divide(3),loadPQ.divide(3),loadPQ.divide(3)));
+				else
+				    load.setLoadCI(loadPQ);
 			}
 			else{
 				no_error = false;
@@ -168,8 +184,6 @@ public class OpenDSSLoadParser {
 				
 			}
 			else if(phaseNum==1){
-				
-				
 				if(connectionType.equalsIgnoreCase("wye")){
 					load.setLoadConnectionType(LoadConnectionType.Single_Phase_Wye);
 					
@@ -189,8 +203,10 @@ public class OpenDSSLoadParser {
 			}
 			
 		 
-			
-			bus.getThreePhaseLoadList().add(load);
+			if(phaseNum==1)
+			  bus.getContributeLoadList().add(load);
+			else if(phaseNum==3)
+			  bus.getThreePhaseLoadList().add((Load3Phase) load);
 			
 			return no_error;
 			

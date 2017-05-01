@@ -5,13 +5,14 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.DistLoadType;
+import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.LoadConnectionType;
 
 import com.interpss.core.aclf.impl.AclfLoadImpl;
 import com.interpss.core.acsc.PhaseCode;
 
-public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
+public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 	
 	DistLoadType loadType = DistLoadType.CONST_PQ; // by default constant PQ
 	LoadConnectionType loadConnectType = LoadConnectionType.Three_Phase_Wye; // by default three-phase wye;
@@ -80,55 +81,50 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 
 	@Override
 	public Complex3x1 getEquivCurrInj(Complex3x1 vabc) {
-		return equivCurInj = ph3Load.divide(vabc).conjugate().multiply(-1.0);
-	}
-
-	@Override
-	public void setLoadModelType(DistLoadType loadModelType) {
-		this.loadType = loadModelType;
+		Complex3x1 loadPQ = ph3Load;
 		
-	}
-
-	@Override
-	public DistLoadType getLoadModelType() {
-		return this.loadType;
-	}
-
-	@Override
-	public void setLoadConnectionType(LoadConnectionType loadConnectType) {
-		this.loadConnectType = loadConnectType;
 		
+		switch (this.loadConnectType){
+		  case Three_Phase_Wye:
+			  if(this.loadType==DistLoadType.CONST_PQ){
+				  // default 
+			  }
+			  else if(this.loadType==DistLoadType.CONST_I){
+				  loadPQ.a_0 = ph3Load.a_0.multiply(vabc.a_0.abs());
+				  loadPQ.b_1 = ph3Load.b_1.multiply(vabc.b_1.abs());
+				  loadPQ.c_2 = ph3Load.c_2.multiply(vabc.c_2.abs());
+			  }
+			  else if(this.loadType==DistLoadType.CONST_Z){
+				  double va = vabc.a_0.abs();
+				  double vb = vabc.b_1.abs();
+				  double vc = vabc.c_2.abs();
+				  loadPQ.a_0 = ph3Load.a_0.multiply(va*va);
+				  loadPQ.b_1 = ph3Load.b_1.multiply(vb*vb);
+				  loadPQ.c_2 = ph3Load.c_2.multiply(vc*vc);
+			  }
+			  else{
+				  throw new Error("Load model type not supported yet!! Bus, load id,model type, phases: "
+				          +this.getParentBus().getId()+","+this.getId()+","+this.loadType+","+this.ph);
+			  }
+			  
+			  
+			  break;
+		  case Three_Phase_Delta:
+			  throw new Error("Connection type not supported yet!! Bus, load id,connectType, phases: "
+			          +this.getParentBus().getId()+","+this.getId()+","+this.loadConnectType+","+this.ph);
+			  
+		  default:
+			  
+			   throw new Error("Connection type and phases are not consisent!! Bus, load id,connectType, phases: "
+		          +this.getParentBus().getId()+","+this.getId()+","+this.loadConnectType+","+this.ph);
+			   
+		}
+		
+		
+		return equivCurInj = loadPQ.divide(vabc).conjugate().multiply(-1.0);
 	}
 
-	@Override
-	public LoadConnectionType getLoadConnectionType() {
-		
-		return this.loadConnectType;
-	}
-
-	@Override
-	public void setNominalKV(double ratedkV) {
-		this.nominalKV = ratedkV;
-		
-	}
-
-	@Override
-	public double getNominalKV() {
-		
-		return this.nominalKV;
-	}
-
-	@Override
-	public void setPhaseCode(PhaseCode phCode) {
-		this.ph = phCode;
-		
-	}
-
-	@Override
-	public PhaseCode getPhaseCode() {
-		
-		return this.ph;
-	}
+	
 
 
 }
