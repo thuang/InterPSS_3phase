@@ -43,7 +43,7 @@ public class OpenDSSTransformerParser {
 		double xhl = 0;
 		double losspercent1 = 0,losspercent2;
 		double kva1 = 0, kva2 = 0;
-		double normKV1 = 0, normKV2 = 0;
+		double nominalKV1 = 0, nominalKV2 = 0;
 		String xfrId = "";
 		String fromBusId = "", toBusId = "";
 		String fromConnection="", toConnection = "";
@@ -80,7 +80,7 @@ public class OpenDSSTransformerParser {
 				fromConnection = wdg1StrAry[i].substring(5);
 			}
 			else if(wdg1StrAry[i].contains("kv=")){
-				normKV1 = Double.valueOf(wdg1StrAry[i].substring(3));
+				nominalKV1 = Double.valueOf(wdg1StrAry[i].substring(3));
 			}
 			else if(wdg1StrAry[i].contains("kva=")){
 				kva1 = Double.valueOf(wdg1StrAry[i].substring(5));
@@ -99,10 +99,10 @@ public class OpenDSSTransformerParser {
 				toConnection = wdg2StrAry[i].substring(5);
 			}
 			else if(wdg2StrAry[i].contains("kv=")){
-				normKV2 = Double.valueOf(wdg2StrAry[i].substring(3));
+				nominalKV2 = Double.valueOf(wdg2StrAry[i].substring(3));
 			}
 			else if(wdg2StrAry[i].contains("kva=")){
-				kva1 = Double.valueOf(wdg2StrAry[i].substring(5));
+				kva1 = Double.valueOf(wdg2StrAry[i].substring(4));
 			}
 			else if(wdg2StrAry[i].contains("%r=")){
 				losspercent2= Double.valueOf(wdg2StrAry[i].substring(3));
@@ -118,19 +118,29 @@ public class OpenDSSTransformerParser {
 		
 		// create a transformer object
 		Branch3Phase xfrBranch = ThreePhaseObjectFactory.create3PBranch(fromBusId, toBusId, "0", this.dataParser.getDistNetwork());
+		xfrBranch.setName(xfrId);
 		xfrBranch.setBranchCode(AclfBranchCode.XFORMER);
 		
-		xfrBranch.getFromAclfBus().setBaseVoltage(normKV1, UnitType.kV);
-		xfrBranch.getToAclfBus().setBaseVoltage(normKV2, UnitType.kV);
+		// use the turn ratios to tentatively store the nominalKVs, will convert both to true ratios later.
+		xfrBranch.setFromTurnRatio(nominalKV1*1000.0);
+		xfrBranch.setToTurnRatio(nominalKV2*1000.0);
+		
+//		xfrBranch.getFromAclfBus().setBaseVoltage(normKV1, UnitType.kV);
+//		xfrBranch.getToAclfBus().setBaseVoltage(normKV2, UnitType.kV);
 		
 		//TODO calculate r based on loss percent  
 		xfrBranch.setZ( new Complex( 0.0, xhl ));
+		
+		xfrBranch.setXfrRatedKVA(kva1);
 		
 	    
 	    AcscXformer xfr0 = acscXfrAptr.apply(xfrBranch);
 	    
 	    if(fromConnection.equalsIgnoreCase("Delta")){
-		    xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
+	    	if(toConnection.equalsIgnoreCase("Delta"))
+		        xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+	    	else
+	    		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
 	    }
 	    else if(fromConnection.equalsIgnoreCase("Wye")){
 	    	xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
@@ -140,7 +150,10 @@ public class OpenDSSTransformerParser {
 	    }
 	    
 	    if(toConnection.equalsIgnoreCase("Delta")){
-		    xfr0.setToConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+	    	if(fromConnection.equalsIgnoreCase("Wye"))
+		        xfr0.setToConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
+	    	else
+	    		xfr0.setToConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
 	    }
 	    else if(toConnection.equalsIgnoreCase("Wye")){
 	    	xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
@@ -306,9 +319,12 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 			}
 		}
 		
-		xfrBranch.getFromBus().setBaseVoltage(normKV1, UnitType.kV);
-		xfrBranch.getToBus().setBaseVoltage(normKV2, UnitType.kV);
+		xfrBranch.setFromTurnRatio(normKV1*1000.0);
+		xfrBranch.setToTurnRatio(normKV2*1000.0);
 		
+//		xfrBranch.getFromBus().setBaseVoltage(normKV1, UnitType.kV);
+//		xfrBranch.getToBus().setBaseVoltage(normKV2, UnitType.kV);
+//		
 		//TODO calculate r based on loss percent  
 		xfrBranch.setZ( new Complex( 0.0, xhl ));
 		
@@ -318,7 +334,10 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 	    AcscXformer xfr0 = acscXfrAptr.apply(xfrBranch);
 	    
 	    if(fromConnection.equalsIgnoreCase("Delta")){
-		    xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
+	    	if(toConnection.equalsIgnoreCase("Delta"))
+		        xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+	    	else
+	    		xfr0.setFromConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
 	    }
 	    else if(fromConnection.equalsIgnoreCase("Wye")){
 	    	xfr0.setFromConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
@@ -328,7 +347,10 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 	    }
 	    
 	    if(toConnection.equalsIgnoreCase("Delta")){
-		    xfr0.setToConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
+	    	if(fromConnection.equalsIgnoreCase("Wye"))
+		        xfr0.setToConnectGroundZ(XfrConnectCode.DELTA11, new Complex(0.0,0.0), UnitType.PU);
+	    	else
+	    		xfr0.setToConnectGroundZ(XfrConnectCode.DELTA, new Complex(0.0,0.0), UnitType.PU);
 	    }
 	    else if(toConnection.equalsIgnoreCase("Wye")){
 	    	xfr0.setToConnectGroundZ(XfrConnectCode.WYE_SOLID_GROUNDED, new Complex(0.0,0.0), UnitType.PU);
@@ -336,6 +358,7 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 	    else{
 	    	throw new Error("Transformer connection type at winding 2 is not supported yet #"+toConnection);
 	    }
+	    
 		
 		
 		

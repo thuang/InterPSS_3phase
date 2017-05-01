@@ -11,6 +11,6 @@ package org.ipss.threePhase.basic;
 	7:Const P, Fixed Impedance Q
 	8:ZIPV (7 values)
  */
-public enum DistLoadType {
-    CONST_PQ, CONST_I,CONST_Z, CONST_P_QUAD_Q, LINEAR_P_QUAD_Q,CONST_P_FIXED_Q,CONST_P_FIXED_Z_Q,ZIP
-}
+//public enum DistLoadType {
+//    CONST_PQ, CONST_I,CONST_Z, CONST_P_QUAD_Q, LINEAR_P_QUAD_Q,CONST_P_FIXED_Q,CONST_P_FIXED_Z_Q,ZIP
+//}

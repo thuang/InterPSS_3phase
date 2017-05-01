@@ -20,6 +20,7 @@ import org.ipss.threePhase.basic.LineConfiguration;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 
+import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.net.Branch;
 import com.interpss.core.net.NetworkType;
 
@@ -187,6 +188,7 @@ public class OpenDSSDataParser {
     		        					  if(distNet.getBus(sourceBusId)==null)
     		        							sourceBus = ThreePhaseObjectFactory.create3PDStabBus(sourceBusId, distNet);
     		        					  
+    		        					  sourceBus.setGenCode(AclfGenCode.SWING);
     		        					  sourceBus.setBaseVoltage(basekv, UnitType.kV);
     		        					  
     		        					  sourceBus.setVoltageMag(basekv);

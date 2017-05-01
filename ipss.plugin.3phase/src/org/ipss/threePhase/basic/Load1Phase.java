@@ -29,13 +29,13 @@ public interface Load1Phase extends AclfLoad {
 	 * set the load model type, such as constant PQ, constant current, constant impedance, etc.
 	 * @param loadModelType
 	 */
-	public void setLoadModelType(DistLoadType loadModelType);
-	
-	/**
-	 * get the load model type, such as constant PQ, constant current, constant impedance, etc.
-	 * @return
-	 */
-	public DistLoadType getLoadModelType();
+//	public void setLoadModelType(DistLoadType loadModelType);
+//	
+//	/**
+//	 * get the load model type, such as constant PQ, constant current, constant impedance, etc.
+//	 * @return
+//	 */
+//	public DistLoadType getLoadModelType();
 	
 	/**
 	 * set the load connection type. The connection type could be single phase wye, single phase delta, three phase wye and three phase delta.

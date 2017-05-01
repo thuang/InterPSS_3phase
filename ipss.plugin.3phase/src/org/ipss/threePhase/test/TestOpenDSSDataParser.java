@@ -1,18 +1,31 @@
 package org.ipss.threePhase.test;
 
+import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.numeric.datatype.Complex3x3;
+import org.ipss.threePhase.basic.Branch3Phase;
+import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.LineConfiguration;
+import org.ipss.threePhase.basic.Load1Phase;
+import org.ipss.threePhase.basic.LoadConnectionType;
 import org.ipss.threePhase.data_parser.OpenDSSDataParser;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.junit.Test;
 
+import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.aclf.adpter.AclfXformer;
+import com.interpss.core.acsc.PhaseCode;
+import com.interpss.core.acsc.XfrConnectCode;
+import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.net.Bus;
 
 public class TestOpenDSSDataParser {
@@ -92,7 +105,7 @@ public class TestOpenDSSDataParser {
 	}
 	
 	@Test
-	public void testLineParser(){
+	public void testDataParser(){
 		
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -104,13 +117,126 @@ public class TestOpenDSSDataParser {
 		DStabNetwork3Phase distNet = parser.getDistNetwork();
 		
 		
-		System.out.println(parser.getDistNetwork().toString());
+		
+		//System.out.println(parser.getDistNetwork().net2String());
+		
+		String netStrFileName = "testData\\feeder\\IEEE123\\ieee123_netString.dat";
+		try {
+			Files.write(Paths.get(netStrFileName), parser.getDistNetwork().net2String().getBytes());
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
 		System.out.println("total number of buses: "+distNet.getNoActiveBus());
 //		assertTrue(distNet.getNoActiveBus()==123);
 		
 		for(Bus b: distNet.getBusList()){
 			System.out.println(b.getId());
 		}
+		
+		//1. test lineParser
+		  //1.a  Zabc, Yabc for 3phase line
+		
+		/*New Line.L10    Phases=3 Bus1=8.1.2.3    Bus2=13.1.2.3   LineCode=1    Length=0.3*/
+		//NOTE: all are converted to lowercase
+		 Branch3Phase line3phase = parser.getBranchByName("l10");
+		 
+		 LineConfiguration lc1 = parser.getLineConfigTable().get("1");
+		 assertTrue(line3phase.getZabc().subtract(lc1.getZ3x3Matrix().multiply(0.3)).absMax()<1.0E-6);
+		   
+		
+		  //1.b  Zabc, Yabc for 1-phase and 2-phase lines
+		 
+		   //New Line.L27    Phases=2 Bus1=26.1.3     Bus2=27.1.3     LineCode=7    Length=0.275
+		  Branch3Phase line2phase = parser.getBranchByName("l27");
+		  System.out.println("L27 Zabc =" +line2phase.getZabc().toString());
+		  double length = 0.275;
+		  
+		  LineConfiguration lc7 = parser.getLineConfigTable().get("7");
+		  assertTrue(line2phase.getZabc().aa.subtract(lc7.getZ3x3Matrix().aa.multiply(length)).abs()<1.0E-9);
+		  assertTrue(line2phase.getZabc().ac.subtract(lc7.getZ3x3Matrix().ac.multiply(length)).abs()<1.0E-9);
+		  assertTrue(line2phase.getZabc().cc.subtract(lc7.getZ3x3Matrix().cc.multiply(length)).abs()<1.0E-9);
+		  assertTrue(line2phase.getZabc().ab.abs()<1.0E-9);
+		  assertTrue(line2phase.getZabc().ba.abs()<1.0E-9);
+		  
+		  //New Line.L28    Phases=1 Bus1=26.3       Bus2=31.3       LineCode=11   Length=0.225
+		  Branch3Phase line1phase = parser.getBranchByName("l28");
+		  LineConfiguration lc11 = parser.getLineConfigTable().get("11");
+		  length = 0.225;
+		  
+		  assertTrue(line1phase.getZabc().cc.subtract(lc11.getZ3x3Matrix().cc.multiply(length)).abs()<1.0E-9);
+		  assertTrue(line1phase.getZabc().bb.abs()<1.0E-9);
+		  assertTrue(line1phase.getZabc().aa.abs()<1.0E-9);
+		  assertTrue(line1phase.getZabc().ab.abs()<1.0E-9);
+		  assertTrue(line1phase.getZabc().ac.abs()<1.0E-9);
+		  
+		//2. test transformer parser
+		  /*
+		   * New Transformer.XFM1  Phases=3   Windings=2 Xhl=2.72
+			~ wdg=1 bus=61s       conn=Delta kv=4.16    kva=150    %r=0.635
+			~ wdg=2 bus=610       conn=Delta kv=0.48    kva=150    %r=0.635
+		   */
+		  
+		  Branch3Phase xfr1 = parser.getBranchByName("xfm1");
+		  assertTrue(xfr1.getZ().subtract(new Complex(0,2.72)).abs()<1.0E-9);
+		  assertTrue(xfr1.getFromBus().getId().equals("61s"));
+		  assertTrue(xfr1.getToBus().getId().equals("610"));
+		  
+		  //TODO in the future, could add the nominalKV info to the transformer
+		  assertTrue(Math.abs(xfr1.getFromTurnRatio()-4160)<1.0E-6);
+		  assertTrue(Math.abs(xfr1.getToTurnRatio()-480)<1.0E-6);
+		  
+		  assertTrue(Math.abs(xfr1.getXfrRatedKVA()-150)<1.0E-6);
+		  
+		  AcscXformer xfr10 = acscXfrAptr.apply(xfr1);
+		  assertTrue(xfr10.getFromConnect()==XfrConnectCode.DELTA);
+		  assertTrue(xfr10.getToConnect()==XfrConnectCode.DELTA);
+		  
+		  /*
+		   * new transformer.reg4a phases=1          windings=2        buses=[160.1 160r.1]   conns=[wye wye]       kvs=[2.402 2.402] kvas=[2000 2000] XHL=.01 %LoadLoss=0.00001 ppm=0.0 
+		   */
+		  
+		  Branch3Phase xfr2 = parser.getBranchByName("reg4a");
+		  assertTrue(xfr2.getZ().subtract(new Complex(0,0.01)).abs()<1.0E-9);
+		  assertTrue(xfr2.getFromBus().getId().equals("160"));
+		  assertTrue(xfr2.getToBus().getId().equals("160r"));
+		  
+		  //TODO in the future, could add the nominalKV info to the transformer
+		  assertTrue(Math.abs(xfr2.getFromTurnRatio()-2402)<1.0E-6);
+		  assertTrue(Math.abs(xfr2.getToTurnRatio()-2402)<1.0E-6);
+		  
+		  assertTrue(Math.abs(xfr2.getXfrRatedKVA()-2000)<1.0E-6);
+		  
+		  AcscXformer xfr20 = acscXfrAptr.apply(xfr2);
+		  assertTrue(xfr20.getFromConnect()==XfrConnectCode.WYE_SOLID_GROUNDED);
+		  assertTrue(xfr20.getToConnect()==XfrConnectCode.WYE_SOLID_GROUNDED);
+		  
+		//3. test load parser
+		
+		   //New Load.S1a   Bus1=1.1    Phases=1 Conn=Wye   Model=1 kV=2.4   kW=40.0  kvar=20.0
+		  Bus3Phase bus1 = (Bus3Phase) distNet.getBus("1");
+		  Load1Phase ld_s1a= (Load1Phase) bus1.getContributeLoad("s1a");
+		  assertTrue(ld_s1a.getLoadCP().subtract(new Complex(40,20)).abs()<1.0E-9);
+		  assertTrue(ld_s1a.getLoadConnectionType()==LoadConnectionType.Single_Phase_Wye);
+		  assertTrue(Math.abs(ld_s1a.getNominalKV()-2.4)<1.0E-9);
+		  assertTrue(ld_s1a.getCode()==AclfLoadCode.CONST_P);
+		  assertTrue(ld_s1a.getPhaseCode()==PhaseCode.A);
+		  
+		  
+		  /*
+		   * New Load.S35a  Bus1=35.1.2 Phases=1 Conn=Delta Model=1 kV=4.160 kW=40.0  kvar=20.0
+		   */
+		  Bus3Phase bus35 = (Bus3Phase) distNet.getBus("35");
+		  Load1Phase ld_s35a= (Load1Phase) bus35.getContributeLoad("s35a");
+		  assertTrue(ld_s35a.getLoadCP().subtract(new Complex(40,20)).abs()<1.0E-9);
+		  assertTrue(ld_s35a.getLoadConnectionType()==LoadConnectionType.Single_Phase_Delta);
+		  assertTrue(Math.abs(ld_s35a.getNominalKV()-4.160)<1.0E-9);
+		  assertTrue(ld_s35a.getCode()==AclfLoadCode.CONST_P);
+		  assertTrue(ld_s35a.getPhaseCode()==PhaseCode.AB);
+		  
+		//4. test capacitor parser
 		
 	}
 

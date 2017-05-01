@@ -3,7 +3,6 @@ package org.ipss.threePhase.data_parser;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.DistLoadType;
 import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.LoadConnectionType;
@@ -11,6 +10,8 @@ import org.ipss.threePhase.basic.impl.Load1PhaseImpl;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 
 import com.interpss.common.exp.InterpssException;
+import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.acsc.PhaseCode;
 
 public class OpenDSSLoadParser {
 	
@@ -68,7 +69,7 @@ public class OpenDSSLoadParser {
 			double loadP = 0.0, loadQ  = 0.0;
 			double powerfactor = 0.0;
 			
-			String[] loadStrAry = loadStr.trim().split("\\s+");
+			String[] loadStrAry = loadStr.toLowerCase().trim().split("\\s+");
 			
 			for(int i = 0; i <loadStrAry.length;i++){
 				if(loadStrAry[i].startsWith("Load.")||loadStrAry[i].startsWith("load.")){
@@ -94,6 +95,9 @@ public class OpenDSSLoadParser {
 				}
 				else if(loadStrAry[i].startsWith("PF=")||loadStrAry[i].startsWith("pf=")){
 					 powerfactor=Double.valueOf(loadStrAry[i].substring(3));
+				}
+				else if(loadStrAry[i].startsWith("kv=")){
+					nominalKV = Double.valueOf(loadStrAry[i].substring(3));
 				}
 				
 				
@@ -135,26 +139,31 @@ public class OpenDSSLoadParser {
 			else
 				load= new Load1PhaseImpl();
 			
+			//load ID
+			load.setId(loadId);
 			// rated KV
 			load.setNominalKV(nominalKV);
 			
 			//load model type
 			if(modelType==1){
-				load.setLoadModelType(DistLoadType.CONST_PQ);
+				//TODO extend AclfLoadCode instead of introducing a new load model type
+				load.setCode(AclfLoadCode.CONST_P);
+				
 				if(phaseNum==3)
 					((Load3Phase)load).set3PhaseLoad(new Complex3x1(loadPQ.divide(3),loadPQ.divide(3),loadPQ.divide(3)));
 				else
-				  load.setLoadCP(loadPQ);
+				   load.setLoadCP(loadPQ);
 			}
 			else if(modelType==2){
-				load.setLoadModelType(DistLoadType.CONST_Z);
+				load.setCode(AclfLoadCode.CONST_Z);
+				
 				if(phaseNum==3)
 					((Load3Phase)load).set3PhaseLoad(new Complex3x1(loadPQ.divide(3),loadPQ.divide(3),loadPQ.divide(3)));
 				else
 				    load.setLoadCZ(loadPQ);
 			}
 			else if(modelType==5){
-				load.setLoadModelType(DistLoadType.CONST_I);
+				load.setCode(AclfLoadCode.CONST_I);
 				if(phaseNum==3)
 					((Load3Phase)load).set3PhaseLoad(new Complex3x1(loadPQ.divide(3),loadPQ.divide(3),loadPQ.divide(3)));
 				else
@@ -202,11 +211,48 @@ public class OpenDSSLoadParser {
 				}
 			}
 			
+			
+			// process phase code
+			
+			if(phaseNum==3)
+				load.setPhaseCode(PhaseCode.ABC);
+			else if(phaseNum==1){
+				if(phase2.equals("")){
+					if(phase1.equals("1")){
+						load.setPhaseCode(PhaseCode.A);
+					}
+					else if(phase1.equals("2")){
+						load.setPhaseCode(PhaseCode.B);
+					}
+					else if(phase1.equals("3")){
+						load.setPhaseCode(PhaseCode.C);				
+					}
+					else{
+						no_error = false;
+						throw new Error("Connection phases not supported yet! # "+ phase1);
+					}
+				}
+				else{
+					if((phase1.equals("1") && phase2.equals("2"))  || (phase1.equals("2") && phase2.equals("1")))
+						load.setPhaseCode(PhaseCode.AB);
+					else if((phase1.equals("1") && phase2.equals("3"))||(phase1.equals("3") && phase2.equals("1")))
+						load.setPhaseCode(PhaseCode.AC);
+					else if((phase1.equals("2") && phase2.equals("3"))||(phase1.equals("3") && phase2.equals("2")))
+						load.setPhaseCode(PhaseCode.BC);
+					else{
+						no_error = false;
+						throw new Error("Connection phases not supported yet!  phase1, 2 = "+ phase1+","+ phase2);
+					}
+				}
+			}
 		 
 			if(phaseNum==1)
 			  bus.getContributeLoadList().add(load);
 			else if(phaseNum==3)
 			  bus.getThreePhaseLoadList().add((Load3Phase) load);
+			
+			//TODO The following setting does NOT mean all the loads are constP type, it is a known limitation with bus level loadcode setting
+			bus.setLoadCode(AclfLoadCode.CONST_P);
 			
 			return no_error;
 			

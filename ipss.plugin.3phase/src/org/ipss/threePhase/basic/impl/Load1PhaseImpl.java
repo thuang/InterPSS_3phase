@@ -4,7 +4,6 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.DistLoadType;
 import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.LoadConnectionType;
 
@@ -13,7 +12,7 @@ import com.interpss.core.acsc.PhaseCode;
 
 public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 	
-	DistLoadType loadType = DistLoadType.CONST_PQ; // by default constant PQ
+	
 	LoadConnectionType loadConnectType = LoadConnectionType.Single_Phase_Wye; // by default three-phase wye;
 	double nominalKV = 0; 
 
@@ -123,17 +122,17 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 		return equivCurInj;
 	}
 
-	@Override
-	public void setLoadModelType(DistLoadType loadModelType) {
-		this.loadType = loadModelType;
-		
-	}
-
-	@Override
-	public DistLoadType getLoadModelType() {
-		
-		return this.loadType;
-	}
+//	@Override
+//	public void setLoadModelType(DistLoadType loadModelType) {
+//		this.loadType = loadModelType;
+//		
+//	}
+//
+//	@Override
+//	public DistLoadType getLoadModelType() {
+//		
+//		return this.loadType;
+//	}
 
 	@Override
 	public void setLoadConnectionType(LoadConnectionType loadConnectType) {

@@ -59,7 +59,7 @@ public class OpenDSSLineParser {
 		
 		for(int i = 0;i<lineStrAry.length;i++){
 			if(lineStrAry[i].contains("line.")){
-				lineName    = lineStrAry[i].substring(4);
+				lineName    = lineStrAry[i].substring(5);
 			}
 			else if(lineStrAry[i].contains("phases=")){
 				phaseIdx = i;
