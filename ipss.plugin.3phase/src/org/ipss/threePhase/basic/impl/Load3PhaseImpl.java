@@ -20,8 +20,9 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 	Complex3x1 ph3Load = new Complex3x1();
 	Complex3x3 equivYabc = new Complex3x3();
 	
-	//TODO
-	// ADD load connection type, either wye- or delta-connected 
+	PhaseCode  ph = PhaseCode.ABC;
+	// ADD load connection type, either wye- or delta-connected
+	
 	
 	private  Complex3x1 equivCurInj = null;
 	
@@ -116,5 +117,18 @@ public class Load3PhaseImpl extends AclfLoadImpl implements Load3Phase {
 		
 		return this.nominalKV;
 	}
+
+	@Override
+	public void setPhaseCode(PhaseCode phCode) {
+		this.ph = phCode;
+		
+	}
+
+	@Override
+	public PhaseCode getPhaseCode() {
+		
+		return this.ph;
+	}
+
 
 }
