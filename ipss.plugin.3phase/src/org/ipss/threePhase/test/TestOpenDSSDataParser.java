@@ -239,5 +239,49 @@ public class TestOpenDSSDataParser {
 		//4. test capacitor parser
 		
 	}
+	
+	@Test
+	public void testCalcBaseVoltage(){
+		
+		IpssCorePlugin.init();
+		IpssCorePlugin.setLoggerLevel(Level.INFO);
+		
+		OpenDSSDataParser parser = new OpenDSSDataParser();
+		parser.parseFeederData("testData\\feeder\\IEEE123","IEEE123Master.dss");
+		
+		parser.calcVoltageBases();
+		DStabNetwork3Phase distNet = parser.getDistNetwork();
+		
+		System.out.println("bus Id, baseVoltage");
+		double vll4160 = 4160.0;
+		double vll480 = 480.0;
+		double sumDiff = 0.0;
+		for(Bus b: distNet.getBusList()){
+			//System.out.println(b.getId()+","+b.getBaseVoltage());
+			if(b.getId().equals("610"))
+				sumDiff += b.getBaseVoltage()-vll480;
+			else
+				sumDiff += b.getBaseVoltage()-vll4160;
+				
+		}
+		
+		assertTrue(Math.abs(sumDiff)<1.0E-9);
+	}
+	
+	@Test
+	public void testConvertValuesToPU(){
+		
+		IpssCorePlugin.init();
+		IpssCorePlugin.setLoggerLevel(Level.INFO);
+		
+		OpenDSSDataParser parser = new OpenDSSDataParser();
+		parser.parseFeederData("testData\\feeder\\IEEE123","IEEE123Master.dss");
+		
+		parser.calcVoltageBases();
+		parser.convertActualValuesToPU();
+		
+		
+	}
+	
 
 }

@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.ieee.odm.common.IFileReader;
 import org.ieee.odm.common.ODMException;
@@ -20,8 +22,12 @@ import org.ipss.threePhase.basic.LineConfiguration;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 
+import com.interpss.common.exp.InterpssException;
+import com.interpss.core.aclf.AclfBranch;
+import com.interpss.core.aclf.AclfBus;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.net.Branch;
+import com.interpss.core.net.Bus;
 import com.interpss.core.net.NetworkType;
 
 public class OpenDSSDataParser {
@@ -451,13 +457,94 @@ public class OpenDSSDataParser {
      
      
      public boolean initNetwork(){
-    	 boolean no_error = initBusBasekV() & convertBranchZYMatrixToPU();
+    	 boolean no_error = calcVoltageBases() & convertActualValuesToPU();
     	 return no_error;
      }
-     private boolean initBusBasekV(){
+     public boolean calcVoltageBases(){
     	 boolean no_error = true;
     	 
-    	 //TODO
+    	 Queue<Bus3Phase> onceVisitedBuses = new  LinkedList<>();
+ 		
+ 		// find the source bus, which is the swing bus for radial feeders;
+ 		for(AclfBus b: distNet.getBusList()){
+ 				if(b.isActive() && b.isSwing()){
+ 					onceVisitedBuses.add((Bus3Phase) b);
+ 					b.setIntFlag(1);
+ 				}
+ 				else{
+ 					b.setIntFlag(0);
+ 					b.setBooleanFlag(false);
+ 				}
+ 		}
+ 		
+ 		//make sure all internal branches are unvisited
+ 		for(AclfBranch bra:distNet.getBranchList()){
+ 			bra.setBooleanFlag(false);
+ 		}
+
+ 		// perform BFS and set the bus sortNumber 
+ 		BFS(onceVisitedBuses);
+ 		
+
+
+    	 return no_error;
+     }
+     
+	
+    private void BFS (Queue<Bus3Phase> onceVisitedBuses){
+ 	int orderNumber = 0;
+		//Retrieves and removes the head of this queue, or returns null if this queue is empty.
+	    while(!onceVisitedBuses.isEmpty()){
+			Bus3Phase  startingBus = onceVisitedBuses.poll();
+			startingBus.setSortNumber(orderNumber++);
+			startingBus.setBooleanFlag(true);
+			startingBus.setIntFlag(2);
+			
+			if(startingBus!=null){
+				  for(Branch connectedBra: startingBus.getBranchList()){
+					  AclfBranch aclfBra = (AclfBranch) connectedBra;
+						if(!connectedBra.isBooleanFlag()){
+							try {
+								Bus findBus = connectedBra.getOppositeBus(startingBus);
+								
+								//update status
+								connectedBra.setBooleanFlag(true);
+								
+								//for first time visited buses
+								if(findBus.getIntFlag()==0){
+									findBus.setIntFlag(1);
+									onceVisitedBuses.add((Bus3Phase) findBus);
+									
+									//update the L-L basekV
+									if(aclfBra.isLine()){
+										findBus.setBaseVoltage(startingBus.getBaseVoltage());
+									}
+									else{
+										//check from/ to relationship before using the turn ratio info
+										if(aclfBra.getFromBus().getId().equals(startingBus.getId()))
+											findBus.setBaseVoltage(startingBus.getBaseVoltage()*aclfBra.getToTurnRatio()/aclfBra.getFromTurnRatio());
+										else
+											findBus.setBaseVoltage(startingBus.getBaseVoltage()*aclfBra.getFromTurnRatio()/aclfBra.getToTurnRatio());
+									}
+									
+								}
+							} catch (InterpssException e) {
+								
+								e.printStackTrace();
+							}
+							
+						}
+				 }
+			 
+			}
+			
+	      }
+	}
+     
+     public boolean convertActualValuesToPU(){
+    	 boolean no_error = convertBranchZYMatrixToPU()&&convertLoadCapacitorToPU();
+    	 
+    	 //TODO set the distribution system mvabase to 10 MVA
     	 
     	 return no_error;
      }
@@ -469,6 +556,14 @@ public class OpenDSSDataParser {
     	 
     	  return no_error;
      }
+     
+     private boolean convertLoadCapacitorToPU(){
+         boolean no_error = true;
+   	 
+         //TODO
+   	 
+   	  return no_error;
+    }
      
      /**
       * skip all the comment lines (including in-line comments and block comments) to get the next data input line string, so that processing can be performed to check

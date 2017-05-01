@@ -60,6 +60,10 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		for(AclfBus b: distNet.getBusList()){
 				if(b.isActive() && b.isSwing()){
 					onceVisitedBuses.add((Bus3Phase) b);
+					b.setIntFlag(1);
+				}
+				else{
+					b.setIntFlag(0);
 				}
 		}
 		
