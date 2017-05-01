@@ -31,6 +31,7 @@ public class OpenDSSLineParser {
 		String  toBusId = "";
 		String  toBusPhases = "1.2.3"; // by default;
 		String  lineCodeId = "";
+		String  units = "";
 		double  lineLength = 0;
 		int     phaseNum = 3;    // 3 phases by default
 		
@@ -54,29 +55,32 @@ public class OpenDSSLineParser {
 		double r1= 0,r0 = 0, x1 = 0, x0 = 0, c1 = 0, c0 = 0;
 		
 
-		String[] lineStrAry = lineStr.split("\\s+");
+		String[] lineStrAry = lineStr.toLowerCase().split("\\s+");
 		
 		for(int i = 0;i<lineStrAry.length;i++){
-			if(lineStrAry[i].contains("Line.")){
+			if(lineStrAry[i].contains("line.")){
 				lineName    = lineStrAry[i].substring(4);
 			}
-			else if(lineStrAry[i].contains("Phases=")){
+			else if(lineStrAry[i].contains("phases=")){
 				phaseIdx = i;
 				phaseNum  = Integer.valueOf(lineStrAry[i].substring(7));
 			}
 			
-			else if(lineStrAry[i].contains("Bus1=")){
+			else if(lineStrAry[i].contains("bus1=")){
 				fromBusStr = lineStrAry[i].substring(5);
 			}
-			else if(lineStrAry[i].contains("Bus2=")){
+			else if(lineStrAry[i].contains("bus2=")){
 				toBusStr = lineStrAry[i].substring(5);
 			}
-			else if(lineStrAry[i].contains("LineCode=")){
+			else if(lineStrAry[i].contains("linecode=")){
 				lineCodeIdx = i;
 				lineCodeId= lineStrAry[i].substring(9);
 			}
-			else if(lineStrAry[i].contains("Length=")){
+			else if(lineStrAry[i].contains("length=")){
 				lineLength = Double.valueOf(lineStrAry[i].substring(7));
+			}
+			else if(lineStrAry[i].contains("units=")){
+				units = lineStrAry[i].substring(5);
 			}
 			else if(lineStrAry[i].contains("r1=")){
 				r1 = Double.valueOf(lineStrAry[i].substring(3));
@@ -211,12 +215,6 @@ public class OpenDSSLineParser {
 		}
 						
 			
-			
-			
-		
-		// line parameters defined by raw input data
-	
-		
 		if(distNet.getBus(fromBusId)==null)
 			fromBus = ThreePhaseObjectFactory.create3PDStabBus(fromBusId, distNet);
 		
@@ -243,7 +241,7 @@ public class OpenDSSLineParser {
 		
 	}
 	
-	private boolean parseLineDataWithoutLineCode(String lineStr) throws InterpssException{
+	private boolean parseLineDataWithLineCode(String lineStr) throws InterpssException{
 		boolean no_error = true;
 		
         final String  DOT = ".";
@@ -254,11 +252,13 @@ public class OpenDSSLineParser {
 		String  toBusId = "";
 		String  toBusPhases = "1.2.3"; // by default;
 		String  lineCodeId = "";
-		double  lineLength = 0;
+		String  units = "";
+		double  lineLength = 1.0; // by default is 1.0
 		int     phaseNum = 3;    // 3 phases by default
 		
 		String  fromBusStr = "";
 		String  toBusStr = "";
+		
 		
 		DStabNetwork3Phase distNet = this.dataParser.getDistNetwork();
 		
@@ -284,13 +284,20 @@ public class OpenDSSLineParser {
 		fromBusStr = lineStrAry[fromBusIdx].substring(4);
 		toBusStr   = lineStrAry[toBusIdx].substring(4);
 		lineCodeId = lineStrAry[lineCodeIdx].substring(9);
-		lineLength = Double.valueOf(lineStrAry[lengthIdx].substring(7));		
+		lineLength = Double.valueOf(lineStrAry[lengthIdx].substring(7));
+		
+		for(int i =0;i<lineStrAry.length;i++){
+			//TODO
+				
+				
+				
+		}
 		
 		//busId is the substring before the first DOT
 		//phases info is defined in the substring after the first DOT
 		if(fromBusStr.contains(DOT)){
 			fromBusId = fromBusStr.substring(0, fromBusStr.indexOf(DOT));
-		    fromBusPhases = fromBusId = fromBusStr.substring( fromBusStr.indexOf(DOT)+1);
+		    fromBusPhases =  fromBusStr.substring( fromBusStr.indexOf(DOT)+1);
 		}else{
 			fromBusId = fromBusStr;
 			
@@ -298,7 +305,8 @@ public class OpenDSSLineParser {
 		
 		if(toBusStr.contains(DOT)){
 			toBusId = toBusStr.substring(0, toBusStr.indexOf(DOT));
-		    toBusPhases = toBusId = toBusStr.substring( toBusStr.indexOf(DOT)+1);
+			
+		    toBusPhases = toBusStr.substring( toBusStr.indexOf(DOT)+1);
 		}else{
 			fromBusId = toBusStr;
 			

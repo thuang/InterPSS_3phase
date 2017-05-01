@@ -10,7 +10,10 @@ import org.interpss.IpssCorePlugin;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.LineConfiguration;
 import org.ipss.threePhase.data_parser.OpenDSSDataParser;
+import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.junit.Test;
+
+import com.interpss.core.net.Bus;
 
 public class TestOpenDSSDataParser {
 	
@@ -97,7 +100,17 @@ public class TestOpenDSSDataParser {
 		OpenDSSDataParser parser = new OpenDSSDataParser();
 		parser.parseFeederData("testData\\feeder\\IEEE123","IEEE123Master.dss");
 		
+		
+		DStabNetwork3Phase distNet = parser.getDistNetwork();
+		
+		
 		System.out.println(parser.getDistNetwork().toString());
+		System.out.println("total number of buses: "+distNet.getNoActiveBus());
+//		assertTrue(distNet.getNoActiveBus()==123);
+		
+		for(Bus b: distNet.getBusList()){
+			System.out.println(b.getId());
+		}
 		
 	}
 

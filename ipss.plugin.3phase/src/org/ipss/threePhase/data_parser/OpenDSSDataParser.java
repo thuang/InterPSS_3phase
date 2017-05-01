@@ -132,7 +132,7 @@ public class OpenDSSDataParser {
     		        	if (str != null && !str.trim().equals("")) {
     		        		str = str.trim();
     		        		if(str.startsWith("!") || str.startsWith("//")){
-    		        			//bypass the comment
+    		        			//bypass the comments
     		        		}
     		        		else if(str.startsWith("New")||str.startsWith("new")){	
     		        			
@@ -169,7 +169,7 @@ public class OpenDSSDataParser {
     		        							  basekv = Double.valueOf(tempAry2[i].substring(7));
     		        						  }
     		        						  else if(tempAry2[i].contains("Bus1=")){
-    		        							  sourceBusId = tempAry2[i].substring(4);
+    		        							  sourceBusId = tempAry2[i].substring(5);
     		        						  }
     		        						  else if(tempAry2[i].contains("pu=")){
     		        							  volt_pu = Double.valueOf(tempAry2[i].substring(3));

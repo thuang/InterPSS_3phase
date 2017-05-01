@@ -134,15 +134,15 @@ public class OpenDSSLoadParser {
 			//load model type
 			if(modelType==1){
 				load.setLoadModelType(DistLoadType.CONST_PQ);
-				load.setLoadCP(loadPQ);
+				
 			}
 			else if(modelType==2){
 				load.setLoadModelType(DistLoadType.CONST_Z);
-				load.setLoadCZ(loadPQ);
+				
 			}
 			else if(modelType==5){
 				load.setLoadModelType(DistLoadType.CONST_I);
-				load.setLoadCI(loadPQ);
+				
 			}
 			else{
 				no_error = false;
@@ -168,8 +168,11 @@ public class OpenDSSLoadParser {
 				
 			}
 			else if(phaseNum==1){
+				
+				
 				if(connectionType.equalsIgnoreCase("wye")){
 					load.setLoadConnectionType(LoadConnectionType.Single_Phase_Wye);
+					
 				}
 				else if(connectionType.equalsIgnoreCase("delta")){
 					if(phase1.length()>0 && phase2.length()>0)
