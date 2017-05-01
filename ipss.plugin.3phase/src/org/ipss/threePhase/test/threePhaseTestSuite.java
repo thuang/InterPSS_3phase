@@ -15,6 +15,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	TwoBus_3Phase_Test.class,
 	ThreeBus_3Phase_Test.class,
 	
+	//OpenDSS data adapter
+	TestOpenDSSDataParser.class,
 	
 	// Init from positive sequence load flow
 	IEEE9Bus_3phase_LF_init_test.class,

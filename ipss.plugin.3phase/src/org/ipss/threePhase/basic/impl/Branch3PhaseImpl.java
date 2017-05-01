@@ -10,10 +10,12 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.dstab.impl.DStabBranchImpl;
 
 public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
    
+	private PhaseCode phaseCode = PhaseCode.ABC;
 	private Complex3x3 Zabc =null;
 	private Complex3x3 Yabc =null;
 	private Complex3x3 fromShuntYabc =null;
@@ -389,6 +391,18 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 	public void setCurrentAbcAtToSide(Complex3x1 IabcToBus) {
 		this.currInjAtToBus = IabcToBus;
 		
+	}
+
+	@Override
+	public void setPhaseCode(PhaseCode phCode) {
+		this.phaseCode = phCode;
+		
+	}
+
+	@Override
+	public PhaseCode getPhaseCode() {
+		
+		return this.phaseCode;
 	}
 
 }

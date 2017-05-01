@@ -5,11 +5,15 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 
 import com.interpss.core.acsc.AcscBranch;
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.dstab.DStabBranch;
 
 public interface Branch3Phase extends DStabBranch{
 	
-	//TODO add phase info, 
+	// phase code is currently used in the transformer; for lines, Zabc reflects the connection phases
+	public void setPhaseCode(PhaseCode phCode);
+	
+	public PhaseCode getPhaseCode();
 	
     public void setZabc(Complex3x3 Zabc);
     

@@ -9,6 +9,7 @@ import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 
 import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranchCode;
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 
@@ -133,6 +134,8 @@ public class OpenDSSTransformerParser {
 		
 		xfrBranch.setXfrRatedKVA(kva1);
 		
+		//TODO to add the phase info to the Branch3Phase
+		
 	    
 	    AcscXformer xfr0 = acscXfrAptr.apply(xfrBranch);
 	    
@@ -189,7 +192,7 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 		String fromBusId = "", toBusId = "";
 		String fromConnection="", toConnection = "";
 		String referenceXfrName = "";
-	
+		String phase1 = "", phase2 = "",phase3 = "";
 		
 		String[] xfrStrAry  = xfrStr.trim().toLowerCase().split("\\s+(?![^\\[]*\\])");
 
@@ -214,15 +217,31 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 				String[] busIds = xfrStrAry[i].substring(startIdx,endIdx).trim().split("\\s+");
 				fromBusId = busIds[0];
 				if(fromBusId.contains(".")){
-					int dotIdx = fromBusId.indexOf(".");
-					fromBusId = fromBusId.substring(0, dotIdx);
+					
+//					int dotIdx = fromBusId.indexOf(".");
+//					fromBusId = fromBusId.substring(0, dotIdx);
+					
+					String[] tempAry = fromBusId.split("\\.");
+					fromBusId = tempAry[0];
+					
+					if(tempAry.length>1){
+						phase1 = tempAry[1];
+					}
+					else if(tempAry.length>2){
+						phase2 = tempAry[2];
+					}
+					else if(tempAry.length>3){
+						phase3 = tempAry[3];
+					}
 							
 				}
 				toBusId = busIds[1];
 				
 				if(toBusId.contains(".")){
-					int dotIdx = toBusId.indexOf(".");
-					toBusId = toBusId.substring(0, dotIdx);
+//					int dotIdx = toBusId.indexOf(".");
+//					toBusId = toBusId.substring(0, dotIdx);
+					String[] tempAry = toBusId.split("\\.");
+					toBusId = tempAry[0];
 							
 				}
 				
@@ -321,6 +340,24 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 		
 		xfrBranch.setFromTurnRatio(normKV1*1000.0);
 		xfrBranch.setToTurnRatio(normKV2*1000.0);
+		
+		//phase info
+		
+		if(phaseNum ==3){
+			xfrBranch.setPhaseCode(PhaseCode.ABC);
+		}
+		else if(phaseNum ==1){
+			if(phase1.equals("1"))
+				xfrBranch.setPhaseCode(PhaseCode.A);
+			else if(phase1.equals("2"))
+				xfrBranch.setPhaseCode(PhaseCode.B);
+			else if(phase1.equals("3"))
+				xfrBranch.setPhaseCode(PhaseCode.C);
+			else{
+				throw new Error("Transformer connection phase currently must be either 1, 2 or 3.  xfr #" +xfrId);
+			}
+				
+		}
 		
 //		xfrBranch.getFromBus().setBaseVoltage(normKV1, UnitType.kV);
 //		xfrBranch.getToBus().setBaseVoltage(normKV2, UnitType.kV);
