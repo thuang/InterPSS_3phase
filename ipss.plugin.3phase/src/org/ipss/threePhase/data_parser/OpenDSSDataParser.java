@@ -204,7 +204,7 @@ public class OpenDSSDataParser {
     		        					  sourceBus.setGenCode(AclfGenCode.SWING);
     		        					  sourceBus.setBaseVoltage(basekv, UnitType.kV);
     		        					  
-    		        					  sourceBus.setVoltageMag(basekv);
+    		        					  sourceBus.setVoltageMag(volt_pu);
     		        				  }
     		        				  else{
     		        					  throw new Error("source bus name is not properly parse! # "+ nextLine);
@@ -354,7 +354,7 @@ public class OpenDSSDataParser {
     		        						  if(tempAry2[i].contains("basekv=")){
     		        							  basekv = Double.valueOf(tempAry2[i].substring(7));
     		        						  }
-    		        						  else if(tempAry2[i].contains("Bus1=")){
+    		        						  else if(tempAry2[i].contains("Bus1=")||tempAry2[i].contains("bus1=")){
     		        							  sourceBusId = tempAry2[i].substring(4);
     		        						  }
     		        						  else if(tempAry2[i].contains("pu=")){
@@ -375,7 +375,7 @@ public class OpenDSSDataParser {
     		        					  
     		        					  sourceBus.setBaseVoltage(basekv, UnitType.kV);
     		        					  
-    		        					  sourceBus.setVoltageMag(basekv);
+    		        					  sourceBus.setVoltageMag(volt_pu);
     		        				  }
     		        				  else{
     		        					  no_error = false;
@@ -552,8 +552,8 @@ public class OpenDSSDataParser {
     		 this.getDistNetwork().setBaseKva(mvaBase*1000.0);
     	 }
     	 else{
-    		 ODMLogger.getLogger().severe("The input mvabase <= 0. mvabase = 10 MVA will be used");
-    		 mvaBase = 10;
+    		 ODMLogger.getLogger().severe("The input mvabase <= 0. mvabase = 1.0 MVA will be used");
+    		 mvaBase = 1.0;
     		 this.getDistNetwork().setBaseKva(mvaBase*1000.0);
     	 }
     		 

@@ -47,7 +47,9 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 		
 		Bus3Phase bus = ((Bus3Phase)this.getParentBus());
 		
-		
+		if(bus.getId().equals("113")){
+			System.out.println("Debug bus equiv Current calculation");
+		}
 		Complex vt = null;
 		double vmag=1.0;
 		switch (this.loadConnectType){
@@ -89,20 +91,20 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 		  case Single_Phase_Delta:
 			   if(this.ph==PhaseCode.AB){
 				   vt=vabc.a_0.subtract(vabc.b_1);
-				   vmag = vt.abs();
+				   vmag = vt.abs()/Math.sqrt(3); // the per unit is based on  L-L Volt
 				   equivCurInj.a_0=this.getLoad(vmag).divide(vt).conjugate().multiply(-1);
 				   equivCurInj.b_1=equivCurInj.a_0.multiply(-1);
 				   
 			   }
 			   else if(this.ph==PhaseCode.BC){
 				   vt = vabc.b_1.subtract(vabc.c_2);
-				   vmag = vt.abs();
+				   vmag = vt.abs()/Math.sqrt(3);// the per unit is based on  L-L Volt
 				   equivCurInj.b_1=this.getLoad(vmag).divide(vt).conjugate().multiply(-1);
 				   equivCurInj.c_2=equivCurInj.b_1.multiply(-1);
 			   }
 			   else if(this.ph==PhaseCode.AC){
 				   vt = vabc.a_0.subtract(vabc.c_2);
-				   vmag = vt.abs();
+				   vmag = vt.abs()/Math.sqrt(3);// the per unit is based on  L-L Volt
 				   equivCurInj.a_0=this.getLoad(vmag).divide(vt).conjugate().multiply(-1);
 				   equivCurInj.c_2=equivCurInj.a_0.multiply(-1);
 			   }

@@ -273,7 +273,9 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 							
 							if(bra.getFromBus().getId().equals(bus.getId())){
 							 
-								
+								if(bra3P.getCurrentAbcAtFromSide()==null){
+									System.out.println("Current At From Side is null for branch #"+ bra3P.getId());
+								}
 							   sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtFromSide());
 							}
 							else{ 
@@ -306,6 +308,14 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 						
 						// consider the existing bus current injection into the network from generators, loads, shunt capacitors, etc.
 						Complex3x1 busSelfEquivCurInj3Ph =bus3P.calc3PhEquivCurInj();
+						
+						if(busSelfEquivCurInj3Ph == null){
+							throw new Error("Bus current injection is NULL @ Bus: "+bus3P.getId());
+						}
+						else if(busSelfEquivCurInj3Ph.a_0.isNaN()){
+							throw new Error("Bus current injection is NaN @ Bus: "+bus3P.getId());
+						}
+						
 						
 						// add the branch current flows to obtain the current injections
 						Branch3Phase upStreamBranch = (Branch3Phase) this.distNet.getBranch(upStreamBranchId);

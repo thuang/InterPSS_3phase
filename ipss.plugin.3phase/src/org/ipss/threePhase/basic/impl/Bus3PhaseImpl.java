@@ -11,6 +11,7 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
+import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
@@ -18,6 +19,7 @@ import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 import org.ipss.threePhase.util.ThreeSeqLoadProcessor;
 
 import com.interpss.core.aclf.AclfGen;
+import com.interpss.core.aclf.AclfLoad;
 import com.interpss.core.net.Branch;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.dynLoad.DynLoadModel;
@@ -179,14 +181,32 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private Complex3x1 calcLoad3PhEquivCurInj() {
 		this.load3PhEquivCurInj = new Complex3x1();
-		if(this.isLoad() && this.getThreePhaseLoadList().size()>0){
-			if (Vabc == null ||Vabc.abs()<1.0E-5) 
-				Vabc = new Complex3x1(new Complex(1,0),new Complex(-Math.sin(Math.PI/6),-Math.cos(Math.PI/6)),new Complex(-Math.sin(Math.PI/6),Math.cos(Math.PI/6)));
+		if (Vabc == null ||Vabc.abs()<1.0E-5) 
+			Vabc = new Complex3x1(new Complex(1,0),new Complex(-Math.sin(Math.PI/6),-Math.cos(Math.PI/6)),new Complex(-Math.sin(Math.PI/6),Math.cos(Math.PI/6)));
+		
+		//single-phase loads
+		if(this.getContributeLoadList().size()>0){
+			for(AclfLoad load: this.getContributeLoadList()){
+				if(load instanceof Load1Phase){
+					Load1Phase load1P = (Load1Phase) load;
+					this.load3PhEquivCurInj=this.load3PhEquivCurInj.add(load1P.getEquivCurrInj(Vabc));
+				}
+				else{
+					throw new Error("Load instance is not single-phase load! Bus, load = "+this.getId()+","+load.getId());
+				}
+			}
+		}
+		
+		//three phase loads
+		if(this.getThreePhaseLoadList().size()>0){
+			
 			for(Load3Phase load:this.getThreePhaseLoadList()){
 				this.load3PhEquivCurInj=this.load3PhEquivCurInj.add(load.getEquivCurrInj(Vabc));
 			}
 			
 		}
+		
+		
 		return this.load3PhEquivCurInj;
 		
 	}
