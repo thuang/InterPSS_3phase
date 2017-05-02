@@ -109,9 +109,9 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 				  throw new Error("Load model type not supported yet!! Bus, load id,model type, phases: "
 				          +this.getParentBus().getId()+","+this.getId()+","+this.code+","+this.ph);
 			  }
-			  
-			  
 			  break;
+			  
+			  
 		  case Three_Phase_Delta:
 			  throw new Error("Connection type not supported yet!! Bus, load id,connectType, phases: "
 			          +this.getParentBus().getId()+","+this.getId()+","+this.loadConnectType+","+this.ph);
