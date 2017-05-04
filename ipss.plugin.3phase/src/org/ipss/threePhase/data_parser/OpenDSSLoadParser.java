@@ -247,7 +247,7 @@ public class OpenDSSLoadParser {
 			}
 		 
 			if(phaseNum==1)
-			  bus.getContributeLoadList().add(load);
+			  bus.getSinglePhaseLoadList().add(load);
 			else if(phaseNum==3)
 			  bus.getThreePhaseLoadList().add((Load3Phase) load);
 			

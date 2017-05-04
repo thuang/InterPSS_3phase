@@ -615,8 +615,8 @@ public class OpenDSSDataParser {
          for(DStabBus b: this.getDistNetwork().getBusList()){
         	 
         	 Bus3Phase bus3P = (Bus3Phase)b;
-        	 if(bus3P.getContributeLoadList().size()>0){
-        		 for(AclfLoad load:bus3P.getContributeLoadList()){
+        	 if(bus3P.getSinglePhaseLoadList().size()>0){
+        		 for(Load1Phase load:bus3P.getSinglePhaseLoadList()){
         			 Load1Phase ld1P = (Load1Phase) load;
         			 ld1P.setLoadCP(ld1P.getLoadCP().divide(baseKVA1P)); 
         			 ld1P.setLoadCI(ld1P.getLoadCI().divide(baseKVA1P)); 

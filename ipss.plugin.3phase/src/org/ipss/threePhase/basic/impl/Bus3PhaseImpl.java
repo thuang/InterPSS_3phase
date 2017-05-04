@@ -43,8 +43,9 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private List<DynLoadModel3Phase> threePhaseDynLoadList;
 	
+	private List<Load1Phase> singlePhaseLoadList = null;
 	private List<Load3Phase> threePhaseLoadList = null;
-	private List<Gen3Phase> threePhaseGenList = null;
+	private List<Gen3Phase>  threePhaseGenList = null;
 	
 	private Complex3x1 load3PhEquivCurInj = null;
 	private Complex3x1 equivCurInj3Phase = null;
@@ -101,7 +102,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 			 
 		 }
    
-        // the  shuntYabc
+        //TODO add setter/getter for the  shuntYabc
 		 if(shuntYabc != null){
 			 yiiAbc= yiiAbc.add(shuntYabc);
 		 }
@@ -116,6 +117,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		 //EquivLoadYabc does not limit to load buses, otherwise buses with sequence shuntY cannot be correctly modeled
 		 //ALSO NOTE: The contribution from the generators has been considered in the  <EquivLoadYabc> above   		    
 		  
+		 //TODO 05/04/2017
 		 yiiAbc= yiiAbc.add(ThreeSeqLoadProcessor.getEquivLoadYabc(this));
 		 
 		
@@ -178,6 +180,14 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 			threePhaseLoadList = new ArrayList<>();
 		return threePhaseLoadList;
 	}
+	
+	@Override
+	public List<Load1Phase> getSinglePhaseLoadList() {
+		if(singlePhaseLoadList ==null)
+			singlePhaseLoadList = new ArrayList<>();
+		return singlePhaseLoadList;
+		
+	}
 
 	
 	private Complex3x1 calcLoad3PhEquivCurInj() {
@@ -186,14 +196,13 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 			Vabc = new Complex3x1(new Complex(1,0),new Complex(-Math.sin(Math.PI/6),-Math.cos(Math.PI/6)),new Complex(-Math.sin(Math.PI/6),Math.cos(Math.PI/6)));
 		
 		//single-phase loads
-		if(this.getContributeLoadList().size()>0){
-			for(AclfLoad load: this.getContributeLoadList()){
-				if(load instanceof Load1Phase){
-					Load1Phase load1P = (Load1Phase) load;
+		if(this.getSinglePhaseLoadList().size()>0){
+			for(Load1Phase load1P: this.getSinglePhaseLoadList()){
+				if(load1P.isActive()){
 					this.load3PhEquivCurInj=this.load3PhEquivCurInj.add(load1P.getEquivCurrInj(Vabc));
 				}
 				else{
-					throw new Error("Load instance is not single-phase load! Bus, load = "+this.getId()+","+load.getId());
+					throw new Error("Load instance is not single-phase load! Bus, load = "+this.getId()+","+load1P.getId());
 				}
 			}
 		}
@@ -202,7 +211,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		if(this.getThreePhaseLoadList().size()>0){
 			
 			for(Load3Phase load:this.getThreePhaseLoadList()){
-				this.load3PhEquivCurInj=this.load3PhEquivCurInj.add(load.getEquivCurrInj(Vabc));
+				if(load.isActive())
+				  this.load3PhEquivCurInj=this.load3PhEquivCurInj.add(load.getEquivCurrInj(Vabc));
 			}
 			
 		}
@@ -285,6 +295,23 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		
 	}
 	
+	@Override
+	public AclfLoad getContributeLoad(String id) {
+		for (AclfLoad load : this.getContributeLoadList())
+			if (id.equals(load.getId()))
+				return load;
+		
+		for (AclfLoad load : this.getSinglePhaseLoadList())
+			if (id.equals(load.getId()))
+				return load;
+		
+		for (AclfLoad load : this.getThreePhaseLoadList())
+			if (id.equals(load.getId()))
+				return load;
+		
+		return null;	
+	}
+			
 
 	@Override
 	public Complex3x1 get3PhaseTotalLoad() {
@@ -295,11 +322,10 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		}
 		//consider single-phase Wye connected load included in the contributeLoadList()
 		// TODO how about delta connected load??
-		for(AclfLoad load: this.getContributeLoadList()){
-			if(load.isActive() && load instanceof Load1Phase){
-				Load1Phase load1P = (Load1Phase) load;
+		for(Load1Phase load1P: this.getSinglePhaseLoadList()){
+			if(load1P.isActive()){
 				if(load1P.getLoadConnectionType()==LoadConnectionType.Single_Phase_Delta){
-					throw new Error (" get3PhaseTotalLoad() does not support LoadConnectionType.Single_Phase_Delta yet! bus, load = "+this.getId()+","+load.getId());
+					throw new Error (" get3PhaseTotalLoad() does not support LoadConnectionType.Single_Phase_Delta yet! bus, load = "+this.getId()+","+load1P.getId());
 				}
 				else{
 					switch(load1P.getPhaseCode()){
@@ -317,7 +343,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 						   this.totalLoad3Phase.c_2 = this.totalLoad3Phase.c_2.add(load1P.getLoad(vmag));
 						  break;
 					   default:
-						   throw new Error (" get3PhaseTotalLoad() does not support the phase code of this single load yet! bus, load, phase code = "+this.getId()+","+load.getId()+","+load1P.getPhaseCode());
+						   throw new Error (" get3PhaseTotalLoad() does not support the phase code of this single load yet! bus, load, phase code = "+this.getId()+","+load1P.getId()+","+load1P.getPhaseCode());
 					
 						
 					}
@@ -341,6 +367,8 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 		
 		return this.initVabc;
 	}
+
+	
 
 	
 

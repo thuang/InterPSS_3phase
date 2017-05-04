@@ -135,7 +135,7 @@ AcscBus Info
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -143,11 +143,7 @@ AcscBus Info
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s1a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -174,7 +170,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -182,11 +178,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s2b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -248,7 +240,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -256,11 +248,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s7a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -287,7 +275,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -295,11 +283,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s4c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -326,7 +310,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -334,11 +318,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 20.0000 + j10.0000, id: s5c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -365,7 +345,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -373,11 +353,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s6c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -439,7 +415,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -447,11 +423,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s12b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -478,7 +450,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -486,11 +458,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s9a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -622,7 +590,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -630,11 +598,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s34c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -696,7 +660,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -704,11 +668,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s11a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -735,7 +695,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -743,11 +703,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 20.0000 + j10.0000, id: s10a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -809,7 +765,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -817,11 +773,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s16c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -848,7 +800,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -856,11 +808,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s17c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -887,7 +835,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -895,11 +843,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s19a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -961,7 +905,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -969,11 +913,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 40.0000 + j20.0000, id: s20a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1000,7 +940,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1008,11 +948,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s22b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1074,7 +1010,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1082,11 +1018,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s24c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1218,7 +1150,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1226,11 +1158,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 40.0000 + j20.0000, id: s28a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1292,7 +1220,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1300,11 +1228,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s31c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1331,7 +1255,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1339,11 +1263,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 40.0000 + j20.0000, id: s33a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1370,7 +1290,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1378,11 +1298,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s29a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1409,7 +1325,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1417,11 +1333,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s30c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1483,7 +1395,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1491,11 +1403,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s32c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1522,7 +1430,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1530,11 +1438,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s35a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1631,7 +1535,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1639,11 +1543,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s37a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1670,7 +1570,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1678,11 +1578,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 20.0000 + j10.0000, id: s38b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1709,7 +1605,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1717,11 +1613,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s39b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1748,7 +1640,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1756,11 +1648,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s41c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1787,7 +1675,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1795,11 +1683,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s42a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1826,7 +1710,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1834,11 +1718,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s43b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1900,7 +1780,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1908,11 +1788,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 20.0000 + j10.0000, id: s45a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -1974,7 +1850,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -1982,11 +1858,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s46a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2048,7 +1920,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       140.0000 + j95.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2056,13 +1928,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 140.0000 + j95.0000 pu   14000000.0000 + j9500000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 35.0000 + j25.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s49a, name: )
- (code: ConstP, loadCP: 70.0000 + j50.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s49b, name: )
- (code: ConstP, loadCP: 35.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s49c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2089,7 +1955,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2097,11 +1963,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s50c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2128,7 +1990,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2136,11 +1998,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s51a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2202,7 +2060,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2210,11 +2068,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s52a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2241,7 +2095,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2249,11 +2103,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s53a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2315,7 +2165,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2323,11 +2173,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 20.0000 + j10.0000, loadCI: 0.0000 + j0.0000, id: s55a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2389,7 +2235,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2397,11 +2243,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s56b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2428,7 +2270,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2436,11 +2278,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 20.0000 + j10.0000, id: s58b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2467,7 +2305,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2475,11 +2313,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s60a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2506,7 +2340,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2514,11 +2348,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s59b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2580,7 +2410,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2588,11 +2418,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s62c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2619,7 +2445,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2627,11 +2453,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s63a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2658,7 +2480,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       75.0000 + j35.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2666,11 +2488,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 75.0000 + j35.0000 pu   7500000.0000 + j3500000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 75.0000 + j35.0000, id: s64b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2697,7 +2515,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       140.0000 + j100.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2705,13 +2523,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 140.0000 + j100.0000 pu   14000000.0000 + j10000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 35.0000 + j25.0000, loadCI: 0.0000 + j0.0000, id: s65a, name: )
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 35.0000 + j25.0000, loadCI: 0.0000 + j0.0000, id: s65b, name: )
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 70.0000 + j50.0000, loadCI: 0.0000 + j0.0000, id: s65c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2738,7 +2550,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       75.0000 + j35.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2746,11 +2558,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 75.0000 + j35.0000 pu   7500000.0000 + j3500000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 75.0000 + j35.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s66c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2812,7 +2620,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2820,11 +2628,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s68a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2921,7 +2725,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2929,11 +2733,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s69a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2960,7 +2760,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -2968,11 +2768,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s70a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -2999,7 +2795,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3007,11 +2803,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s71a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3038,7 +2830,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3046,11 +2838,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s73c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3077,7 +2865,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       245.0000 + j180.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3085,13 +2873,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 245.0000 + j180.0000 pu   24500000.0000 + j18000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 105.0000 + j80.0000, id: s76a, name: )
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 70.0000 + j50.0000, id: s76b, name: )
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 70.0000 + j50.0000, id: s76c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3118,7 +2900,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3126,11 +2908,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s74c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3157,7 +2935,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3165,11 +2943,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s75c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3196,7 +2970,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3204,11 +2978,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s77b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3235,7 +3005,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3243,11 +3013,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s86b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3309,7 +3075,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3317,11 +3083,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s79a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3348,7 +3110,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3356,11 +3118,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s80b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3422,7 +3180,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3430,11 +3188,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s82a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3461,7 +3215,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3469,11 +3223,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s84c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3500,7 +3250,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3508,11 +3258,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s83c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3539,7 +3285,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3547,11 +3293,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s85c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3578,7 +3320,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3586,11 +3328,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s87b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3617,7 +3355,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3625,11 +3363,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s88a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3691,7 +3425,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3699,11 +3433,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 40.0000 + j20.0000, id: s90b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3765,7 +3495,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3773,11 +3503,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s92c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3839,7 +3565,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3847,11 +3573,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s94a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3878,7 +3600,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3886,11 +3608,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s95b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3917,7 +3635,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3925,11 +3643,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s96b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3956,7 +3670,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -3964,11 +3678,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s98a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -3995,7 +3705,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4003,11 +3713,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s99b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4034,7 +3740,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4042,11 +3748,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s100c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4178,7 +3880,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4186,11 +3888,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s102c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4252,7 +3950,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4260,11 +3958,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s103c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4291,7 +3985,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4299,11 +3993,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s104c, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4330,7 +4020,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4338,11 +4028,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s106b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4404,7 +4090,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4412,11 +4098,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s107b, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4443,7 +4125,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4451,11 +4133,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 40.0000 + j20.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s109a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4552,7 +4230,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4560,11 +4238,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s111a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4591,7 +4265,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4599,11 +4273,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstI, loadCP: 0.0000 + j0.0000, loadCZ: 0.0000 + j0.0000, loadCI: 20.0000 + j10.0000, id: s112a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4630,7 +4300,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       40.0000 + j20.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4638,11 +4308,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 40.0000 + j20.0000 pu   4000000.0000 + j2000000.0000 kva
-
-Contributing Load:
- (code: ConstZ, loadCP: 0.0000 + j0.0000, loadCZ: 40.0000 + j20.0000, loadCI: 0.0000 + j0.0000, id: s113a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri
@@ -4669,7 +4335,7 @@ Contributing Load:
      voltageAng: 0.0
      gen:        0.0000 + j0.0000
      capacitor:  0.0000
-     load:       20.0000 + j10.0000
+     load:       0.0000 + j0.0000
      shuntY:     0.0000 + j0.0000
      distFactor: 0.0000
      vLimit:     ( 0.0, 0.0 )
@@ -4677,11 +4343,7 @@ Contributing Load:
       voltage   : 1.0000 pu   0.0000 v
       angle     : 0.0000 deg
       gen       : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      load      : 20.0000 + j10.0000 pu   2000000.0000 + j1000000.0000 kva
-
-Contributing Load:
- (code: ConstP, loadCP: 20.0000 + j10.0000, loadCZ: 0.0000 + j0.0000, loadCI: 0.0000 + j0.0000, id: s114a, name: )
-
+      load      : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
 
   SC Info:  
      scCode:  NonContri

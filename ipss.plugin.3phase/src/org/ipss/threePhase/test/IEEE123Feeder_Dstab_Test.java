@@ -147,7 +147,7 @@ public class IEEE123Feeder_Dstab_Test {
 		// output three phase total load
 		for(DStabBus bus: distNet.getBusList()){
 			Bus3Phase bus3P = (Bus3Phase) bus;
-			bus3P.get3PhaseTotalLoad();
+			System.out.println(bus.getId()+", total loads, "+ bus3P.get3PhaseTotalLoad().multiply(100.0*1000.0/3).toString());
 		}
 		
 		// Add the dyanmic machine to the source Bus
