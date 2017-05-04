@@ -252,17 +252,17 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					
 				    if(yii.aa.abs()<yiiMinTolerance){
 				    	yii.aa = new Complex(1.0,0);
-				    	IpssLogger.getLogger().info(b.getId()+": abs of Yii.aa of is less than 1.0E-8, changed to 1.0 ");
+				    	IpssLogger.getLogger().info("Bus : "+b.getId()+": abs of Yii.aa of is less than 1.0E-8, changed to 1.0 ");
 				    }
 				    
 				    if(yii.bb.abs()<yiiMinTolerance){
 				    	yii.bb = new Complex(1.0,0);
-				    	IpssLogger.getLogger().info(b.getId()+": abs of Yii.bb of is less than 1.0E-8, changed to 1.0 ");
+				    	IpssLogger.getLogger().info("Bus : "+b.getId()+": abs of Yii.bb of is less than 1.0E-8, changed to 1.0 ");
 				    }
 				    
 				    if(yii.cc.abs()<yiiMinTolerance){
 				    	yii.cc = new Complex(1.0,0);
-				    	IpssLogger.getLogger().info(b.getId()+": abs of Yii.cc of is less than 1.0E-8, changed to 1.0 ");
+				    	IpssLogger.getLogger().info("Bus : "+b.getId()+": abs of Yii.cc of is less than 1.0E-8, changed to 1.0 ");
 				    }
 										
 					yMatrixAbc.setA( yii,i, i);
@@ -622,7 +622,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 								totalDynLoadPercent = 100.0;
 							}
 							
-							// the init load is only available after initialization
+							// the initialized load power is only available after initialization of the dynLoadModel
 							for(DynLoadModel load:bus.getDynLoadModelList()){
 								if(load.isActive()){
 							       load.initStates();

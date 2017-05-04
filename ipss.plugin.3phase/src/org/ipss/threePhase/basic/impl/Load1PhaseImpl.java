@@ -47,9 +47,9 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 		
 		Bus3Phase bus = ((Bus3Phase)this.getParentBus());
 		
-		if(bus.getId().equals("113")){
-			System.out.println("Debug bus equiv Current calculation");
-		}
+//		if(bus.getId().equals("113")){
+//			System.out.println("Debug bus equiv Current calculation");
+//		}
 		Complex vt = null;
 		double vmag=1.0;
 		switch (this.loadConnectType){

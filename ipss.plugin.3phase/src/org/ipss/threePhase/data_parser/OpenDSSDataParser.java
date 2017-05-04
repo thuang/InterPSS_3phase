@@ -50,6 +50,8 @@ public class OpenDSSDataParser {
 	protected OpenDSSCapacitorParser capParser = null;
 	protected OpenDSSRegulatorParser regulatorParser = null;
 	
+	boolean debug = false;
+	
     public OpenDSSDataParser(){
     	//create and initialize the distribution network model
     	if(this.distNet == null){
@@ -64,6 +66,10 @@ public class OpenDSSDataParser {
     	this.xfrParser =  new  OpenDSSTransformerParser (this);
     	//TODO tentatively, treat regulator as a fixed tap transformer
     	this.regulatorParser = new  OpenDSSRegulatorParser(this); 
+    }
+    
+    public void setDebugMode(boolean enableDebug){
+    	this.debug = enableDebug;
     }
 	
 	public Hashtable<String, LineConfiguration> getLineConfigTable() {
@@ -142,7 +148,7 @@ public class OpenDSSDataParser {
     		    			str = reader.readLine(); 
     		                lineCnt++;
     		    		}
-    		    		System.out.println("Parsing: "+str);
+    		    		if (this.debug) System.out.println("Parsing: "+str);
     		        	if (str != null && !str.trim().equals("")) {
     		        		str = str.trim();
     		        		if(str.startsWith("!") || str.startsWith("//")){
@@ -320,7 +326,7 @@ public class OpenDSSDataParser {
     		    			str = reader.readLine(); 
     		                lineCnt++;
     		    		}
-    		    		System.out.println("Parsing :" +str);
+    		    		if(this.debug)System.out.println("Parsing :" +str);
     		        	if (str != null && !str.trim().equals("")) {
     		        		str = str.trim();
     		        		if(str.startsWith("!") || str.startsWith("//")){
@@ -620,7 +626,7 @@ public class OpenDSSDataParser {
         	 
         	 if(bus3P.getThreePhaseLoadList().size()>0){
         		 for(Load3Phase load3P:bus3P.getThreePhaseLoadList()){
-        			 load3P.set3PhaseLoad(load3P.get3PhaseLoad().multiply(1.0/baseKVA1P));
+        			 load3P.set3PhaseLoad(load3P.getInit3PhaseLoad().multiply(1.0/baseKVA1P));
         		 }
         	 }
          }

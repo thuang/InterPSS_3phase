@@ -97,7 +97,7 @@ public class Branch3PhaseImpl extends DStabBranchImpl implements Branch3Phase{
 				}
 				
 				if(dim == 0){
-					throw new Error(" The branch Yii diagonal elements are zero! # "+this.getId());
+					throw new Error(" The branch Yii diagonal elements are all zero! # "+this.getId());
 				}
 				else if(dim ==1){
 					if( hasPhaseA) {

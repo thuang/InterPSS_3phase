@@ -185,8 +185,8 @@ Load Flow Summary
 				    if(bus.getId().equals("Bus5")){
 				    	  
 				    	//System.out.println("Phase A load@Bus5 ="+ph3Load.get3PhaseLoad().a_0);
-				    	assertTrue(Math.abs(ph3Load.get3PhaseLoad().a_0.getReal()-1.25)<1.0E-4);
-				    	assertTrue(ph3Load.get3PhaseLoad().a_0.abs() ==ph3Load.get3PhaseLoad().b_1.abs());
+				    	assertTrue(Math.abs(ph3Load.get3PhaseLoad(ph3Bus.get3PhaseVotlages()).a_0.getReal()-1.25)<1.0E-4);
+				    	assertTrue(ph3Load.get3PhaseLoad(ph3Bus.get3PhaseVotlages()).a_0.abs() ==ph3Load.get3PhaseLoad(ph3Bus.get3PhaseVotlages()).b_1.abs());
 				    	 // assertTrue(ph3Load .getZabc(false).aa.subtract(new Complex(0.0,0.04)).abs()<1.0E-5);
 				    	 // assertTrue(ph3Load .getZabc(false).ab.abs()<1.0E-5);
 				    	 // assertTrue(ph3Load .getZabc(false).ca.abs()<1.0E-5);

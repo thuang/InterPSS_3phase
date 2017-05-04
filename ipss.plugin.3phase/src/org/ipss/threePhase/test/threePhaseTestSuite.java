@@ -24,6 +24,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	
 	// distribution load flow algo
 	 TestDistributionPowerflowAlgo.class,
+	 TestIEEETestFeederPowerFlow.class,
 	 
 	// dynamic models
 	TestSinglePhaseACMotorModel.class,

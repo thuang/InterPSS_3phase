@@ -103,7 +103,10 @@ public class OpenDSSLineParser {
 			
 			
 		}
-				
+		
+		if(lineName.equals("l4")){
+			System.out.println("processing line :"+lineName);
+		}
 		
 		//busId is the substring before the first DOT
 		//phases info is defined in the substring after the first DOT
@@ -125,11 +128,11 @@ public class OpenDSSLineParser {
 		
 		Complex3x3 zabc = null;
 		Complex3x3 yshuntabc = new Complex3x3();
+		LineConfiguration config = null;
 		
 		if(lineCodeIdx> 0){ // line parameters defined by line code
 			
-			LineConfiguration config = this.dataParser.getLineConfigTable().get(lineCodeId);
-
+			config = this.dataParser.getLineConfigTable().get(lineCodeId);
 			
 			if(config!=null){
 				zabc = config.getZ3x3Matrix();
@@ -199,12 +202,29 @@ public class OpenDSSLineParser {
 				// by default, phase = "1", no change is needed
 			}
 			else if(fromBusPhases.equals("2")){
-				zabc.bb = zabc.aa;
-				zabc.aa = new Complex(0.0);
+				if(zabc.aa.abs()<1.0E-8 && zabc.bb.abs()>1.0E-5){
+					zabc.aa = new Complex(0.0);
+					zabc.cc = new Complex(0.0);
+					// no change to zabc.cc is needed 
+				}
+				else{
+					zabc.bb = zabc.aa;
+					zabc.aa = new Complex(0.0);
+					zabc.cc = new Complex(0.0);
+				}
 			}
 			else if(fromBusPhases.equals("3")){
-				zabc.cc = zabc.aa;
-				zabc.aa = new Complex(0.0);
+				Complex diag = null;
+				if(zabc.aa.abs()<1.0E-8 && zabc.cc.abs()>1.0E-5){
+					zabc.aa = new Complex(0.0);
+					zabc.bb = new Complex(0.0);
+					// no change to zabc.cc is needed 
+				}
+				else{
+					zabc.cc = zabc.aa;
+					zabc.aa = new Complex(0.0);
+					zabc.bb = new Complex(0.0);
+				}
 			}
 			else{
 				throw new Error("phase arrangement not support yet : "+lineStr);
@@ -224,6 +244,7 @@ public class OpenDSSLineParser {
 		Branch3Phase line = ThreePhaseObjectFactory.create3PBranch(fromBusId, toBusId, "1", distNet);
 		
 		line.setName(lineName);
+	
 		
 		line.setBranchCode(AclfBranchCode.LINE);
 		// the format of Zmatrix need to be consistent with the number of phases and the phases in use.
@@ -232,6 +253,10 @@ public class OpenDSSLineParser {
 		// need to consider the line length
 		//TODO consistency of the unit types
 		line.setZabc(zabc.multiply(lineLength));
+		
+		if(line.getZabc().absMax()<1.0E-7){
+			throw new Error("Line Zabc.absMax() is less than 1.0E-7. LineID, Name = "+line.getId()+", "+line.getName());
+		}
 		
 		//TODO ShuntY is not considered for this initial implementation 
 		//line.setFromShuntYabc(yshuntabc.multiply(0.5));

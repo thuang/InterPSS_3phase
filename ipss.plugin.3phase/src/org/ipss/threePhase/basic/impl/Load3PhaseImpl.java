@@ -63,10 +63,59 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 	}
 
 	@Override
-	public Complex3x1 get3PhaseLoad() {
-		return ph3Load;
+	public Complex3x1 get3PhaseLoad( Complex3x1 vabc) {
+        Complex3x1 loadPQ = ph3Load;
+		
+//        Complex3x1 vabc =((Bus3Phase)this.getParentBus()).get3PhaseVotlages();
+        
+		if(this.code ==AclfLoadCode.NON_LOAD){
+			code = AclfLoadCode.CONST_P; // by default constant PQ
+		}
+		
+		switch (this.loadConnectType){
+		  case Three_Phase_Wye:
+			  if(this.code==AclfLoadCode.CONST_P){
+				  // default 
+			  }
+			  else if(this.code==AclfLoadCode.CONST_I){
+				  loadPQ.a_0 = ph3Load.a_0.multiply(vabc.a_0.abs());
+				  loadPQ.b_1 = ph3Load.b_1.multiply(vabc.b_1.abs());
+				  loadPQ.c_2 = ph3Load.c_2.multiply(vabc.c_2.abs());
+			  }
+			  else if(this.code==AclfLoadCode.CONST_Z){
+				  double va = vabc.a_0.abs();
+				  double vb = vabc.b_1.abs();
+				  double vc = vabc.c_2.abs();
+				  loadPQ.a_0 = ph3Load.a_0.multiply(va*va);
+				  loadPQ.b_1 = ph3Load.b_1.multiply(vb*vb);
+				  loadPQ.c_2 = ph3Load.c_2.multiply(vc*vc);
+			  }
+			  else{
+				  throw new Error("Load model type not supported yet!! Bus, load id,model type, phases: "
+				          +this.getParentBus().getId()+","+this.getId()+","+this.code+","+this.ph);
+			  }
+			  break;
+			  
+			  
+		  case Three_Phase_Delta:
+			  throw new Error("Connection type not supported yet!! Bus, load id,connectType, phases: "
+			          +this.getParentBus().getId()+","+this.getId()+","+this.loadConnectType+","+this.ph);
+			  
+		  default:
+			  
+			   throw new Error("Connection type and phases are not consisent!! Bus, load id,connectType, phases: "
+		          +this.getParentBus().getId()+","+this.getId()+","+this.loadConnectType+","+this.ph);
+			   
+		}
+		
+		return loadPQ;
 	}
-
+	
+	@Override
+	public Complex3x1 getInit3PhaseLoad() {
+        return ph3Load;
+	}
+	
 	@Override
 	public void set3PhaseLoad(Complex3x1 threePhaseLoad) {
 		

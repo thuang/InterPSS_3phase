@@ -22,7 +22,9 @@ public interface Load3Phase extends Load1Phase {
 	 * @return
 	 */
 	
-	public Complex3x1  get3PhaseLoad();
+	public Complex3x1  getInit3PhaseLoad();
+	
+	public Complex3x1  get3PhaseLoad(Complex3x1 vabc);
 	
 	
 	/**

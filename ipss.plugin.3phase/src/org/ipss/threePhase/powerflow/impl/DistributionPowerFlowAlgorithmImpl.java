@@ -273,9 +273,9 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 							
 							if(bra.getFromBus().getId().equals(bus.getId())){
 							 
-								if(bra3P.getCurrentAbcAtFromSide()==null){
-									System.out.println("Current At From Side is null for branch #"+ bra3P.getId());
-								}
+//								if(bra3P.getCurrentAbcAtFromSide()==null){
+//									System.out.println("Current At From Side is null for branch #"+ bra3P.getId());
+//								}
 							   sumOfBranchCurrents= sumOfBranchCurrents.add(bra3P.getCurrentAbcAtFromSide());
 							}
 							else{ 
@@ -312,7 +312,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 						if(busSelfEquivCurInj3Ph == null){
 							throw new Error("Bus current injection is NULL @ Bus: "+bus3P.getId());
 						}
-						else if(busSelfEquivCurInj3Ph.a_0.isNaN()){
+						else if(busSelfEquivCurInj3Ph.a_0.isNaN()||busSelfEquivCurInj3Ph.b_1.isNaN()||busSelfEquivCurInj3Ph.c_2.isNaN()){
 							throw new Error("Bus current injection is NaN @ Bus: "+bus3P.getId());
 						}
 						

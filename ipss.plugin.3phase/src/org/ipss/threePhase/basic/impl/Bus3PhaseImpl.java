@@ -13,6 +13,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.basic.LoadConnectionType;
 import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
@@ -289,8 +290,42 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	public Complex3x1 get3PhaseTotalLoad() {
 		this.totalLoad3Phase = new Complex3x1();
 		for(Load3Phase load: this.getThreePhaseLoadList()){
-			this.totalLoad3Phase = this.totalLoad3Phase.add(load.get3PhaseLoad());  
+			if(load.isActive())
+			     this.totalLoad3Phase = this.totalLoad3Phase.add(load.get3PhaseLoad(this.get3PhaseVotlages()));  
 		}
+		//consider single-phase Wye connected load included in the contributeLoadList()
+		// TODO how about delta connected load??
+		for(AclfLoad load: this.getContributeLoadList()){
+			if(load.isActive() && load instanceof Load1Phase){
+				Load1Phase load1P = (Load1Phase) load;
+				if(load1P.getLoadConnectionType()==LoadConnectionType.Single_Phase_Delta){
+					throw new Error (" get3PhaseTotalLoad() does not support LoadConnectionType.Single_Phase_Delta yet! bus, load = "+this.getId()+","+load.getId());
+				}
+				else{
+					switch(load1P.getPhaseCode()){
+					   case A:
+						   double vmag = this.get3PhaseVotlages().a_0.abs();
+						   this.totalLoad3Phase.a_0 = this.totalLoad3Phase.a_0.add(load1P.getLoad(vmag));
+					     break;
+					   case B:
+						   vmag = this.get3PhaseVotlages().b_1.abs();
+						   this.totalLoad3Phase.b_1 = this.totalLoad3Phase.b_1.add(load1P.getLoad(vmag));
+						 break;
+					  
+					   case C:
+						   vmag = this.get3PhaseVotlages().c_2.abs();
+						   this.totalLoad3Phase.c_2 = this.totalLoad3Phase.c_2.add(load1P.getLoad(vmag));
+						  break;
+					   default:
+						   throw new Error (" get3PhaseTotalLoad() does not support the phase code of this single load yet! bus, load, phase code = "+this.getId()+","+load.getId()+","+load1P.getPhaseCode());
+					
+						
+					}
+				}
+			}
+		}
+		
+		
 		return this.totalLoad3Phase;
 	}
 

@@ -37,6 +37,7 @@ import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.cache.StateMonitor.MonitorRecord;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 
@@ -125,6 +126,15 @@ public class IEEE_13BusFeeder_Test {
 	  	}
 	  	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	  	
+	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus684").get(1);
+	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus684").get(20);
+	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
+	  	
+	  	
+//	  	MonitorRecord rec0 = sm.getBusVoltTable().get("Bus652").get(0);
+//	  	MonitorRecord rec50 = sm.getBusVoltTable().get("Bus652").get(50);
+//	  	assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
 		
 	}
 	

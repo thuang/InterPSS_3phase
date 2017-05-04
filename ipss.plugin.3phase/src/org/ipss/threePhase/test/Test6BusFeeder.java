@@ -83,8 +83,8 @@ public class Test6BusFeeder {
 		
 		StateMonitor sm = new StateMonitor();
 		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
-		sm.addBusStdMonitor(new String[]{"Bus2","Bus1"});
-		sm.add3PhaseBusStdMonitor(new String[]{"Bus2","Bus1"});
+		sm.addBusStdMonitor(new String[]{"Bus2","Bus1","Bus4"});
+		sm.add3PhaseBusStdMonitor(new String[]{"Bus2","Bus1","Bus4"});
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
 		dstabAlgo.setOutPutPerSteps(1);
@@ -109,9 +109,14 @@ public class Test6BusFeeder {
 	  	}
 	  	//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  	//System.out.println(sm.toCSVString(sm.getBusVoltTable()));
-	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus2").get(1);
+	  	MonitorRecord rec10 = sm.getBusVoltTable().get("Bus2").get(0);
 	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus2").get(20);
-	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
+	  	assertTrue(Math.abs(rec10.getValue()-rec20.getValue())<1.0E-4);
+	  	
+	  	
+	  	MonitorRecord rec0 = sm.getBusVoltTable().get("Bus4").get(0);
+	  	MonitorRecord rec50 = sm.getBusVoltTable().get("Bus4").get(50);
+	  	assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
 	  	
 	  	
 	  	System.out.println(sm.toCSVString(sm.getBusPhAVoltTable()));
