@@ -2,16 +2,26 @@ package org.ipss.threePhase.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
+import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Bus3Phase;
+import org.ipss.threePhase.basic.Load1Phase;
+import org.ipss.threePhase.basic.Load3Phase;
+import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.data_parser.OpenDSSDataParser;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
+import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
+import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
 import org.ipss.threePhase.util.ThreePhaseAclfOutFunc;
@@ -26,7 +36,9 @@ import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
 import com.interpss.dstab.cache.StateMonitor.MonitorRecord;
+import com.interpss.dstab.dynLoad.InductionMotor;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 
@@ -170,6 +182,12 @@ public class IEEE123Feeder_Dstab_Test {
 		mach.setH(50000.0);
 		mach.setXd1(0.05);
 		
+	    double ACMotorPercent = 50;
+	    double IndMotorPercent = 0;
+	    double ACPhaseUnbalance = 0;
+	    
+		List<String> acMotorIds= buildFeederDynModel(distNet, ACMotorPercent, IndMotorPercent,ACPhaseUnbalance);
+		
 		
 		DynamicSimuAlgorithm dstabAlgo =DStabObjectFactory.createDynamicSimuAlgorithm(
 				distNet, IpssCorePlugin.getMsgHub());
@@ -180,13 +198,17 @@ public class IEEE123Feeder_Dstab_Test {
 		dstabAlgo.setSimuStepSec(0.005d);
 		dstabAlgo.setTotalSimuTimeSec(1.0);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
-		distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("150r", distNet, SimpleFaultCode.GROUND_LG,new Complex(0,0.0),new Complex(0,0.0), 0.5,0.07), "SLG@Bus1");
+		//distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("150r", distNet, SimpleFaultCode.GROUND_LG,new Complex(0,0.0),new Complex(0,0.0), 0.5,0.07), "SLG@Bus1");
         
 		
 		StateMonitor sm = new StateMonitor();
 		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
 		sm.addBusStdMonitor(new String[]{"150","150r","300","30","21"});
 		sm.add3PhaseBusStdMonitor(new String[]{"150","150r","300","30","21"});
+		
+		for(String acMotorId: acMotorIds)
+		    sm.addDynDeviceMonitor(DynDeviceType.ACMotor, acMotorId);
+		
 		// set the output handler
 		dstabAlgo.setSimuOutputHandler(sm);
 		dstabAlgo.setOutPutPerSteps(1);
@@ -201,7 +223,7 @@ public class IEEE123Feeder_Dstab_Test {
 				
 				 sm.addBusPhaseVoltageMonitorRecord( busId,dstabAlgo.getSimuTime(), ((Bus3Phase)distNet.getBus(busId)).get3PhaseVotlages());
 			}
-	  	
+	  	    double vsag = 0.4;
 	  		//dstabAlgo.performSimulation();
 	  		while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
 				
@@ -212,8 +234,19 @@ public class IEEE123Feeder_Dstab_Test {
 					 sm.addBusPhaseVoltageMonitorRecord( busId,dstabAlgo.getSimuTime(), ((Bus3Phase)distNet.getBus(busId)).get3PhaseVotlages());
 				}
 				
+				
+				if(dstabAlgo.getSimuTime()>0.5 && dstabAlgo.getSimuTime()<0.5833){
+					mach.setE(vsag);
+				}
+				else if (dstabAlgo.getSimuTime()>=0.6){
+					mach.setE(1.0);
+				}
 			}
 	  	}
+	  	
+	  	
+	  	
+	  	
 	  	System.out.println(sm.toCSVString(sm.getBusPhAVoltTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
@@ -227,10 +260,180 @@ public class IEEE123Feeder_Dstab_Test {
 	  	
 	  	MonitorRecord rec0 = sm.getBusVoltTable().get("21").get(0);
 	  	MonitorRecord rec50 = sm.getBusVoltTable().get("21").get(50);
-	  	assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
+	  	//assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
 	  	
-	  	
+		FileUtil.writeText2File("output//IEEE123//AcMotorState.csv",
+				sm.toCSVString(sm.getAcMotorStateTable()));
+		FileUtil.writeText2File("output//IEEE123////AcMotorP.csv",
+				sm.toCSVString(sm.getAcMotorPTable()));
+		FileUtil.writeText2File("output//IEEE123//AcMotorQ.csv",
+				sm.toCSVString(sm.getAcMotorQTable()));
 
 	}
+	
+	 private List<String> buildFeederDynModel(DStabNetwork3Phase dsNet, double ACMotorPercent, double IndMotorPercent,double ACPhaseUnbalance) {
+			
+		    List<String> monList  = new ArrayList<>();
+			double Vstallmin = 0.40,Vstallmax = 0.5;
+			double Tstallmin = 2/60.0,Tstallmax = 5.0/60.0;
+			
+	  		double tstall = 0.033;
+	  		double vstall = 0.45;
+	  		
+	  		Hashtable<String, Double> tStallTable = new Hashtable<>();
+	  		Hashtable<String, Double> vStallTable = new Hashtable<>();
+			
+			int k = 0;
+			for(DStabBus bus: dsNet.getBusList()){
+				if(bus.isLoad()){
+				Bus3Phase loadBus = (Bus3Phase) bus;
+				
+				/*
+				Load3Phase load1 = new Load3PhaseImpl();
+				load1.set3PhaseLoad(new Complex3x1(new Complex(0.3,0.05),new Complex(0.3,0.05),new Complex(0.3,0.05)));
+				loadBus.getThreePhaseLoadList().add(load1);
+				*/
+					
+
+				// AC motor, 50%
+				if(loadBus.getSinglePhaseLoadList().size()>0.0){
+					
+				 for(Load1Phase ld1P: loadBus.getSinglePhaseLoadList()){
+					 switch (ld1P.getPhaseCode()){
+					 
+					 case A: 
+						 SinglePhaseACMotor ac1 = new SinglePhaseACMotor(loadBus,"1");
+					  		ac1.setLoadPercent(ACMotorPercent-ACPhaseUnbalance);
+					  		ac1.setPhase(Phase.A);
+					  	    
+					  		tstall = randDouble(Tstallmin,Tstallmax);
+					  		vstall = randDouble(Vstallmin,Vstallmax);
+					  		
+					  		ac1.setTstall(tstall); // disable ac stalling
+					  		ac1.setVstall(vstall);
+					  		loadBus.getPhaseADynLoadList().add(ac1);
+					  		
+					  		monList.add(ac1.getExtendedDeviceId());
+					  		
+					  		tStallTable.put(ac1.getExtendedDeviceId(), tstall);
+					  		vStallTable.put(ac1.getExtendedDeviceId(), vstall);
+					  		
+					  		break;
+					 case B:
+					  		
+					  		
+					  	SinglePhaseACMotor ac2 = new SinglePhaseACMotor(loadBus,"2");
+					  		ac2.setLoadPercent(ACMotorPercent);
+					  		ac2.setPhase(Phase.B);
+					  		tstall = randDouble(Tstallmin,Tstallmax);
+					  		vstall = randDouble(Vstallmin,Vstallmax);
+					  		
+					  		ac2.setTstall(tstall); // disable ac stalling
+					  		ac2.setVstall(vstall);
+					  		loadBus.getPhaseBDynLoadList().add(ac2);
+					  		monList.add(ac2.getExtendedDeviceId());
+					  		
+					  		tStallTable.put(ac2.getExtendedDeviceId(), tstall);
+					  		vStallTable.put(ac2.getExtendedDeviceId(), vstall);
+		                  break;
+		                  
+					 case C:
+					  		
+					  	SinglePhaseACMotor ac3 = new SinglePhaseACMotor(loadBus,"3");
+					  		ac3.setLoadPercent(ACMotorPercent+ACPhaseUnbalance);
+					  		ac3.setPhase(Phase.C);
+					  		tstall = randDouble(Tstallmin,Tstallmax);
+					  		vstall = randDouble(Vstallmin,Vstallmax);
+					  		
+					  		ac3.setTstall(tstall); // disable ac stalling
+					  		ac3.setVstall(vstall);
+					  		loadBus.getPhaseCDynLoadList().add(ac3);
+					  		monList.add(ac3.getExtendedDeviceId());
+					  		
+					  		tStallTable.put(ac3.getExtendedDeviceId(), tstall);
+					  		vStallTable.put(ac3.getExtendedDeviceId(), vstall);
+					  		
+					  	 break;
+					 }
+				 }
+				}
+				
+				for(Load3Phase ld3P: loadBus.getThreePhaseLoadList()){
+				// 3 phase motor, 20%
+				    if(IndMotorPercent>0.0){
+				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
+						indMotor.setDStabBus(loadBus);
+			
+						indMotor.setXm(3.0);
+						indMotor.setXl(0.07);
+						indMotor.setRa(0.032);
+						indMotor.setXr1(0.3);
+						indMotor.setRr1(0.01);
+						
+				        double motorMVA = ld3P.getLoad(1.0).getReal()*IndMotorPercent/100.0/0.8;
+						indMotor.setMVABase(motorMVA);
+						indMotor.setH(0.3);
+						indMotor.setA(0.0); //Toreque = (a+bw+cw^2)*To;
+						indMotor.setB(0.0); //Toreque = (a+bw+cw^2)*To;
+						indMotor.setC(1.0); //Toreque = (a+bw+cw^2)*To;
+						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
+						indMotor3Phase.setLoadPercent(IndMotorPercent); //0.06 MW
+						loadBus.getThreePhaseDynLoadList().add(indMotor3Phase);	
+				    }
+				}
+				// PV generation
+				
+//					Gen3Phase gen1 = new Gen3PhaseImpl();
+//					gen1.setParentBus(loadBus);
+//					gen1.setId("PV1");
+//					gen1.setGen(new Complex(pvGen,0));  // total gen power, system mva based
+//					
+//					loadBus.getThreePhaseGenList().add(gen1);
+//					
+//					double pvMVABase = pvGen/0.8*100;
+//					gen1.setMvaBase(pvMVABase); // for dynamic simulation only
+//					gen1.setPosGenZ(new Complex(0,1.0E-1));   // assuming open-circuit
+//					gen1.setNegGenZ(new Complex(0,1.0E-1));
+//					gen1.setZeroGenZ(new Complex(0,1.0E-1));
+//					//create the PV Distributed generation model
+//					PVDistGen3Phase pv = new PVDistGen3Phase(gen1);
+//					pv.setId("1");
+//					pv.setUnderVoltTripAll(0.4);
+//					pv.setUnderVoltTripStart(0.8);
+				
+				
+					k++;
+			  }
+			}
+			
+			System.out.println("tstall settings:"+tStallTable.values());
+			System.out.println("vstall settings:"+vStallTable.values());
+			
+			return monList;
+		 }
+
+	  private static int randInt(int min, int max) {
+
+		    // Usually this can be a field rather than a method variable
+		    Random rand = new Random();
+
+		    // nextInt is normally exclusive of the top value,
+		    // so add 1 to make it inclusive
+		    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+		    return randomNum;
+		}
+	  
+	  private static double randDouble(double min, double max) {
+
+		    // Usually this can be a field rather than a method variable
+		    Random rand = new Random();
+
+		    // nextInt is normally exclusive of the top value,
+		    // so add 1 to make it inclusive
+		    double randomNum = rand.nextDouble()*(max - min) + min;
+
+		    return randomNum;
+		}
 
 }

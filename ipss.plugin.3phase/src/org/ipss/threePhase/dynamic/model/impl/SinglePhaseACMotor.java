@@ -199,7 +199,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		private static final String OUT_SYMBOL_VT ="ACMotorVt";
 		private static final String OUT_SYMBOL_STATE ="ACMotorState";
 		private static final String OUT_SYMBOL_RemainFraction ="ACMotorRemainFraction";
-		private String extended_device_Id = "";
+		
 		private Complex PQmotor;
 		private Complex equivYpq;
 		private Complex nortonCurInj;
@@ -361,7 +361,11 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			return flag;
 		}
 		
-		
+		@Override public String getExtendedDeviceId(){
+			extended_device_Id = "ACMotor_"+this.getId()+"@"+this.getParentBus().getId()+"_phase"+this.getPhase();
+			return this.extended_device_Id;
+		}
+
 
 		
 		/**

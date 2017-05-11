@@ -39,6 +39,7 @@ import com.interpss.dstab.DStabBus;
 
 public class OpenDSSDataParser {
 	
+	protected String busIdPrefix = "";
 	// Line configuration table
 	protected Hashtable<String,LineConfiguration> lineConfigTable = null;
 	
@@ -49,6 +50,7 @@ public class OpenDSSDataParser {
 	protected OpenDSSTransformerParser xfrParser = null;
 	protected OpenDSSCapacitorParser capParser = null;
 	protected OpenDSSRegulatorParser regulatorParser = null;
+	
 	
 	boolean debug = false;
 	
@@ -81,6 +83,13 @@ public class OpenDSSDataParser {
 
 	public void setLineConfigTable(Hashtable<String, LineConfiguration> lineConfigTable) {
 		this.lineConfigTable = lineConfigTable;
+	}
+	
+	public void setDistNetwork( DStabNetwork3Phase distNet){
+		if(distNet != null){
+			 this.distNet = distNet;
+		}
+	
 	}
 	
 	public DStabNetwork3Phase getDistNetwork(){
@@ -205,7 +214,7 @@ public class OpenDSSDataParser {
     		        				  // create the source bus
     		        				  if(sourceBusId.length()>0){
     		        					  if(distNet.getBus(sourceBusId)==null)
-    		        							sourceBus = ThreePhaseObjectFactory.create3PDStabBus(sourceBusId, distNet);
+    		        							sourceBus = ThreePhaseObjectFactory.create3PDStabBus(this.busIdPrefix+sourceBusId, distNet);
     		        					  
     		        					  sourceBus.setGenCode(AclfGenCode.SWING);
     		        					  sourceBus.setBaseVoltage(basekv, UnitType.kV);
@@ -700,6 +709,14 @@ public class OpenDSSDataParser {
     	 }
     	 return null;
      }
+
+	public String getBusIdPrefix() {
+		return busIdPrefix;
+	}
+
+	public void setBusIdPrefix(String busIdPrefix) {
+		this.busIdPrefix = busIdPrefix;
+	}
     
 	
 }

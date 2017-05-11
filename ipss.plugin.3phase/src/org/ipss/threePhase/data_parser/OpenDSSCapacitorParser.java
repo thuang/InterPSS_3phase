@@ -75,6 +75,7 @@ public class OpenDSSCapacitorParser {
 		
 	
 		//get the bus object
+		busId = this.dataParser.getBusIdPrefix()+busId;
 		Bus3Phase bus = (Bus3Phase) this.dataParser.getDistNetwork().getBus(busId);
 		
 		if(bus==null){

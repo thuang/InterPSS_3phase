@@ -31,7 +31,7 @@ import com.interpss.core.net.Bus;
 
 public class TestOpenDSSDataParser {
 	
-	//@Test
+	@Test
 	public void test_LineCodeParser(){
 		OpenDSSDataParser parser = new OpenDSSDataParser();
 		
@@ -114,7 +114,7 @@ public class TestOpenDSSDataParser {
 		 
 	}
 	
-	//@Test
+	@Test
 	public void testDataParser(){
 		
 		IpssCorePlugin.init();
@@ -270,7 +270,7 @@ public class TestOpenDSSDataParser {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testCalcBaseVoltage(){
 		
 		IpssCorePlugin.init();

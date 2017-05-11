@@ -130,7 +130,7 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 
 	@Override
 	public Complex3x1 getEquivCurrInj(Complex3x1 vabc) {
-		Complex3x1 loadPQ = ph3Load;
+		Complex3x1 loadPQ = new Complex3x1();
 		
 		if(this.code ==AclfLoadCode.NON_LOAD){
 			code = AclfLoadCode.CONST_P; // by default constant PQ
@@ -140,6 +140,7 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 		  case Three_Phase_Wye:
 			  if(this.code==AclfLoadCode.CONST_P){
 				  // default 
+				  loadPQ = ph3Load;
 			  }
 			  else if(this.code==AclfLoadCode.CONST_I){
 				  loadPQ.a_0 = ph3Load.a_0.multiply(vabc.a_0.abs());

@@ -33,7 +33,7 @@ import com.interpss.core.net.NetworkType;
 
 public class TestDistributionPowerflowAlgo {
 	
-	//@Test
+	@Test
 	public void testLineAndXfrGeneralizedMatrices() throws InterpssException {
 		
 		AclfNetwork3Phase net = createDistNetNoDG();
@@ -270,7 +270,7 @@ public class TestDistributionPowerflowAlgo {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testDistBusPF() throws InterpssException {
 		AclfNetwork3Phase net = createDistNetNoDG();
 		

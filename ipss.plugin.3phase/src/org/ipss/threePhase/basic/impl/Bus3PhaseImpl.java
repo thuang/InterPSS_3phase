@@ -226,9 +226,9 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
    // for power flow purpose
 	@Override
 	public Complex3x1 calc3PhEquivCurInj() {
-		calcLoad3PhEquivCurInj();
 		
-		this.equivCurInj3Phase = this.load3PhEquivCurInj;
+		
+		this.equivCurInj3Phase = calcLoad3PhEquivCurInj();
 		
 		for(Gen3Phase gen:this.getThreePhaseGenList()){
 			this.equivCurInj3Phase = this.equivCurInj3Phase.add(gen.getPowerflowEquivCurrInj());

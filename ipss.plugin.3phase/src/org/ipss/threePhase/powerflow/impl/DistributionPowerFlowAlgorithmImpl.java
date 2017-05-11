@@ -34,7 +34,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 	private DistributionPFMethod pfMethod = DistributionPFMethod.Forward_Backword_Sweep;
 	
 	private double tol = 1.0E-6;
-	private int    maxIteration = 20;
+	private int    maxIteration = 30;
 	private boolean radialNetworkOnly = true;
 	private boolean pfFlag =false;
 	private Hashtable<String,Complex3x1> busVoltTable =null;
@@ -218,10 +218,24 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 		
 		
 		for (int i=0;i<this.maxIteration;i++){
+			
+			IpssLogger.getLogger().info("FBSPowerflow iteration : "+ (i+1) );
+			
+//			if(i==4){
+//				System.out.println("\n/n FBSPowerflow iteration : "+ (i+1));
+//				
+//				for (Bus b: this.distNet.getBusList()){
+//					Bus3Phase bus3P = (Bus3Phase) b;
+//					System.out.println(bus3P.getId()+","+bus3P.get3PhaseVotlages());
+//				}
+//			}
 		
 			for (Branch bra: this.distNet.getBranchList()){
 				bra.setIntFlag(0);
 			}
+			
+			
+			
 			
 			for (Bus b: this.distNet.getBusList()){
 				 b.setIntFlag(0);
@@ -448,6 +462,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 					if(i>=1){
 						mis=bus3P.get3PhaseVotlages().subtract(busVoltTable.get(bus3P.getId())).absMax();
 						if(mis>this.getTolerance()){
+							//System.out.println("bus, mismatch = "+bus3P.getId()+","+mis);
 							this.pfFlag = false;
 						}
 					}
@@ -457,7 +472,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			
 			// power flow is converged, break the outer iteration and return
 			if(i>0 && this.pfFlag) {
-				System.out.println("\n\nDistribution power flow converged, iterations = "+i+"\n");
+				System.out.println("\n\nDistribution power flow converged, iterations = "+(i+1)+"\n");
 				
 				
 				calcSwingBusGenPower();

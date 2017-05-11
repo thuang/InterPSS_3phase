@@ -281,6 +281,9 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 		
 		}
 		
+		fromBusId =this.dataParser.getBusIdPrefix()+fromBusId;
+		toBusId =this.dataParser.getBusIdPrefix()+toBusId;
+		
 		if(this.dataParser.getDistNetwork().getBus(fromBusId)==null)
 			ThreePhaseObjectFactory.create3PDStabBus(fromBusId, this.dataParser.getDistNetwork());
 		
@@ -292,7 +295,7 @@ public boolean parseTransformerDataOneLine(String xfrStr) throws InterpssExcepti
 		Branch3Phase xfrBranch = ThreePhaseObjectFactory.create3PBranch(fromBusId, toBusId, "0", this.dataParser.getDistNetwork());
 	    
 		// since InterPSS uses fromBus->toBus(cirId) as the unique branchId, here the original Id is set as the name.
-		xfrBranch.setName(xfrId);
+		xfrBranch.setName(this.dataParser.getBusIdPrefix()+xfrId);
 		xfrBranch.setBranchCode(AclfBranchCode.XFORMER);
 		
 		Branch3Phase likeBranch = null;

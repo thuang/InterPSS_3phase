@@ -131,6 +131,7 @@ public class OpenDSSLoadParser {
 			Complex loadPQ = new Complex(loadP,loadQ);
 			
 			//get the bus object
+			busName =this.dataParser.getBusIdPrefix()+busName;
 			Bus3Phase bus = (Bus3Phase) this.dataParser.getDistNetwork().getBus(busName);
 			
 			Load1Phase load= null;
