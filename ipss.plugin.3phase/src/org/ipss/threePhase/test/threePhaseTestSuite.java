@@ -31,10 +31,12 @@ import org.junit.runners.Suite.SuiteClasses;
 	IEEE9_3Phase_1PAC_test.class,
     TestPVDistGen3Phase.class,
     Test3PhaseInductionMotor.class,
+   
     
     
     //dynamic simulation
     Test6BusFeeder.class,
+    IEEE123Feeder_Dstab_Test.class,
    
 })
 public class threePhaseTestSuite {

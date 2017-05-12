@@ -45,7 +45,7 @@ public class IEEE_13BusFeeder_Test {
 	
 	private final double ft2mile = 1.0/5280.0;
 	
-	//@Test
+	@Test
 	public void test_ieee13feeder_powerflow() throws InterpssException{
 		
 		IpssCorePlugin.init();
@@ -132,9 +132,9 @@ public class IEEE_13BusFeeder_Test {
 	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
 	  	
 	  	
-//	  	MonitorRecord rec0 = sm.getBusVoltTable().get("Bus652").get(0);
-//	  	MonitorRecord rec50 = sm.getBusVoltTable().get("Bus652").get(50);
-//	  	assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
+	  	MonitorRecord rec0 = sm.getBusVoltTable().get("Bus652").get(0);
+	  	MonitorRecord rec50 = sm.getBusVoltTable().get("Bus652").get(50);
+	  	assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
 		
 	}
 	

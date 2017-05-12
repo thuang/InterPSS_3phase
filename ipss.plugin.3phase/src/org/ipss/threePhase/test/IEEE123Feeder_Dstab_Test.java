@@ -150,10 +150,7 @@ public class IEEE123Feeder_Dstab_Test {
 		
 		
 		DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(distNet);
-		//distPFAlgo.orderDistributionBuses(true);
-		//distPFAlgo.setInitBusVoltageEnabled(true);
-		//distPFAlgo.setMaxIteration(1);
-		distPFAlgo.setTolerance(5.0E-3); // tolearnce = max voltage difference of two steps
+
 		assertTrue(distPFAlgo.powerflow());
 		
 		// output three phase total load
@@ -258,9 +255,11 @@ public class IEEE123Feeder_Dstab_Test {
 	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);
 	  	
 	  	
-	  	MonitorRecord rec0 = sm.getBusVoltTable().get("21").get(0);
-	  	MonitorRecord rec50 = sm.getBusVoltTable().get("21").get(50);
-	  	//assertTrue(Math.abs(rec0.getValue()-rec50.getValue())<1.0E-4);
+	  	MonitorRecord rec0_21 = sm.getBusVoltTable().get("21").get(0);
+	  	MonitorRecord rec1_21 = sm.getBusVoltTable().get("21").get(50);
+	  	MonitorRecord rec50_21 = sm.getBusVoltTable().get("21").get(50);
+	  	assertTrue(Math.abs(rec0_21.getValue()-rec1_21.getValue())<1.0E-2);
+	  	assertTrue(Math.abs(rec1_21.getValue()-rec50_21.getValue())<1.0E-4);
 	  	
 		FileUtil.writeText2File("output//IEEE123//AcMotorState.csv",
 				sm.toCSVString(sm.getAcMotorStateTable()));

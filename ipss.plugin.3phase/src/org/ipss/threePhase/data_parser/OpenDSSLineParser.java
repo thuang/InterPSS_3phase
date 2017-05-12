@@ -104,9 +104,9 @@ public class OpenDSSLineParser {
 			
 		}
 		
-		if(lineName.equals("l4")){
-			System.out.println("processing line :"+lineName);
-		}
+//		if(lineName.equals("l4")){
+//			System.out.println("processing line :"+lineName);
+//		}
 		
 		//busId is the substring before the first DOT
 		//phases info is defined in the substring after the first DOT
