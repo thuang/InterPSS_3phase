@@ -1,4 +1,4 @@
-package org.ipss.threePhase.data_parser;
+package org.ipss.threePhase.dataParser.opendss;
 
 import org.apache.commons.math3.complex.Complex;
 import org.ieee.odm.common.ODMLogger;

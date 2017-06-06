@@ -510,7 +510,7 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 					//if(bus.getId().equals("Bus12"))
 					//System.out.println("Bus, Vabc:"+b.getId()+","+vabc.toString());
 					
-					if(!vabc.a_0.isNaN()){
+					if(!vabc.a_0.isNaN()&& !vabc.b_1.isNaN() && !vabc.c_2.isNaN()){
                     
 						//if(bus instanceof Bus3Phase){
 							Bus3Phase bus3P = (Bus3Phase) bus;

@@ -18,7 +18,7 @@ import org.ipss.threePhase.basic.LineConfiguration;
 import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.LoadConnectionType;
-import org.ipss.threePhase.data_parser.OpenDSSDataParser;
+import org.ipss.threePhase.dataParser.opendss.OpenDSSDataParser;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.junit.Test;
 

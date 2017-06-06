@@ -17,7 +17,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.Load3Phase;
 import org.ipss.threePhase.basic.Phase;
-import org.ipss.threePhase.data_parser.OpenDSSDataParser;
+import org.ipss.threePhase.dataParser.opendss.OpenDSSDataParser;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;

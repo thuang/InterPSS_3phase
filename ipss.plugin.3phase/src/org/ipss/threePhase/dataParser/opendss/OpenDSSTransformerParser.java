@@ -1,4 +1,4 @@
-package org.ipss.threePhase.data_parser;
+package org.ipss.threePhase.dataParser.opendss;
 
 import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
 

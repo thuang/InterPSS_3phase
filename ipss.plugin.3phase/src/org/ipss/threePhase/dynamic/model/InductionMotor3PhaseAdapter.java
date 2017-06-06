@@ -140,6 +140,12 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 		
 		return getISource3Phase() ;
 	}
+	
+
+	@Override
+	public boolean updateAttributes(boolean netChange) {
+		return this.getInductionMotor().updateAttributes(netChange);
+	}
 
 	
 	public void setInductionMotor(InductionMotor indMotor) {

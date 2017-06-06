@@ -1,4 +1,4 @@
-package org.ipss.threePhase.data_parser;
+package org.ipss.threePhase.dataParser.opendss;
 
 import java.io.BufferedReader;
 import java.io.File;

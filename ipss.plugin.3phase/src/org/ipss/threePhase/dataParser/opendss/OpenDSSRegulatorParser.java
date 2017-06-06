@@ -1,4 +1,4 @@
-package org.ipss.threePhase.data_parser;
+package org.ipss.threePhase.dataParser.opendss;
 
 public class OpenDSSRegulatorParser {
 

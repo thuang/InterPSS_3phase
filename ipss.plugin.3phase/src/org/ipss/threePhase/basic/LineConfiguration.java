@@ -5,6 +5,8 @@ import org.interpss.numeric.datatype.Complex3x3;
 public class LineConfiguration {
 	
 	enum InputType { Physical, ZYMatrix, LineCode} 
+	enum LengthUnit {Feet, Mile, Meter, kM}
+	
 	
 	private String id = "";
 	private int nphases = 1;
@@ -16,6 +18,8 @@ public class LineConfiguration {
 	private Complex3x3 zMtx = null;
 	
 	private Complex3x3 shuntYMtx = null;
+	
+	//physical parameters
 	
 	
 	public String getId() {
@@ -66,6 +70,10 @@ public class LineConfiguration {
 		this.shuntYMtx = shuntYMtx;
 	}
 	
+	
+	public boolean calculateZYMatrixWithPhyiscalConfiguration(){
+		return true;
+	}
 	
 	public String toString(){
 		StringBuffer sb = new StringBuffer();
