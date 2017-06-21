@@ -16,6 +16,7 @@ import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
+import org.interpss.numeric.datatype.Point;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
@@ -52,6 +53,11 @@ import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
 import com.interpss.dstab.dynLoad.InductionMotor;
+import com.interpss.dstab.dynLoad.impl.MotorContactorControl;
+import com.interpss.dstab.dynLoad.impl.MotorEMSControl;
+import com.interpss.dstab.dynLoad.impl.MotorElectronicRelayProtection;
+import com.interpss.dstab.dynLoad.impl.MotorOverLoadProtection;
+import com.interpss.dstab.dynLoad.impl.MotorThermalProtection;
 import com.interpss.dstab.mach.EConstMachine;
 import com.interpss.dstab.mach.MachineType;
 
@@ -648,7 +654,7 @@ public class Test_GC_12_47_1_Feeder {
           
           // add building motor models
           try {
-//			addLargeOffice(net,"meter_1",1,3000.0, 80.0);
+			addLargeOffice(net,"meter_1",1,3000.0, 80.0);
 			addSmallOffice(net,"meter_2",3,300.0, 70.0);
 			addHotel(net,"meter_3",1,2000.0, 75.0);
 			
@@ -830,7 +836,74 @@ public class Test_GC_12_47_1_Feeder {
 								throw new Error("motor type must be among [1, 2, 3,  4]");
 						  
 						}
-					
+						
+						// add the motor protections and controls
+						if(motorProtectionType[j].contains("1")){
+							//create electronic relay and add it to the list
+							MotorElectronicRelayProtection eleRelay = new MotorElectronicRelayProtection(indMotor);
+							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.05,0.7));       // x-axis is time, y-axis is voltage
+							
+							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,0.95)); // x-axis is time, y-axis is voltage
+							indMotor.getProtectionControlList().add(eleRelay);
+
+						}
+	                    if(motorProtectionType[j].contains("2")){
+	                    	
+	                    	MotorOverLoadProtection olProtection = new MotorOverLoadProtection(indMotor);
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.33,0.6)); // x-axis is time, y-axis is voltage
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.5, 0.7)); // x-axis is time, y-axis is voltage
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(1.0, 0.8)); // x-axis is time, y-axis is voltage
+	                		//olProtection.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,1.0)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(olProtection);
+							
+						}
+	                    if(motorProtectionType[j].contains("3")){
+	                    	
+	                    	MotorThermalProtection thermalProtection = new MotorThermalProtection(indMotor);
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.5,0.55)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(1.0, 0.6)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(2.0, 0.65)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(4.0, 0.7)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(8.0, 0.75)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(10.0, 0.8)); // x-axis is time, y-axis is voltage
+	                		//olProtection.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,1.0)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(thermalProtection);
+							
+						}
+	                    if(motorProtectionType[j].contains("4")){
+	                    	
+	                    	MotorContactorControl contactor = new MotorContactorControl(indMotor);
+	                		
+	                		contactor.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.55));  // x-axis is time, y-axis is voltage
+
+
+	                		contactor.getReconnectVoltTimeCurve().getPoints().add(new Point(0.1,0.7)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(contactor);
+
+							
+						}
+	                    if(motorProtectionType[j].contains("5")){
+	                    	
+	                    	MotorEMSControl ems = new MotorEMSControl(indMotor);
+	                		
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.0));  // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.1,0.4)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.166, 0.5)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.25, 0.6)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.5, 0.7)); // x-axis is time, y-axis is voltage
+	                	
+
+
+	                		ems.getReconnectVoltTimeCurve().getPoints().add(new Point(2.0,0.95)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(ems);
+							
+						}
+						
+					    // apply the motor adapter
 						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
 						indMotor3Phase.setLoadPercent(motorkW/sumOfBusLoad.getReal());
 						bus3p.getThreePhaseDynLoadList().add(indMotor3Phase);
@@ -1005,6 +1078,72 @@ public class Test_GC_12_47_1_Feeder {
 								throw new Error("motor type must be among [1, 2, 3,  4]");
 						  
 						}
+						
+						// add the motor protections and controls
+						if(motorProtectionType[j].contains("1")){
+							//create electronic relay and add it to the list
+							MotorElectronicRelayProtection eleRelay = new MotorElectronicRelayProtection(indMotor);
+							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.05,0.7));       // x-axis is time, y-axis is voltage
+							
+							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,0.95)); // x-axis is time, y-axis is voltage
+							indMotor.getProtectionControlList().add(eleRelay);
+
+						}
+	                    if(motorProtectionType[j].contains("2")){
+	                    	
+	                    	MotorOverLoadProtection olProtection = new MotorOverLoadProtection(indMotor);
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.33,0.6)); // x-axis is time, y-axis is voltage
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.5, 0.7)); // x-axis is time, y-axis is voltage
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(1.0, 0.8)); // x-axis is time, y-axis is voltage
+	                		//olProtection.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,1.0)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(olProtection);
+							
+						}
+	                    if(motorProtectionType[j].contains("3")){
+	                    	
+	                    	MotorThermalProtection thermalProtection = new MotorThermalProtection(indMotor);
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.5,0.55)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(1.0, 0.6)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(2.0, 0.65)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(4.0, 0.7)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(8.0, 0.75)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(10.0, 0.8)); // x-axis is time, y-axis is voltage
+	                		//olProtection.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,1.0)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(thermalProtection);
+							
+						}
+	                    if(motorProtectionType[j].contains("4")){
+	                    	
+	                    	MotorContactorControl contactor = new MotorContactorControl(indMotor);
+	                		
+	                		contactor.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.55));  // x-axis is time, y-axis is voltage
+
+
+	                		contactor.getReconnectVoltTimeCurve().getPoints().add(new Point(0.1,0.7)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(contactor);
+
+							
+						}
+	                    if(motorProtectionType[j].contains("5")){
+	                    	
+	                    	MotorEMSControl ems = new MotorEMSControl(indMotor);
+	                		
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.0));  // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.1,0.4)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.166, 0.5)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.25, 0.6)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.5, 0.7)); // x-axis is time, y-axis is voltage
+	                	
+
+
+	                		ems.getReconnectVoltTimeCurve().getPoints().add(new Point(2.0,0.95)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(ems);
+							
+						}
 					
 						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
 						indMotor3Phase.setLoadPercent(motorkW/sumOfBusLoad.getReal());
@@ -1177,6 +1316,72 @@ public class Test_GC_12_47_1_Feeder {
 							default: 
 								throw new Error("motor type must be among [1, 2, 3,  4]");
 						  
+						}
+						
+						// add the motor protections and controls
+						if(motorProtectionType[j].contains("1")){
+							//create electronic relay and add it to the list
+							MotorElectronicRelayProtection eleRelay = new MotorElectronicRelayProtection(indMotor);
+							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.05,0.7));       // x-axis is time, y-axis is voltage
+							
+							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,0.95)); // x-axis is time, y-axis is voltage
+							indMotor.getProtectionControlList().add(eleRelay);
+
+						}
+	                    if(motorProtectionType[j].contains("2")){
+	                    	
+	                    	MotorOverLoadProtection olProtection = new MotorOverLoadProtection(indMotor);
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.33,0.6)); // x-axis is time, y-axis is voltage
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.5, 0.7)); // x-axis is time, y-axis is voltage
+	                		olProtection.getTripVoltTimeCurve().getPoints().add(new Point(1.0, 0.8)); // x-axis is time, y-axis is voltage
+	                		//olProtection.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,1.0)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(olProtection);
+							
+						}
+	                    if(motorProtectionType[j].contains("3")){
+	                    	
+	                    	MotorThermalProtection thermalProtection = new MotorThermalProtection(indMotor);
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(0.5,0.55)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(1.0, 0.6)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(2.0, 0.65)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(4.0, 0.7)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(8.0, 0.75)); // x-axis is time, y-axis is voltage
+	                		thermalProtection.getTripVoltTimeCurve().getPoints().add(new Point(10.0, 0.8)); // x-axis is time, y-axis is voltage
+	                		//olProtection.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,1.0)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(thermalProtection);
+							
+						}
+	                    if(motorProtectionType[j].contains("4")){
+	                    	
+	                    	MotorContactorControl contactor = new MotorContactorControl(indMotor);
+	                		
+	                		contactor.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.55));  // x-axis is time, y-axis is voltage
+
+
+	                		contactor.getReconnectVoltTimeCurve().getPoints().add(new Point(0.1,0.7)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(contactor);
+
+							
+						}
+	                    if(motorProtectionType[j].contains("5")){
+	                    	
+	                    	MotorEMSControl ems = new MotorEMSControl(indMotor);
+	                		
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.0));  // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.1,0.4)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.166, 0.5)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.25, 0.6)); // x-axis is time, y-axis is voltage
+	                		ems.getTripVoltTimeCurve().getPoints().add(new Point(0.5, 0.7)); // x-axis is time, y-axis is voltage
+	                	
+
+
+	                		ems.getReconnectVoltTimeCurve().getPoints().add(new Point(2.0,0.95)); // x-axis is time, y-axis is voltage
+	                		
+	                		indMotor.getProtectionControlList().add(ems);
+							
 						}
 					
 						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
