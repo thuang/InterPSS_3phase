@@ -177,6 +177,12 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 		return equivCurInj = loadPQ.divide(vabc).conjugate().multiply(-1.0);
 	}
 
+	@Override
+	public Complex getInit3PhaseTotalLoad() {
+		
+		return ph3Load.a_0.add(ph3Load.b_1).add(ph3Load.c_2);
+	}
+
 	
 
 

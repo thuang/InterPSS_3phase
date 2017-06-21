@@ -170,5 +170,9 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 		  
 		  return this.indMotor.getStates(ref);
 	}
+	  
+	@Override public String getExtendedDeviceId(){
+		return this.indMotor.getExtendedDeviceId();
+	}
 
 }
