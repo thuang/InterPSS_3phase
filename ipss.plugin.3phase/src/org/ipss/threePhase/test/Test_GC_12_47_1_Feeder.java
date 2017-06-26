@@ -285,12 +285,13 @@ public class Test_GC_12_47_1_Feeder {
 			
 			for(DynamicBusDevice dynDevice: bus.getDynamicBusDeviceList()){
             	if(dynDevice instanceof InductionMotor ){
-            		DynLoadModel3Phase dynLoad3P = threePhaseInductionMotorAptr.apply((InductionMotor) dynDevice);
-            		if(dynLoad3P.isActive()){
-            			motorIds.add(dynLoad3P.getExtendedDeviceId());
-        				motorRatingTable.put(dynLoad3P.getExtendedDeviceId(), dynLoad3P.getMVABase());
-        				sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, dynLoad3P.getExtendedDeviceId());
-                	}
+            		InductionMotor indMotor = (InductionMotor) dynDevice;
+            		//DynLoadModel3Phase dynLoad3P = threePhaseInductionMotorAptr.apply((InductionMotor) dynDevice);
+            		//if(dynLoad3P.isActive()){
+            			motorIds.add(dynDevice.getExtendedDeviceId());
+        				motorRatingTable.put(dynDevice.getExtendedDeviceId(), indMotor.getMVABase());
+        				sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, dynDevice.getExtendedDeviceId());
+                	
             	}
 			}
 //			for(DynLoadModel3Phase dynld3ph:bus.getThreePhaseDynLoadList()){
@@ -376,16 +377,16 @@ public class Test_GC_12_47_1_Feeder {
 //			 sb.append(entry.getKey()+","+entry.getValue()+"\n");
 //		}
 		
-//		FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//motor_rating.csv",sb.toString());
+		FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//motor_rating.csv",sb.toString());
 	  	
 	  	System.out.println("\n"+sm.toCSVString(sm.getBusPhAVoltTable()));
 	  	//System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
 	  	//System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
-	  	//System.out.println(sm.toCSVString(sm.getMotorPTable()));
+	  	System.out.println(sm.toCSVString(sm.getMotorPTable()));
 	  	System.out.println(sm.toCSVString(sm.getMotorFuvTable()));
 	  	
-//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
-//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
+	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
+	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
 //	    
 //	 	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_delayed_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
 //	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_delayed_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
@@ -735,9 +736,9 @@ public class Test_GC_12_47_1_Feeder {
           
           // add building motor models
           try {
-			//addLargeOffice(net,"meter_1",1,3000.0, 70.0);
-			addSmallOffice(net,"meter_2",1,300.0, 70.0);
-			//addHotel(net,"meter_3",1,2000.0, 75.0);
+			addLargeOffice(net,"meter_1",1,3000.0, 70.0);
+			addSmallOffice(net,"meter_2",5,300.0, 70.0);
+			addHotel(net,"meter_3",1,2000.0, 75.0);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -792,6 +793,7 @@ public class Test_GC_12_47_1_Feeder {
 				for(Load3Phase ld3P: bus3p.getThreePhaseLoadList()){
 					ld3P.set3PhaseLoad(ld3P.getInit3PhaseLoad().multiply(ratio));
 				}
+				sumOfBusLoad = sumOfBusLoad.multiply(ratio);
 				
 			}
 	
@@ -830,7 +832,7 @@ public class Test_GC_12_47_1_Feeder {
 		 */
 		
 		String[] motorName = {"AHU_Fan", "VAV_Frac_Fan", "DOAS_Fan", "Chiller_Compressor","Chiller_Pump","Cool_Tower",
-				"Boilers	Ind_Draft","Boilers	Pump","CRAC	Compressor","CRAC	Fan","CRAC	Frac_Condensor"};
+				"Boilers_Ind_Draft","Boilers_Pump","CRAC_Compressor","CRAC_Fan","CRAC_Frac_Condensor"};
 		String[] motorProtectionType = {"245","345","245","145","25","245","145","25","145","145","345"};
 		
 		int[] motorType = {2,4,2,1,3,2,2,3,1,2,4};
@@ -890,8 +892,8 @@ public class Test_GC_12_47_1_Feeder {
 						double motorkW = totalMotorKW*motorLoadPercent[j]/100.0;
 				        double motorP_sysbase = motorkW/kvaBase;
 				        indMotor.setMVABase(motorkW*0.001/0.8);
-						indMotor.setLoadFactor(0.8);
-						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
+						//indMotor.setLoadFactor(0.8);
+						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()*100.0); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
 						
 				
 						switch (motorType[j]){
@@ -925,9 +927,9 @@ public class Test_GC_12_47_1_Feeder {
 						if(motorProtectionType[j].contains("1")){
 							//create electronic relay and add it to the list
 							MotorElectronicRelayProtection eleRelay = new MotorElectronicRelayProtection(indMotor);
-							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.05,0.7));       // x-axis is time, y-axis is voltage
+							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.08,0.6));       // x-axis is time, y-axis is voltage
 							
-							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,0.95)); // x-axis is time, y-axis is voltage
+							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.033,0.90)); // x-axis is time, y-axis is voltage
 							indMotor.getProtectionControlList().add(eleRelay);
 
 						}
@@ -960,10 +962,10 @@ public class Test_GC_12_47_1_Feeder {
 	                    	
 	                    	MotorContactorControl contactor = new MotorContactorControl(indMotor);
 	                		
-	                		contactor.getTripVoltTimeCurve().getPoints().add(new Point(0.083,0.55));  // x-axis is time, y-axis is voltage
+	                		contactor.getTripVoltTimeCurve().getPoints().add(new Point(0.1,0.65));  // x-axis is time, y-axis is voltage
 
 
-	                		contactor.getReconnectVoltTimeCurve().getPoints().add(new Point(0.1,0.7)); // x-axis is time, y-axis is voltage
+	                		contactor.getReconnectVoltTimeCurve().getPoints().add(new Point(0.1,0.75)); // x-axis is time, y-axis is voltage
 	                		
 	                		indMotor.getProtectionControlList().add(contactor);
 
@@ -1071,7 +1073,7 @@ public class Test_GC_12_47_1_Feeder {
 
 		 */
 		
-		String[] motorName = {"AHU_Compressor","AHU_Fan", "VAV_Frac_Fan", "Boilers	Ind_Draft","CRAC	Compressor"};
+		String[] motorName = {"AHU_Compressor","AHU_Fan", "VAV_Frac_Fan", "Boilers_Ind_Draft","CRAC_Compressor"};
 		
 		String[] motorProtectionType = {"1245","1245","345","345","145"};
 		
@@ -1135,7 +1137,7 @@ public class Test_GC_12_47_1_Feeder {
 				        double motorP_sysbase = motorkW/kvaBase;
 				        indMotor.setMVABase(motorkW*0.001/0.8);
 						//indMotor.setLoadFactor(0.8);
-						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
+						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()*100.0); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
 				
 						switch (motorType[j]){
 							case 1: // motor A
@@ -1300,12 +1302,12 @@ public class Test_GC_12_47_1_Feeder {
 		}
 		
 		/*
-			Hotel	PTAC 	Compressor	MA	P3P4	425	0.319069069
-			Hotel	PTAC 	Fan	MD	P3	123.0769231	0.092400092
-			Hotel	Exhaust	Fan	MD	P3	23.08923077	0.017334257	
-			Hotel	Split	Fan	MB	P2P4	123.0769231	0.092400092
-			Hotel	Split	Compressor	MA	P2P4	425	0.319069069
-			Hotel	Split	Frac_Condensor	MD	P3P4	130	0.097597598
+			Hotel	PTAC 	Compressor	MA	P3P4	425	    0.319069069
+			Hotel	PTAC 	Fan	        MD	P3	123.0769231	0.092400092
+			Hotel	Exhaust	Fan	        MD	P3	23.08923077	0.017334257	
+			Hotel	Split	Fan	        MB	P2P4	123.0769231	0.092400092
+			Hotel	Split	Compressor	MA	P2P4	425	       0.319069069
+			Hotel	Split	Frac_Condensor	MD	P3P4	130	    0.097597598
 			Hotel	Split	Frac_Ind_Draft	MD	P3P4	83.25	0.0625
 
 		 */
@@ -1372,7 +1374,7 @@ public class Test_GC_12_47_1_Feeder {
 				        double motorP_sysbase = motorkW/kvaBase;
 				        indMotor.setMVABase(motorkW*0.001/0.8);
 						//indMotor.setLoadFactor(0.8);
-						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
+						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()*100.0); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
 						
 				
 						switch (motorType[j]){
@@ -1406,9 +1408,9 @@ public class Test_GC_12_47_1_Feeder {
 						if(motorProtectionType[j].contains("1")){
 							//create electronic relay and add it to the list
 							MotorElectronicRelayProtection eleRelay = new MotorElectronicRelayProtection(indMotor);
-							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.05,0.7));       // x-axis is time, y-axis is voltage
+							eleRelay.getTripVoltTimeCurve().getPoints().add(new Point(0.08,0.7));       // x-axis is time, y-axis is voltage
 							
-							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.016,0.95)); // x-axis is time, y-axis is voltage
+							eleRelay.getReconnectVoltTimeCurve().getPoints().add(new Point(0.05,0.95)); // x-axis is time, y-axis is voltage
 							indMotor.getProtectionControlList().add(eleRelay);
 
 						}

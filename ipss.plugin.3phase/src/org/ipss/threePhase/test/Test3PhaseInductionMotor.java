@@ -1,10 +1,12 @@
 package org.ipss.threePhase.test;
 
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseInductionMotorAptr;
 import static org.junit.Assert.assertTrue;
 
 import org.interpss.IpssCorePlugin;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
+import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
 import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
@@ -18,6 +20,8 @@ import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
+import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
+import com.interpss.dstab.device.DynamicBusDevice;
 import com.interpss.dstab.dynLoad.InductionMotor;
 import com.interpss.dstab.dynLoad.impl.InductionMotorImpl;
 
@@ -98,6 +102,10 @@ public class Test3PhaseInductionMotor extends TestBase{
 	  			sm.addGeneratorStdMonitor(new String[]{"Bus3-mach1"});
 	  			sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
 	  			
+	  			
+	            sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, indMotor.getExtendedDeviceId());
+	        
+	  			
 	  			// set the output handler
 	  			dstabAlgo.setSimuOutputHandler(sm);
 	  			dstabAlgo.setOutPutPerSteps(1);
@@ -125,5 +133,8 @@ public class Test3PhaseInductionMotor extends TestBase{
 	  		 	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  		  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	  		  	assertTrue(bus1.getDynamicBusDeviceList().size()==1);
+	  		  	
+	  		   System.out.println(sm.toCSVString(sm.getMotorPTable()));
+	  		   System.out.println(sm.toCSVString(sm.getMotorSlipTable()));
 	}
 }
