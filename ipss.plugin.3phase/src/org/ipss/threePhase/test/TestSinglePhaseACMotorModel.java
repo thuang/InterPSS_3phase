@@ -139,6 +139,7 @@ public class TestSinglePhaseACMotorModel {
 		  
 		  assertTrue(Math.abs(sm.getBusPhAVoltTable().get("Bus1").get(1).getValue()-
 					sm.getBusPhAVoltTable().get("Bus1").get(10).getValue())<1.0E-3);
+		  assertTrue(bus1.getDynamicBusDeviceList().size()==3);
 	}
 	
 	//@Test

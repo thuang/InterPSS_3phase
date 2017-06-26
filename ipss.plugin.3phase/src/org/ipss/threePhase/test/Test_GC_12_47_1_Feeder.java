@@ -1,6 +1,7 @@
 package org.ipss.threePhase.test;
 
 import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
+import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseInductionMotorAptr;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +20,7 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Point;
 import org.interpss.numeric.datatype.Unit.UnitType;
+import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
@@ -53,6 +56,7 @@ import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
+import com.interpss.dstab.device.DynamicBusDevice;
 import com.interpss.dstab.dynLoad.InductionMotor;
 import com.interpss.dstab.dynLoad.impl.MotorContactorControl;
 import com.interpss.dstab.dynLoad.impl.MotorEMSControl;
@@ -152,7 +156,7 @@ public class Test_GC_12_47_1_Feeder {
 	 
 	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(.005);
+		dstabAlgo.setTotalSimuTimeSec(.5);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
 		//distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("150r", distNet, SimpleFaultCode.GROUND_LG,new Complex(0,0.0),new Complex(0,0.0), 0.5,0.07), "SLG@Bus1");
         
@@ -191,10 +195,10 @@ public class Test_GC_12_47_1_Feeder {
 				}
 				
 				
-				if(dstabAlgo.getSimuTime()>0.5 && dstabAlgo.getSimuTime()<0.5833){
+				if(dstabAlgo.getSimuTime()>0.1 && dstabAlgo.getSimuTime()<=0.2){
 					mach.setE(vsag);
 				}
-				else if (dstabAlgo.getSimuTime()>=0.6){
+				else if (dstabAlgo.getSimuTime()>=0.2){
 					mach.setE(1.0);
 				}
 			}
@@ -260,7 +264,7 @@ public class Test_GC_12_47_1_Feeder {
 	 
 	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(.1);
+		dstabAlgo.setTotalSimuTimeSec(0.5);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
 		//distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("150r", distNet, SimpleFaultCode.GROUND_LG,new Complex(0,0.0),new Complex(0,0.0), 0.5,0.07), "SLG@Bus1");
         
@@ -271,14 +275,32 @@ public class Test_GC_12_47_1_Feeder {
 		sm.add3PhaseBusStdMonitor(new String[]{"node_7","node_8","node_9","node_28","node_27"});
 		
 		String[] motorBuses = {"meter_1","meter_2","meter_3"};
+		sm.addBusStdMonitor(motorBuses);
+		sm.add3PhaseBusStdMonitor(motorBuses);
 		List<String> motorIds = new ArrayList<>();
+		Hashtable<String,Double> motorRatingTable = new Hashtable<>();
+		
 		for(int i = 0; i<motorBuses.length;i++){
 			Bus3Phase bus= (Bus3Phase) net.getBus(motorBuses[i]);
-			for(DynLoadModel3Phase dynld3ph:bus.getThreePhaseDynLoadList()){
-				motorIds.add(dynld3ph.getExtendedDeviceId());
-				sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, dynld3ph.getExtendedDeviceId());
+			
+			for(DynamicBusDevice dynDevice: bus.getDynamicBusDeviceList()){
+            	if(dynDevice instanceof InductionMotor ){
+            		DynLoadModel3Phase dynLoad3P = threePhaseInductionMotorAptr.apply((InductionMotor) dynDevice);
+            		if(dynLoad3P.isActive()){
+            			motorIds.add(dynLoad3P.getExtendedDeviceId());
+        				motorRatingTable.put(dynLoad3P.getExtendedDeviceId(), dynLoad3P.getMVABase());
+        				sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, dynLoad3P.getExtendedDeviceId());
+                	}
+            	}
 			}
+//			for(DynLoadModel3Phase dynld3ph:bus.getThreePhaseDynLoadList()){
+//				motorIds.add(dynld3ph.getExtendedDeviceId());
+//				motorRatingTable.put(dynld3ph.getExtendedDeviceId(), dynld3ph.getMVABase());
+//				sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, dynld3ph.getExtendedDeviceId());
+//			}
 		}
+		
+		
 		//sm.addDynDeviceMonitor(DynDeviceType.InductionMotor, "IndMotor_1@Bus1");
 		
 //		for(String acMotorId: acMotorIds)
@@ -299,9 +321,11 @@ public class Test_GC_12_47_1_Feeder {
 				 sm.addBusPhaseVoltageMonitorRecord( busId,dstabAlgo.getSimuTime(), ((Bus3Phase)net.getBus(busId)).get3PhaseVotlages());
 			}
 	  	    double vsag = 0.4;
+	  	    boolean delayRecoverFlag = false;
+	  	    double delayRecoverTime = 2; // 2 second from dip to 1.0 pu
 	  		//dstabAlgo.performSimulation();
 	  		while(dstabAlgo.getSimuTime()<=dstabAlgo.getTotalSimuTimeSec()){
-				
+				System.out.println("time = "+dstabAlgo.getSimuTime());
 				dstabAlgo.solveDEqnStep(true);
 				
 				for(String busId: sm.getBusPhAVoltTable().keySet()){
@@ -310,20 +334,63 @@ public class Test_GC_12_47_1_Feeder {
 				}
 				
 				
-				if(dstabAlgo.getSimuTime()>0.5 && dstabAlgo.getSimuTime()<0.5833){
+				if(dstabAlgo.getSimuTime()>=0.1 && dstabAlgo.getSimuTime()<=0.2){
 					mach.setE(vsag);
 				}
-				else if (dstabAlgo.getSimuTime()>=0.6){
-					mach.setE(1.0);
+				
+				if (dstabAlgo.getSimuTime()>0.2){
+					if(delayRecoverFlag){
+						double rampRate = (1.0-vsag)/delayRecoverTime;
+						double volt = vsag + (dstabAlgo.getSimuTime()-0.2)*rampRate;
+						if(volt>1.0) volt = 1.0;
+						mach.setE(volt);
+					}
+					else
+					  mach.setE(1.0);
 				}
+				
 			}
 	  	}
 	  	
-	  	System.out.println(sm.toCSVString(sm.getBusPhAVoltTable()));
-	  	System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
-	  	System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
-	  	System.out.println(sm.toCSVString(sm.getMotorPTable()));
+        StringBuffer sb = new StringBuffer();
+    	for(int i = 0; i<motorBuses.length;i++){
+			Bus3Phase bus= (Bus3Phase) net.getBus(motorBuses[i]);
+			for(DynamicBusDevice dynDevice: bus.getDynamicBusDeviceList()){
+            	if(dynDevice instanceof InductionMotor ){
+            		DynLoadModel3Phase dynLoad3P = threePhaseInductionMotorAptr.apply((InductionMotor) dynDevice);
+            		if(dynLoad3P.isActive()){
+        				sb.append(dynLoad3P.getExtendedDeviceId()+","+dynLoad3P.getMVABase()+"\n");
+        				System.out.print("'"+dynLoad3P.getExtendedDeviceId()+"':"+dynLoad3P.getMVABase()+",");
+                	}
+            	}
+			}
+			
+//			for(DynLoadModel3Phase dynld3ph:bus.getThreePhaseDynLoadList()){
+//				//motorIds.add(dynld3ph.getExtendedDeviceId());
+//				sb.append(dynld3ph.getExtendedDeviceId()+","+dynld3ph.getMVABase()+"\n");
+//				System.out.print("'"+dynld3ph.getExtendedDeviceId()+"':"+dynld3ph.getMVABase()+",");
+//			}
+    	}
+		
+//		for(Entry<String, Double> entry: motorRatingTable.entrySet()){
+//			 sb.append(entry.getKey()+","+entry.getValue()+"\n");
+//		}
+		
+//		FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//motor_rating.csv",sb.toString());
+	  	
+	  	System.out.println("\n"+sm.toCSVString(sm.getBusPhAVoltTable()));
+	  	//System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
+	  	//System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
+	  	//System.out.println(sm.toCSVString(sm.getMotorPTable()));
 	  	System.out.println(sm.toCSVString(sm.getMotorFuvTable()));
+	  	
+//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
+//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
+//	    
+//	 	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_delayed_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
+//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_delayed_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
+	
+	
 	}
 	
 	
@@ -668,9 +735,9 @@ public class Test_GC_12_47_1_Feeder {
           
           // add building motor models
           try {
-			addLargeOffice(net,"meter_1",1,3000.0, 80.0);
-			addSmallOffice(net,"meter_2",3,300.0, 70.0);
-			addHotel(net,"meter_3",1,2000.0, 75.0);
+			//addLargeOffice(net,"meter_1",1,3000.0, 70.0);
+			addSmallOffice(net,"meter_2",1,300.0, 70.0);
+			//addHotel(net,"meter_3",1,2000.0, 75.0);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -787,7 +854,7 @@ public class Test_GC_12_47_1_Feeder {
 				    	double acmotorbase = totalMotorKW /1000.0*motorLoadPercent[j]/100.0/0.8/3; // assuming 0.8 loading factor
 					
 						
-					    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus3p, bus3p.getId()+"_largeOffice_"+i+"_"+motorName[j]+"_A");
+					    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus3p, "type_"+motorType[j]+"_largeOffice_"+i+"_"+motorName[j]+"_A");
 				  		ac1.setLoadPercent(motorLoadPercent[j]);
 				  		ac1.setPhase(Phase.A);
 				  		ac1.setMVABase(acmotorbase);
@@ -795,7 +862,7 @@ public class Test_GC_12_47_1_Feeder {
 				  		
 				  		
 				  		
-				  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus3p,bus3p.getId()+"_largeOffice_"+i+"_"+motorName[j]+"_B");
+				  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus3p,"type_"+motorType[j]+"_largeOffice_"+i+"_"+motorName[j]+"_B");
 				  		ac2.setLoadPercent(motorLoadPercent[j]);
 				  		ac2.setPhase(Phase.B);
 				  		ac2.setMVABase(acmotorbase);
@@ -803,7 +870,7 @@ public class Test_GC_12_47_1_Feeder {
 				  		
 
 				  		
-				  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus3p,bus3p.getId()+"_largeOffice_"+buildingNum+"_"+motorName[j]+"_C");
+				  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus3p,"type_"+motorType[j]+"_largeOffice_"+i+"_"+motorName[j]+"_C");
 				  		ac3.setLoadPercent(motorLoadPercent[j]);
 				  		ac3.setPhase(Phase.C);
 				  		ac3.setMVABase(acmotorbase);
@@ -811,7 +878,7 @@ public class Test_GC_12_47_1_Feeder {
 				    }
 				    else{	
 				    	
-				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor(bus3p.getId()+"_largeOffice_"+i+"_"+motorName[j]);
+				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor("type_"+motorType[j]+"_largeOffice_"+i+"_"+motorName[j]);
 						indMotor.setDStabBus(bus3p);
 			
 						indMotor.setXm(3.0);
@@ -822,7 +889,10 @@ public class Test_GC_12_47_1_Feeder {
 						
 						double motorkW = totalMotorKW*motorLoadPercent[j]/100.0;
 				        double motorP_sysbase = motorkW/kvaBase;
+				        indMotor.setMVABase(motorkW*0.001/0.8);
 						indMotor.setLoadFactor(0.8);
+						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
+						
 				
 						switch (motorType[j]){
 							case 1: // motor A
@@ -916,11 +986,8 @@ public class Test_GC_12_47_1_Feeder {
 	                		indMotor.getProtectionControlList().add(ems);
 							
 						}
-						
-					    // apply the motor adapter
-						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
-						indMotor3Phase.setLoadPercent(motorkW/sumOfBusLoad.getReal());
-						bus3p.getThreePhaseDynLoadList().add(indMotor3Phase);
+
+
 					
 				    }
 			
@@ -1005,6 +1072,7 @@ public class Test_GC_12_47_1_Feeder {
 		 */
 		
 		String[] motorName = {"AHU_Compressor","AHU_Fan", "VAV_Frac_Fan", "Boilers	Ind_Draft","CRAC	Compressor"};
+		
 		String[] motorProtectionType = {"1245","1245","345","345","145"};
 		
 		int[] motorType = {1,2,4,4,1};
@@ -1028,7 +1096,7 @@ public class Test_GC_12_47_1_Feeder {
 				    	double acmotorbase = totalMotorKW /1000.0*motorLoadPercent[j]/100.0/0.8/3; // assuming 0.8 loading factor
 					
 						
-					    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus3p, bus3p.getId()+"_smallOffice_"+i+"_"+motorName[j]+"_A");
+					    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus3p, "type_"+motorType[j]+"_smallOffice_"+i+"_"+motorName[j]+"_A");
 				  		ac1.setLoadPercent(motorLoadPercent[j]);
 				  		ac1.setPhase(Phase.A);
 				  		ac1.setMVABase(acmotorbase);
@@ -1036,7 +1104,7 @@ public class Test_GC_12_47_1_Feeder {
 				  		
 				  		
 				  		
-				  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus3p,bus3p.getId()+"_smallOffice_"+i+"_"+motorName[j]+"_B");
+				  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus3p,"type_"+motorType[j]+"_smallOffice_"+i+"_"+motorName[j]+"_B");
 				  		ac2.setLoadPercent(motorLoadPercent[j]);
 				  		ac2.setPhase(Phase.B);
 				  		ac2.setMVABase(acmotorbase);
@@ -1044,7 +1112,7 @@ public class Test_GC_12_47_1_Feeder {
 				  		
 
 				  		
-				  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus3p,bus3p.getId()+"_smallOffice_"+i+"_"+motorName[j]+"_C");
+				  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus3p,"type_"+motorType[j]+"_smallOffice_"+i+"_"+motorName[j]+"_C");
 				  		ac3.setLoadPercent(motorLoadPercent[j]);
 				  		ac3.setPhase(Phase.C);
 				  		ac3.setMVABase(acmotorbase);
@@ -1052,8 +1120,9 @@ public class Test_GC_12_47_1_Feeder {
 				    }
 				    else{	
 				    	
-				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor(bus3p.getId()+"_smallOffice_"+i+"_"+motorName[j]);
+				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor("type_"+motorType[j]+"_smallOffice_"+i+"_"+motorName[j]);
 						indMotor.setDStabBus(bus3p);
+					
 			
 						indMotor.setXm(3.0);
 						indMotor.setXl(0.07);
@@ -1064,7 +1133,9 @@ public class Test_GC_12_47_1_Feeder {
 						
 				        double motorkW = totalMotorKW*motorLoadPercent[j]/100.0;
 				        double motorP_sysbase = motorkW/kvaBase;
-						indMotor.setLoadFactor(0.8);
+				        indMotor.setMVABase(motorkW*0.001/0.8);
+						//indMotor.setLoadFactor(0.8);
+						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
 				
 						switch (motorType[j]){
 							case 1: // motor A
@@ -1158,10 +1229,6 @@ public class Test_GC_12_47_1_Feeder {
 	                		indMotor.getProtectionControlList().add(ems);
 							
 						}
-					
-						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
-						indMotor3Phase.setLoadPercent(motorkW/sumOfBusLoad.getReal());
-						bus3p.getThreePhaseDynLoadList().add(indMotor3Phase);
 					
 				    }
 			
@@ -1268,7 +1335,7 @@ public class Test_GC_12_47_1_Feeder {
 				    	double acmotorbase = totalMotorKW /1000.0*motorLoadPercent[j]/100.0/0.8/3; // assuming 0.8 loading factor
 					
 						
-					    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus3p, bus3p.getId()+"_hotel_"+i+"_"+motorName[j]+"_A");
+					    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus3p, "type_"+motorType[j]+"_hotel_"+i+"_"+motorName[j]+"_A");
 				  		ac1.setLoadPercent(motorLoadPercent[j]);
 				  		ac1.setPhase(Phase.A);
 				  		ac1.setMVABase(acmotorbase);
@@ -1276,7 +1343,7 @@ public class Test_GC_12_47_1_Feeder {
 				  		
 				  		
 				  		
-				  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus3p,bus3p.getId()+"_hotel_"+i+"_"+motorName[j]+"_B");
+				  		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus3p,"type_"+motorType[j]+"_hotel_"+i+"_"+motorName[j]+"_B");
 				  		ac2.setLoadPercent(motorLoadPercent[j]);
 				  		ac2.setPhase(Phase.B);
 				  		ac2.setMVABase(acmotorbase);
@@ -1284,7 +1351,7 @@ public class Test_GC_12_47_1_Feeder {
 				  		
 
 				  		
-				  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus3p,bus3p.getId()+"_hotel_"+i+"_"+motorName[j]+"_C");
+				  		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus3p,"type_"+motorType[j]+"_hotel_"+i+"_"+motorName[j]+"_C");
 				  		ac3.setLoadPercent(motorLoadPercent[j]);
 				  		ac3.setPhase(Phase.C);
 				  		ac3.setMVABase(acmotorbase);
@@ -1292,7 +1359,7 @@ public class Test_GC_12_47_1_Feeder {
 				    }
 				    else{	
 				    	
-				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor(bus3p.getId()+"_hotel_"+i+"_"+motorName[j]);
+				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor("type_"+motorType[j]+"_hotel_"+i+"_"+motorName[j]);
 						indMotor.setDStabBus(bus3p);
 			
 						indMotor.setXm(3.0);
@@ -1303,7 +1370,10 @@ public class Test_GC_12_47_1_Feeder {
 
 						double motorkW = totalMotorKW*motorLoadPercent[j]/100.0;
 				        double motorP_sysbase = motorkW/kvaBase;
-						indMotor.setLoadFactor(0.8);
+				        indMotor.setMVABase(motorkW*0.001/0.8);
+						//indMotor.setLoadFactor(0.8);
+						indMotor.setLoadPercent(motorkW/sumOfBusLoad.getReal()); // this is required for 3phaseAdapter to properly initialize the states in dynamic simulation
+						
 				
 						switch (motorType[j]){
 							case 1: // motor A
@@ -1398,9 +1468,7 @@ public class Test_GC_12_47_1_Feeder {
 							
 						}
 					
-						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
-						indMotor3Phase.setLoadPercent(motorkW/sumOfBusLoad.getReal());
-						bus3p.getThreePhaseDynLoadList().add(indMotor3Phase);
+
 					
 				    }
 			

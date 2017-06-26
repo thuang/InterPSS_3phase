@@ -43,6 +43,9 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
     public InductionMotor3PhaseAdapter(InductionMotor motor){
 		this.indMotor = motor;
 		this.parentBus = (Bus3Phase) motor.getDStabBus();
+		
+		this.loadPercent = this.indMotor.getLoadPercent();
+		this.indMotor.setLoadPercent(-100); // such that the load percent is not used, used the initLoadPQ instead
 	}
 	
 	@Override
@@ -114,6 +117,7 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 	@Override
 	public boolean initStates() {
 		//TODO here assuming balanced
+		//TODO in the future, it can be improved by using the average power
 		Complex initMotorLoad = this.getParentBus().get3PhaseTotalLoad().a_0.multiply(this.loadPercent/100.0);
 		this.getInductionMotor().setInitLoadPQ(initMotorLoad);
 		
@@ -175,4 +179,9 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 		return this.indMotor.getExtendedDeviceId();
 	}
 
+	@Override
+	public double getMVABase(){
+		return this.indMotor.getMVABase();
+		
+	}
 }

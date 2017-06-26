@@ -6,9 +6,11 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Transformer3Phase;
 
 import com.interpss.dstab.DStabGen;
+import com.interpss.dstab.dynLoad.InductionMotor;
 
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.dynamic.model.DStabGen3PhaseAdapter;
+import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
 
 public class ThreePhaseUtilFunction {
 	
@@ -22,6 +24,12 @@ public class ThreePhaseUtilFunction {
 	public static Function<DStabGen, DStabGen3PhaseAdapter> threePhaseGenAptr = gen -> {
 		DStabGen3PhaseAdapter adpter = ThreePhaseObjectFactory.create3PDynGenerator(gen.getId());
 		adpter.setGen(gen);
+		return adpter;
+	};
+	
+	public static Function<InductionMotor, InductionMotor3PhaseAdapter> threePhaseInductionMotorAptr = indMotor -> {
+		InductionMotor3PhaseAdapter adpter = new InductionMotor3PhaseAdapter(indMotor);
+		
 		return adpter;
 	};
 	

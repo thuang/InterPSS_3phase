@@ -362,6 +362,7 @@ public class IEEE123Feeder_Dstab_Test {
 				    if(IndMotorPercent>0.0){
 				  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
 						indMotor.setDStabBus(loadBus);
+						indMotor.setLoadPercent(IndMotorPercent);
 			
 						indMotor.setXm(3.0);
 						indMotor.setXl(0.07);
@@ -375,9 +376,9 @@ public class IEEE123Feeder_Dstab_Test {
 						indMotor.setA(0.0); //Toreque = (a+bw+cw^2)*To;
 						indMotor.setB(0.0); //Toreque = (a+bw+cw^2)*To;
 						indMotor.setC(1.0); //Toreque = (a+bw+cw^2)*To;
-						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
-						indMotor3Phase.setLoadPercent(IndMotorPercent); //0.06 MW
-						loadBus.getThreePhaseDynLoadList().add(indMotor3Phase);	
+//						InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
+//						indMotor3Phase.setLoadPercent(IndMotorPercent); //0.06 MW
+//						loadBus.getThreePhaseDynLoadList().add(indMotor3Phase);	
 				    }
 				}
 				// PV generation

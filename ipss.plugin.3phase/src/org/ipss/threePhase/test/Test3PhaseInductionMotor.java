@@ -65,6 +65,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 			Bus3Phase bus1 = (Bus3Phase) net.getDStabBus("Bus1");
 			InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
 			indMotor.setDStabBus(bus1);
+			indMotor.setLoadPercent(50);
 
 			indMotor.setXm(3.0);
 			indMotor.setXl(0.07);
@@ -76,9 +77,9 @@ public class Test3PhaseInductionMotor extends TestBase{
 			indMotor.setMVABase(50);
 			indMotor.setH(1.0);
 			
-			InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);
-			indMotor3Phase.setLoadPercent(50);
-			bus1.getThreePhaseDynLoadList().add(indMotor3Phase);
+			
+		
+			//bus1.getThreePhaseDynLoadList().add(indMotor3Phase);
 			
 			
 	  		
@@ -114,9 +115,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 	  		  		
 	  		  		
 	  		  		//3phase equivY
-	  		  		
-	  		  		
-	  		  		System.out.println(indMotor3Phase.getInitLoadPQ3Phase().toString());
+
 	  		  	   
 	  		  	   dstabAlgo.performSimulation();
 	  		  	    
@@ -125,5 +124,6 @@ public class Test3PhaseInductionMotor extends TestBase{
 	  		  	
 	  		 	System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  		  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+	  		  	assertTrue(bus1.getDynamicBusDeviceList().size()==1);
 	}
 }
