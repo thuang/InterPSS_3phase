@@ -264,7 +264,7 @@ public class Test_GC_12_47_1_Feeder {
 	 
 	  	dstabAlgo.setSimuMethod(DynamicSimuMethod.MODIFIED_EULER);
 		dstabAlgo.setSimuStepSec(0.005d);
-		dstabAlgo.setTotalSimuTimeSec(0.5);
+		dstabAlgo.setTotalSimuTimeSec(1);
 	    //dstabAlgo.setRefMachine(net.getMachine("Bus3-mach1"));
 		//distNet.addDynamicEvent(DStabObjectFactory.createBusFaultEvent("150r", distNet, SimpleFaultCode.GROUND_LG,new Complex(0,0.0),new Complex(0,0.0), 0.5,0.07), "SLG@Bus1");
         
@@ -335,11 +335,11 @@ public class Test_GC_12_47_1_Feeder {
 				}
 				
 				
-				if(dstabAlgo.getSimuTime()>=0.1 && dstabAlgo.getSimuTime()<=0.2){
+				if(dstabAlgo.getSimuTime()>=0.1 && dstabAlgo.getSimuTime()<=0.183){
 					mach.setE(vsag);
 				}
 				
-				if (dstabAlgo.getSimuTime()>0.2){
+				if (dstabAlgo.getSimuTime()>0.183){
 					if(delayRecoverFlag){
 						double rampRate = (1.0-vsag)/delayRecoverTime;
 						double volt = vsag + (dstabAlgo.getSimuTime()-0.2)*rampRate;
@@ -377,16 +377,18 @@ public class Test_GC_12_47_1_Feeder {
 //			 sb.append(entry.getKey()+","+entry.getValue()+"\n");
 //		}
 		
-		FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//motor_rating.csv",sb.toString());
+//		FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//motor_rating.csv",sb.toString());
 	  	
 	  	System.out.println("\n"+sm.toCSVString(sm.getBusPhAVoltTable()));
 	  	//System.out.println(sm.toCSVString(sm.getBusPhBVoltTable()));
 	  	//System.out.println(sm.toCSVString(sm.getBusPhCVoltTable()));
 	  	System.out.println(sm.toCSVString(sm.getMotorPTable()));
 	  	System.out.println(sm.toCSVString(sm.getMotorFuvTable()));
+	  	System.out.println(sm.toCSVString(sm.getMotorSlipTable()));
+	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_5cycles_normal_recov_phAVolt.csv", sm.toCSVString(sm.getBusPhAVoltTable()));
 	  	
-	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
-	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_normal_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
+//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_5cycles_normal_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
+//	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_5cycles_normal_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));
 //	    
 //	 	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_delayed_recov_motorP.csv", sm.toCSVString(sm.getMotorPTable()));
 //	  	FileUtil.writeText2File("C://Qiuhua//FY2016_Project_CompositeLoad//protection//GC_Feeders//vsag_0.4_0.1s_delayed_recov_motorFuv.csv", sm.toCSVString(sm.getMotorFuvTable()));

@@ -4677,9 +4677,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4699,9 +4699,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4721,9 +4721,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4743,9 +4743,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4765,9 +4765,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4787,9 +4787,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4809,9 +4809,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4831,9 +4831,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4853,9 +4853,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4875,9 +4875,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4897,9 +4897,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4919,9 +4919,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4941,9 +4941,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4963,9 +4963,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -4985,9 +4985,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5007,9 +5007,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5029,9 +5029,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5051,9 +5051,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5073,9 +5073,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5095,9 +5095,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5117,9 +5117,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5139,9 +5139,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5161,9 +5161,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5183,9 +5183,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5205,9 +5205,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5227,9 +5227,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5249,9 +5249,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5271,9 +5271,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5293,9 +5293,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5315,9 +5315,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5337,9 +5337,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5359,9 +5359,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5381,9 +5381,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5403,9 +5403,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5425,9 +5425,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5447,9 +5447,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5469,9 +5469,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5491,9 +5491,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5513,9 +5513,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5535,9 +5535,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5557,9 +5557,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5579,9 +5579,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5601,9 +5601,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5623,9 +5623,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5645,9 +5645,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5667,9 +5667,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5689,9 +5689,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5711,9 +5711,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5733,9 +5733,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5755,9 +5755,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5777,9 +5777,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5799,9 +5799,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5821,9 +5821,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5843,9 +5843,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5865,9 +5865,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5887,9 +5887,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5909,9 +5909,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5931,9 +5931,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5953,9 +5953,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5975,9 +5975,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -5997,9 +5997,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6019,9 +6019,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6041,9 +6041,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6063,9 +6063,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6085,9 +6085,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6107,9 +6107,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6129,9 +6129,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6151,9 +6151,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6173,9 +6173,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6195,9 +6195,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6217,9 +6217,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6239,9 +6239,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6261,9 +6261,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6283,9 +6283,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6305,9 +6305,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6327,9 +6327,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6349,9 +6349,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6371,9 +6371,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6393,9 +6393,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6415,9 +6415,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6437,9 +6437,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6459,9 +6459,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6481,9 +6481,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6503,9 +6503,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6525,9 +6525,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6547,9 +6547,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6569,9 +6569,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6591,9 +6591,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6613,9 +6613,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6635,9 +6635,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6657,9 +6657,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6679,9 +6679,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6701,9 +6701,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6723,9 +6723,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6745,9 +6745,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6767,9 +6767,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6789,9 +6789,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6811,9 +6811,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6833,9 +6833,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6855,9 +6855,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6877,9 +6877,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6899,9 +6899,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6921,9 +6921,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6943,9 +6943,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6965,9 +6965,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -6987,9 +6987,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7009,9 +7009,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7031,9 +7031,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7053,9 +7053,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7075,9 +7075,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7097,9 +7097,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7119,9 +7119,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7141,9 +7141,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7163,9 +7163,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7185,9 +7185,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7207,9 +7207,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7229,9 +7229,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7251,9 +7251,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7273,9 +7273,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7295,9 +7295,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7317,9 +7317,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7339,9 +7339,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7361,9 +7361,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7383,9 +7383,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7405,9 +7405,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7427,9 +7427,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7452,7 +7452,7 @@ AcscBranch Info
    LF results 
       p+jq(f->t) : 0.0000 + j-0.0000 pu   0.0000 + j-0.01629 kva
       p+jq(t->f) : 0.0000 + j0.0000 pu   0.0000 + j0.14116 kva
-      current    : 0.0000 + j0.0000 pu    ? Amps
+      current    : 0.0000 + j0.0000 pu    ∞ Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7478,7 +7478,7 @@ AcscBranch Info
    LF results 
       p+jq(f->t) : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
       p+jq(t->f) : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      current    : 0.0000 + j0.0000 pu    ? Amps
+      current    : 0.0000 + j0.0000 pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7504,7 +7504,7 @@ AcscBranch Info
    LF results 
       p+jq(f->t) : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
       p+jq(t->f) : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      current    : 0.0000 + j0.0000 pu    ? Amps
+      current    : 0.0000 + j0.0000 pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7530,7 +7530,7 @@ AcscBranch Info
    LF results 
       p+jq(f->t) : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
       p+jq(t->f) : 0.0000 + j0.0000 pu   0.0000 + j0.0000 kva
-      current    : 0.0000 + j0.0000 pu    ? Amps
+      current    : 0.0000 + j0.0000 pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7554,9 +7554,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7580,9 +7580,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000
@@ -7606,9 +7606,9 @@ AcscBranch Info
      toShuntY:   0.0000 + j0.0000 pu
      mvaRating1,mvaRating2,mvaRating3:   0.0000, 0.0000, 0.0000
    LF results 
-      p+jq(f->t) : ? + j? pu   ? + j? kva
-      p+jq(t->f) : ? + j? pu   ? + j? kva
-      current    : ? + j? pu    ? Amps
+      p+jq(f->t) : � + j� pu   � + j� kva
+      p+jq(t->f) : � + j� pu   � + j� kva
+      current    : � + j� pu    � Amps
 
   SC Info:
      z0:      0.0000 + j0.0000

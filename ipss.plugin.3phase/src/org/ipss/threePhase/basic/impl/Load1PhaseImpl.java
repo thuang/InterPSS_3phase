@@ -7,6 +7,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Load1Phase;
 import org.ipss.threePhase.basic.LoadConnectionType;
 
+import com.interpss.core.aclf.AclfLoadCode;
 import com.interpss.core.aclf.impl.AclfLoadImpl;
 import com.interpss.core.acsc.PhaseCode;
 
@@ -15,6 +16,8 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 	
 	LoadConnectionType loadConnectType = LoadConnectionType.Single_Phase_Wye; // by default three-phase wye;
 	double nominalKV = 0; 
+	double Vminpu = 0.90; // pu
+	double Vmaxpu = 1.1; // pu
 
 	PhaseCode  ph = PhaseCode.A;  //connected phase(s)
 	
@@ -40,6 +43,29 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 		
 		return this.equivYabc;
 	}
+	
+	@Override
+	public Complex getLoad(double vmag) {
+		if (this.code == AclfLoadCode.CONST_P){
+			if(vmag>this.Vminpu)
+			    return this.loadCP;
+			else
+				return this.loadCP.multiply(vmag*vmag);
+		}
+		else if (this.code == AclfLoadCode.CONST_I)
+			if(vmag>this.Vminpu)
+				return this.loadCI.multiply(vmag);
+			else
+				return this.loadCI.multiply(vmag*vmag);
+		else if (this.code == AclfLoadCode.CONST_Z)
+			return this.loadCZ.multiply(vmag*vmag);
+		else {
+			if(vmag>this.Vminpu)
+			    return this.loadCP.add(this.loadCI.multiply(vmag)).add(loadCZ.multiply(vmag*vmag));
+			else
+				return (this.loadCP.add(this.loadCI).add(loadCZ)).multiply(vmag*vmag);
+		}
+	}
 
 	@Override
 	public Complex3x1 getEquivCurrInj(Complex3x1 vabc) {
@@ -52,6 +78,10 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 //		}
 		Complex vt = null;
 		double vmag=1.0;
+		
+		if(vabc.absMax()<0.001) // too low voltage, current equals to zero
+			return equivCurInj;
+		
 		switch (this.loadConnectType){
 		  case Single_Phase_Wye:
 			   if(this.ph==PhaseCode.A){
@@ -158,6 +188,30 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 	public double getNominalKV() {
 		
 		return this.nominalKV;
+	}
+
+	@Override
+	public void setVminpu(double newVminpu) {
+		this.Vminpu = newVminpu;
+		
+	}
+
+	@Override
+	public void setVmaxpu(double newVmaxpu) {
+		this.Vmaxpu = newVmaxpu;
+		
+	}
+
+	@Override
+	public double getVminpu() {
+		
+		return this.Vminpu;
+	}
+
+	@Override
+	public double getVmaxpu() {
+		
+		return this.Vmaxpu;
 	}
 
 }

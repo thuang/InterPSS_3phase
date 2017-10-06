@@ -136,13 +136,38 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 			code = AclfLoadCode.CONST_P; // by default constant PQ
 		}
 		
+		if(vabc.absMax()<0.001) // too low voltage, current equals to zero
+			return new Complex3x1();
+		
 		switch (this.loadConnectType){
 		  case Three_Phase_Wye:
 			  if(this.code==AclfLoadCode.CONST_P){
 				  // default 
-				  loadPQ = ph3Load;
+				  double va = vabc.a_0.abs();
+				  double vb = vabc.b_1.abs();
+				  double vc = vabc.c_2.abs();
+				  
+				  if(va>this.Vminpu)
+				     loadPQ.a_0 = ph3Load.a_0;
+				  else
+					  loadPQ.a_0 = ph3Load.a_0.multiply(va*va);
+				  
+				  if(vb>this.Vminpu)
+					     loadPQ.b_1 = ph3Load.b_1;
+					  else
+						  loadPQ.b_1 = ph3Load.b_1.multiply(vb*vb);
+				  
+				  if(vc>this.Vminpu)
+					     loadPQ.c_2 = ph3Load.c_2;
+					  else
+						  loadPQ.c_2 = ph3Load.c_2.multiply(vc*vc);
+				  
 			  }
 			  else if(this.code==AclfLoadCode.CONST_I){
+				  double va = vabc.a_0.abs();
+				  double vb = vabc.b_1.abs();
+				  double vc = vabc.c_2.abs();
+				  
 				  loadPQ.a_0 = ph3Load.a_0.multiply(vabc.a_0.abs());
 				  loadPQ.b_1 = ph3Load.b_1.multiply(vabc.b_1.abs());
 				  loadPQ.c_2 = ph3Load.c_2.multiply(vabc.c_2.abs());
@@ -172,6 +197,7 @@ public class Load3PhaseImpl extends Load1PhaseImpl implements Load3Phase {
 		          +this.getParentBus().getId()+","+this.getId()+","+this.loadConnectType+","+this.ph);
 			   
 		}
+		
 		
 		
 		return equivCurInj = loadPQ.divide(vabc).conjugate().multiply(-1.0);

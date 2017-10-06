@@ -192,7 +192,7 @@ public class Bus3PhaseImpl extends DStabBusImpl implements Bus3Phase{
 	
 	private Complex3x1 calcLoad3PhEquivCurInj() {
 		this.load3PhEquivCurInj = new Complex3x1();
-		if (Vabc == null ||Vabc.abs()<1.0E-5) 
+		if (Vabc == null) 
 			Vabc = new Complex3x1(new Complex(1,0),new Complex(-Math.sin(Math.PI/6),-Math.cos(Math.PI/6)),new Complex(-Math.sin(Math.PI/6),Math.cos(Math.PI/6)));
 		
 		//single-phase loads

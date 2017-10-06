@@ -675,7 +675,7 @@ public class ThreeBus_3Phase_Test {
 		
 	}
 	
-private DStabNetwork3Phase create3BusSys() throws InterpssException{
+ private DStabNetwork3Phase create3BusSys() throws InterpssException{
 		
 		DStabNetwork3Phase net = new DStabNetwork3phaseImpl();
 
