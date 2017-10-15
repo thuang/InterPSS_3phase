@@ -472,8 +472,7 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			
 			// power flow is converged, break the outer iteration and return
 			if(i>0 && this.pfFlag) {
-				System.out.println("\n\nDistribution power flow converged, iterations = "+(i+1)+"\n");
-				
+				//System.out.println("\n\nDistribution power flow converged, iterations = "+(i+1)+"\n");
 				
 				calcSwingBusGenPower();
 				

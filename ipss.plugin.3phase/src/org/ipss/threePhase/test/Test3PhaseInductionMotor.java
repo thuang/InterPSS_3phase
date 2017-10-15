@@ -1,13 +1,10 @@
 package org.ipss.threePhase.test;
 
-import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseInductionMotorAptr;
 import static org.junit.Assert.assertTrue;
 
 import org.interpss.IpssCorePlugin;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
-import org.ipss.threePhase.dynamic.model.DynLoadModel3Phase;
-import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
@@ -21,9 +18,7 @@ import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
-import com.interpss.dstab.device.DynamicBusDevice;
 import com.interpss.dstab.dynLoad.InductionMotor;
-import com.interpss.dstab.dynLoad.impl.InductionMotorImpl;
 
 public class Test3PhaseInductionMotor extends TestBase{
 
@@ -35,20 +30,6 @@ public class Test3PhaseInductionMotor extends TestBase{
 			DStabNetwork3Phase net = create2BusSys();
 		    net.setNetworkType(NetworkType.DISTRIBUTION);
 		    
-//			// initGenLoad-- summarize the effects of contributive Gen/Load to make equivGen/load for power flow calculation	
-//			net.initContributeGenLoad();
-//				
-//			//create a load flow algorithm object
-//		  	LoadflowAlgorithm algo = CoreObjectFactory.createLoadflowAlgorithm(net);
-//		  	//run load flow using default setting
-//		  	
-//			// run power flow
-//		  	assertTrue(algo.loadflow())	;
-//	 
-//		  	
-//			System.out.println(AclfOutFunc.loadFlowSummary(net));
-//			
-//			net.initThreePhaseFromLfResult();
 			
 			DistributionPowerFlowAlgorithm distPFAlgo = ThreePhaseObjectFactory.createDistPowerFlowAlgorithm(net);
 			//distPFAlgo.orderDistributionBuses(true);

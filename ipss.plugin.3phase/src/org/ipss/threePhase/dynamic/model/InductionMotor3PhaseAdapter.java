@@ -92,8 +92,12 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 	@Override
 	public Complex3x1 getPower3Phase(UnitType unit) {
 		//Power = VABC*conj(equivYABC*VABC - IgenABC)
+		Complex3x1 Vabc = ((Bus3Phase)this.indMotor.getDStabBus()).get3PhaseVotlages();
+		Complex3x1 Iabc = getIinj2Network3Phase();
 		
-		return null;
+		Complex3x1 Pabc = Vabc.multiply(Iabc.conjugate());
+		
+		return Pabc;
 	}
 
 	@Override

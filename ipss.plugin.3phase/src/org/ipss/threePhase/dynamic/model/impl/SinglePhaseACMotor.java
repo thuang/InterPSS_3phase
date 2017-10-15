@@ -103,9 +103,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		private double Vstallbrk = 0.0;
 		
 		// restart
-		private double Frst = 0.0; // 0.2 
+		private double Frst = 0.0; // no motor can restart
 		private double Vrst = 0.9;
-		private double Trst = 0.4;
+		private double Trst = 0.4; // it task the ac 0.4 second to restart of stalling
 		
 		// real and reactive power frequency sensitivity
 		private double CmpKpf = 1.0;
@@ -122,14 +122,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		//Contractor setting
 		private double	Vc1off = 0.5;
 		private double	Vc2off = 0.4;
-		private double	Vc1on  = 0.6;
-		private double	Vc2on  = 0.5;
+		private double	Vc1on  = 0.65;
+		private double	Vc2on  = 0.55;
 		
 		//Thermal relay setting 
 		// Based on  "WECC air conditioner motor model test report", Page.75
-		private double	Tth =  8;
-		private double	Th1t = 1.3;
-		private double	Th2t = 4.3;
+		private double	Tth =  15;
+		private double	Th1t = 0.7;
+		private double	Th2t = 1.9;
 		
 
 		
@@ -143,10 +143,12 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 		
 		//Thermal relays
-		// the tripping characterisic is modeled as y = Ax +B for x within {Th1t, Th2t}
+		// the tripping characterisic is modeled as y = thermalEqnCoeff1*x +thermalEqnCoeff2 for x within {Th1t, Th2t}
+		// here x is the internal temperature, y is the output for determining thermal tripping
+		// when x>Th1t, starting trippinng, when x>Th2t, all will be tripped
 		
-		private double thEqnA = -1.0/3;
-		private double thEqnB = 1.433;  // default value
+		private double thermalEqnCoeff1 = -1.0/3;
+		private double thermalEqnCoeff2 = 1.433;  // default value
 		
 		private double temperature = 0.0d;
 		
@@ -203,6 +205,8 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		private Complex PQmotor;
 		private Complex equivYpq;
 		private Complex nortonCurInj;
+		
+		private boolean debugMode = false;
 		
 		
 		public SinglePhaseACMotor(){
@@ -269,18 +273,21 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			this.setInitLoadPQ(new Complex(pac,qac));
 			this.setLoadPQ(new Complex(pac,qac));
 			
+			double mVABase1Phase = this.getDStabBus().getNetwork().getBaseMva()/3.0;
+			
 			// if mva is not defined and loading factor is available
 			if(this.getMVABase()==0.0){
 				if(this.loadFactor >0 && this.loadFactor<=1.0)
 	                    IpssLogger.getLogger().fine("AC motor MVABase will be calculated based on load factor");
 				else 
 					this.loadFactor = 1.0;
-				// phase mva base is the 1/3 of the system 3phaes mva base
-				double calcMva = this.pac*this.getDStabBus().getNetwork().getBaseMva()/3.0d/this.loadFactor;
+				// single-phase mva base is the 1/3 of the system 3-phae mva base
+				double calcMva = this.pac*mVABase1Phase/this.loadFactor;
 				this.setMVABase(calcMva);
 			}
 			
-			this.I_CONV_FACTOR_M2S = this.getMVABase()/this.getDStabBus().getNetwork().getBaseMva();
+			// multiply factor 3 -- becuase this is for single phase, and the single-phase mvabase is 1/3 of the three-phase system MVAbase
+			this.I_CONV_FACTOR_M2S = this.getMVABase()/ mVABase1Phase; 
 			
 			
 			
@@ -295,13 +302,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				 this.compensateShuntY = new Complex(0,b);
 			}
 			
-			
-
-			Complex Sac = new Complex (pac, qac);
-			double i_motor = Sac.abs()/vt;
-			
-			this.tempA = i_motor*i_motor*this.Rstall;
-			this.tempB = this.tempA;
+			this.equivYpq = new Complex(pac,qac).conjugate().divide(vt*vt); // on motor MVABase
 			
 			
 			// update the Vstall and Vbrk if necessary
@@ -309,8 +310,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			this.Vbrk = this.Vbrk*(1+this.LFadj*(this.loadFactor-1));
 			
 			// motor P and Q on motor mvabase
-			double pac_mbase = this.pac*this.getDStabBus().getNetwork().getBaseMva()/this.getMVABase();
-			double qac_mbase = this.qac*this.getDStabBus().getNetwork().getBaseMva()/this.getMVABase();
+			double pac_mbase = this.pac* mVABase1Phase/this.getMVABase();
+			double qac_mbase = this.qac* mVABase1Phase/this.getMVABase();
+			
+			Complex Sac_motor_pu = new Complex (pac_mbase, qac_mbase);
+			double i_motor = Sac_motor_pu.abs()/vt;
+			
+			this.tempA = i_motor*i_motor*this.Rstall;
+			this.tempB = this.tempA;
 			
 			// initialize the parts A and B of the motor
 			this.pac_a = pac_mbase; 
@@ -345,15 +352,15 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			//calculate the thermal protection equation coefficient
 			if(Th1t >0 && Th2t>Th1t){
-			   thEqnA  = -1/(Th2t-Th1t);
-			   thEqnB  = Th2t/(Th2t-Th1t);
+			   thermalEqnCoeff1  = -1/(Th2t-Th1t);
+			   thermalEqnCoeff2  = Th2t/(Th2t-Th1t);
 			}
 			else{
-				thEqnA = 0.0;
-				thEqnB = 0.0;
+				thermalEqnCoeff1 = 0.0;
+				thermalEqnCoeff2 = 0.0;
 			}
 				
-			this.equivY = this.getEquivY();
+			this.equivY = this.getEquivY(); // On system mva base, not motor mva base
 			
 			extended_device_Id = "ACMotor_"+this.getId()+"@"+this.getParentBus().getId()+"_phase"+this.getPhase();
 			this.states.put(DStabOutSymbol.OUT_SYMBOL_BUS_DEVICE_ID, extended_device_Id);
@@ -381,8 +388,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			// check the protection actions and update the status of AC motor accordingly
 			timestep = dt;
 			
+			Complex vt = this.getBusPhaseVoltage();
+			double vmag = vt.abs();
 			
-			double vmag = this.getBusPhaseVoltage().abs();
 			
 			
 		    // voltage measurements
@@ -404,20 +412,29 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				and B parts of the load that have not been tripped by the thermal protection is output as fthA and fthB, respectively.	
 			 */
 			
-			Complex vt = this.getDStabBus().getVoltage();
 			
+			// motor stator current in motor mva base
 			Complex ImotorA_pu = new Complex(0.0);
 			Complex ImotorB_pu = new Complex(0.0);
 			
 			if(this.statusA ==0)
-				 ImotorA_pu = vt.multiply(this.equivY);
-			else
-				ImotorA_pu = new Complex(pac_a, qac_a).divide(vt).conjugate();
+				 ImotorA_pu = vt.multiply(this.Ystall);
+			else{
+				//Updated 10/14/2017 to fix the bug with the voltage is close to zero;
+				if(vt.abs()>this.Vstallbrk)
+				   ImotorA_pu = new Complex(pac_a, qac_a).divide(vt).conjugate();
+				else
+				   ImotorA_pu = vt.multiply(this.Ystall);
+			}
 			
 			if(this.statusB ==0)
-				 ImotorB_pu = vt.multiply(this.equivY);
-			else
-				ImotorB_pu = new Complex(pac_b, qac_b).divide(vt).conjugate();
+				 ImotorB_pu = vt.multiply(this.Ystall);
+			else{
+				if(vt.abs()>this.Vstallbrk)
+				   ImotorB_pu = new Complex(pac_b, qac_b).divide(vt).conjugate();
+				else
+				   ImotorB_pu = vt.multiply(this.Ystall);
+			}
 			
 			double dThA_dt0 = (Math.pow(ImotorA_pu.abs(),2)*this.Rstall - this.tempA)/this.Tth;
 			
@@ -432,7 +449,9 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 			this.tempA = this.tempA + (dThA_dt0+dThA_dt1)*0.5d*dt;
 			this.tempB = this.tempB + (dThB_dt0+dThB_dt1)*0.5d*dt;
-
+			
+			if(debugMode)
+			  System.out.println("next step:" +extended_device_Id+" vt ="+vmag+", tempA = "+this.tempA);
 			
 			return flag;
 		}
@@ -547,10 +566,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	          % the remaining fraction;
 			 */
 			
-			if(this.thEqnA< 0.0){
+			if(this.thermalEqnCoeff1< 0.0){
 				if(this.tempA > this.Th1t){
 					if(this.statusA == 0){
-						this.fthA = this.tempA*this.thEqnA + this.thEqnB;
+						this.fthA = this.tempA*this.thermalEqnCoeff1 + this.thermalEqnCoeff2;
 						
 						if(this.fthA<0.0)
 							this.fthA = 0.0;
@@ -559,7 +578,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				
 				if(this.tempB > this.Th1t){
 					if(this.statusB == 0){
-						this.fthB = this.tempB*this.thEqnB + this.thEqnB;
+						this.fthB = this.tempB*this.thermalEqnCoeff1 + this.thermalEqnCoeff2;
 						
 						if(this.fthB<0.0)
 							this.fthB = 0.0;
@@ -567,7 +586,10 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				}
 			}
 			
-			
+			if(debugMode){
+			   System.out.println("next step: motor, fthA, fthB = "+this.extended_device_Id+","+this.fthA+","+this.fthB );
+			   System.out.println("next step: motor, thEqnA, tempA, tempB = "+this.extended_device_Id+","+thermalEqnCoeff1+","+this.tempA+","+this.tempB );
+			}
 			// Calculate the AC motor power
 
 			// call this method to update "this.PQmotor"
@@ -589,6 +611,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			double freq = this.getDStabBus().getFreq();
 			double vmag = this.getBusPhaseVoltage().abs();
 			
+			// running mode
 			if(this.statusA == 1){
 				if(vmag >= this.Vbrk){
 					this.pac_a  = (p0 +Kp1*Math.pow((vmag-this.Vbrk),this.Np1))*(1+this.CmpKpf*(freq-1.0));
@@ -605,7 +628,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				}
 				
 			}
-			// stall
+			// stall mode
 			else {
 				this.pac_a =this.Gstall*vmag*vmag;
 				this.qac_a =-this.Bstall*vmag*vmag;
@@ -641,16 +664,19 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			double Pmotor = this.pac_a*(1-this.Frst)*this.fthA+this.pac_b*this.Frst*this.fthB;
 			double Qmotor = this.qac_a*(1-this.Frst)*this.fthA+this.qac_b*this.Frst*this.fthB;
 			
-			// consider the UR Relay and contractor
+			// consider the UR Relay and contractor status
 			Pmotor = this.kuv*this.kcon*Pmotor;
 			Qmotor = this.kuv*this.kcon*Qmotor;
 			
-			this.PQmotor = new Complex(Pmotor, Qmotor);
-			this.setLoadPQ(this.PQmotor.multiply(getPowerConvFactorM2S()));
+			this.PQmotor = new Complex(Pmotor, Qmotor); // on motor base
 			
-			this.pac = this.getLoadPQ().getReal();       // both are on system base
-			this.qac = this.getLoadPQ().getImaginary();
-			
+			this.pac = Pmotor*getPowerConvFactorM2S(); // converted to system base
+			this.qac = Qmotor*getPowerConvFactorM2S();		
+		
+			if(debugMode){
+				System.out.println(extended_device_Id+" statusA, pac_a,pac_b,kuv, kcon= "+this.statusA+","+this.pac_a+","+this.qac_a+","+this.kuv+","+this.kcon);
+				System.out.println(extended_device_Id+" power on system base = "+this.getLoadPQ().toString());
+			}
 			return this.PQmotor;
 		}
 		
@@ -659,7 +685,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		 * @return
 		 */
 		private double getPowerConvFactorM2S(){
-			return this.getMVABase()/this.getDStabBus().getNetwork().getBaseMva();
+			return this.getMVABase()/this.getDStabBus().getNetwork().getBaseMva()*3.0;
 		}
 	
 		@Override

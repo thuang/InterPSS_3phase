@@ -811,7 +811,8 @@ public class DStabNetwork3phaseImpl extends DStabilityNetworkImpl implements DSt
 
 	@Override
 	public Hashtable<String, Complex3x1> get3phaseCustomCurrInjTable() {
-		
+		if(this.threePhaseCurInjTable ==null)
+			this.threePhaseCurInjTable = new Hashtable<String, Complex3x1>();
 		return this.threePhaseCurInjTable;
 	}
 

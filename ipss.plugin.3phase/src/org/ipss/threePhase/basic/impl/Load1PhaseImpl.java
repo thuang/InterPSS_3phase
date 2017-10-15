@@ -16,7 +16,7 @@ public class Load1PhaseImpl extends AclfLoadImpl implements Load1Phase {
 	
 	LoadConnectionType loadConnectType = LoadConnectionType.Single_Phase_Wye; // by default three-phase wye;
 	double nominalKV = 0; 
-	double Vminpu = 0.90; // pu
+	double Vminpu = 0.85; // pu
 	double Vmaxpu = 1.1; // pu
 
 	PhaseCode  ph = PhaseCode.A;  //connected phase(s)
