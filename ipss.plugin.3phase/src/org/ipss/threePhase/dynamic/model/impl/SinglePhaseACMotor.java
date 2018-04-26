@@ -1074,6 +1074,11 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	    	this.disableInternalStallControl = disableStallControl;
 	    }
 
+		@Override
+		public boolean changeLoad(double percentageFactor) {
+			throw new UnsupportedOperationException();
+		}
+
 	
 
 

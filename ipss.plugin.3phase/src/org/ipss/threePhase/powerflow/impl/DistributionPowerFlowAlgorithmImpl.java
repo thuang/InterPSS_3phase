@@ -128,8 +128,14 @@ public class DistributionPowerFlowAlgorithmImpl implements DistributionPowerFlow
 			for(AclfBus b: distNet.getBusList()){
 					Bus3Phase bus = (Bus3Phase) b;
 					
-					if(b.isSwing())
-						bus.set3PhaseVoltages(getSwingBusThreePhaseVoltages(b.getVoltageMag(), b.getVoltageAng(UnitType.Deg)));
+					if(b.isSwing()){
+						if(bus.get3PhaseVotlages()==null)
+						   bus.set3PhaseVoltages(getSwingBusThreePhaseVoltages(b.getVoltageMag(), b.getVoltageAng(UnitType.Deg)));
+						else if(bus.get3PhaseVotlages()!=null && bus.get3PhaseVotlages().absMax()==0.0){
+							bus.set3PhaseVoltages(getSwingBusThreePhaseVoltages(b.getVoltageMag(), b.getVoltageAng(UnitType.Deg)));
+						}
+							
+					}
 					else if(b.isGenPV()) 
 						bus.set3PhaseVoltages(getPVBusThreePhaseVoltages(b.getVoltageMag()));
 					else
