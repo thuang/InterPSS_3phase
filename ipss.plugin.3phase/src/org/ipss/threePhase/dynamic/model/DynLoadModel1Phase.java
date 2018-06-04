@@ -64,6 +64,11 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	public Complex getPosSeqEquivY() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public boolean changeLoad() {
+		throw new UnsupportedOperationException();
+	}
 	
 	public  Complex getEquivY(){
 		return this.equivY ;
