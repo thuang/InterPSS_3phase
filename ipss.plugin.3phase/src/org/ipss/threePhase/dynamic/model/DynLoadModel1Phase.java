@@ -66,7 +66,7 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	}
 
 	@Override
-	public boolean changeLoad() {
+	public boolean changeLoad(double factor) {
 		throw new UnsupportedOperationException();
 	}
 	
