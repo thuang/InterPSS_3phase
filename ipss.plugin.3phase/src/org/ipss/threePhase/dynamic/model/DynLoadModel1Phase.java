@@ -130,12 +130,10 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 		
 	}
 	
-	@Override
 	public Complex getCompensateCurInj(){
 		return this.compensateCurrInj;
 	}
  
-	@Override
 	public void setCompensateCurInj(Complex compCurrent){
 		this.compensateCurrInj = compCurrent;
 	}
