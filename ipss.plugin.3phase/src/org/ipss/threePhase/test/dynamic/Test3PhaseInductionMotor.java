@@ -1,4 +1,4 @@
-package org.ipss.threePhase.test;
+package org.ipss.threePhase.test.dynamic;
 
 import static org.junit.Assert.assertTrue;
 
@@ -8,6 +8,7 @@ import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
 import org.ipss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.ipss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
+import org.ipss.threePhase.test.TestBase;
 import org.ipss.threePhase.util.ThreePhaseObjectFactory;
 import org.junit.Test;
 

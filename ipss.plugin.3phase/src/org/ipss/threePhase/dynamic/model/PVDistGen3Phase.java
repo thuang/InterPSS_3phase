@@ -8,6 +8,7 @@ import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 
 import com.interpss.core.acsc.BaseAcscBus;
+import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.common.DStabOutSymbol;
@@ -88,7 +89,9 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 		 return this.posSeqGenPQ; 
 	 }
 	 
-	 public boolean initStates(Bus3Phase abus){
+	 @Override
+	 public boolean initStates(BaseDStabBus<?,?> abus) {
+		
 		 if(this.getPosSeqGenPQ() == null)
 			 return false;
 		 this.genPQInit = new Complex(this.posSeqGenPQ.getReal(),this.posSeqGenPQ.getImaginary());
@@ -127,7 +130,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
      // in power flow and dynamics" report
      private Complex calcPosSeqCurInjection(){
     	 
-    	 double freq = ((DStabBus)this.getParentGen().getParentBus()).getFreq();
+    	 double freq = ((BaseDStabBus)this.getParentGen().getParentBus()).getFreq();
     	 
     	 
     	 //calculate Idq with reference to the terminal voltage angle

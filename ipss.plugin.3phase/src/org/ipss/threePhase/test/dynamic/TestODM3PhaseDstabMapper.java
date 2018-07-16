@@ -1,4 +1,4 @@
-package org.ipss.threePhase.test;
+package org.ipss.threePhase.test.dynamic;
 
 import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseGenAptr;
 import static org.junit.Assert.assertTrue;
@@ -42,7 +42,7 @@ import com.interpss.simu.SimuCtxType;
 
 public class TestODM3PhaseDstabMapper {
 	
-	//@Test
+	@Test
 	public void test_IEEE9Bus_3phase_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -173,7 +173,7 @@ public class TestODM3PhaseDstabMapper {
 	}
 	
 	
-	@Test
+	//@Test
 	public void test_IEEE9Bus_posSeq_Dstab() throws InterpssException{
 		IpssCorePlugin.init();
 		IpssCorePlugin.setLoggerLevel(Level.INFO);
@@ -249,10 +249,10 @@ public class TestODM3PhaseDstabMapper {
 		
 	     System.out.println(sm.toCSVString(sm.getBusVoltTable()));
 	     
-			FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_machAngle.csv",sm.toCSVString(sm.getMachAngleTable()));
-			FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_machSpd.csv",sm.toCSVString(sm.getMachSpeedTable()));
-			FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_busVolt.csv",sm.toCSVString(sm.getBusVoltTable()));
-		
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_machAngle.csv",sm.toCSVString(sm.getMachAngleTable()));
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_machSpd.csv",sm.toCSVString(sm.getMachSpeedTable()));
+//		FileUtil.writeText2File("E://Dropbox//PhD project//test data and results//comprehensive_ch7//ieee9_pos_SLG@bus5_busVolt.csv",sm.toCSVString(sm.getBusVoltTable()));
+//		
 //		FileUtil.writeText2File("output/ieee9_bus5_machPe_v5_03172015.csv",sm.toCSVString(sm.getMachPeTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machAngle_v5_03172015.csv",sm.toCSVString(sm.getMachAngleTable()));
 //		FileUtil.writeText2File("output/ieee9_bus5_machSpd_v5_03172015.csv",sm.toCSVString(sm.getMachSpeedTable()));

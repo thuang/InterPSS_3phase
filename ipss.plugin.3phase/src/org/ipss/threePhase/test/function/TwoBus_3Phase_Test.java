@@ -1,4 +1,4 @@
-package org.ipss.threePhase.test;
+package org.ipss.threePhase.test.function;
 
 import static org.ipss.threePhase.util.ThreePhaseUtilFunction.threePhaseXfrAptr;
 import static org.junit.Assert.assertTrue;

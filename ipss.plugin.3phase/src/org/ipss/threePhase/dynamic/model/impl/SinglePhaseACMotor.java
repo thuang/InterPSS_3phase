@@ -5,14 +5,11 @@ import java.util.Hashtable;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 
 import com.interpss.common.util.IpssLogger;
-import com.interpss.dstab.DStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.common.DStabOutSymbol;
-import com.interpss.dstab.device.DynamicBusDeviceType;
 /**
  * This dynamic model of single phase AC motor must be used under the condition that the 
  * loads in the power flow data is input as Load3phase in the threePhaseLoadList.
@@ -422,7 +419,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		
 	
 		@Override
-		public Complex getCompensateCurInj() {
+		public Complex getNortonCurInj() {
 			
 			if(this.compensateCurrInj == null) calculateCompensateCurInj();
 			
@@ -506,7 +503,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		@Override
 		public Object getOutputObject() {
 			
-		     return this.getCompensateCurInj();
+		     return this.getNortonCurInj();
 		}
 		
 		@Override

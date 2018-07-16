@@ -1,4 +1,4 @@
-package org.ipss.threePhase.test;
+package org.ipss.threePhase.test.powerflow;
 
 import static com.interpss.core.funcImpl.AcscFunction.acscXfrAptr;
 import static org.junit.Assert.assertTrue;
