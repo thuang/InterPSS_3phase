@@ -20,7 +20,7 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	
 	protected Complex equivY = null;
 	
-	protected Complex compensateCurrInj;
+	protected Complex nortonCurrInj;
 	protected Complex currInj2Net = null;
 
 	protected Complex initLoadPQ = null;
@@ -130,14 +130,18 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 		
 	}
 	
+
 	@Override
 	public Complex getNortonCurInj(){
-		return this.compensateCurrInj;
+
+		return this.nortonCurrInj;
 	}
  
 	@Override
 	public void setNortonCurInj(Complex compCurrent){
-		this.compensateCurrInj = compCurrent;
+
+
+		this.nortonCurrInj = compCurrent;
 	}
 	
 

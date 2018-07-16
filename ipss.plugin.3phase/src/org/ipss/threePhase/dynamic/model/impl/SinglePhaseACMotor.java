@@ -421,7 +421,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		@Override
 		public Complex getNortonCurInj() {
 			
-			if(this.compensateCurrInj == null) calculateCompensateCurInj();
+			if(this.nortonCurrInj == null) calculateCompensateCurInj();
 			
 	        Complex v = this.getBusPhaseVoltage();
 	        
@@ -445,21 +445,21 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 
 			
 		    if(stage == 1 && this.remainFraction <1.0){
-				 this.compensateCurrInj = this.getEquivY().multiply(v).multiply(1-this.remainFraction);
+				 this.nortonCurrInj = this.getEquivY().multiply(v).multiply(1-this.remainFraction);
 			}
 			else if(stage ==-1){
-				 this.compensateCurrInj = this.getEquivY().multiply(v);
+				 this.nortonCurrInj = this.getEquivY().multiply(v);
 			}
 		    
 		    
 		    //System.out.println(this.extended_device_Id+", compensate current ="+ this.compensateCurrInj);
 		    
-			return this.compensateCurrInj;
+			return this.nortonCurrInj;
 			
 		}
 		
 		private void calculateCompensateCurInj(){
-           this.compensateCurrInj = new Complex(0.0d,0.0d);
+           this.nortonCurrInj = new Complex(0.0d,0.0d);
            Complex v = this.getBusPhaseVoltage();
 			double vmag = v.abs();
 			
@@ -479,7 +479,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				
 				// I = -conj( (p+j*q - conj(v^2*this.equivY))/v)
 				
-				   this.compensateCurrInj= compPower.divide(v).conjugate().multiply(-1.0d);
+				   this.nortonCurrInj= compPower.divide(v).conjugate().multiply(-1.0d);
 			}
 			
 			
