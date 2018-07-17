@@ -239,7 +239,7 @@ public class TestSinglePhaseACMotorModel {
 				 // check the current injection compensation under normal running condition
 				 Complex Iinj = ac1.getLoadPQ().subtract(ac1.getEquivY().multiply(v*v).conjugate());
 				 Iinj = Iinj.divide( bus1.get3PhaseVotlages().a_0).conjugate().multiply(-1.0);
-				 assertTrue(ac1.getCompensateCurInj().subtract(Iinj).abs()<1.0E-6);
+				 assertTrue(ac1.getNortonCurInj().subtract(Iinj).abs()<1.0E-6);
 				 
 				 
 				 ac1.nextStep(0.005, DynamicSimuMethod.MODIFIED_EULER);
@@ -249,7 +249,7 @@ public class TestSinglePhaseACMotorModel {
 				 System.out.println(ac1.getLoadPQ());
 				 
 				 // check the current injection compesation under stalling condition
-				 assertTrue(ac1.getCompensateCurInj().abs()==0.0);
+				 assertTrue(ac1.getNortonCurInj().abs()==0.0);
   		  	}
 	}
 	
