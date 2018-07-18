@@ -25,7 +25,7 @@ import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.mach.EConstMachine;
-import com.interpss.dstab.mach.MachineType;
+import com.interpss.dstab.mach.MachineModelType;
 
 public class TestBase {
 
@@ -82,7 +82,7 @@ public class TestBase {
 	  		bus3.getContributeGenList().add(gen2);
 	  		
 	  		EConstMachine mach2 = (EConstMachine)DStabObjectFactory.
-					createMachine("1", "Mach-1", MachineType.ECONSTANT, net, "Bus3", "Gen2");
+					createMachine("1", "Mach-1", MachineModelType.ECONSTANT, net, "Bus3", "Gen2");
 	  		
 	  		mach2.setRating(100, UnitType.mVA, net.getBaseKva());
 			mach2.setRatedVoltage(230000.0);
@@ -133,7 +133,7 @@ public class TestBase {
 			
 			
 			EConstMachine mach = (EConstMachine)DStabObjectFactory.
-					createMachine("MachId", "MachName", MachineType.ECONSTANT, net, "Bus1", "Source");
+					createMachine("MachId", "MachName", MachineModelType.ECONSTANT, net, "Bus1", "Source");
 		
 			mach.setRating(100, UnitType.mVA, net.getBaseKva());
 			mach.setRatedVoltage(69000.0);

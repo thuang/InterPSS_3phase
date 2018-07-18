@@ -4,13 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
-import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.basic.impl.Gen3PhaseImpl;
-import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
@@ -24,6 +20,7 @@ import org.junit.Test;
 
 import com.interpss.DStabObjectFactory;
 import com.interpss.common.exp.InterpssException;
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
@@ -64,7 +61,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 			
 			 SinglePhaseACMotor ac1 = new SinglePhaseACMotor(loadBus,"1");
 		  		ac1.setLoadPercent(50);
-		  		ac1.setPhase(Phase.A);
+		  		ac1.setPhase(PhaseCode.A);
 		  		ac1.setMVABase(5);
 		  		ac1.setTstall(99); // disable ac stalling
 		  		loadBus.getPhaseADynLoadList().add(ac1);
@@ -73,7 +70,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 		  		
 		  	SinglePhaseACMotor ac2 = new SinglePhaseACMotor(loadBus,"2");
 		  		ac2.setLoadPercent(50);
-		  		ac2.setPhase(Phase.B);
+		  		ac2.setPhase(PhaseCode.B);
 		  		ac2.setMVABase(5);
 		  		ac2.setTstall(99); // disable ac stalling
 		  		loadBus.getPhaseBDynLoadList().add(ac2);
@@ -82,7 +79,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 		  		
 		  	SinglePhaseACMotor ac3 = new SinglePhaseACMotor(loadBus,"3");
 		  		ac3.setLoadPercent(50);
-		  		ac3.setPhase(Phase.C);
+		  		ac3.setPhase(PhaseCode.C);
 		  		ac3.setMVABase(5);
 		  		ac3.setTstall(99); // disable ac stalling
 		  		loadBus.getPhaseCDynLoadList().add(ac3);

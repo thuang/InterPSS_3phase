@@ -5,8 +5,8 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 
-import com.interpss.core.acsc.AcscGen;
 import com.interpss.dstab.DStabGen;
+import com.interpss.dstab.GeneratorType;
 
 public interface Gen3Phase extends DStabGen {
 	
@@ -50,9 +50,9 @@ public interface Gen3Phase extends DStabGen {
 
 	public Complex3x1 getPowerflowEquivCurrInj();
 	
-	public GenType    getGenType();
+	public GeneratorType    getGenType();
 	
-	public void setGenType(GenType type);
+	public void setGenType(GeneratorType type);
 
 	
 	

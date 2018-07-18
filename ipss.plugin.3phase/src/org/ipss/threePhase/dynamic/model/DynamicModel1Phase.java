@@ -6,11 +6,10 @@ import java.util.List;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.IDynamicModel1Phase;
 
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.core.net.Network;
-import com.interpss.core.net.impl.NameTagImpl;
 import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.device.impl.DynamicBusDeviceImpl;
@@ -19,7 +18,7 @@ import com.interpss.dstab.mach.Machine;
 public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
 		IDynamicModel1Phase {
 	
-	protected  Phase     connectPhase = null;
+	protected  PhaseCode     connectPhase = null;
 	protected  Bus3Phase parentBus = null;
 	
     public Bus3Phase getParentBus(){
@@ -30,12 +29,12 @@ public abstract class DynamicModel1Phase extends DynamicBusDeviceImpl implements
     }
 	
 	@Override
-	public Phase getPhase() {
+	public PhaseCode getPhase() {
 		return this.connectPhase;
 	}
 
 	@Override
-	public void setPhase(Phase p) {
+	public void setPhase(PhaseCode p) {
 		this.connectPhase = p;
 
 	}

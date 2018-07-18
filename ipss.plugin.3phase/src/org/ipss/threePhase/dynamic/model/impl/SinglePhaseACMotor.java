@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.model.DynLoadModel1Phase;
 
 import com.interpss.common.util.IpssLogger;
@@ -39,7 +38,7 @@ import com.interpss.dstab.device.DynamicBusDeviceType;
 	Initialization calculations:
 		Qo = Po * tan ( acos(CompPF)  ) - 6 * (1-0.86) ^2
 	
-	Vâ€™stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
+	V芒鈧劉stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
 			for ( V = 0.4; V < Vstall; V += 0.01 )
 				{
 				pst = Gstall * V2
@@ -431,11 +430,11 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	        //TODO based on the WECC Dynamic Composite Load Model (CMPLDW) Specifications published 01-27-2015 
 	        // A/C are modeled as like "stalled A/C", if V<V'stall. 
 	        /*
-	         * Vâ€™stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
+	         * V芒鈧劉stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
 				for ( V = 0.4; V < Vstall; V += 0.01 )
 					{
 					pst = Gstall * V2
-					p_comp = Po + 12 * (0.86 â€“ V) 3.2 
+					p_comp = Po + 12 * (0.86 芒鈧�� V) 3.2 
 					if ( p_comp < pst )
 						{
 						Vbrkstall = V
@@ -869,10 +868,27 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 	    	this.disableInternalStallControl = disableStallControl;
 	    }
 
-	
+		@Override
+		public double getAccumulatedLoadChangeFactor() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 
+		@Override
+		public void setAccumulatedLoadChangeFactor(double value) {
+			// TODO Auto-generated method stub
+			
+		}
 
-	
-	
+		@Override
+		public Complex getCompensateCurInj() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
+		@Override
+		public void setCompensateCurInj(Complex value) {
+			// TODO Auto-generated method stub
+			
+		}
 }

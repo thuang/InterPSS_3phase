@@ -15,12 +15,8 @@ import org.interpss.display.AclfOutFunc;
 import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.numeric.util.PerformanceTimer;
-import org.interpss.util.FileUtil;
 import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.basic.Phase;
-import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
 import org.ipss.threePhase.dynamic.model.impl.SinglePhaseACMotor;
@@ -36,6 +32,7 @@ import com.interpss.common.util.IpssLogger;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.core.acsc.XfrConnectCode;
 import com.interpss.core.acsc.adpter.AcscXformer;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
@@ -87,7 +84,7 @@ public class IEEE9_3Phase_1PAC_test {
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus5,"1");
   		ac1.setLoadPercent(50);
-  		ac1.setPhase(Phase.A);
+  		ac1.setPhase(PhaseCode.A);
   		ac1.setMVABase(25);
   		bus5.getPhaseADynLoadList().add(ac1);
   		
@@ -95,7 +92,7 @@ public class IEEE9_3Phase_1PAC_test {
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus5,"2");
   		ac2.setLoadPercent(50);
-  		ac2.setPhase(Phase.B);
+  		ac2.setPhase(PhaseCode.B);
   		ac2.setMVABase(25);
   		bus5.getPhaseBDynLoadList().add(ac2);
   		
@@ -103,7 +100,7 @@ public class IEEE9_3Phase_1PAC_test {
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus5,"3");
   		ac3.setLoadPercent(50);
-  		ac3.setPhase(Phase.C);
+  		ac3.setPhase(PhaseCode.C);
   		ac3.setMVABase(25);
   		bus5.getPhaseCDynLoadList().add(ac3);
 	    
@@ -380,7 +377,7 @@ public class IEEE9_3Phase_1PAC_test {
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus12,"1");
   		ac1.setLoadPercent(100);
-  		ac1.setPhase(Phase.A);
+  		ac1.setPhase(PhaseCode.A);
   		ac1.setMVABase(25);
   		bus12.getPhaseADynLoadList().add(ac1);
   		ac1.setVstall(0.65);
@@ -388,7 +385,7 @@ public class IEEE9_3Phase_1PAC_test {
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus12,"2");
   		ac2.setLoadPercent(100);
-  		ac2.setPhase(Phase.B);
+  		ac2.setPhase(PhaseCode.B);
   		ac2.setMVABase(25);
   		bus12.getPhaseBDynLoadList().add(ac2);
   		ac2.setVstall(0.65);
@@ -397,7 +394,7 @@ public class IEEE9_3Phase_1PAC_test {
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus12,"3");
   		ac3.setLoadPercent(100);
-  		ac3.setPhase(Phase.C);
+  		ac3.setPhase(PhaseCode.C);
   		ac3.setMVABase(25);
   		bus12.getPhaseCDynLoadList().add(ac3);
   		ac3.setVstall(0.65);

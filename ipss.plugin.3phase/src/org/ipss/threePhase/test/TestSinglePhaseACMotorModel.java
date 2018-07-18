@@ -11,7 +11,6 @@ import org.ipss.threePhase.basic.Branch3Phase;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
 import org.ipss.threePhase.basic.Load3Phase;
-import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.basic.impl.Load3PhaseImpl;
 import org.ipss.threePhase.dynamic.DStabNetwork3Phase;
 import org.ipss.threePhase.dynamic.algo.DynamicEventProcessor3Phase;
@@ -27,15 +26,15 @@ import com.interpss.common.exp.InterpssException;
 import com.interpss.core.aclf.AclfBranchCode;
 import com.interpss.core.aclf.AclfGenCode;
 import com.interpss.core.aclf.AclfLoadCode;
+import com.interpss.core.acsc.PhaseCode;
 import com.interpss.core.acsc.fault.SimpleFaultCode;
 import com.interpss.core.net.NetworkType;
-import com.interpss.dstab.DStabGen;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
 import com.interpss.dstab.mach.EConstMachine;
-import com.interpss.dstab.mach.MachineType;
+import com.interpss.dstab.mach.MachineModelType;
 
 public class TestSinglePhaseACMotorModel {
 	
@@ -63,7 +62,7 @@ public class TestSinglePhaseACMotorModel {
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
   		ac1.setLoadPercent(25);
-  		ac1.setPhase(Phase.A);
+  		ac1.setPhase(PhaseCode.A);
   		ac1.setMVABase(25);
   		bus1.getPhaseADynLoadList().add(ac1);
   		
@@ -71,7 +70,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
   		ac2.setLoadPercent(30);
-  		ac2.setPhase(Phase.B);
+  		ac2.setPhase(PhaseCode.B);
   		ac2.setMVABase(30);
   		bus1.getPhaseBDynLoadList().add(ac2);
   		
@@ -79,7 +78,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
   		ac3.setLoadPercent(20);
-  		ac3.setPhase(Phase.C);
+  		ac3.setPhase(PhaseCode.C);
   		ac3.setMVABase(20);
   		bus1.getPhaseCDynLoadList().add(ac3);
   		
@@ -165,7 +164,7 @@ public class TestSinglePhaseACMotorModel {
 		
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
   		ac1.setLoadPercent(50);
-  		ac1.setPhase(Phase.A);
+  		ac1.setPhase(PhaseCode.A);
   		ac1.setMVABase(50);
   		bus1.getPhaseADynLoadList().add(ac1);
   		
@@ -173,7 +172,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
   		ac2.setLoadPercent(50);
-  		ac2.setPhase(Phase.B);
+  		ac2.setPhase(PhaseCode.B);
   		ac2.setMVABase(50);
   		bus1.getPhaseBDynLoadList().add(ac2);
   		
@@ -181,7 +180,7 @@ public class TestSinglePhaseACMotorModel {
   		
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
   		ac3.setLoadPercent(50);
-  		ac3.setPhase(Phase.C);
+  		ac3.setPhase(PhaseCode.C);
   		ac3.setMVABase(50);
   		bus1.getPhaseCDynLoadList().add(ac3);
   		
@@ -305,7 +304,7 @@ public class TestSinglePhaseACMotorModel {
   		bus3.getContributeGenList().add(gen2);
   		
   		EConstMachine mach2 = (EConstMachine)DStabObjectFactory.
-				createMachine("1", "Mach-1", MachineType.ECONSTANT, net, "Bus3", "Gen2");
+				createMachine("1", "Mach-1", MachineModelType.ECONSTANT, net, "Bus3", "Gen2");
   		
   		mach2.setRating(100, UnitType.mVA, net.getBaseKva());
 		mach2.setRatedVoltage(230000.0);

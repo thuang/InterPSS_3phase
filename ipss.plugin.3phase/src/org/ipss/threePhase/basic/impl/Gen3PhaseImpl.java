@@ -6,8 +6,8 @@ import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Bus3Phase;
 import org.ipss.threePhase.basic.Gen3Phase;
-import org.ipss.threePhase.basic.GenType;
 
+import com.interpss.dstab.GeneratorType;
 import com.interpss.dstab.impl.DStabGenImpl;
 
 /**
@@ -30,7 +30,7 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 
 	private Complex3x1 igen3Ph = null;
 	
-	private GenType    genType = GenType.Inverter_based; // inverter-based by default 
+	private GeneratorType    genType = GeneratorType.INVERTER_BASED; // inverter-based by default 
 	
 	
 	
@@ -140,10 +140,10 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 		
 		
 		// calculate the equivalent current injection based on the GenType
-		if(this.getGenType().equals(GenType.Synchrounous_machine)){
+		if(this.getGenType().equals(GeneratorType.SYNCH_MACHINE)){
 			currInj = this.getPower3Phase(UnitType.PU).divide(this.getParentBus().get3PhaseVotlages()).conjugate();
 		}
-		else if(this.getGenType().equals(GenType.Inverter_based)){
+		else if(this.getGenType().equals(GeneratorType.INVERTER_BASED)){
 			
 			//TODO here assuming the inverter based DG only produces positive sequence current. negative sequence current is based on 
 			//negative sequence impedance of the generator
@@ -187,13 +187,13 @@ public class Gen3PhaseImpl extends DStabGenImpl implements Gen3Phase {
 	}
 
 	@Override
-	public GenType getGenType() {
+	public GeneratorType getGenType() {
 		
 		return this.genType;
 	}
 
 	@Override
-	public void setGenType(GenType type) {
+	public void setGenType(GeneratorType type) {
 		this.genType = type;
 		
 	}

@@ -8,7 +8,6 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.ipss.threePhase.basic.Bus3Phase;
-import org.ipss.threePhase.basic.Phase;
 import org.ipss.threePhase.dynamic.IDynamicModel3Phase;
 
 import com.interpss.core.net.Network;
