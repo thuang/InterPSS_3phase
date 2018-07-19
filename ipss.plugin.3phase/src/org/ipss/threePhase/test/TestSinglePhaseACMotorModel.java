@@ -35,7 +35,7 @@ import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.DynDeviceType;
 import com.interpss.dstab.mach.EConstMachine;
-import com.interpss.dstab.mach.MachineType;
+import com.interpss.dstab.mach.MachineModelType;
 
 public class TestSinglePhaseACMotorModel {
 	
@@ -305,7 +305,7 @@ public class TestSinglePhaseACMotorModel {
   		bus3.getContributeGenList().add(gen2);
   		
   		EConstMachine mach2 = (EConstMachine)DStabObjectFactory.
-				createMachine("1", "Mach-1", MachineType.ECONSTANT, net, "Bus3", "Gen2");
+				createMachine("1", "Mach-1", MachineModelType.ECONSTANT, net, "Bus3", "Gen2");
   		
   		mach2.setRating(100, UnitType.mVA, net.getBaseKva());
 		mach2.setRatedVoltage(230000.0);

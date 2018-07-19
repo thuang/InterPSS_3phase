@@ -37,7 +37,7 @@ import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.MonitorRecord;
 import com.interpss.dstab.mach.EConstMachine;
-import com.interpss.dstab.mach.MachineType;
+import com.interpss.dstab.mach.MachineModelType;
 
 public class Test8BusFeeder {
 	
@@ -136,7 +136,7 @@ public DStabNetwork3Phase createFeeder(double baseVolt, int BusNum, double total
 		
 		
 		EConstMachine mach = (EConstMachine)DStabObjectFactory.
-				createMachine("MachId", "MachName", MachineType.ECONSTANT, net, "Bus1", "Source");
+				createMachine("MachId", "MachName", MachineModelType.ECONSTANT, net, "Bus1", "Source");
 	
 		mach.setRating(100, UnitType.mVA, net.getBaseKva());
 		mach.setRatedVoltage(baseVolt);

@@ -64,7 +64,7 @@ import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.devent.DynamicEvent;
 import com.interpss.dstab.devent.DynamicEventType;
 import com.interpss.dstab.mach.EConstMachine;
-import com.interpss.dstab.mach.MachineType;
+import com.interpss.dstab.mach.MachineModelType;
 import com.interpss.dstab.mach.RoundRotorMachine;
 import com.interpss.simu.SimuContext;
 import com.interpss.simu.SimuCtxType;
@@ -528,7 +528,7 @@ public class ThreeBus_3Phase_Test {
 			
 			
 			EConstMachine mach = (EConstMachine)DStabObjectFactory.
-					createMachine("MachId", "MachName", MachineType.ECONSTANT, net, "SubBus", "1");
+					createMachine("MachId", "MachName", MachineModelType.ECONSTANT, net, "SubBus", "1");
 		
 			mach.setRating(1, UnitType.mVA, net.getBaseKva());
 			mach.setRatedVoltage(baseVolt115kV);
@@ -710,7 +710,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
   		bus1.setSortNumber(0);
   		
   		RoundRotorMachine mach = (RoundRotorMachine)DStabObjectFactory.
-				createMachine("1", "Mach-1", MachineType.EQ11_ED11_ROUND_ROTOR, net, "Bus1", "Gen1");
+				createMachine("1", "Mach-1", MachineModelType.EQ11_ED11_ROUND_ROTOR, net, "Bus1", "Gen1");
   		
   		mach.setRating(100, UnitType.mVA, net.getBaseKva());
 		mach.setRatedVoltage(16500.0);
@@ -778,7 +778,7 @@ private DStabNetwork3Phase create3BusSys() throws InterpssException{
   		bus3.getContributeGenList().add(gen2);
   		
   		EConstMachine mach2 = (EConstMachine)DStabObjectFactory.
-				createMachine("1", "Mach-1", MachineType.ECONSTANT, net, "Bus3", "Gen2");
+				createMachine("1", "Mach-1", MachineModelType.ECONSTANT, net, "Bus3", "Gen2");
   		
   		mach2.setRating(100, UnitType.mVA, net.getBaseKva());
 		mach2.setRatedVoltage(230000.0);
