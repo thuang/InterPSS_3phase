@@ -7,8 +7,6 @@ import org.interpss.numeric.datatype.Complex3x1;
 import org.interpss.numeric.datatype.Complex3x3;
 import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.threePhase.basic.Bus3Phase;
-import org.interpss.threePhase.dynamic.model.DynLoadModel3Phase;
-import org.interpss.threePhase.dynamic.model.InductionMotor3PhaseAdapter;
 
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.dynLoad.InductionMotor;
@@ -69,7 +67,7 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 	public Complex3x3 getYabc(boolean machineMVABase) {
 		
 		double sysMVABase = this.indMotor.getDStabBus().getNetwork().getBaseMva();
-		double zMultiFactor=sysMVABase/this.indMotor.getMVABase(); // convert z from motor base to system base
+		double zMultiFactor=sysMVABase/this.indMotor.getMvaBase(); // convert z from motor base to system base
         
 		if(Yabc == null){
 	        // y1 = y2 = equivYSysBase, y0 = 0.0;

@@ -1,7 +1,6 @@
 package org.interpss.threePhase.dynamic.model;
 
 import org.interpss.numeric.datatype.Complex3x1;
-import org.interpss.numeric.datatype.Complex3x3;
 
 /**
  * There are many aspects that are different from the dynLoadModel, which is mainly defined for positive sequence and 1-phase scenarios.

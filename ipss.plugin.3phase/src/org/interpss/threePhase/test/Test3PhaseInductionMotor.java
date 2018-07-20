@@ -72,7 +72,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 			indMotor.setRr1(0.01);
 			
 	
-			indMotor.setMVABase(50);
+			indMotor.setMvaBase(50);
 			indMotor.setH(1.0);
 			
 			InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);

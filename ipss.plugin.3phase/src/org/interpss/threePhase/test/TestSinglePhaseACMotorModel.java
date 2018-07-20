@@ -63,7 +63,7 @@ public class TestSinglePhaseACMotorModel {
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
   		ac1.setLoadPercent(25);
   		ac1.setPhase(PhaseCode.A);
-  		ac1.setMVABase(25);
+  		ac1.setMvaBase(25);
   		bus1.getPhaseADynLoadList().add(ac1);
   		
   		
@@ -71,7 +71,7 @@ public class TestSinglePhaseACMotorModel {
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
   		ac2.setLoadPercent(30);
   		ac2.setPhase(PhaseCode.B);
-  		ac2.setMVABase(30);
+  		ac2.setMvaBase(30);
   		bus1.getPhaseBDynLoadList().add(ac2);
   		
 
@@ -79,7 +79,7 @@ public class TestSinglePhaseACMotorModel {
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
   		ac3.setLoadPercent(20);
   		ac3.setPhase(PhaseCode.C);
-  		ac3.setMVABase(20);
+  		ac3.setMvaBase(20);
   		bus1.getPhaseCDynLoadList().add(ac3);
   		
   		// run dstab to test 1-phase ac model
@@ -165,7 +165,7 @@ public class TestSinglePhaseACMotorModel {
 	    SinglePhaseACMotor ac1 = new SinglePhaseACMotor(bus1,"1");
   		ac1.setLoadPercent(50);
   		ac1.setPhase(PhaseCode.A);
-  		ac1.setMVABase(50);
+  		ac1.setMvaBase(50);
   		bus1.getPhaseADynLoadList().add(ac1);
   		
   		
@@ -173,7 +173,7 @@ public class TestSinglePhaseACMotorModel {
   		SinglePhaseACMotor ac2 = new SinglePhaseACMotor(bus1,"2");
   		ac2.setLoadPercent(50);
   		ac2.setPhase(PhaseCode.B);
-  		ac2.setMVABase(50);
+  		ac2.setMvaBase(50);
   		bus1.getPhaseBDynLoadList().add(ac2);
   		
 
@@ -181,7 +181,7 @@ public class TestSinglePhaseACMotorModel {
   		SinglePhaseACMotor ac3 = new SinglePhaseACMotor(bus1,"3");
   		ac3.setLoadPercent(50);
   		ac3.setPhase(PhaseCode.C);
-  		ac3.setMVABase(50);
+  		ac3.setMvaBase(50);
   		bus1.getPhaseCDynLoadList().add(ac3);
   		
   		// run dstab to test 1-phase ac model

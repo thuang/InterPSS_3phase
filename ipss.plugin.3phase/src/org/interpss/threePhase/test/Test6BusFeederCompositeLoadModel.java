@@ -62,7 +62,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 			 SinglePhaseACMotor ac1 = new SinglePhaseACMotor(loadBus,"1");
 		  		ac1.setLoadPercent(50);
 		  		ac1.setPhase(PhaseCode.A);
-		  		ac1.setMVABase(5);
+		  		ac1.setMvaBase(5);
 		  		ac1.setTstall(99); // disable ac stalling
 		  		loadBus.getPhaseADynLoadList().add(ac1);
 		  		
@@ -71,7 +71,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 		  	SinglePhaseACMotor ac2 = new SinglePhaseACMotor(loadBus,"2");
 		  		ac2.setLoadPercent(50);
 		  		ac2.setPhase(PhaseCode.B);
-		  		ac2.setMVABase(5);
+		  		ac2.setMvaBase(5);
 		  		ac2.setTstall(99); // disable ac stalling
 		  		loadBus.getPhaseBDynLoadList().add(ac2);
 		  		
@@ -80,7 +80,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 		  	SinglePhaseACMotor ac3 = new SinglePhaseACMotor(loadBus,"3");
 		  		ac3.setLoadPercent(50);
 		  		ac3.setPhase(PhaseCode.C);
-		  		ac3.setMVABase(5);
+		  		ac3.setMvaBase(5);
 		  		ac3.setTstall(99); // disable ac stalling
 		  		loadBus.getPhaseCDynLoadList().add(ac3);
 			
@@ -97,7 +97,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 				indMotor.setRr1(0.01);
 				
 		
-				indMotor.setMVABase(8);
+				indMotor.setMvaBase(8);
 				indMotor.setH(1.0);
 				
 				InductionMotor3PhaseAdapter indMotor3Phase = new InductionMotor3PhaseAdapter(indMotor);

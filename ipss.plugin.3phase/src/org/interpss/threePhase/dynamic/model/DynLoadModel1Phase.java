@@ -1,8 +1,6 @@
 package org.interpss.threePhase.dynamic.model;
 
 import org.apache.commons.math3.complex.Complex;
-import org.interpss.numeric.datatype.Complex3x1;
-import org.interpss.threePhase.basic.Bus3Phase;
 
 import com.interpss.dstab.BaseDStabBus;
 import com.interpss.dstab.dynLoad.DynLoadModel;
@@ -40,13 +38,13 @@ public abstract class DynLoadModel1Phase extends DynamicModel1Phase implements D
 	}
 
 	@Override
-	public double getMVABase() {
+	public double getMvaBase() {
 		
 		return this.mva;
 	}
 
 	@Override
-	public void setMVABase(double loadMVABase) {
+	public void setMvaBase(double loadMVABase) {
 		this.mva = loadMVABase;
 		
 	}

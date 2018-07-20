@@ -225,14 +225,14 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			this.setLoadPQ(new Complex(pac,qac));
 			
 			// if mva is not defined and loading factor is available
-			if(this.getMVABase()==0.0){
+			if(this.getMvaBase()==0.0){
 				if(this.loadFactor >0 && this.loadFactor<=1.0)
 	                    IpssLogger.getLogger().fine("AC motor MVABase will be calculated based on load factor");
 				else 
 					this.loadFactor = 1.0;
 				// phase mva base is the 1/3 of the system 3phaes mva base
 				double calcMva = this.pac*this.getDStabBus().getNetwork().getBaseMva()/3.0d/this.loadFactor;
-				this.setMVABase(calcMva);
+				this.setMvaBase(calcMva);
 			}
 			
 			
@@ -434,7 +434,7 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 				for ( V = 0.4; V < Vstall; V += 0.01 )
 					{
 					pst = Gstall * V2
-					p_comp = Po + 12 * (0.86 芒鈧��? V) 3.2 
+					p_comp = Po + 12 * (0.86 芒鈧��? V) 3.2 
 					if ( p_comp < pst )
 						{
 						Vbrkstall = V
