@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.math3.complex.Complex;
 import org.interpss.IpssCorePlugin;
+import org.interpss.dstab.dynLoad.InductionMotor;
+import org.interpss.dstab.dynLoad.impl.InductionMotorImpl;
 import org.interpss.threePhase.basic.Bus3Phase;
 import org.interpss.threePhase.basic.Gen3Phase;
 import org.interpss.threePhase.basic.impl.Gen3PhaseImpl;
@@ -27,7 +29,6 @@ import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
 import com.interpss.dstab.cache.StateMonitor.MonitorRecord;
-import com.interpss.dstab.dynLoad.InductionMotor;
 
 /**
  * This test case serves to test more detailed load modeling at the feeder level
@@ -87,7 +88,7 @@ public class Test6BusFeederCompositeLoadModel extends TestBase {
 			
 			// 3 phase motor, 20%
 			
-		  		InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
+		  		InductionMotor indMotor= new InductionMotorImpl("1");
 				indMotor.setDStabBus(loadBus);
 
 				indMotor.setXm(3.0);
