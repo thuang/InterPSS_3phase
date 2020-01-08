@@ -427,24 +427,6 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 			
 	        Complex v = this.getBusPhaseVoltage();
 	        
-	        //TODO based on the WECC Dynamic Composite Load Model (CMPLDW) Specifications published 01-27-2015 
-	        // A/C are modeled as like "stalled A/C", if V<V'stall. 
-	        /*
-	         * V芒鈧劉stall is calculated to determine the voltage level at which there is an intersection between the stall power characteristic and the transition characteristic used for V < 0.86:
-				for ( V = 0.4; V < Vstall; V += 0.01 )
-					{
-					pst = Gstall * V2
-					p_comp = Po + 12 * (0.86 芒鈧��? V) 3.2 
-					if ( p_comp < pst )
-						{
-						Vbrkstall = V
-						break
-						}
-					}
-
-
-	         */
-
 			
 		    if(stage == 1 && this.remainFraction <1.0){
 				 this.nortonCurrInj = this.getEquivY().multiply(v).multiply(1-this.remainFraction);
@@ -506,6 +488,12 @@ public class SinglePhaseACMotor extends DynLoadModel1Phase {
 		public Object getOutputObject() {
 			
 		     return this.getNortonCurInj();
+		}
+		
+		//TODO
+		@Override
+		public boolean updateAttributes(boolean netChange) {
+			return true;
 		}
 		
 		@Override

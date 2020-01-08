@@ -188,6 +188,12 @@ public class TwoBus_3Phase_Test {
 	  
 	  	assertTrue(algo.loadflow())	;
 	  	
+		StateMonitor sm = new StateMonitor();
+		//sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus2-mach1"});
+		sm.addBusStdMonitor(new String[]{"Bus6","Bus2","Bus1"});
+		// set the output handler
+		dstabAlgo.setSimuOutputHandler(sm);
+	  	
 	  	
 	  	assertTrue(dstabAlgo.initialization());
 	  	//assertTrue(net.initDStabNet());
@@ -261,11 +267,11 @@ public class TwoBus_3Phase_Test {
         
 		
 		StateMonitor sm = new StateMonitor();
-		sm.addGeneratorStdMonitor(new String[]{"Bus1-mach1","Bus3-mach1"});
-		sm.addBusStdMonitor(new String[]{"Bus3","Bus1"});
+		sm.addBusStdMonitor(new String[]{"Bus1"});
 		// set the output handler
-				dstabAlgo.setSimuOutputHandler(sm);
-				dstabAlgo.setOutPutPerSteps(1);
+		dstabAlgo.setSimuOutputHandler(sm);
+		dstabAlgo.setOutPutPerSteps(1);
+				
 	  	if(dstabAlgo.initialization()){
 	  	
 	  		dstabAlgo.performSimulation();

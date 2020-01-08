@@ -18,7 +18,8 @@ import com.interpss.core.net.NetworkType;
 import com.interpss.dstab.algo.DynamicSimuAlgorithm;
 import com.interpss.dstab.algo.DynamicSimuMethod;
 import com.interpss.dstab.cache.StateMonitor;
-import com.interpss.dstab.dynLoad.InductionMotor;
+import org.interpss.dstab.dynLoad.InductionMotor;
+import org.interpss.dstab.dynLoad.impl.InductionMotorImpl;
 
 public class Test3PhaseInductionMotor extends TestBase{
 
@@ -62,7 +63,7 @@ public class Test3PhaseInductionMotor extends TestBase{
 		     */
 			
 			Bus3Phase bus1 = (Bus3Phase) net.getBus("Bus1");
-			InductionMotor indMotor= DStabObjectFactory.createInductionMotor("1");
+			InductionMotor indMotor= new InductionMotorImpl(bus1, "1");
 			indMotor.setDStabBus(bus1);
 
 			indMotor.setXm(3.0);

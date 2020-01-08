@@ -339,5 +339,6 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
  	public void setOverFreqTripAll(double overFreqTripAll) {
  		this.overFreqTripAll = overFreqTripAll;
  	}
-     
+    
+ 	
 }

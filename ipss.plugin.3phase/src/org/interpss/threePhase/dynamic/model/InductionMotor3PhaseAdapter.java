@@ -9,7 +9,7 @@ import org.interpss.numeric.datatype.Unit.UnitType;
 import org.interpss.threePhase.basic.Bus3Phase;
 
 import com.interpss.dstab.algo.DynamicSimuMethod;
-import com.interpss.dstab.dynLoad.InductionMotor;
+import org.interpss.dstab.dynLoad.InductionMotor;
 
 
 /**
@@ -161,6 +161,12 @@ public class InductionMotor3PhaseAdapter extends DynLoadModel3Phase {
 	public Hashtable<String, Object> getStates(Object ref) {
 		  
 		  return this.indMotor.getStates(ref);
+	}
+	 
+	//TODO to implement
+	@Override
+	public boolean updateAttributes(boolean netChange) {
+		return true;
 	}
 
 }
