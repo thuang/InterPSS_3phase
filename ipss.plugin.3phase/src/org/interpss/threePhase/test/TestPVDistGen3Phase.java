@@ -23,6 +23,7 @@ import org.interpss.threePhase.powerflow.DistributionPowerFlowAlgorithm;
 import org.interpss.threePhase.powerflow.impl.DistPowerFlowOutFunc;
 import org.interpss.threePhase.util.ThreePhaseAclfOutFunc;
 import org.interpss.threePhase.util.ThreePhaseObjectFactory;
+import org.interpss.util.FileUtil;
 import org.junit.Test;
 
 import com.interpss.CoreObjectFactory;
@@ -357,6 +358,8 @@ public class TestPVDistGen3Phase {
 	  	
 	  	//System.out.println(sm.toCSVString(sm.getBusAngleTable()));
 	  	System.out.println(sm.toCSVString(sm.getBusVoltTable()));
+		FileUtil.writeText2File("C:\\results.csv", sm.toCSVString(sm.getBusVoltTable()));
+
 	  	MonitorRecord rec1 = sm.getBusVoltTable().get("Bus2").get(1);
 	  	MonitorRecord rec20 = sm.getBusVoltTable().get("Bus2").get(20);
 	  	assertTrue(Math.abs(rec1.getValue()-rec20.getValue())<1.0E-4);

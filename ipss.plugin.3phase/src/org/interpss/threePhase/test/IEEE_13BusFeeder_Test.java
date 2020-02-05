@@ -43,7 +43,7 @@ public class IEEE_13BusFeeder_Test {
 	
 	private final double ft2mile = 1.0/5280.0;
 	
-	//@Test
+	@Test
 	public void test_ieee13feeder_powerflow() throws InterpssException{
 		
 		IpssCorePlugin.init();
@@ -65,7 +65,7 @@ public class IEEE_13BusFeeder_Test {
 		
 	} 
 	
-	@Test
+	//@Test
 	public void test_ieee13feeder_dstab() throws InterpssException{
 		
 		IpssCorePlugin.init();
@@ -263,7 +263,6 @@ public class IEEE_13BusFeeder_Test {
 			Load3Phase load671 = new Load3PhaseImpl();
 			load671.set3PhaseLoad(new Complex3x1(new Complex(1.155/3,0.660/3),new Complex(1.155/3,0.660/3),new Complex(1.155/3,0.660/3)).multiply(loadScaleFactor));
 			bus671.getThreePhaseLoadList().add(load671);
-			
 			
 			
 			
