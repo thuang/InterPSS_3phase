@@ -219,6 +219,8 @@ public class TestSinglePhaseACMotorModel {
 				Complex y = new Complex(1.5,0).divide(new Complex(ac1.getRstall(),ac1.getXstall()));
 				assertTrue( NumericUtil.equals(ac1.getEquivY(),y,1.0E-5));
 				
+				bus1.getFreq();
+				//bus1.setFreq(arg0);
 
 				
 				 double v = 0.599;
@@ -226,6 +228,7 @@ public class TestSinglePhaseACMotorModel {
 				 //Tstall = 0.033;
 				 ac1.nextStep(0.005, DynamicSimuMethod.MODIFIED_EULER);
 				 ac1.nextStep(0.005, DynamicSimuMethod.MODIFIED_EULER);
+			
 				 ac1.nextStep(0.005, DynamicSimuMethod.MODIFIED_EULER);
 				 ac1.nextStep(0.005, DynamicSimuMethod.MODIFIED_EULER);
 				 ac1.nextStep(0.005, DynamicSimuMethod.MODIFIED_EULER);

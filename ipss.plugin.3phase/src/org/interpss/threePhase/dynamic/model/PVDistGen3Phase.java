@@ -23,7 +23,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 	
 	private Complex  genPQInit = null;  // based on the positive sequence
 	private Complex  posSeqGenPQ = null;
-	private Complex  genCurSource = null;
+	private Complex  nortonCurSource = null;
 	private double   currLimit = 9999;
 	private Complex  Ipq_pos = null;
 	
@@ -106,13 +106,17 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
 		 return this.genPQInit;
 	 }
 	 
-	 // for dynamic simulation, in the nextStep, update the equivalent current injection
+	 // for dynamic simulation, in the nextStep, update the this.vtmeasured
      public boolean nextStep(double dt, DynamicSimuMethod method){
     	 //TODO for the simplified inverter-based PV generation, the only dynamic components is the terminal voltage measurement
     	 
     	 double dVtm_dt = (getPosSeqVt().abs()-this.vtmeasured)/this.TR;
     	 
     	 this.vtmeasured = this.vtmeasured + dVtm_dt*dt;
+    	 
+    	if(method==DynamicSimuMethod.MODIFIED_EULER) {
+    		//TODO
+    	}
     	 return true;
      }
      
@@ -191,9 +195,9 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 }
     		 
     		 
-    	 genCurSource = effectiveCurrInj.add(compensateCurrent);
+    	 nortonCurSource = effectiveCurrInj.add(compensateCurrent);
     	 
-         return genCurSource;
+         return nortonCurSource;
     	 
      }
      
@@ -213,7 +217,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
     	 double vt = getPosSeqVt().abs();
     	         
     	 Complex genPQ = this.Ipq_pos.multiply(vt);
-    	 //update the positive sequence generation output
+    	 //update the positive sequence generation output.
     	 this.setPosSeqGenPQ(genPQ);
     	 
     	 //TODO consider other attributes
@@ -256,7 +260,7 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
      public Object getOutputObject(){
     	 
          this.calcPosSeqCurInjection();
-    	 return this.genCurSource;
+    	 return this.nortonCurSource;
      }
      
      public Complex getPosSeqIpq() {
@@ -264,12 +268,12 @@ public class PVDistGen3Phase extends DynGenModel3Phase{
  		return Ipq_pos;
  	}
      
-    public Complex  getPosSeqGenCurSource(){
-    	return this.genCurSource;
+    public Complex  getPosSeqnortonCurSource(){
+    	return this.nortonCurSource;
     }
     
-    public void    setPosSeqGenCurSource( Complex Igen){
-    	this.genCurSource = Igen;
+    public void    setPosSeqNortonCurSource( Complex Igen){
+    	this.nortonCurSource = Igen;
     }
 
  	public void setPosSeqIpq(Complex ipq_pos) {

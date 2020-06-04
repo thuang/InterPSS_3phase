@@ -147,7 +147,7 @@ public class TestPVDistGen3Phase {
 		
 		assertTrue(pv.getPosSeqIpq().subtract(new Complex(ip,0)).abs()<1.0E-5);
 		
-		Complex ipos = pv.getPosSeqGenCurSource();
+		Complex ipos = pv.getPosSeqIpq();
 		
 		Complex calcPower = vpos.multiply(ipos.conjugate());
 		
